@@ -37,7 +37,7 @@ export class Database {
         let exists = res.rows[0].exists;
         if (!exists) {
             //run setup file
-            let res = await this.QueryFile("src/elpers/atabase/ueries/ableSetup.sql");
+            let res = await this.QueryFile("src/helpers/database/Queries/TableSetup.sql");
         }        
     }
 
