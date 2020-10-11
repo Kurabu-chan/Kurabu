@@ -7,6 +7,9 @@ import { AppState, AppStateStatus } from 'react-native';
 import Authentication from './src/APIManager/Authenticate';
 import { NavigationDrawerScreenProps } from 'react-navigation-drawer';
 import { setTopLevelNavigator, navigate } from './src/APIManager/helper/NavigationService';
+import { Config } from './src/Config';
+
+
 
 const getFonts = () => Font.loadAsync({
     'AGRevueCyr': require('./assets/fonts/AGRevueCyr.ttf')
@@ -23,6 +26,11 @@ type StateType = {
 export default class Application extends React.Component<NavigationDrawerScreenProps, StateType>{
     constructor(props: NavigationDrawerScreenProps) {        
         super(props);
+
+        Config.GetInstance().then((config)=>{
+            console.log("Config loaded");
+        });
+
         this.state = {
             fonts: false,
             appstate: AppState.currentState,

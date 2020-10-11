@@ -1,6 +1,7 @@
 import { AsyncStorage, Alert } from 'react-native';
 import { isUUID } from './helper/FormatChecker';
 import * as Linking from 'expo-linking';
+import { Config } from '../Config';
 
 type JsonType = {
     status: "success" | "error",
@@ -9,12 +10,15 @@ type JsonType = {
 
 class Authentication {
     private static instance: Authentication;
-    private stateCode?: string;// = "12ac8766-cc54-4360-b7c4-91cd1374daec";
+    private stateCode?: string;
     private loaded: boolean = false;
     public static devMode = false;
 
+    private static root: string;
+
     private constructor() {
         console.log("Starting Authenticator...");
+
         if (this.stateCode) {
             this.loaded = true;
             return;
@@ -64,7 +68,7 @@ class Authentication {
     /** make request to MAL, check status and save stateCode */
     public async Trylogin(email: string, password: string): Promise<boolean> {
         //url to make request to
-        let url = `http://api.imal.ml/authed/login`;
+        let url = `${Authentication.root}authed/login`;
         //the body of the request
         let body = {
             email: email.replace(' ',''),
@@ -98,7 +102,7 @@ class Authentication {
 
     public async TryRegister(email: string, password: string) : Promise<string> {
         //url to make request to
-        let url = `http://api.imal.ml/authed/register`;
+        let url = `${Authentication.root}authed/register`;
         //the body of the request
 
         let body = {
@@ -126,7 +130,7 @@ class Authentication {
 
     public async TryVerif(uuid:string,code: string) : Promise<JsonType>{
         //url to make request to
-        let url = `http://api.imal.ml/authed/verif`;
+        let url = `${Authentication.root}authed/verif`;
         //the body of the request
 
         let body = {
@@ -176,7 +180,12 @@ class Authentication {
             Authentication.instance = new Authentication();
             if (!this.devMode) {
                 await Authentication.instance.LoadStorage();
-            }            
+            } 
+        }
+
+        if(!Authentication.root){
+            let config = await Config.GetInstance();
+            Authentication.root = config.GetApiRoot();
         }
 
         return Authentication.instance;

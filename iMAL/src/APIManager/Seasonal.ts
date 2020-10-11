@@ -1,6 +1,7 @@
 import AnimeNodeSource from './AnimeNodeSource';
 import Authentication from './Authenticate';
 import { AnimeNode } from '../components/AnimeItem';
+import { Config } from '../Config';
 
 type JSONType = {
     data: AnimeNode[],
@@ -32,10 +33,12 @@ class SeasonalSource implements AnimeNodeSource{
     }
 
     public async MakeRequest(limit?: number, offset?: number) : Promise<JSONType>{
+        let config = await Config.GetInstance();
+
         let auther = await Authentication.getInstance();
         let stateCode = auther.GetStateCode();
         try {
-            let url = `http://api.imal.ml/anime/seasonal?season=${this.season?this.season:"summer"}&year=${this.year?this.year:2020}&state=${stateCode}${limit?"&limit="+limit:""}${offset?"&offset="+offset:""}&sort=users`;
+            let url = `${config.GetApiRoot()}anime/seasonal?season=${this.season?this.season:"summer"}&year=${this.year?this.year:2020}&state=${stateCode}${limit?"&limit="+limit:""}${offset?"&offset="+offset:""}&sort=users`;
             let res: Response = await fetch(url);
             let json: JSONType = await res.json();
             let ret = (json as JSONType);
@@ -45,8 +48,6 @@ class SeasonalSource implements AnimeNodeSource{
                 console.log(json);
                 throw json;
             }
-            
-            
         } catch (e) {}
 
         return {

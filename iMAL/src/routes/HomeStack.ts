@@ -23,8 +23,7 @@ const defaultOptions: CreateNavigatorConfig<StackNavigationConfig, NavigationSta
         },
         headerTintColor: 'white',
         headerTitleAlign: 'center',
-        title: "iMAL"
-        
+        title: "iMAL"        
     },
     headerMode: "screen"
 }
