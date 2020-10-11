@@ -8,9 +8,9 @@ import * as MailHelper from './helpers/MailHelper';
 config();
 reload();
 
-let PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+let PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 15000;
 
-if (PORT === 3000) {
+if (PORT === 15000) {
     Logger.Warn(`env port is ${process.env.PORT}`);
 }
 MailHelper.Setup();

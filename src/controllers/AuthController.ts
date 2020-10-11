@@ -58,7 +58,9 @@ export class AuthedController {
 
             let redirect = BodyOrUrlParams.OptionalString("redirect", req);
 
-            UserManager.GetInstance().DoVerif(uuid,code,redirect).then((url) => {
+            let ourdomain = `${req.protocol}://${req.hostname}`;
+
+            UserManager.GetInstance().DoVerif(uuid,code,ourdomain,redirect).then((url) => {
                 res.status(200).json({
                     status: SUCCESS_STATUS,
                     message: url
@@ -151,8 +153,8 @@ export class AuthedController {
             });
             return;
         }
-        
-        UserManager.GetInstance().DoPending(state, code).then((redirUrl) => {
+        let ourdomain = `${req.protocol}://${req.hostname}`;
+        UserManager.GetInstance().DoPending(state, code, ourdomain).then((redirUrl) => {
             console.log()
             res.redirect(redirUrl);
         }).catch((err) => {

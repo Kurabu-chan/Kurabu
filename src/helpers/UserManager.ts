@@ -105,7 +105,7 @@ export class UserManager {
         return uuid;
     }
 
-    public async DoVerif(uuid: string, code: string, redirect? : string) : Promise<string>{
+    public async DoVerif(uuid: string, code: string,ourdomain : string, redirect? : string) : Promise<string>{
         if(!this.codeDict.has(uuid)) throw new Error("verif uuid doesn't exist");
 
         let dictVal = <DictEntry>this.codeDict.get(uuid);
@@ -143,7 +143,7 @@ export class UserManager {
             }
         }, 10 * 60 * 1000);
 
-        return `https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&code_challenge=${codeVerifier}&state=${uuid}&redirect_uri=${process.env.LOCALMODE ? "http://localhost:3000/authed" : "http://api.imal.ml/authed"}`;
+        return `https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&code_challenge=${codeVerifier}&state=${uuid}&redirect_uri=${process.env.LOCALMODE ? "http://localhost:3000/authed" : ourdomain + "/authed"}`;
     }
 
     /** Check and load state of uuid */
@@ -167,7 +167,7 @@ export class UserManager {
     }
 
     /** end the registration, add user to database */
-    public async DoPending(uuid: string, code: string) {
+    public async DoPending(uuid: string, code: string, ourdomain : string) {
         //check if the uuid exists in the dict
         if (!this.codeDict.has(uuid)) throw new Error("uuid does not exist yet");
 
@@ -178,7 +178,7 @@ export class UserManager {
         //get the dict data in the correct type
         let dictData = <RegisterData>dictEntry.data;
         //get the tokens from MAL
-        let tokens = await GetToken(code, dictData.verifier);
+        let tokens = await GetToken(code, dictData.verifier, ourdomain);
         //check if we errored while connecting to MAL
         if ((tokens as ResponseMessage).status) {
             let err = (tokens as ResponseMessage);
