@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha \"tests/**/*.ts\" --config ./tests/.mocharc.json --timeout 15000",
     "start-dev": "nodemon --config \"./util/nodemon.json\"/",
-    "build": "rm -rf ./build/ && tsc",
+    "build": "rm -rf ./build/ && tsc && npm test",
     "start": "node build/start.js"
   },
   "keywords": [],
