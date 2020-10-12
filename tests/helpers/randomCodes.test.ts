@@ -21,7 +21,7 @@ describe('UUID tests', () => {
 
     it('getUUID Should return valid lower case uuid', () => {
         let uuid = getUUID();
-        expect(isUUID(uuid)).to.equal(true);
+        expect(isUUID(uuid)).to.equal(false);
     });
 });
 
