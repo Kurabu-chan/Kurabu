@@ -1,14 +1,14 @@
 import * as crypto from "crypto";
 
-function base64URLEncode(str : Buffer) {
-    return str.toString('base64')
+function base64URLEncode(buff : Buffer) {
+    return buff.toString('base64')
         .replace(/\+/g, '-')
         .replace(/\//g, '_')
         .replace(/=/g, '');
 }
 
 export function isUUID(uuid : string) : boolean {
-    const stateRe = /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/;
+    const stateRe = /^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/;
     return uuid.match(stateRe) != null;
 }
 
@@ -23,6 +23,6 @@ export function getUUID(){
 }
 
 export function getPKCE(length: number) : string {
-    var l = Math.floor(length / (4 / 3));
+    var l = Math.ceil(length / (4 / 3));
     return base64URLEncode(crypto.randomBytes(l));
 }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "build/start.js",
   "scripts": {
-    "test": "mocha -r ts-node/register 'tests/**/*.ts'",
+    "test": "mocha \"tests/**/*.ts\" --config ./tests/.mocharc.json",
     "start-dev": "nodemon --config \"./util/nodemon.json\"/",
     "build": "rm -rf ./build/ && tsc",
     "start": "node build/start.js"
