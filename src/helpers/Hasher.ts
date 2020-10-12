@@ -1,5 +1,7 @@
 import * as crypto from 'crypto';
 
+//TODO hide iters inside the hash
+
 const digest = 'sha512';
 const iters = 99999;
 const keyLength = 1024;
