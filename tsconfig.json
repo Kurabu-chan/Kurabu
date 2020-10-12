@@ -11,7 +11,8 @@
       "moduleResolution": "node",
       "importHelpers": true,
       "types": [
-        "node"
+        "node",
+        "mocha"
       ],
       "typeRoots": [
         "node_modules/@types"
@@ -21,6 +22,7 @@
       "./src/**/*.ts"
     ],
     "exclude": [
-      "./src/public/"
+      "./src/public/",
+      "./tests/"
     ]
   }
