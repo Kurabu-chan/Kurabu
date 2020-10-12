@@ -4,7 +4,7 @@
   "description": "",
   "main": "build/start.js",
   "scripts": {
-    "test": "mocha \"tests/**/*.ts\" --config ./tests/.mocharc.json",
+    "test": "mocha \"tests/**/*.ts\" --config ./tests/.mocharc.json --timeout 15000",
     "start-dev": "nodemon --config \"./util/nodemon.json\"/",
     "build": "rm -rf ./build/ && tsc",
     "start": "node build/start.js"
