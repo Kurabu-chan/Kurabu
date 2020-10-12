@@ -6,7 +6,6 @@ import {getPKCE} from '../../src/helpers/randomCodes';
 
 describe('Hash tests', ()=> {
     it("Hashing then verifying should return true", async () => {
-        //TODO change runs when hashing has been edited to be faster
         let allNonHashed : string[] = [];
         let allHashedPromise : Promise<string>[] = [];
         for(let i =0; i < 1; i++){
@@ -24,5 +23,13 @@ describe('Hash tests', ()=> {
         allVerify.forEach((verify)=>{
             expect(verify).to.equal(true);
         });
+    })
+
+    it("Hashing then verifying an old hash (99999 iters) should return true", async () => {
+        let nonhashed = getPKCE(100);
+        let hashed = await hash(nonhashed, 99999);
+        let verified = await Verify(nonhashed, hashed)
+       
+        expect(verified).to.equal(true);
     })
 })
