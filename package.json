@@ -4,6 +4,7 @@
   "description": "",
   "main": "build/start.js",
   "scripts": {
+    "test-setup": "npm install chai mocha ts-node @types/chai @types/mocha",
     "test": "mocha \"tests/**/*.ts\" --config ./tests/.mocharc.json --timeout 15000",
     "start-dev": "nodemon --config \"./util/nodemon.json\"/",
     "build": "rm -rf ./build/ && tsc && npm test",
