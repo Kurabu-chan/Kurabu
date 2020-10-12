@@ -1,4 +1,4 @@
-import { getPKCE, getUUID, isUUID } from '../helpers/randomCodes';
+import { getPKCE, getUUID, isUUID, makeVerifCode } from '../helpers/randomCodes';
 import { CLIENT_ID, ERROR_STATUS } from '../helpers/GLOBALVARS';
 import { GetToken } from '../MALWrapper/Authentication';
 import { tokenResponse, ResponseMessage } from '../MALWrapper/BasicTypes';
@@ -36,17 +36,6 @@ type DictEntry = {
     state: "done" | "pending" | "errored" | "canceled" | "verif",
     data?: DictData | RegisterData | VerifData
 }
-
-function makeVerifCode() {
-    let length = 6;
-    var result           = '';
-    var characters       = '0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
- }
 
 export class UserManager {
     private codeDict: Map<string, DictEntry>;

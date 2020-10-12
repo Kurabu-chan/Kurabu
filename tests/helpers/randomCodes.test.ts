@@ -1,4 +1,4 @@
-import {isUUID, getUUID, getPKCE} from '../../src/helpers/randomCodes';
+import {isUUID, getUUID, getPKCE, makeVerifCode} from '../../src/helpers/randomCodes';
 import {expect} from 'chai';
 
 describe('UUID tests', () => {
@@ -39,5 +39,12 @@ describe('Other Random Codes tests', () => {
         let pkce = getPKCE(4827);
         let encoded = encodeURI(pkce)
         expect(encoded).to.equal(pkce);
+    })
+
+    it('makeVerifCode should return a 6 character string', () => {
+        expect(makeVerifCode().length).to.equal(6);
+    })
+    it('makeVerifCode should return only digits', () => {
+        expect(makeVerifCode().match(/\D/)==null).to.equal(true);
     })
 })

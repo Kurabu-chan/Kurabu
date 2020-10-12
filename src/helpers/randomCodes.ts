@@ -26,3 +26,14 @@ export function getPKCE(length: number) : string {
     var l = Math.ceil(length / (4 / 3));
     return base64URLEncode(crypto.randomBytes(l));
 }
+
+export function makeVerifCode() {
+    let length = 6;
+    var result           = '';
+    var characters       = '0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
