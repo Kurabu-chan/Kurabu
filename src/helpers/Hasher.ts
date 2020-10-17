@@ -3,7 +3,7 @@ import * as crypto from 'crypto';
 const digest = 'sha512';
 function iters(iterations: number|undefined) : number {
     if( iterations != undefined) return 99999;
-    return Math.ceil((Math.random()*5000) + 1000);    
+    return Math.ceil((Math.random()*5000) + 5000);    
 }
 const keyLength = 1024;
 
@@ -65,24 +65,44 @@ function SetIterations(hash: string, iterations : number) : string{
 }
 
 const algorithm = 'aes-256-cbc';
-const key = "jifjSUe5HhZjkzd08CrpAkJkL2TWH7Ug";
-const iv = Buffer.from("m1Xj6fKq6XSEeQ==");
-
-const encrypt = (text:string) => {
-
+const pass = process.env.PASSWORD_ENCR;
+const defaultPass = "hnwaxyn781no28yx787n2891xn87d6x230x713x13x";
+export function encrypt(text:string) {
+    let key: Buffer;
+    if(pass != undefined){
+        key = crypto.scryptSync(pass, 'salt', 32);
+        //throw new Error("PASSWORD_ENCR is undefined");
+    }else{
+        console.warn("Using default pass!");
+        key = crypto.scryptSync(defaultPass, 'salt',32);
+    }   
+    const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(algorithm, key, iv);
 
     const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
 
-    return encrypted.toString('hex')
+    return encrypted.toString('hex') + iv.toString('hex');
     
 };
 
-const decrypt = (hash:string) => {
+export function decrypt (hash:string) {
+    let key: Buffer;
+    if(pass != undefined){
+        key = crypto.scryptSync(pass, 'salt', 32);
+        //throw new Error("PASSWORD_ENCR is undefined");
+    }else{
+        console.warn("Using default pass!");
+        key = crypto.scryptSync(defaultPass, 'salt',32);
+    }  
+    const bytes = Buffer.from(hash,'hex');
+
+    const iv = bytes.slice(bytes.length-16,bytes.length);
+    const hashed = bytes.slice(0,bytes.length-16);
+
 
     const decipher = crypto.createDecipheriv(algorithm, key, iv);
 
-    const decrpyted = Buffer.concat([decipher.update(Buffer.from(hash, 'hex')), decipher.final()]);
+    const decrpyted = Buffer.concat([decipher.update(hashed), decipher.final()]);
 
     return decrpyted.toString();
 };
