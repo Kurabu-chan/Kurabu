@@ -67,42 +67,35 @@ function SetIterations(hash: string, iterations : number) : string{
 const algorithm = 'aes-256-cbc';
 const pass = process.env.PASSWORD_ENCR;
 const defaultPass = "hnwaxyn781no28yx787n2891xn87d6x230x713x13x";
+
 export function encrypt(text:string) {
-    let key: Buffer;
-    if(pass != undefined){
-        key = crypto.scryptSync(pass, 'salt', 32);
-        //throw new Error("PASSWORD_ENCR is undefined");
-    }else{
-        console.warn("Using default pass!");
-        key = crypto.scryptSync(defaultPass, 'salt',32);
-    }   
+    let key = GetKey();  
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(algorithm, key, iv);
 
     const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
-
     return encrypted.toString('hex') + iv.toString('hex');
-    
 };
 
 export function decrypt (hash:string) {
-    let key: Buffer;
-    if(pass != undefined){
-        key = crypto.scryptSync(pass, 'salt', 32);
-        //throw new Error("PASSWORD_ENCR is undefined");
-    }else{
-        console.warn("Using default pass!");
-        key = crypto.scryptSync(defaultPass, 'salt',32);
-    }  
+    let key = GetKey();     
+    
+    //split hash into iv and actual hash
     const bytes = Buffer.from(hash,'hex');
-
     const iv = bytes.slice(bytes.length-16,bytes.length);
     const hashed = bytes.slice(0,bytes.length-16);
 
-
     const decipher = crypto.createDecipheriv(algorithm, key, iv);
-
     const decrpyted = Buffer.concat([decipher.update(hashed), decipher.final()]);
 
     return decrpyted.toString();
 };
+
+function GetKey(){
+    if(pass != undefined){
+        return crypto.scryptSync(pass, 'salt', 32);
+    }else{
+        console.warn("Using default pass!");
+        return crypto.scryptSync(defaultPass, 'salt',32);
+    } 
+}
