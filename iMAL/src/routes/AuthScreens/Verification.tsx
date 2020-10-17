@@ -1,11 +1,13 @@
 import React from "react";
 import { NavigationStackScreenProps } from "react-navigation-stack";
-import { StyleSheet, Text, View, Dimensions, TouchableNativeFeedbackBase, Linking } from 'react-native';
+import { Text, View, Linking, Button, Dimensions, StyleSheet } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import Cursor from "react-native-confirmation-code-field/esm/Cursor";
 import { CodeField } from "react-native-confirmation-code-field";
 import Authentication from "../../APIManager/Authenticate";
 import { Alert } from "react-native";
+import { navigate } from "../../APIManager/helper/NavigationService";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 type State = {
     uuid: string,
@@ -43,6 +45,22 @@ export default class Verif extends React.Component<NavigationStackScreenProps, S
         }
     }
 
+    async Cancel() {
+        let auth = await Authentication.getInstance();
+        let uuid = auth.GetStateCode();
+        if(uuid == undefined){
+            Alert.alert("An error occured during the authentication process, please retry canceling. If that doesn't work close and open the app.")
+            return false;
+        }
+        let result = await auth.TryCancelRegister(uuid);        
+        if(result){
+            console.log("Going to register and clearing stateCode");
+            auth.ClearCode();
+
+            navigate("Register", undefined);
+        }
+    }
+
     async SetCode(code: string) {
         if (code.match(/.*\D.*/)) return;
 
@@ -68,7 +86,7 @@ export default class Verif extends React.Component<NavigationStackScreenProps, S
             <View style={styles.appContainer}>
                 <SafeAreaView style={styles.safeContainer} />
                 <View style={styles.content}>
-                <Text style={styles.head}>iMAL</Text>
+                    <Text style={styles.head}>iMAL</Text>
                     <Text
                         style={styles.sentMailText}>
                         We've sent you an email with a verification code, please enter it below.</Text>
@@ -88,6 +106,9 @@ export default class Verif extends React.Component<NavigationStackScreenProps, S
                             </Text>
                         )}
                     />
+                    <TouchableOpacity
+                    style={styles.cancel}
+                    onPress={this.Cancel.bind(this)}><Text>Cancel</Text></TouchableOpacity>
                 </View>
             </View>
         );
@@ -158,4 +179,13 @@ const styles = StyleSheet.create({
         fontFamily: 'AGRevueCyr',
         marginBottom: 100
     },
+    cancel: {
+        marginTop: 30,
+        backgroundColor: "#eb6100",
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 3,
+        borderColor: '#9b5100',
+        borderWidth: 1
+    }
 });

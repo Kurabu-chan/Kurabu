@@ -42,6 +42,12 @@ class Authentication {
         });        
     }
 
+    public ClearCode(){
+        this.loaded = false;
+        this.stateCode = undefined;
+        AsyncStorage.removeItem("stateCode");
+    }
+
     private SetCode(uuid: string) {
         this.loaded = true;
         this.stateCode = uuid;
@@ -126,6 +132,31 @@ class Authentication {
         }
 
         return json.message;
+    }
+
+    public async TryCancelRegister(uuid: string) : Promise<boolean>{
+        let url = `${Authentication.root}authed/cancelRegister`;
+
+        let body = {
+            uuid: uuid
+        }
+
+        let res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+
+        let json: JsonType = await res.json();
+        if(json.status == "error"){
+            //oh fuck
+            Alert.alert("Something bad happened",json.message);
+            return false;
+        }
+
+        return true;
     }
 
     public async TryVerif(uuid:string,code: string) : Promise<JsonType>{
