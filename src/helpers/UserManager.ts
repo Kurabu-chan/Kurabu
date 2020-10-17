@@ -7,11 +7,12 @@ import { Logger } from '@overnightjs/logger';
 import { Request, Response } from 'express';
 import { BodyOrUrlParams } from './RequestHelper';
 import * as MailHelper from '../helpers/MailHelper';
+import { resolve } from 'path';
 
 /*
 Manage all user data
 */
-
+//#region types
 type DictData = {
     token: string,
     RefreshToken: string,
@@ -36,11 +37,12 @@ type DictEntry = {
     state: "done" | "pending" | "errored" | "canceled" | "verif",
     data?: DictData | RegisterData | VerifData
 }
+//#endregion types
 
 export class UserManager {
     private codeDict: Map<string, DictEntry>;
 
-    /* #region  functions */
+    //#region functions
     /** Log the codeDict */
     public LogDict() {
         let strRep = "";
@@ -92,6 +94,17 @@ export class UserManager {
         }, 10 * 60 * 1000);
         //return the authentication url
         return uuid;
+    }
+
+    public CancelRegister(uuid: string){
+        if(this.codeDict.has(uuid)){
+            let current = this.codeDict.get(uuid);
+            if(current?.state == "verif"){
+                this.SetCanceled(uuid);
+                return true;
+            }
+        }
+        return false;        
     }
 
     public async DoVerif(uuid: string, code: string,ourdomain : string, redirect? : string) : Promise<string>{
@@ -292,9 +305,9 @@ export class UserManager {
             }
         }, 10 * 60 * 1000);
     }
-    /* #endregion */
+    //#endregion functions
 
-    /* #region  singleton */
+    //#region singleton
     private static instance: UserManager;
     /** Initialize codeDict */
     private constructor() {
@@ -306,5 +319,5 @@ export class UserManager {
         }
         return UserManager.instance;
     }
-    /* #endregion */
+    //#endregion singleton
 }

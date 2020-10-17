@@ -79,6 +79,28 @@ export class AuthedController {
         }
     }
 
+    //endpoint for canceling register so someone can retry
+    @Post("cancelRegister")
+    private CancelRegister(req: Request, res: Response){
+        let uuid = BodyOrUrlParams.RequiredString("uuid", req);
+
+        let result = UserManager
+            .GetInstance()
+            .CancelRegister(uuid);
+            
+        if(result){
+            res.status(200).json({
+                status: SUCCESS_STATUS,
+                message: "Register canceled successfully"
+            });
+        }else{
+            res.status(403).json({
+                status: ERROR_STATUS,
+                message: "There was a problem canceling registration"
+            });
+        }
+    }
+
     //endpoint for login using email and password, returning error or uuid
     @Post("login")
     private Login(req: Request, res: Response) {
