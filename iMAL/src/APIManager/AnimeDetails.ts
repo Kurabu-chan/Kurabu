@@ -80,7 +80,7 @@ export type Anime = {
     background?: string,
     related_anime?: Relation[],
     related_manga?: Relation[],
-    recommendations?: AnimeNode & { num_recommendations?: number }[],
+    recommendations?: (AnimeNode & { num_recommendations?: number })[],
     studios?: Studio[],
     statistics?: {
         status?: {

@@ -38,7 +38,7 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState>{
     }
 
     public openDetails() {
-        this.state.navigator.navigate("Details",this.state);
+        this.state.navigator.push("Details",this.state);
     }
 
     render() {
@@ -53,7 +53,7 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState>{
 
 const styles = StyleSheet.create({
     animeContainer: {
-        height: 180,
+        height: 200,
         width:100,
         marginTop: 10,
         marginLeft: 10
