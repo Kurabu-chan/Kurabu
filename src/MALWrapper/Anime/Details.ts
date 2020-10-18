@@ -80,7 +80,7 @@ export type Anime = {
     background?: string,
     related_anime?: Relation[],
     related_manga?: Relation[],
-    recommendations?: AnimeNode & { num_recommendations?: number }[],
+    recommendations?: (AnimeNode & { num_recommendations?: number })[],
     studios?: Studio[],
     statistics?: {
         status?: {
@@ -124,6 +124,6 @@ export async function GetDetails(uuid: string, animeid: number,fields?: Fields[]
     if ((json as ErrorResponse).error) {
         throw new Error((json as ErrorResponse).error);
     }
-    
+    console.log(data);
     return (json as Anime);
 }
