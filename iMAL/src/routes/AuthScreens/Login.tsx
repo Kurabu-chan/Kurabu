@@ -7,6 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Auth from '../../APIManager/Authenticate';
 import { StackNavigationProp } from 'react-navigation-stack/lib/typescript/src/vendor/types';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
+import { Colors } from '../../Configuration/Colors';
 
 
 type LoginState = {
@@ -88,10 +89,10 @@ class Login extends React.Component<NavigationStackScreenProps, LoginState>{
 
 const styles = StyleSheet.create({
     appContainer: {
-        backgroundColor: "#2e51a2"
+        backgroundColor: Colors.BLUE
     },
     safeContainer: {
-        backgroundColor: "#2e51a2"
+        backgroundColor: Colors.BLUE
     },
     content: {
         height: Dimensions.get('window').height,
@@ -99,67 +100,46 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     head: {
-        color: 'white',
+        color: Colors.TEXT,
         fontSize: 60,
         fontFamily: 'AGRevueCyr'
     },
     Input: {
         width: 250,
         height: 50,
-        borderBottomColor: 'white',
+        borderBottomColor: Colors.INPUT_UNDERLINE,
         borderBottomWidth: 1,
-        color: 'white',
+        color: Colors.TEXT,
         fontSize: 20,
         marginTop:15
     },
     LoginButton: {
         borderRadius: 4,
-        backgroundColor: '#eb6100',
+        backgroundColor: Colors.ORANGE,
         paddingHorizontal: 97,
         paddingVertical: 10,
         marginTop: 90,
         marginBottom: 40,
-        color: 'white'
+        color: Colors.TEXT
     },
     LoginButtonText: {
-        color: 'white',
+        color: Colors.TEXT,
         fontSize: 18,
         fontWeight: "bold"
     },
     SignupButton: {
         borderRadius: 4,
-        backgroundColor: '#eb6100',
+        backgroundColor: Colors.ORANGE,
         paddingHorizontal: 60,
         paddingVertical: 6,
         marginTop: 5,
-        color: 'white'
+        color: Colors.TEXT
     },
     SignupButtonText: {
-        color: 'white',
+        color: Colors.TEXT,
         fontSize: 18,
         fontWeight: "bold"
     }
 });
-
-/* not rouned
-width: 250,
-height: 50,
-borderBottomColor: 'white',
-borderBottomWidth: 1,
-color: 'white',
-fontSize: 20,
-marginTop:20
-*/
-/* rounded:
-width: 250,
-height: 50,
-borderColor: 'white',
-borderWidth: 1,
-borderRadius: 25,
-paddingLeft: 20,
-color: 'white',
-fontSize: 20,
-marginTop:10
-*/
 
 export default Login;

@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, FlatList, View, Text, Image, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from 'react-navigation-stack/lib/typescript/src/vendor/types';
 import { NavigationRoute, NavigationParams } from 'react-navigation';
+import { Colors } from '../Configuration/Colors';
 
 export type AnimePicture = {
     medium: string,
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 14,
         marginLeft: 5,
-        color: "white"
+        color: Colors.TEXT
     },
     image: {
         width: 100,

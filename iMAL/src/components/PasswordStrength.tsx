@@ -1,5 +1,6 @@
 import React from 'react';
-import { View,StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Colors } from '../Configuration/Colors';
 
 type props = {
     pass: string
@@ -9,8 +10,8 @@ type state = {
     innerStyle: any
 }
 
-export default class PasswordStrength extends React.Component<props,state> {
-    constructor(props: props){
+export default class PasswordStrength extends React.Component<props, state> {
+    constructor(props: props) {
         super(props)
         this.state = {
             innerStyle: {
@@ -22,7 +23,7 @@ export default class PasswordStrength extends React.Component<props,state> {
         }
     }
 
-    private GetStrength(): number{
+    private GetStrength(): number {
         let strength = 0;
         const regexes = [
             /(?=[a-z])/, //at least 1 lower case
@@ -38,8 +39,8 @@ export default class PasswordStrength extends React.Component<props,state> {
         ];
 
         //look at all regexes and check if they match
-        regexes.forEach((reg)=>{
-            if(this.props.pass.match(reg)){
+        regexes.forEach((reg) => {
+            if (this.props.pass.match(reg)) {
                 // add strength if they match
                 strength += 0.1;
             }
@@ -48,25 +49,25 @@ export default class PasswordStrength extends React.Component<props,state> {
         return strength;
     }
 
-    componentDidUpdate(prevProps: props){
-        if(prevProps.pass === this.props.pass) return;
+    componentDidUpdate(prevProps: props) {
+        if (prevProps.pass === this.props.pass) return;
 
         let strength = this.GetStrength();
-        let color = '#F00';
-        if(strength >= 0.5){
-            color = "#f70"
+        let color = Colors.PASSWORD_STRENGTH.TERRIBLE;
+        if (strength >= 0.5) {
+            color = Colors.PASSWORD_STRENGTH.SUPERBAD
         }
-        if(strength >= 0.6){
-            color = "#fc0"
+        if (strength >= 0.6) {
+            color = Colors.PASSWORD_STRENGTH.BAD
         }
-        if(strength >= 0.7){
-            color= "#FF0"
+        if (strength >= 0.7) {
+            color = Colors.PASSWORD_STRENGTH.OK
         }
-        if(strength >= 0.8){
-            color= "#0F0"
+        if (strength >= 0.8) {
+            color = Colors.PASSWORD_STRENGTH.GOOD
         }
-        if(strength >= 0.9){
-            color = "#00F"
+        if (strength >= 0.9) {
+            color = Colors.PASSWORD_STRENGTH.EXCELLENT
         }
 
         this.setState(
@@ -78,10 +79,10 @@ export default class PasswordStrength extends React.Component<props,state> {
                     borderRadius: 5
                 }
             }
-        );               
+        );
     }
 
-    render(){
+    render() {
         return (
             <View style={styles.outer}>
                 <View style={this.state.innerStyle}></View>
@@ -92,7 +93,7 @@ export default class PasswordStrength extends React.Component<props,state> {
 
 const styles = StyleSheet.create({
     outer: {
-        backgroundColor: "#bbb",
+        backgroundColor:  Colors.PASSWORD_STRENGTH.BACKGROUND,
         height: 10,
         width: '60%',
         marginTop: 5,

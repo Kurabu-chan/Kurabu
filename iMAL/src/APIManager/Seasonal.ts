@@ -1,7 +1,7 @@
 import AnimeNodeSource from './AnimeNodeSource';
 import Authentication from './Authenticate';
 import { AnimeNode } from '../components/AnimeItem';
-import { Config } from '../Config';
+import { Config } from '../Configuration/Config';
 
 type JSONType = {
     data: AnimeNode[],

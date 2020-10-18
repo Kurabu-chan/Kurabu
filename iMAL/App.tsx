@@ -7,7 +7,7 @@ import { AppState, AppStateStatus } from 'react-native';
 import Authentication from './src/APIManager/Authenticate';
 import { NavigationDrawerScreenProps } from 'react-navigation-drawer';
 import { setTopLevelNavigator, navigate } from './src/APIManager/helper/NavigationService';
-import { Config } from './src/Config';
+import { Config } from './src/Configuration/Config';
 
 
 

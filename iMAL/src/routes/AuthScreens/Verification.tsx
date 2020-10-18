@@ -8,6 +8,7 @@ import Authentication from "../../APIManager/Authenticate";
 import { Alert } from "react-native";
 import { navigate } from "../../APIManager/helper/NavigationService";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Colors } from "../../Configuration/Colors";
 
 type State = {
     uuid: string,
@@ -126,27 +127,27 @@ const styles = StyleSheet.create({
         fontSize: 24,
         margin: 5,
         borderWidth: 2,
-        borderColor: '#eb6100',
+        borderColor: Colors.ORANGE,
         textAlign: 'center',
-        color: "#eb6100"
+        color: Colors.ORANGE
     },
     focusCell: {
-        borderColor: '#9b5100',
+        borderColor: Colors.ORANGE_SELECTED,
     },
     appContainer: {
-        backgroundColor: "#2e51a2",
+        backgroundColor: Colors.BLUE,
         alignItems: 'center',
         justifyContent: 'center'
     },
     safeContainer: {
-        backgroundColor: "#2e51a2"
+        backgroundColor: Colors.BLUE
     },
     VerifInput: {
         width: 240,
         height: 50,
-        borderBottomColor: 'white',
+        borderBottomColor: Colors.INPUT_UNDERLINE,
         borderBottomWidth: 1,
-        color: 'white',
+        color: Colors.TEXT,
         fontSize: 50,
         letterSpacing: 10
     },
@@ -156,11 +157,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     text: {
-        color: 'white',
+        color: Colors.TEXT,
         fontSize: 15
     },
     incorrect: {
-        color: 'red',
+        color: Colors.ERROR,
         fontSize: 20,
         opacity: 100
     },
@@ -168,24 +169,24 @@ const styles = StyleSheet.create({
         opacity: 0
     },
     sentMailText: {
-        color: 'white',
+        color: Colors.TEXT,
         width: Dimensions.get('window').width * 0.8,
         fontSize: 14,
         fontFamily: "AGRevueCyr"
     },
     head: {
-        color: 'white',
+        color: Colors.TEXT,
         fontSize: 60,
         fontFamily: 'AGRevueCyr',
         marginBottom: 100
     },
     cancel: {
         marginTop: 30,
-        backgroundColor: "#eb6100",
+        backgroundColor: Colors.ORANGE,
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 3,
-        borderColor: '#9b5100',
+        borderColor: Colors.ORANGE_SELECTED,
         borderWidth: 1
     }
 });

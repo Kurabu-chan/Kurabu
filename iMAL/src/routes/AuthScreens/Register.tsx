@@ -6,6 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Auth from '../../APIManager/Authenticate';
 import PasswordStrength from '../../components/PasswordStrength';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
+import { Colors } from '../../Configuration/Colors';
 
 type RegisterState = {
     email: string,
@@ -104,10 +105,10 @@ class Register extends React.Component<NavigationStackScreenProps, RegisterState
 
 const styles = StyleSheet.create({
     appContainer: {
-        backgroundColor: "#1a1a1a"
+        backgroundColor: Colors.ALTERNATE_BACKGROUND
     },
     safeContainer: {
-        backgroundColor: "#1a1a1a"
+        backgroundColor: Colors.ALTERNATE_BACKGROUND
     },
     content: {
         height: Dimensions.get('window').height,
@@ -115,43 +116,43 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     head: {
-        color: 'white',
+        color: Colors.TEXT,
         fontSize: 60,
         fontFamily: 'AGRevueCyr'
     },
     Input: {
         width: 250,
         height: 50,
-        borderBottomColor: 'white',
+        borderBottomColor: Colors.INPUT_UNDERLINE,
         borderBottomWidth: 1,
-        color: 'white',
+        color: Colors.TEXT,
         fontSize: 20,
         marginTop:15
     },
     SignupButton: {
         borderRadius: 4,
-        backgroundColor: '#2e51a2',
+        backgroundColor: Colors.BLUE,
         paddingHorizontal: 97,
         paddingVertical: 10,
         marginTop: 40,
         marginBottom: 40,
-        color: 'white'
+        color: Colors.TEXT
     },
     SignupButtonText: {
-        color: 'white',
+        color: Colors.TEXT,
         fontSize: 18,
         fontWeight: "bold"
     },
     LoginButton: {
         borderRadius: 4,
-        backgroundColor: '#2e51a2',
+        backgroundColor: Colors.BLUE,
         paddingHorizontal: 60,
         paddingVertical: 6,
         marginTop: 5,
-        color: 'white'
+        color: Colors.TEXT
     },
     LoginButtonText: {
-        color: 'white',
+        color: Colors.TEXT,
         fontSize: 18,
         fontWeight: "bold"
     }

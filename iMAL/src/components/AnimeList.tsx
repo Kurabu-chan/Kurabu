@@ -4,6 +4,7 @@ import AnimeItem, { AnimeNode } from './AnimeItem';
 import AnimeNodeSource from '../APIManager/AnimeNodeSource';
 import { NavigationParams, NavigationRoute } from 'react-navigation';
 import { StackNavigationProp } from 'react-navigation-stack/lib/typescript/src/vendor/types';
+import { Colors } from '../Configuration/Colors';
 
 type AnimeListState = {
     title: string,
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         marginLeft: 5,
-        color: "white"
+        color: Colors.TEXT
     },
     animeList: {
         justifyContent: 'flex-start'

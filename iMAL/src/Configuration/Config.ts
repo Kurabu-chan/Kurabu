@@ -1,4 +1,4 @@
-import conf from "../config.json";
+import conf from "../../config.json";
 
 export class Config {
     private config : any;

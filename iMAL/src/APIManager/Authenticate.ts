@@ -1,7 +1,7 @@
 import { AsyncStorage, Alert } from 'react-native';
 import { isUUID } from './helper/FormatChecker';
 import * as Linking from 'expo-linking';
-import { Config } from '../Config';
+import { Config } from '../Configuration/Config';
 
 type JsonType = {
     status: "success" | "error",
@@ -68,6 +68,11 @@ class Authentication {
     }
 
     public GetStateCode(): string | undefined {
+        if(this.stateCode == undefined){
+            this.LoadStorage().then(()=>{
+                return this.stateCode;
+            });
+        }
         return this.stateCode;
     }
 

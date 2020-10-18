@@ -5,8 +5,8 @@ import Auth from '../../APIManager/Authenticate';
 import { NavigationSwitchScreenProps } from 'react-navigation';
 
 //uncomment to reset saved uuid and go into developer mode for the Auth system
-Auth.devMode = false;
-Auth.ClearAsync();
+//Auth.devMode = false;
+//Auth.ClearAsync();
 
 class PreLogin extends React.Component<NavigationSwitchScreenProps,NavigationSwitchScreenProps> {
     constructor(props: NavigationSwitchScreenProps) {
@@ -17,7 +17,7 @@ class PreLogin extends React.Component<NavigationSwitchScreenProps,NavigationSwi
             screenProps: props.screenProps
         };
 
-        // this.state.navigation.navigate("Verify");
+        //this.state.navigation.navigate("Details");
         
         Auth.getInstance().then((auth) => {
             if (auth.getLoaded()) {
