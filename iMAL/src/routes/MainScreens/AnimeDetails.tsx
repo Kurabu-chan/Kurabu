@@ -37,7 +37,7 @@ export default class AnimeDetails extends React.Component<NavigationStackScreenP
                 }
             }
         }
-
+        //#region state
         // this.state = {
         //     animeNode: animeNode,
         //     anime: {
@@ -213,7 +213,7 @@ export default class AnimeDetails extends React.Component<NavigationStackScreenP
         //         }
         //     }
         // }
-
+        //#endregion state
         this.state = {
             animeNode: animeNode
         }
@@ -231,10 +231,10 @@ export default class AnimeDetails extends React.Component<NavigationStackScreenP
             });
     }
 
-    NiceString(text: string|undefined){
-        if(text == undefined) return "";
+    NiceString(text: string | undefined) {
+        if (text == undefined) return "";
         text = text.replace("_", " ");
-        return text.slice(0,1).toUpperCase() + text.slice(1,text.length);
+        return text.slice(0, 1).toUpperCase() + text.slice(1, text.length);
     }
 
     render() {
@@ -263,35 +263,43 @@ export default class AnimeDetails extends React.Component<NavigationStackScreenP
                                         <Text style={styles.TopAreaLabel}>Score:</Text>
                                         <Text style={styles.TopAreaLabel}>Rank:</Text>
                                         <Text style={styles.TopAreaLabel}>Popularity:</Text>
-                                        <Divider color={Colors.DIVIDER} widthPercentage={100}/>
+                                    </View>
+                                    <View style={styles.TopAreaValues}>
+                                        <Text style={styles.TopAreaValue}>{this.state.anime.mean}</Text>
+                                        <Text style={styles.TopAreaValue}>#{this.state.anime.rank}</Text>
+                                        <Text style={styles.TopAreaValue}>#{this.state.anime.popularity}</Text>
+                                    </View>
+                                </View>
+                                <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                                <View style={styles.TopAreaData}>
+                                    <View style={styles.TopAreaLabels}>
                                         <Text style={styles.TopAreaLabel}>Status:</Text>
                                         <Text style={styles.TopAreaLabel}>Aired:</Text>
                                         <Text style={styles.TopAreaLabel}>Episodes:</Text>
                                         <Text style={styles.TopAreaLabel}>Genres:</Text>
                                     </View>
                                     <View style={styles.TopAreaValues}>
-                                        <Text style={styles.TopAreaValue}>{this.state.anime.mean}</Text>
-                                        <Text style={styles.TopAreaValue}>#{this.state.anime.rank}</Text>
-                                        <Text style={styles.TopAreaValue}>#{this.state.anime.popularity}</Text>
-                                        <Divider color={Colors.DIVIDER} widthPercentage={100}/>
                                         <Text style={styles.TopAreaValue}>{this.NiceString(this.state.anime.status)}</Text>
                                         <Text style={styles.TopAreaValue}>{this.state.anime.start_date}</Text>
                                         <Text style={styles.TopAreaValue}>{this.state.anime.num_episodes == 0 ? "N/A" : this.state.anime.num_episodes}</Text>
                                         <Text style={styles.TopAreaValue}>{this.state.anime.genres?.map(x => x.name).join(", ")}</Text>
                                     </View>
                                 </View>
-                                
-                                
+
                             </View>
                         </View>
 
                         <Text style={styles.head2}>Synopsis</Text>
                         <Divider color={Colors.DIVIDER} widthPercentage={100} />
                         <LargeText text={this.state.anime.synopsis} />
-
-                        <Text style={styles.head2}>Background</Text>
-                        <Divider color={Colors.DIVIDER} widthPercentage={100} />
-                        <LargeText text={this.state.anime.background} />
+                        {
+                            this.state.anime.background != undefined && this.state.anime.background != "" ?
+                                <View>
+                                    <Text style={styles.head2}>Background</Text>
+                                    <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                                    <LargeText text={this.state.anime.background} />
+                                </View> : undefined
+                        }
                     </ScrollView>
                 }
             </SafeAreaProvider>
@@ -342,26 +350,27 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     head2: {
-        fontSize: 20,
+        fontSize: 17,
         color: Colors.TEXT
     },
     TopAreaLabels: {
         flexDirection: "column",
-        flex: 1
+        flex: 1.3
     },
     TopAreaValues: {
         flexDirection: "column",
         flex: 2
     },
     TopAreaData: {
-
         flexDirection: "row",
     },
     TopAreaLabel: {
         color: Colors.TEXT,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: 12
     },
     TopAreaValue: {
-        color: Colors.TEXT
+        color: Colors.TEXT,
+        fontSize: 12
     }
 });

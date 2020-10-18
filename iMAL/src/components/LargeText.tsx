@@ -20,12 +20,12 @@ export class LargeText extends React.Component<Props, State> {
         }
     }
 
-    ShortedText(text: string){
-        if(text.length > 300){
-            return text.slice(0,200) + "...";
-        }else{
+    ShortedText(text: string) {
+        if (text.length > 300) {
+            return text.slice(0, 200) + "...";
+        } else {
             return text;
-        }       
+        }
     }
 
     render() {
@@ -45,27 +45,27 @@ export class LargeText extends React.Component<Props, State> {
         return (
             <View>
                 <Text style={styles.text}>{text}</Text>
-                {this.state.text.length > 300? <TouchableOpacity onPress={() => {
+                {this.state.text.length > 300 ? <TouchableOpacity onPress={() => {
                     this.setState({ ...this.state, readmore: !this.state.readmore })
                 }}>
                     <Text style={styles.ReadMore}>{read}</Text>
-                </TouchableOpacity>:undefined}
+                </TouchableOpacity> : undefined}
             </View>
-
         );
     }
 }
 
 const styles = StyleSheet.create({
     text: {
-        color: Colors.TEXT
+        color: Colors.TEXT,
+        fontSize: 13
     },
     ReadMore: {
         color: Colors.BLUE,
         textDecorationStyle: "solid",
         textDecorationLine: "underline",
         textDecorationColor: Colors.BLUE,
-        fontSize: 15,
+        fontSize: 12,
         marginBottom: 15
     }
 });
