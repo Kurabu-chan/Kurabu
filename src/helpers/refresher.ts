@@ -31,6 +31,12 @@ export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: 
                 await UserManager.GetInstance().TryUpdateTokens(uuid, refresh.access_token, refresh.refresh_token);
                 //return new result
                 return res2.json();
+            }else{
+                // refresh token might be bad
+                return {
+                    status: "error",
+                    message: "bad_refresh"
+                }
             }
         }
     }
