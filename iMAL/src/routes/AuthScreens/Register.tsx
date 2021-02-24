@@ -7,6 +7,7 @@ import Auth from '../../APIManager/Authenticate';
 import PasswordStrength from '../../components/PasswordStrength';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import { Colors } from '../../Configuration/Colors';
+import Kurabu from "../../../assets/pinkregister.svg";
 
 type RegisterState = {
     email: string,
@@ -44,7 +45,6 @@ class Register extends React.Component<NavigationStackScreenProps, RegisterState
                     //we got the uuid for the verification
                     auth.setCode(res);
                     console.log("Obtained uuid: " + res);
-                    //OLD: Linking.openURL(res);
                     this.props.navigation.replace("Verify");
                 }
             });
@@ -58,9 +58,15 @@ class Register extends React.Component<NavigationStackScreenProps, RegisterState
     render() {
         return (
             <View style={styles.appContainer}>
+                <Kurabu height={Dimensions.get('window').height}
+                    width={Dimensions.get('window').width*3}
+                    preserveAspectRatio="xMinYMin slice"
+                    style={{
+                        position: 'absolute'
+                    }} />
                 <SafeAreaView style={styles.safeContainer} />
                 <View style={styles.content}>
-                    <Text style={styles.head}>Sign up</Text>
+                <View style={{width:10,height:"25%"}}></View>
                     <TextInput onChangeText={this.changeEmail.bind(this)}
                         placeholder="Email"
                         autoCompleteType="email"
@@ -131,7 +137,7 @@ const styles = StyleSheet.create({
     },
     SignupButton: {
         borderRadius: 4,
-        backgroundColor: Colors.BLUE,
+        backgroundColor: Colors.CYAN,
         paddingHorizontal: 97,
         paddingVertical: 10,
         marginTop: 40,
@@ -145,7 +151,7 @@ const styles = StyleSheet.create({
     },
     LoginButton: {
         borderRadius: 4,
-        backgroundColor: Colors.BLUE,
+        backgroundColor: Colors.CYAN,
         paddingHorizontal: 60,
         paddingVertical: 6,
         marginTop: 5,

@@ -1,5 +1,6 @@
 export class Colors {
     public static BLUE = "#2e51a2";
+    public static CYAN = "#2893E7";
     public static TEXT = "#ffffff";
     public static SUBTEXT = "#999999";
     public static ORANGE = "#eb6100";

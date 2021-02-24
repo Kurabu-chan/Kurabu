@@ -5,7 +5,7 @@ import Auth from '../../APIManager/Authenticate';
 import { NavigationSwitchScreenProps } from 'react-navigation';
 
 //uncomment to reset saved uuid and go into developer mode for the Auth system
-Auth.devMode = false;
+Auth.devMode = true;
 Auth.ClearAsync();
 
 class PreLogin extends React.Component<NavigationSwitchScreenProps,NavigationSwitchScreenProps> {

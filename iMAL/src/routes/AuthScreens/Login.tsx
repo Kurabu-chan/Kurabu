@@ -1,14 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput} from 'react-native';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {Dimensions } from "react-native";
+import { Dimensions } from "react-native";
 import { NavigationRoute, NavigationParams } from 'react-navigation';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Auth from '../../APIManager/Authenticate';
 import { StackNavigationProp } from 'react-navigation-stack/lib/typescript/src/vendor/types';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import { Colors } from '../../Configuration/Colors';
-
+import Kurabu from "../../../assets/pinklogin.svg";
 
 type LoginState = {
     navigator: StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>,
@@ -27,11 +27,11 @@ class Login extends React.Component<NavigationStackScreenProps, LoginState>{
     }
 
     private changeEmail(newstr: string) {
-        this.setState({...this.state,email: newstr});
+        this.setState({ ...this.state, email: newstr });
     }
 
     private changePass(newstr: string) {
-        this.setState({...this.state,pass: newstr});
+        this.setState({ ...this.state, pass: newstr });
     }
 
     private DoLogin() {
@@ -41,7 +41,7 @@ class Login extends React.Component<NavigationStackScreenProps, LoginState>{
                     this.state.navigator.navigate("Home");
                 }
             });
-        });        
+        });
     }
 
     private DoSignup() {
@@ -51,9 +51,15 @@ class Login extends React.Component<NavigationStackScreenProps, LoginState>{
     render() {
         return (
             <View style={styles.appContainer}>
+                <Kurabu height={Dimensions.get('window').height}
+                    width={Dimensions.get('window').width*3}
+                    preserveAspectRatio="xMinYMin slice"
+                    style={{
+                        position: 'absolute'
+                    }} />
                 <SafeAreaView style={styles.safeContainer} />
                 <View style={styles.content}>
-                    <Text style={styles.head}>iMAL</Text>
+                    <View style={{width:10,height:"30%"}}></View>
                     <TextInput onChangeText={this.changeEmail.bind(this)}
                         placeholder="Email"
                         autoCompleteType="email"
@@ -63,7 +69,7 @@ class Login extends React.Component<NavigationStackScreenProps, LoginState>{
                         placeholder="Password"
                         autoCompleteType="password"
                         secureTextEntry
-                        
+
                         style={styles.Input}
                         value={this.state.pass} />
                     <TouchableOpacity
@@ -72,7 +78,7 @@ class Login extends React.Component<NavigationStackScreenProps, LoginState>{
                         onPress={this.DoLogin.bind(this)}>
                         <Text style={styles.LoginButtonText}>Login</Text>
                     </TouchableOpacity>
-                    <Text style={{color:'white'}}>
+                    <Text style={{ color: 'white' }}>
                         No Account?
                     </Text>
                     <TouchableOpacity
@@ -82,17 +88,17 @@ class Login extends React.Component<NavigationStackScreenProps, LoginState>{
                         <Text style={styles.SignupButtonText}>Sign up</Text>
                     </TouchableOpacity>
                 </View>
-            </View> 
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
     appContainer: {
-        backgroundColor: Colors.BLUE
+        // backgroundColor: Colors.BLUE
     },
     safeContainer: {
-        backgroundColor: Colors.BLUE
+        // backgroundColor: Colors.BLUE
     },
     content: {
         height: Dimensions.get('window').height,
@@ -111,11 +117,11 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         color: Colors.TEXT,
         fontSize: 20,
-        marginTop:15
+        marginTop: 15
     },
     LoginButton: {
         borderRadius: 4,
-        backgroundColor: Colors.ORANGE,
+        backgroundColor: Colors.CYAN,
         paddingHorizontal: 97,
         paddingVertical: 10,
         marginTop: 90,
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
     },
     SignupButton: {
         borderRadius: 4,
-        backgroundColor: Colors.ORANGE,
+        backgroundColor: Colors.CYAN,
         paddingHorizontal: 60,
         paddingVertical: 6,
         marginTop: 5,
