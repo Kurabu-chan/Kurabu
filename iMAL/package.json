@@ -11,6 +11,7 @@
     "@react-native-community/masked-view": "^0.1.10",
     "@types/node-fetch": "^2.5.7",
     "expo": "~38.0.8",
+    "expo-app-loading": "^1.0.1",
     "expo-linking": "^1.0.3",
     "expo-status-bar": "^1.0.2",
     "http": "0.0.1-security",
