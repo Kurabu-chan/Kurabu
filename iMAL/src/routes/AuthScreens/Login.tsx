@@ -51,7 +51,7 @@ class Login extends React.Component<NavigationStackScreenProps, LoginState>{
     render() {
         return (
             <View style={styles.appContainer}>
-                <Kurabu height={Dimensions.get('window').height}
+                <Kurabu height={Dimensions.get('window').height*1.5}
                     width={Dimensions.get('window').width*3}
                     preserveAspectRatio="xMinYMin slice"
                     style={{
