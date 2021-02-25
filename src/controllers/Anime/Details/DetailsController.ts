@@ -7,24 +7,18 @@ import { GetDetails } from '../../../MALWrapper/Anime/Details';
 import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import GeneralError from '../../../errors/GeneralError';
-import ErrorHandlerDecorator from '../../../decorators/ErrorHandlerDecorator';
+import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
 
 @Controller(Options.ControllerPath)
 export class DetailsController {
     @Get(Options.ControllerName)
     @State()
     @Param.Param("animeid", Param.ParamType.int, false)
-    @LogArg()
-    @ErrorHandlerDecorator()
-    private get(req: Request, res: Response, arg: Options.params){
+    //@LogArg()
+    @RequestHandlerDecorator()
+    private async get(req: Request, res: Response, arg: Options.params){
         arg.animeid = arg.animeid ? arg.animeid : 1;
 
-        //everything is good        
-        GetDetails( arg.state, arg.animeid).then((result) => {
-            res.status(200).json(result);
-        //Maybe it isnt :()
-        }).catch((e) => {
-            throw new GeneralError(e.message);
-        });
+        return await GetDetails( arg.state, arg.animeid);
     }
 }

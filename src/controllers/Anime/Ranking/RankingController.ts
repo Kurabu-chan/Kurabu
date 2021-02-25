@@ -7,7 +7,7 @@ import { GetRanking } from '../../../MALWrapper/Anime/Ranking';
 import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import GeneralError from '../../../errors/GeneralError';
-import ErrorHandlerDecorator from '../../../decorators/ErrorHandlerDecorator';
+import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
 
 const possible = ["all", "airing", "upcoming", "tv", "ova", "movie", "special", "bypopularity", "favorite"];
 
@@ -19,8 +19,8 @@ export class RankingController {
     @Param.Param("limit", Param.ParamType.int, true)
     @Param.Param("offset", Param.ParamType.int, true)
     @LogArg()
-    @ErrorHandlerDecorator()
-    private get(req: Request, res: Response, arg: Options.params){
+    @RequestHandlerDecorator()
+    private async get(req: Request, res: Response, arg: Options.params){
         if (arg.limit && arg.limit > 100) {
             arg.limit = 100;
         }
@@ -29,10 +29,6 @@ export class RankingController {
             arg.rankingtype = <"all" | "airing" | "upcoming" | "tv" | "ova" | "movie" | "special" | "bypopularity" | "favorite">req.query.rankingtype;
         }
 
-        GetRanking(arg.state,arg.rankingtype,arg.limit,arg.offset).then((result) => {
-                res.status(200).json(result);
-        }).catch((e) => {
-            throw new GeneralError(e.message);
-        });
+        return await GetRanking(arg.state,arg.rankingtype,arg.limit,arg.offset)
     }
 }

@@ -108,7 +108,7 @@ export class UserManager {
             let current = this.codeDict.get(uuid);
             if(current?.state == "verif"){
                 this.SetCanceled(uuid);
-                return true;
+                return;
             }else{
                 throw new StateStatusError("State had wrong status during cancel");
             }

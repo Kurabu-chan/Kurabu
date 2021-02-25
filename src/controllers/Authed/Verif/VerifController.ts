@@ -5,7 +5,7 @@ import { SUCCESS_STATUS, ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import { UserManager } from '../../../helpers/UserManager';
 import { Param, ParamType } from '../../../decorators/ParamDecorator';
-import ErrorHandlerDecorator from '../../../decorators/ErrorHandlerDecorator';
+import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
 
 @Controller(Options.ControllerPath)
 export class VerifController {
@@ -14,15 +14,14 @@ export class VerifController {
     @Param("code", ParamType.string, false)
     @Param("redirect", ParamType.string, true)
     @LogArg()
-    @ErrorHandlerDecorator()
-    private post(req: Request, res: Response, arg: Options.params) {
+    @RequestHandlerDecorator()
+    private async post(req: Request, res: Response, arg: Options.params) {
         let ourdomain = `${req.protocol}://${req.hostname}`;
 
-        UserManager.GetInstance().DoVerif(arg.uuid, arg.code, ourdomain, arg.redirect).then((url) => {
-            res.status(200).json({
-                status: SUCCESS_STATUS,
-                message: url
-            });
-        })
+        var url = await UserManager.GetInstance().DoVerif(arg.uuid, arg.code, ourdomain, arg.redirect)
+        return {
+            status: SUCCESS_STATUS,
+            message: url
+        };
     }
 }

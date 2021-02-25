@@ -7,7 +7,7 @@ import { GetSuggested } from '../../../MALWrapper/Anime/Suggestions';
 import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import GeneralError from '../../../errors/GeneralError';
-import ErrorHandlerDecorator from '../../../decorators/ErrorHandlerDecorator';
+import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
 
 @Controller(Options.ControllerPath)
 export class SuggestionsController {
@@ -16,17 +16,13 @@ export class SuggestionsController {
     @Param.Param("limit", Param.ParamType.int, true)
     @Param.Param("offset", Param.ParamType.int, true)
     @LogArg()
-    @ErrorHandlerDecorator()
-    private get(req: Request, res: Response, arg: Options.params){
+    @RequestHandlerDecorator()
+    private async get(req: Request, res: Response, arg: Options.params){
         arg.limit;
         if (arg.limit && arg.limit > 100) {
             arg.limit = 100;
         }
         
-        GetSuggested(arg.state, arg.limit, arg.offset).then((result) => {
-            res.status(200).json(result);
-        }).catch((e) => {
-            throw new GeneralError(e.message);
-        }); 
+        return await GetSuggested(arg.state, arg.limit, arg.offset);
     }
 }
