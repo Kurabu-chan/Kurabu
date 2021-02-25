@@ -2,7 +2,6 @@
     "compilerOptions": {
       "module": "commonjs",
       "strict": true,
-      "baseUrl": "./",
       "outDir": "build",
       "removeComments": true,
       "experimentalDecorators": true,

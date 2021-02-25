@@ -15,7 +15,7 @@ export async function GetToken(code: string, verifier:string, ourdomain:string) 
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: `client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=authorization_code&code=${code}&code_verifier=${verifier}&redirect_uri=${process.env.LOCALMODE?"http://localhost:3000/authed":ourdomain + "/authed"}`
+            body: `client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=authorization_code&code=${code}&code_verifier=${verifier}&redirect_uri=${process.env.LOCALMODE?"http://localhost:15000/authed":ourdomain + "/authed"}`
         });
         
         try {

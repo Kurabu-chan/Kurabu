@@ -1,6 +1,7 @@
 import { Client, QueryResult, QueryConfig } from 'pg';
 import * as fs from 'fs';
 import * as hasher from '../../helpers/Hasher';
+import BadLoginError from '../../errors/Authentication/BadLoginError';
 
 export type UserDatabaseEntry = {
     id: string,
@@ -59,10 +60,10 @@ export class Database {
         let res = await this.ParamQuery(query, [email]);
 
         //user doesn't exist
-        if (res.rowCount === 0) throw new Error("Incorrect login");
+        if (res.rowCount === 0) throw new BadLoginError("Incorrect login");
         
         let entry = res.rows[0];
-        if (!hasher.Verify(password, entry.pass)) throw new Error("Incorrect login");
+        if (!hasher.Verify(password, entry.pass)) throw new BadLoginError("Incorrect login");
 
         return {
             id: entry.id,
