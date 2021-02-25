@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { BodyOrUrlParams } from '../helpers/RequestHelper';
 
 export enum ParamPos {
     body,

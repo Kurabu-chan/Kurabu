@@ -6,6 +6,8 @@ import * as Param from "../../../decorators/ParamDecorator";
 import { GetRanking } from '../../../MALWrapper/Anime/Ranking';
 import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
+import GeneralError from '../../../errors/GeneralError';
+import ErrorHandlerDecorator from '../../../decorators/ErrorHandlerDecorator';
 
 const possible = ["all", "airing", "upcoming", "tv", "ova", "movie", "special", "bypopularity", "favorite"];
 
@@ -17,6 +19,7 @@ export class RankingController {
     @Param.Param("limit", Param.ParamType.int, true)
     @Param.Param("offset", Param.ParamType.int, true)
     @LogArg()
+    @ErrorHandlerDecorator()
     private get(req: Request, res: Response, arg: Options.params){
         if (arg.limit && arg.limit > 100) {
             arg.limit = 100;
@@ -29,10 +32,7 @@ export class RankingController {
         GetRanking(arg.state,arg.rankingtype,arg.limit,arg.offset).then((result) => {
                 res.status(200).json(result);
         }).catch((e) => {
-            res.status(500).json({
-                status: ERROR_STATUS,
-                message: e.message
-            });
+            throw new GeneralError(e.message);
         });
     }
 }

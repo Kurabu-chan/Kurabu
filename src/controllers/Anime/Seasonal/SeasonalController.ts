@@ -6,6 +6,8 @@ import * as Param from "../../../decorators/ParamDecorator";
 import { GetSeasonal } from '../../../MALWrapper/Anime/Seasonal';
 import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
+import GeneralError from '../../../errors/GeneralError';
+import ErrorHandlerDecorator from '../../../decorators/ErrorHandlerDecorator';
 
 const seasons = ["winter", "spring", "summer", "fall"];
 const sortScore = ["score", "animescore", "anime_score"];
@@ -21,6 +23,7 @@ export class SeasonalController {
     @Param.Param("limit", Param.ParamType.int, true)
     @Param.Param("offset", Param.ParamType.int, true)
     @LogArg()
+    @ErrorHandlerDecorator()
     private get(req: Request, res: Response, arg: Options.params) {
         arg.year = arg.year ?? 2020;
         if (arg.year < 1917) {
@@ -48,10 +51,7 @@ export class SeasonalController {
         GetSeasonal(arg.state, arg.sort, arg.year, arg.season, arg.limit, arg.offset).then((result) => {
             res.status(200).json(result);
         }).catch((e) => {
-            res.status(500).json({
-                status: ERROR_STATUS,
-                message: e.message
-            });
+            throw new GeneralError(e.message);
         });
     }
 }

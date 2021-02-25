@@ -1,9 +1,9 @@
-import { ErrorResponse, isErrResp, tokenResponse, isTokenResponse } from '../MALWrapper/BasicTypes';
+import { isErrResp, isTokenResponse } from '../MALWrapper/BasicTypes';
 import * as fetch from 'node-fetch';
-import { json } from 'body-parser';
 import { RefreshToken } from '../MALWrapper/Authentication'
 import { Logger } from '@overnightjs/logger';
 import { UserManager } from './UserManager';
+import RefreshError from '../errors/Authentication/RefreshError';
 
 export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: fetch.RequestInit | undefined): Promise<any> {
     //get current tokens
@@ -33,10 +33,7 @@ export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: 
                 return res2.json();
             }else{
                 // refresh token might be bad
-                return {
-                    status: "error",
-                    message: "bad_refresh"
-                }
+                throw new RefreshError("Refresh token has expired");
             }
         }
     }

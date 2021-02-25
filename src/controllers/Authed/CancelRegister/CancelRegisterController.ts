@@ -5,27 +5,22 @@ import { SUCCESS_STATUS, ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import { UserManager } from '../../../helpers/UserManager';
 import { Param, ParamType } from '../../../decorators/ParamDecorator';
+import ErrorHandlerDecorator from '../../../decorators/ErrorHandlerDecorator';
 
 @Controller(Options.ControllerPath)
 export class CancelRegisterController {
     @Post(Options.ControllerName)
     @Param("uuid", ParamType.string, false)
     @LogArg()
+    @ErrorHandlerDecorator()
     private post(req: Request, res: Response, arg: Options.params) {
-        let result = UserManager
+        UserManager
             .GetInstance()
             .CancelRegister(arg.uuid);
             
-        if(result){
-            res.status(200).json({
-                status: SUCCESS_STATUS,
-                message: "Register canceled successfully"
-            });
-        }else{
-            res.status(403).json({
-                status: ERROR_STATUS,
-                message: "There was a problem canceling registration"
-            });
-        }
+        res.status(200).json({
+            status: SUCCESS_STATUS,
+            message: "Register canceled successfully"
+        });
     }
 }

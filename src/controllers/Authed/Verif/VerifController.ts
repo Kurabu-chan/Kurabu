@@ -5,6 +5,7 @@ import { SUCCESS_STATUS, ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import { UserManager } from '../../../helpers/UserManager';
 import { Param, ParamType } from '../../../decorators/ParamDecorator';
+import ErrorHandlerDecorator from '../../../decorators/ErrorHandlerDecorator';
 
 @Controller(Options.ControllerPath)
 export class VerifController {
@@ -13,6 +14,7 @@ export class VerifController {
     @Param("code", ParamType.string, false)
     @Param("redirect", ParamType.string, true)
     @LogArg()
+    @ErrorHandlerDecorator()
     private post(req: Request, res: Response, arg: Options.params) {
         let ourdomain = `${req.protocol}://${req.hostname}`;
 
@@ -21,11 +23,6 @@ export class VerifController {
                 status: SUCCESS_STATUS,
                 message: url
             });
-        }).catch((e) => {
-            res.status(500).json({
-                status: ERROR_STATUS,
-                message: e.message
-            });
-        });
+        })
     }
 }

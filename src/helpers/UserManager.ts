@@ -1,13 +1,20 @@
 import { getPKCE, getUUID, isUUID, makeVerifCode } from '../helpers/randomCodes';
-import { CLIENT_ID, ERROR_STATUS } from '../helpers/GLOBALVARS';
+import { CLIENT_ID } from '../helpers/GLOBALVARS';
 import { GetToken } from '../MALWrapper/Authentication';
 import { tokenResponse, ResponseMessage } from '../MALWrapper/BasicTypes';
 import { Database } from './database/Database';
 import { Logger } from '@overnightjs/logger';
 import { Request, Response } from 'express';
-import { BodyOrUrlParams } from './RequestHelper';
 import * as MailHelper from '../helpers/MailHelper';
-import { resolve } from 'path';
+import MissingParameterError from '../errors/Parameter/MissingParameterError';
+import MalformedParameterError from '../errors/Parameter/MalformedParameterError';
+import MissingStateError from '../errors/Authentication/MissingStateError';
+import StateStatusError from '../errors/Authentication/StateStatusError';
+import PasswordStrengthError from '../errors/Parameter/PasswordStrengthError';
+import MailUsedError from '../errors/Authentication/MailUsedError';
+import AttemptError from '../errors/Authentication/AttemptError';
+import IncorrectCodeError from '../errors/Authentication/IncorrectCodeError';
+import GeneralError from '../errors/GeneralError';
 
 /*
 Manage all user data
@@ -57,16 +64,16 @@ export class UserManager {
         //Check format for email and password
         const emailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!email.match(emailReg)) {
-            throw new Error("Email incorrect format");
+            throw new MalformedParameterError("Email incorrect format");
         }
 
         const passReg = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)^[a-zA-Z\d\W]{8,30}$/;
         if (!password.match(passReg)) {
-            throw new Error("Password incorrect format");
+            throw new PasswordStrengthError("Password incorrect format");
         }
 
         //check if email exists in db
-        if ((await Database.GetInstance().GetEmailUsed(email))) throw new Error("Email in use");
+        if ((await Database.GetInstance().GetEmailUsed(email))) throw new MailUsedError("Email in use");
 
         //Create a uuid and code verifier
         let uuid = getUUID();
@@ -102,16 +109,19 @@ export class UserManager {
             if(current?.state == "verif"){
                 this.SetCanceled(uuid);
                 return true;
+            }else{
+                throw new StateStatusError("State had wrong status during cancel");
             }
-        }
-        return false;        
+        }else{
+            throw new MissingStateError("State missing during cancel");
+        }              
     }
 
     public async DoVerif(uuid: string, code: string,ourdomain : string, redirect? : string) : Promise<string>{
-        if(!this.codeDict.has(uuid)) throw new Error("verif uuid doesn't exist");
+        if(!this.codeDict.has(uuid)) throw new MissingStateError("verif uuid doesn't exist");
 
         let dictVal = <DictEntry>this.codeDict.get(uuid);
-        if(dictVal.state != "verif") throw new Error("uuid is not a verif uuid")
+        if(dictVal.state != "verif") throw new StateStatusError("uuid is not a verif uuid")
 
         let verifVal: {state:"verif",data: VerifData} = (dictVal as {state:"verif",data: VerifData});
         if(code != verifVal.data.code) {
@@ -119,9 +129,9 @@ export class UserManager {
 
             if(verifVal.data.attempt > 4){
                 this.codeDict.delete(uuid);
-                throw new Error("Too many attempts");
+                throw new AttemptError("Too many attempts");
             }
-            throw new Error("Incorrect code");            
+            throw new IncorrectCodeError("Incorrect code");            
         }
 
         let codeVerifier: string = getPKCE(128);
@@ -171,11 +181,11 @@ export class UserManager {
     /** end the registration, add user to database */
     public async DoPending(uuid: string, code: string, ourdomain : string) {
         //check if the uuid exists in the dict
-        if (!this.codeDict.has(uuid)) throw new Error("uuid does not exist yet");
+        if (!this.codeDict.has(uuid)) throw new MissingStateError("uuid does not exist yet");
 
         //get the dict entry and check if the state is pending
         let dictEntry = <DictEntry>this.codeDict.get(uuid);
-        if (dictEntry.state != "pending") throw new Error("uuid is not pending, it is: " + dictEntry.state);
+        if (dictEntry.state != "pending") throw new StateStatusError("uuid is not pending, it is: " + dictEntry.state);
 
         //get the dict data in the correct type
         let dictData = <RegisterData>dictEntry.data;
@@ -185,7 +195,7 @@ export class UserManager {
         if ((tokens as ResponseMessage).status) {
             let err = (tokens as ResponseMessage);
             if (err.status == "error") {
-                throw new Error(err.message);
+                throw new GeneralError(err.message);
             }
         }
 
@@ -262,15 +272,18 @@ export class UserManager {
     /** Check if state param is set and valid in a request */
     public static CheckRequestState(req: Request, res: Response) {
         //state is one of the paramaters
-        let state = BodyOrUrlParams.RequiredString("state", req);
+        let query = req.query["state"]?.toString();
+        let body = req.body["state"]?.toString();
+
+        let state:string = query??body;
+
+        if(!state || state == ""){
+            throw new MissingParameterError("Missing required parameter state");
+        }
 
         //state is valid format
         if (!isUUID(state)) {
-            res.status(403).json({
-                status: ERROR_STATUS,
-                message: "State incorrect format"
-            });
-            return false;
+            throw new MalformedParameterError("State incorrect format");
         }
 
         this.GetInstance().CheckUUID(state)

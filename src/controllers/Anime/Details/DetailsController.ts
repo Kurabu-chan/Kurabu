@@ -6,6 +6,8 @@ import * as Param from "../../../decorators/ParamDecorator";
 import { GetDetails } from '../../../MALWrapper/Anime/Details';
 import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
+import GeneralError from '../../../errors/GeneralError';
+import ErrorHandlerDecorator from '../../../decorators/ErrorHandlerDecorator';
 
 @Controller(Options.ControllerPath)
 export class DetailsController {
@@ -13,6 +15,7 @@ export class DetailsController {
     @State()
     @Param.Param("animeid", Param.ParamType.int, false)
     @LogArg()
+    @ErrorHandlerDecorator()
     private get(req: Request, res: Response, arg: Options.params){
         arg.animeid = arg.animeid ? arg.animeid : 1;
 
@@ -21,10 +24,7 @@ export class DetailsController {
             res.status(200).json(result);
         //Maybe it isnt :()
         }).catch((e) => {
-            res.status(500).json({
-                status: ERROR_STATUS,
-                message: e.message
-            });
+            throw new GeneralError(e.message);
         });
     }
 }
