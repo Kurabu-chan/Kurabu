@@ -145,7 +145,7 @@ export class UserManager {
             }
         }, 10 * 60 * 1000);
 
-        return `https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&code_challenge=${codeVerifier}&state=${uuid}&redirect_uri=${process.env.LOCALMODE ? "http://localhost:3000/authed" : ourdomain + "/authed"}`;
+        return `https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&code_challenge=${codeVerifier}&state=${uuid}&redirect_uri=${process.env.LOCALMODE ? "http://localhost:15000/authed" : ourdomain + "/authed"}`;
     }
 
     /** Check and load state of uuid */

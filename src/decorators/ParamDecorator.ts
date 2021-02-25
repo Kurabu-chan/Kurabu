@@ -48,7 +48,6 @@ export function Param(paramName: string, paramType: ParamType, optional: boolean
                     return;
                 }
                 arg[paramName] = int;
-                console.log(arg);
                 return original.apply(this, [req,res, arg]);
             }
 
@@ -62,12 +61,10 @@ export function Param(paramName: string, paramType: ParamType, optional: boolean
                     return;
                 }
                 arg[paramName] = float;
-                console.log(arg);
                 return original.apply(this, [req,res, arg]);
             }
 
             arg[paramName] = val as string;
-            console.log(arg);
             return original.apply(this, [req,res, arg]);
         }
     }
