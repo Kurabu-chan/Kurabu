@@ -5,6 +5,7 @@ import State from "../../../decorators/StateDecorator";
 import * as Param from "../../../decorators/ParamDecorator";
 import { GetSeasonal } from '../../../MALWrapper/Anime/Seasonal';
 import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
+import LogArg from '../../../decorators/LogArgDecorator';
 
 const seasons = ["winter", "spring", "summer", "fall"];
 const sortScore = ["score", "animescore", "anime_score"];
@@ -19,6 +20,7 @@ export class SeasonalController {
     @Param.Param("sort", Param.ParamType.string, true)
     @Param.Param("limit", Param.ParamType.int, true)
     @Param.Param("offset", Param.ParamType.int, true)
+    @LogArg()
     private get(req: Request, res: Response, arg: Options.params) {
         arg.year = arg.year ?? 2020;
         if (arg.year < 1917) {

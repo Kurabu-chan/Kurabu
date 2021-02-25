@@ -5,12 +5,14 @@ import State from "../../../decorators/StateDecorator";
 import * as Param from "../../../decorators/ParamDecorator";
 import { GetDetails } from '../../../MALWrapper/Anime/Details';
 import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
+import LogArg from '../../../decorators/LogArgDecorator';
 
 @Controller(Options.ControllerPath)
 export class DetailsController {
     @Get(Options.ControllerName)
     @State()
     @Param.Param("animeid", Param.ParamType.int, false)
+    @LogArg()
     private get(req: Request, res: Response, arg: Options.params){
         arg.animeid = arg.animeid ? arg.animeid : 1;
 

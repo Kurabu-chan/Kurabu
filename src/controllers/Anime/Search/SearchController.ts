@@ -5,6 +5,7 @@ import State from "../../../decorators/StateDecorator";
 import * as Param from "../../../decorators/ParamDecorator";
 import { GetSearch } from '../../../MALWrapper/Anime/Search';
 import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
+import LogArg from '../../../decorators/LogArgDecorator';
 
 @Controller(Options.ControllerPath)
 export class SearchController {
@@ -13,6 +14,7 @@ export class SearchController {
     @Param.Param("query", Param.ParamType.string, false)
     @Param.Param("limit", Param.ParamType.int, true)
     @Param.Param("offset", Param.ParamType.int, true)
+    @LogArg()
     private get(req: Request, res: Response, arg: Options.params){
         if (arg.limit && arg.limit > 100) {
             arg.limit = 100;

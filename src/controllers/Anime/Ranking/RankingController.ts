@@ -5,6 +5,7 @@ import State from "../../../decorators/StateDecorator";
 import * as Param from "../../../decorators/ParamDecorator";
 import { GetRanking } from '../../../MALWrapper/Anime/Ranking';
 import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
+import LogArg from '../../../decorators/LogArgDecorator';
 
 const possible = ["all", "airing", "upcoming", "tv", "ova", "movie", "special", "bypopularity", "favorite"];
 
@@ -15,6 +16,7 @@ export class RankingController {
     @Param.Param("rankingtype", Param.ParamType.string, true)
     @Param.Param("limit", Param.ParamType.int, true)
     @Param.Param("offset", Param.ParamType.int, true)
+    @LogArg()
     private get(req: Request, res: Response, arg: Options.params){
         if (arg.limit && arg.limit > 100) {
             arg.limit = 100;
