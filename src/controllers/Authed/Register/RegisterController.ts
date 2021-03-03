@@ -7,17 +7,23 @@ import { UserManager } from '../../../helpers/UserManager';
 import { Param, ParamType } from '../../../decorators/ParamDecorator';
 import { Logger } from '@overnightjs/logger';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable } from 'tsyringe';
+import { autoInjectable, injectable } from 'tsyringe';
+import ContainerManager from '../../../helpers/ContainerManager';
 
 @Controller(Options.ControllerPath)
-@autoInjectable()
+@injectable()
 export class RegisterController {
+    private _userManager: UserManager;
+    constructor(userManager: UserManager) {
+        this._userManager = userManager;
+    }
+
     @Post(Options.ControllerName)
     @Param("email", ParamType.string, false)
     @Param("pass", ParamType.string, false)
     @RequestHandlerDecorator()
     private async post(req: Request, res: Response, arg: Options.params) {
-        var uuid = await UserManager.GetInstance().StartRegister(arg.email, arg.pass)
+        var uuid = await this._userManager.StartRegister(arg.email, arg.pass)
         Logger.Info(`Starting auth for ${req.ip}`);
 
         return {

@@ -8,14 +8,14 @@ import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import GeneralError from '../../../errors/GeneralError';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable } from 'tsyringe';
+import { autoInjectable, injectable } from 'tsyringe';
 
 const seasons = ["winter", "spring", "summer", "fall"];
 const sortScore = ["score", "animescore", "anime_score"];
 const sortUsers = ["users", "listed", "list_users", "listusers", "anime_num_list_users", "num_list_users", "num_listusers"]
 
 @Controller(Options.ControllerPath)
-@autoInjectable()
+@injectable()
 export class SeasonalController {
     @Get(Options.ControllerName)
     @State()

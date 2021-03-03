@@ -14,6 +14,7 @@ import { LogController } from "./Authed/Log/LogController";
 import { LoginController } from "./Authed/Login/LoginController";
 
 var container = ContainerManager.getInstance().Container;
+
 export default [
     container.resolve(DetailsController),
     container.resolve(RankingController),

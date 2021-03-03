@@ -1,12 +1,15 @@
 import { UserManager } from '../helpers/UserManager';
 import { Request, Response } from 'express';
+import ContainerManager from "../helpers/ContainerManager";
 
 export default function State(){
     return function (target: Object, key: string | symbol, descriptor: PropertyDescriptor){
         const original = descriptor.value;
 
         descriptor.value = function (req: Request, res: Response, arg: any = {}){
-            let stat = UserManager.CheckRequestState(req,res);
+            const userManager = ContainerManager.getInstance().Container.resolve(UserManager);
+            let stat = userManager.CheckRequestState(req,res);
+
             if (typeof stat === "boolean") {
                 return;
             }

@@ -15,6 +15,24 @@ import MailUsedError from '../errors/Authentication/MailUsedError';
 import AttemptError from '../errors/Authentication/AttemptError';
 import IncorrectCodeError from '../errors/Authentication/IncorrectCodeError';
 import GeneralError from '../errors/GeneralError';
+import { autoInjectable, injectable, singleton } from 'tsyringe';
+import { ICommandHandler } from '../commands/ICommand';
+import { CreateUserCommand } from '../commands/Users/Create/CreateUserCommand';
+import { CreateUserCommandResult } from '../commands/Users/Create/CreateUserCommandResult';
+import { UpdateUserTokensCommand } from '../commands/Users/UpdateTokens/UpdateUserTokensCommand';
+import { UpdateUserTokensCommandResult } from '../commands/Users/UpdateTokens/UpdateUserTokensCommandResult';
+import { IQueryHandler } from '../queries/IQuery';
+import { UserEmailUsedQuery } from '../queries/Users/EmailUsed/UserEmailUsedQuery';
+import { UserEmailUsedQueryResult } from '../queries/Users/EmailUsed/UserEmailUsedQueryResult';
+import { UserLoginQuery } from '../queries/Users/Login/UserLoginQuery';
+import { UserLoginQueryResult } from '../queries/Users/Login/USerLoginQueryResult';
+import { UserTokensFromUUIDQuery } from '../queries/Users/TokensFromUUID/UserTokensFromUUIDQuery';
+import { UserTokensFromUUIDQueryResult } from '../queries/Users/TokensFromUUID/UserTokensFromUUIDQueryResult';
+import { CreateUserCommandHandler } from '../commands/Users/Create/CreateUserCommandHandler';
+import { UpdateUserTokensCommandHandler } from '../commands/Users/UpdateTokens/UpdateUserTokensCommandHandler';
+import { UserEmailUsedQueryHandler } from '../queries/Users/EmailUsed/UserEmailUsedQueryHandler';
+import { UserLoginQueryHandler } from '../queries/Users/Login/UserLoginQueryHandler';
+import { UserTokensFromUUIDQueryHandler } from '../queries/Users/TokensFromUUID/UserTokensFromUUIDQueryHandler';
 
 /*
 Manage all user data
@@ -45,9 +63,31 @@ type DictEntry = {
     data?: DictData | RegisterData | VerifData
 }
 //#endregion types
-
+@singleton()
 export class UserManager {
     private codeDict: Map<string, DictEntry>;
+
+    private _createUserCommand: CreateUserCommandHandler;
+    private _updateUserTokensCommand: UpdateUserTokensCommandHandler;
+    private _userEmailUsedQuery: UserEmailUsedQueryHandler;
+    private _userLoginQuery: UserLoginQueryHandler;
+    private _userTokensFromUUIDQuery: UserTokensFromUUIDQueryHandler;
+
+    constructor(
+        createUserCommand: CreateUserCommandHandler,
+        updateUserTokensCommand: UpdateUserTokensCommandHandler,
+        userEmailUsedQuery: UserEmailUsedQueryHandler,
+        userLoginQuery: UserLoginQueryHandler,
+        userTokensFromUUIDQuery: UserTokensFromUUIDQueryHandler
+    ) {
+        this.codeDict = new Map<string, DictEntry>();
+
+        this._createUserCommand = createUserCommand;
+        this._updateUserTokensCommand = updateUserTokensCommand;
+        this._userEmailUsedQuery = userEmailUsedQuery;
+        this._userLoginQuery = userLoginQuery;
+        this._userTokensFromUUIDQuery = userTokensFromUUIDQuery;
+    }
 
     //#region functions
     /** Log the codeDict */
@@ -73,7 +113,7 @@ export class UserManager {
         }
 
         //check if email exists in db
-        if ((await Database.GetInstance().GetEmailUsed(email))) throw new MailUsedError("Email in use");
+        if ((await this._userEmailUsedQuery.handle({ email })).emailIsUsed) throw new MailUsedError("Email in use");
 
         //Create a uuid and code verifier
         let uuid = getUUID();
@@ -89,7 +129,7 @@ export class UserManager {
             }
         }
 
-        MailHelper.SendHtml(email,"Verification imal",`<b>Your verification code is ${code}</b>`,"verification@imal.ml");
+        MailHelper.SendHtml(email, "Verification imal", `<b>Your verification code is ${code}</b>`, "verification@imal.ml");
 
         //add the entry to the dict with the uuid
         this.codeDict.set(uuid, dictEntry);
@@ -103,35 +143,35 @@ export class UserManager {
         return uuid;
     }
 
-    public CancelRegister(uuid: string){
-        if(this.codeDict.has(uuid)){
+    public CancelRegister(uuid: string) {
+        if (this.codeDict.has(uuid)) {
             let current = this.codeDict.get(uuid);
-            if(current?.state == "verif"){
+            if (current?.state == "verif") {
                 this.SetCanceled(uuid);
                 return;
-            }else{
+            } else {
                 throw new StateStatusError("State had wrong status during cancel");
             }
-        }else{
+        } else {
             throw new MissingStateError("State missing during cancel");
-        }              
+        }
     }
 
-    public async DoVerif(uuid: string, code: string,ourdomain : string, redirect? : string) : Promise<string>{
-        if(!this.codeDict.has(uuid)) throw new MissingStateError("verif uuid doesn't exist");
+    public async DoVerif(uuid: string, code: string, ourdomain: string, redirect?: string): Promise<string> {
+        if (!this.codeDict.has(uuid)) throw new MissingStateError("verif uuid doesn't exist");
 
         let dictVal = <DictEntry>this.codeDict.get(uuid);
-        if(dictVal.state != "verif") throw new StateStatusError("uuid is not a verif uuid")
+        if (dictVal.state != "verif") throw new StateStatusError("uuid is not a verif uuid")
 
-        let verifVal: {state:"verif",data: VerifData} = (dictVal as {state:"verif",data: VerifData});
-        if(code != verifVal.data.code) {
+        let verifVal: { state: "verif", data: VerifData } = (dictVal as { state: "verif", data: VerifData });
+        if (code != verifVal.data.code) {
             verifVal.data.attempt++;
 
-            if(verifVal.data.attempt > 4){
+            if (verifVal.data.attempt > 4) {
                 this.codeDict.delete(uuid);
                 throw new AttemptError("Too many attempts");
             }
-            throw new IncorrectCodeError("Incorrect code");            
+            throw new IncorrectCodeError("Incorrect code");
         }
 
         let codeVerifier: string = getPKCE(128);
@@ -165,21 +205,22 @@ export class UserManager {
             return entry.state;
         }
 
-        let dbEntry = await Database.GetInstance().GetUserUUID(uuid);
+        var queryResult = await this._userTokensFromUUIDQuery.handle({ uuid: uuid })
+
         let dictEntry: DictEntry = {
             state: "done",
             data: {
-                email: dbEntry.email,
-                token: dbEntry.token,
-                RefreshToken: dbEntry.refreshtoken
+                email: queryResult.email,
+                token: queryResult.token,
+                RefreshToken: queryResult.refreshtoken
             }
         }
-        this.codeDict.set(dbEntry.id, dictEntry);
+        this.codeDict.set(queryResult.id, dictEntry);
         return "done";
     }
 
     /** end the registration, add user to database */
-    public async DoPending(uuid: string, code: string, ourdomain : string) {
+    public async DoPending(uuid: string, code: string, ourdomain: string) {
         //check if the uuid exists in the dict
         if (!this.codeDict.has(uuid)) throw new MissingStateError("uuid does not exist yet");
 
@@ -201,10 +242,17 @@ export class UserManager {
 
         //get the token data in correct type
         let tokenData = <tokenResponse>tokens;
-        
+
         //All good so add user to the database and update codeDict
-        Database.GetInstance().CreateUser(uuid, dictData.email, dictData.pass, tokenData.access_token, tokenData.refresh_token);
-        this.codeDict.set(uuid,{
+        await this._createUserCommand.handle({
+            uuid: uuid,
+            email: dictData.email,
+            password: dictData.pass,
+            refreshToken: tokenData.refresh_token,
+            token: tokenData.access_token
+        });
+
+        this.codeDict.set(uuid, {
             state: "done",
             data: {
                 token: tokenData.access_token,
@@ -213,7 +261,7 @@ export class UserManager {
             }
         });
 
-        if(dictData.redirect){
+        if (dictData.redirect) {
             return `${dictData.redirect}${uuid}`;
         }
 
@@ -235,7 +283,11 @@ export class UserManager {
             this.codeDict.set(uuid, { state: dictEntry.state, data: curr });
 
             //Update token in database
-            await Database.GetInstance().UpdateTokens(uuid, token, refreshtoken);
+            await this._updateUserTokensCommand.handle({
+                refreshtoken: refreshtoken,
+                token: token,
+                uuid: uuid
+            });
         }
     }
 
@@ -256,28 +308,33 @@ export class UserManager {
 
     /** Do login with an email and password */
     public async Login(email: string, password: string): Promise<string> {
-        let data = await Database.GetInstance().GetUserLogin(email, password);
+
+        var queryResult = await this._userLoginQuery.handle({
+            email: email,
+            password: password
+        })
+
         let dictEntry: DictEntry = {
             state: "done",
             data: {
-                email: data.email,
-                token: data.token,
-                RefreshToken: data.refreshtoken
+                email: queryResult.email,
+                token: queryResult.token,
+                RefreshToken: queryResult.refreshtoken
             }
         }
-        this.codeDict.set(data.id, dictEntry);
-        return data.id;
+        this.codeDict.set(queryResult.id, dictEntry);
+        return queryResult.id;
     }
 
     /** Check if state param is set and valid in a request */
-    public static CheckRequestState(req: Request, res: Response) {
+    public CheckRequestState(req: Request, res: Response) {
         //state is one of the paramaters
         let query = req.query["state"]?.toString();
         let body = req.body["state"]?.toString();
 
-        let state:string = query??body;
+        let state: string = query ?? body;
 
-        if(!state || state == ""){
+        if (!state || state == "") {
             throw new MissingParameterError("Missing required parameter state");
         }
 
@@ -286,7 +343,7 @@ export class UserManager {
             throw new MalformedParameterError("State incorrect format");
         }
 
-        this.GetInstance().CheckUUID(state)
+        this.CheckUUID(state)
 
         return state;
     }
@@ -321,16 +378,16 @@ export class UserManager {
     //#endregion functions
 
     //#region singleton
-    private static instance: UserManager;
-    /** Initialize codeDict */
-    private constructor() {
-        this.codeDict = new Map<string, DictEntry>()
-    }
-    public static GetInstance() {
-        if (!UserManager.instance) {
-            UserManager.instance = new UserManager();
-        }
-        return UserManager.instance;
-    }
+    // private static instance: UserManager;
+    // /** Initialize codeDict */
+    // public constructor() {
+    //     this.codeDict = new Map<string, DictEntry>()
+    // }
+    // public static GetInstance() {
+    //     if (!UserManager.instance) {
+    //         UserManager.instance = new UserManager();
+    //     }
+    //     return UserManager.instance;
+    // }
     //#endregion singleton
 }

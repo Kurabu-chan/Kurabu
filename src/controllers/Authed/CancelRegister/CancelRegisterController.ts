@@ -6,21 +6,25 @@ import LogArg from '../../../decorators/LogArgDecorator';
 import { UserManager } from '../../../helpers/UserManager';
 import { Param, ParamType } from '../../../decorators/ParamDecorator';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable } from 'tsyringe';
+import { autoInjectable, injectable } from 'tsyringe';
+import ContainerManager from '../../../helpers/ContainerManager';
 
 @Controller(Options.ControllerPath)
-@autoInjectable()
+@injectable()
 export class CancelRegisterController {
+    private _userManager: UserManager;
+    constructor(userManager: UserManager) {
+        this._userManager = userManager;
+    }
+
     @Post(Options.ControllerName)
     @Param("uuid", ParamType.string, false)
     @LogArg()
     @RequestHandlerDecorator()
     private post(req: Request, res: Response, arg: Options.params) {
-        UserManager
-            .GetInstance()
-            .CancelRegister(arg.uuid);
-            
-        return{
+        this._userManager.CancelRegister(arg.uuid);
+
+        return {
             status: SUCCESS_STATUS,
             message: "Register canceled successfully"
         };

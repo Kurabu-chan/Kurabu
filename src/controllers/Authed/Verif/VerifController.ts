@@ -6,11 +6,17 @@ import LogArg from '../../../decorators/LogArgDecorator';
 import { UserManager } from '../../../helpers/UserManager';
 import { Param, ParamType } from '../../../decorators/ParamDecorator';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable } from 'tsyringe';
+import { autoInjectable, injectable } from 'tsyringe';
+import ContainerManager from '../../../helpers/ContainerManager';
 
 @Controller(Options.ControllerPath)
-@autoInjectable()
+@injectable()
 export class VerifController {
+    private _userManager: UserManager;
+    constructor(userManager: UserManager) {
+        this._userManager = userManager;
+    }
+
     @Post(Options.ControllerName)
     @Param("uuid", ParamType.string, false)
     @Param("code", ParamType.string, false)
@@ -20,7 +26,7 @@ export class VerifController {
     private async post(req: Request, res: Response, arg: Options.params) {
         let ourdomain = `${req.protocol}://${req.hostname}`;
 
-        var url = await UserManager.GetInstance().DoVerif(arg.uuid, arg.code, ourdomain, arg.redirect)
+        var url = await this._userManager.DoVerif(arg.uuid, arg.code, ourdomain, arg.redirect)
         return {
             status: SUCCESS_STATUS,
             message: url

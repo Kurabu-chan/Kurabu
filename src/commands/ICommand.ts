@@ -1,5 +1,5 @@
 export abstract class ICommand {
-    
+
 }
 
 export abstract class ICommandResult {
@@ -12,5 +12,5 @@ export enum ICommandResultStatus {
 }
 
 export interface ICommandHandler<TCommand extends ICommand, TResult extends ICommandResult> {
-    handle(command: TCommand) : TResult;
+    handle(command: TCommand): Promise<TResult>;
 }

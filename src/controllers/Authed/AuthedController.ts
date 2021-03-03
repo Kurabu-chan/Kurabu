@@ -7,11 +7,17 @@ import State from '../../decorators/StateDecorator';
 import { Logger } from '@overnightjs/logger';
 import RequestHandlerDecorator from '../../decorators/RequestHandlerDecorator';
 import ParameterError from '../../errors/Parameter/ParameterError';
-import {autoInjectable} from "tsyringe";
+import {autoInjectable, injectable} from "tsyringe";
+import ContainerManager from '../../helpers/ContainerManager';
 
 @Controller(Options.ControllerPath)
-@autoInjectable()
+@injectable()
 export class AuthedController {
+    private _userManager: UserManager;
+    constructor(userManager: UserManager) {
+        this._userManager = userManager;
+    }
+    
     @Get(Options.ControllerName)
     @State()
     @Param("error", ParamType.string, true, ParamPos.either, AuthedController.ErrorCallback)
@@ -23,25 +29,29 @@ export class AuthedController {
         if (!arg.code.match(codeRe)) {
             Logger.Warn("Code parameter was of incorrect format in request to /authed");
 
-            UserManager.GetInstance().SetErrored(arg.state);
+            this._userManager.SetErrored(arg.state);
             throw new ParameterError("There is a problem with one of your parameters");
         }
 
         let ourdomain = `${req.protocol}://${req.hostname}`;
-        var redirUrl = await UserManager.GetInstance().DoPending(arg.state, arg.code, ourdomain)
+        var redirUrl = await this._userManager.DoPending(arg.state, arg.code, ourdomain)
 
         res.redirect(redirUrl);        
     }
 
     private static ErrorCallback(req: Request, res: Response, arg: Options.params, success: boolean) {
+        const userManager = ContainerManager.getInstance().Container.resolve(UserManager);
+
         if (!success) {
-            UserManager.GetInstance().SetCanceled(arg.state);
+            userManager.SetCanceled(arg.state);
         }
     }
 
     private static CodeCallback(req: Request, res: Response, arg: Options.params, success: boolean) {
+        const userManager = ContainerManager.getInstance().Container.resolve(UserManager);
+
         if (!success) {
-            UserManager.GetInstance().SetErrored(arg.state);
+            userManager.SetErrored(arg.state);
         }
     }
 }

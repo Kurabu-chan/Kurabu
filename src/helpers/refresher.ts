@@ -4,10 +4,12 @@ import { RefreshToken } from '../MALWrapper/Authentication'
 import { Logger } from '@overnightjs/logger';
 import { UserManager } from './UserManager';
 import RefreshError from '../errors/Authentication/RefreshError';
+import ContainerManager from "../helpers/ContainerManager";
 
 export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: fetch.RequestInit | undefined): Promise<any> {
     //get current tokens
-    let tokens = await UserManager.GetInstance().GetTokensForUUID(uuid);
+    const userManager = ContainerManager.getInstance().Container.resolve(UserManager);
+    let tokens = await userManager.GetTokensForUUID(uuid);
     
     //make first request
     let ini = addTokenHeader(tokens.token, init);
@@ -28,7 +30,7 @@ export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: 
                 let res2 = await fetch.default(url, newInit);
 
                 //update the tokens
-                await UserManager.GetInstance().TryUpdateTokens(uuid, refresh.access_token, refresh.refresh_token);
+                await userManager.TryUpdateTokens(uuid, refresh.access_token, refresh.refresh_token);
                 //return new result
                 return res2.json();
             }else{
