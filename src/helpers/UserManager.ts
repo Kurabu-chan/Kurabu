@@ -2,10 +2,8 @@ import { getPKCE, getUUID, isUUID, makeVerifCode } from '../helpers/randomCodes'
 import { CLIENT_ID } from '../helpers/GLOBALVARS';
 import { GetToken } from '../MALWrapper/Authentication';
 import { tokenResponse, ResponseMessage } from '../MALWrapper/BasicTypes';
-import { Database } from './database/Database';
 import { Logger } from '@overnightjs/logger';
 import { Request, Response } from 'express';
-import * as MailHelper from '../helpers/MailHelper';
 import MissingParameterError from '../errors/Parameter/MissingParameterError';
 import MalformedParameterError from '../errors/Parameter/MalformedParameterError';
 import MissingStateError from '../errors/Authentication/MissingStateError';
@@ -15,24 +13,13 @@ import MailUsedError from '../errors/Authentication/MailUsedError';
 import AttemptError from '../errors/Authentication/AttemptError';
 import IncorrectCodeError from '../errors/Authentication/IncorrectCodeError';
 import GeneralError from '../errors/GeneralError';
-import { autoInjectable, injectable, singleton } from 'tsyringe';
-import { ICommandHandler } from '../commands/ICommand';
-import { CreateUserCommand } from '../commands/Users/Create/CreateUserCommand';
-import { CreateUserCommandResult } from '../commands/Users/Create/CreateUserCommandResult';
-import { UpdateUserTokensCommand } from '../commands/Users/UpdateTokens/UpdateUserTokensCommand';
-import { UpdateUserTokensCommandResult } from '../commands/Users/UpdateTokens/UpdateUserTokensCommandResult';
-import { IQueryHandler } from '../queries/IQuery';
-import { UserEmailUsedQuery } from '../queries/Users/EmailUsed/UserEmailUsedQuery';
-import { UserEmailUsedQueryResult } from '../queries/Users/EmailUsed/UserEmailUsedQueryResult';
-import { UserLoginQuery } from '../queries/Users/Login/UserLoginQuery';
-import { UserLoginQueryResult } from '../queries/Users/Login/USerLoginQueryResult';
-import { UserTokensFromUUIDQuery } from '../queries/Users/TokensFromUUID/UserTokensFromUUIDQuery';
-import { UserTokensFromUUIDQueryResult } from '../queries/Users/TokensFromUUID/UserTokensFromUUIDQueryResult';
+import { singleton } from 'tsyringe';
 import { CreateUserCommandHandler } from '../commands/Users/Create/CreateUserCommandHandler';
 import { UpdateUserTokensCommandHandler } from '../commands/Users/UpdateTokens/UpdateUserTokensCommandHandler';
 import { UserEmailUsedQueryHandler } from '../queries/Users/EmailUsed/UserEmailUsedQueryHandler';
 import { UserLoginQueryHandler } from '../queries/Users/Login/UserLoginQueryHandler';
 import { UserTokensFromUUIDQueryHandler } from '../queries/Users/TokensFromUUID/UserTokensFromUUIDQueryHandler';
+import { MailServiceProvider } from '../SericeProviders/MailServiceProvider';
 
 /*
 Manage all user data
@@ -73,12 +60,16 @@ export class UserManager {
     private _userLoginQuery: UserLoginQueryHandler;
     private _userTokensFromUUIDQuery: UserTokensFromUUIDQueryHandler;
 
+    private _mailServiceProvider: MailServiceProvider;
+
     constructor(
         createUserCommand: CreateUserCommandHandler,
         updateUserTokensCommand: UpdateUserTokensCommandHandler,
         userEmailUsedQuery: UserEmailUsedQueryHandler,
         userLoginQuery: UserLoginQueryHandler,
-        userTokensFromUUIDQuery: UserTokensFromUUIDQueryHandler
+        userTokensFromUUIDQuery: UserTokensFromUUIDQueryHandler,
+
+        mailServiceProvider: MailServiceProvider
     ) {
         this.codeDict = new Map<string, DictEntry>();
 
@@ -87,6 +78,8 @@ export class UserManager {
         this._userEmailUsedQuery = userEmailUsedQuery;
         this._userLoginQuery = userLoginQuery;
         this._userTokensFromUUIDQuery = userTokensFromUUIDQuery;
+
+        this._mailServiceProvider = mailServiceProvider;
     }
 
     //#region functions
@@ -129,7 +122,7 @@ export class UserManager {
             }
         }
 
-        MailHelper.SendHtml(email, "Verification imal", `<b>Your verification code is ${code}</b>`, "verification@imal.ml");
+        this._mailServiceProvider.SendHtml(email, "Verification imal", `<b>Your verification code is ${code}</b>`, "verification@imal.ml");
 
         //add the entry to the dict with the uuid
         this.codeDict.set(uuid, dictEntry);
