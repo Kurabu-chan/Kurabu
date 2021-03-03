@@ -1,8 +1,10 @@
 import * as bodyParser from 'body-parser';
-import * as controllers from './controllers';
+import controllers from './controllers';
 import { Server } from '@overnightjs/core';
 import { Logger } from '@overnightjs/logger';
 import { Server as Serve } from 'http'; 
+import ContainerManager from "./helpers/ContainerManager";
+
 
 class ExampleServer extends Server {
 
@@ -26,14 +28,7 @@ class ExampleServer extends Server {
     }
 
     private setupControllers(): void {
-        const ctlrInstances = [];
-        for (const name in controllers) {
-            if (controllers.hasOwnProperty(name)) {
-                const controller = (controllers as any)[name];
-                ctlrInstances.push(new controller());
-            }
-        }
-        super.addControllers(ctlrInstances);
+        super.addControllers(controllers);
     }
 
     public start(port: number): Serve {

@@ -6,8 +6,10 @@ import LogArg from '../../../decorators/LogArgDecorator';
 import { UserManager } from '../../../helpers/UserManager';
 import { Param, ParamType } from '../../../decorators/ParamDecorator';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
+import { autoInjectable } from 'tsyringe';
 
 @Controller(Options.ControllerPath)
+@autoInjectable()
 export class VerifController {
     @Post(Options.ControllerName)
     @Param("uuid", ParamType.string, false)

@@ -8,11 +8,20 @@ import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import GeneralError from '../../../errors/GeneralError';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
+import { autoInjectable } from 'tsyringe';
 
 const possible = ["all", "airing", "upcoming", "tv", "ova", "movie", "special", "bypopularity", "favorite"];
 
 @Controller(Options.ControllerPath)
+@autoInjectable()
 export class RankingController {
+    /**
+     *
+     */
+    constructor() {
+        console.log("Ranking created")
+    }
+
     @Get(Options.ControllerName)
     @State()
     @Param.Param("rankingtype", Param.ParamType.string, true)
