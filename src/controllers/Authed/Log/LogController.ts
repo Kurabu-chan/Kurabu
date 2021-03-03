@@ -5,8 +5,10 @@ import { SUCCESS_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import { UserManager } from '../../../helpers/UserManager';
 import ErrorHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
+import { autoInjectable } from 'tsyringe';
 
 @Controller(Options.ControllerPath)
+@autoInjectable()
 export class LogController {
     @Get(Options.ControllerName)
     @LogArg()

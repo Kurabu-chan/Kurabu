@@ -8,8 +8,10 @@ import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import GeneralError from '../../../errors/GeneralError';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
+import { autoInjectable } from 'tsyringe';
 
 @Controller(Options.ControllerPath)
+@autoInjectable()
 export class SuggestionsController {
     @Get(Options.ControllerName)
     @State()

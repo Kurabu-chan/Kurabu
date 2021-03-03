@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Controller, Get } from '@overnightjs/core';
 import * as fs from 'fs';
 import { resolve } from 'path';
+import { autoInjectable } from 'tsyringe';
 
 let loaded: string | undefined;
 
@@ -19,6 +20,7 @@ function loadDocs() : string {
 }
 
 @Controller('documentation')
+@autoInjectable()
 export class DocsController {
     @Get("/")
     private GetDocs(req: Request, res: Response) {        

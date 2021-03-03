@@ -4,6 +4,7 @@ import { reload } from './helpers/GLOBALVARS';
 import { config } from 'dotenv';
 import { Database } from './helpers/database/Database';
 import * as MailHelper from './helpers/MailHelper';
+import ContainerManager from './helpers/ContainerManager';
 
 config();
 reload();
@@ -15,6 +16,7 @@ if (PORT === 15000) {
 }
 MailHelper.Setup();
 Database.GetInstance();
+ContainerManager.getInstance();
 
 const exampleServer = new ExampleServer();
 const httpServe = exampleServer.start(PORT);

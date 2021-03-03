@@ -7,8 +7,10 @@ import State from '../../decorators/StateDecorator';
 import { Logger } from '@overnightjs/logger';
 import RequestHandlerDecorator from '../../decorators/RequestHandlerDecorator';
 import ParameterError from '../../errors/Parameter/ParameterError';
+import {autoInjectable} from "tsyringe";
 
 @Controller(Options.ControllerPath)
+@autoInjectable()
 export class AuthedController {
     @Get(Options.ControllerName)
     @State()

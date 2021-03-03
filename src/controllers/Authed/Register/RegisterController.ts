@@ -7,8 +7,10 @@ import { UserManager } from '../../../helpers/UserManager';
 import { Param, ParamType } from '../../../decorators/ParamDecorator';
 import { Logger } from '@overnightjs/logger';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
+import { autoInjectable } from 'tsyringe';
 
 @Controller(Options.ControllerPath)
+@autoInjectable()
 export class RegisterController {
     @Post(Options.ControllerName)
     @Param("email", ParamType.string, false)
