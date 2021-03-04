@@ -20,7 +20,7 @@ export default function RequestHandlerDecorator() {
                 }
             } catch (err) {
                 if (err instanceof GeneralError) {
-                    res.json(err.getHttpCode()).json({
+                    res.status(err.getHttpCode()).json({
                         status: "error",
                         code: err.getErrorCode(),
                         message: err.message
