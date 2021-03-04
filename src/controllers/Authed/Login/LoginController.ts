@@ -7,13 +7,12 @@ import { Param, ParamType } from '../../../decorators/ParamDecorator';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
 import { autoInjectable, injectable } from 'tsyringe';
 import ContainerManager from '../../../helpers/ContainerManager';
+import { UserLoginCommandHandler } from '../../../commands/Users/Login/UserLoginCommandHandler';
 
 @Controller(Options.ControllerPath)
 @injectable()
 export class LoginController {
-    private _userManager: UserManager;
-    constructor(userManager: UserManager) {
-        this._userManager = userManager;
+    constructor(private _userLoginCommand: UserLoginCommandHandler) {
     }
 
     @Post(Options.ControllerName)
@@ -21,7 +20,10 @@ export class LoginController {
     @Param("pass", ParamType.string, false)
     @RequestHandlerDecorator()
     private async post(req: Request, res: Response, arg: Options.params) {
-        var result = await this._userManager.Login(arg.email, arg.pass)
+        var result = await this._userLoginCommand.handle({
+            email:arg.email,
+            password:arg.pass
+        });
         
         return {
             status: SUCCESS_STATUS,

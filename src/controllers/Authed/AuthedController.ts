@@ -9,13 +9,20 @@ import RequestHandlerDecorator from '../../decorators/RequestHandlerDecorator';
 import ParameterError from '../../errors/Parameter/ParameterError';
 import {autoInjectable, injectable} from "tsyringe";
 import ContainerManager from '../../helpers/ContainerManager';
+import { PendingUserCommandHandler } from '../../commands/Users/Pending/PendingUserCommandHandler';
 
 @Controller(Options.ControllerPath)
 @injectable()
 export class AuthedController {
     private _userManager: UserManager;
-    constructor(userManager: UserManager) {
+    private _pendingUserCommand: PendingUserCommandHandler;
+
+    constructor(
+        userManager: UserManager,
+        pendingUserCommand: PendingUserCommandHandler) {
+
         this._userManager = userManager;
+        this._pendingUserCommand = pendingUserCommand;
     }
     
     @Get(Options.ControllerName)
@@ -25,7 +32,6 @@ export class AuthedController {
     @RequestHandlerDecorator()
     private async get(req: Request, res: Response, arg: Options.params) {
         const codeRe = /[0-9a-z]{700,1300}/
-        //code wrong format
         if (!arg.code.match(codeRe)) {
             Logger.Warn("Code parameter was of incorrect format in request to /authed");
 
@@ -34,9 +40,13 @@ export class AuthedController {
         }
 
         let ourdomain = `${req.protocol}://${req.hostname}`;
-        var redirUrl = await this._userManager.DoPending(arg.state, arg.code, ourdomain)
+        var result = await this._pendingUserCommand.handle({
+            code: arg.code,
+            ourdomain: ourdomain,
+            uuid: arg.state
+        });
 
-        res.redirect(redirUrl);        
+        res.redirect(result.url);        
     }
 
     private static ErrorCallback(req: Request, res: Response, arg: Options.params, success: boolean) {

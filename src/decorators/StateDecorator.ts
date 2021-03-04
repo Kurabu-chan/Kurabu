@@ -1,21 +1,19 @@
 import { UserManager } from '../helpers/UserManager';
 import { Request, Response } from 'express';
 import ContainerManager from "../helpers/ContainerManager";
+import { CheckRequestStateQueryHandler } from '../queries/Request/CheckState/CheckRequestStateQueryHandler';
 
-export default function State(){
-    return function (target: Object, key: string | symbol, descriptor: PropertyDescriptor){
+export default function State() {
+    return function (target: Object, key: string | symbol, descriptor: PropertyDescriptor) {
         const original = descriptor.value;
 
-        descriptor.value = function (req: Request, res: Response, arg: any = {}){
-            const userManager = ContainerManager.getInstance().Container.resolve(UserManager);
-            let stat = userManager.CheckRequestState(req,res);
+        descriptor.value = async function (req: Request, res: Response, arg: any = {}) {
+            const container = ContainerManager.getInstance().Container;
+            const checkRequestStateQuery = container.resolve(CheckRequestStateQueryHandler);
 
-            if (typeof stat === "boolean") {
-                return;
-            }
-            let state = <string>stat;
+            let state = await checkRequestStateQuery.handle({ req: req, res: res });
 
-            return original.apply(this, [req,res, {...arg, state: state}]);
+            return original.apply(this, [req, res, { ...arg, state: state.state }]);
         }
     }
 }

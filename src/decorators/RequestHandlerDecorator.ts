@@ -10,13 +10,13 @@ export default function RequestHandlerDecorator() {
             try {
                 val = original.apply(this, [req, res, arg]);
 
+                if(val instanceof Promise){
+                    val = await val;
+                }
+
                 console.log(val);
                 if (val) {
-                    if (val instanceof Promise) {
-                        res.status(200).json(await val);
-                    } else {
-                        res.status(200).json(val);
-                    }
+                    res.status(200).json(val);
                 }
             } catch (err) {
                 if (err instanceof GeneralError) {

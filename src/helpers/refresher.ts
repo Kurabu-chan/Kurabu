@@ -5,11 +5,17 @@ import { Logger } from '@overnightjs/logger';
 import { UserManager } from './UserManager';
 import RefreshError from '../errors/Authentication/RefreshError';
 import ContainerManager from "../helpers/ContainerManager";
+import { UpdateUserTokensCommandHandler } from '../commands/Users/UpdateTokens/UpdateUserTokensCommandHandler';
+import { UserTokensFromUUIDQueryHandler } from '../queries/Users/TokensFromUUID/UserTokensFromUUIDQueryHandler';
 
 export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: fetch.RequestInit | undefined): Promise<any> {
     //get current tokens
-    const userManager = ContainerManager.getInstance().Container.resolve(UserManager);
-    let tokens = await userManager.GetTokensForUUID(uuid);
+    const container = ContainerManager.getInstance().Container;
+    const userManager = container.resolve(UserManager);
+    const updateTokensCommand = container.resolve(UpdateUserTokensCommandHandler);
+    const tokensFromUUIDQuery = container.resolve(UserTokensFromUUIDQueryHandler);
+
+    let tokens = await tokensFromUUIDQuery.handle({uuid});
     
     //make first request
     let ini = addTokenHeader(tokens.token, init);
@@ -30,7 +36,11 @@ export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: 
                 let res2 = await fetch.default(url, newInit);
 
                 //update the tokens
-                await userManager.TryUpdateTokens(uuid, refresh.access_token, refresh.refresh_token);
+                await updateTokensCommand.handle({
+                    uuid:uuid,
+                    token:refresh.access_token,
+                    refreshtoken: refresh.refresh_token
+                });
                 //return new result
                 return res2.json();
             }else{

@@ -1,20 +1,20 @@
 import { Request, Response } from 'express';
 import { Controller, Post } from '@overnightjs/core';
 import * as Options from "./VerifControllerOptions";
-import { SUCCESS_STATUS, ERROR_STATUS } from '../../../helpers/GLOBALVARS';
+import { SUCCESS_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
-import { UserManager } from '../../../helpers/UserManager';
 import { Param, ParamType } from '../../../decorators/ParamDecorator';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable, injectable } from 'tsyringe';
-import ContainerManager from '../../../helpers/ContainerManager';
+import { injectable } from 'tsyringe';
+import { VerifUserCommandHandler } from '../../../commands/Users/Verif/VerifUserCommandHandler';
 
 @Controller(Options.ControllerPath)
 @injectable()
 export class VerifController {
-    private _userManager: UserManager;
-    constructor(userManager: UserManager) {
-        this._userManager = userManager;
+    private _verifUserCommand: VerifUserCommandHandler;
+
+    constructor(verifUserCommand: VerifUserCommandHandler) {
+        this._verifUserCommand = verifUserCommand;
     }
 
     @Post(Options.ControllerName)
@@ -26,10 +26,16 @@ export class VerifController {
     private async post(req: Request, res: Response, arg: Options.params) {
         let ourdomain = `${req.protocol}://${req.hostname}`;
 
-        var url = await this._userManager.DoVerif(arg.uuid, arg.code, ourdomain, arg.redirect)
+        var result = await this._verifUserCommand.handle({
+            code: arg.code,
+            ourdomain: ourdomain,
+            uuid: arg.uuid,
+            redirect: arg.redirect
+        })
+
         return {
             status: SUCCESS_STATUS,
-            message: url
+            message: result.url
         };
     }
 }

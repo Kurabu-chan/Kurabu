@@ -1,28 +1,30 @@
 import { Request, Response } from 'express';
 import { Controller, Post } from '@overnightjs/core';
 import * as Options from "./CancelRegisterControllerOptions";
-import { SUCCESS_STATUS, ERROR_STATUS } from '../../../helpers/GLOBALVARS';
+import { SUCCESS_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
-import { UserManager } from '../../../helpers/UserManager';
 import { Param, ParamType } from '../../../decorators/ParamDecorator';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable, injectable } from 'tsyringe';
-import ContainerManager from '../../../helpers/ContainerManager';
+import { injectable } from 'tsyringe';
+import { CancelUserRegisterCommandHandler } from '../../../commands/Users/CancelRegister/CancelUserRegisterCommandHandler';
 
 @Controller(Options.ControllerPath)
 @injectable()
 export class CancelRegisterController {
-    private _userManager: UserManager;
-    constructor(userManager: UserManager) {
-        this._userManager = userManager;
+    private _cancelUserRegisterCommand: CancelUserRegisterCommandHandler;
+
+    constructor(cancelUserRegisterCommand: CancelUserRegisterCommandHandler) {
+        this._cancelUserRegisterCommand = cancelUserRegisterCommand;
     }
 
     @Post(Options.ControllerName)
     @Param("uuid", ParamType.string, false)
     @LogArg()
     @RequestHandlerDecorator()
-    private post(req: Request, res: Response, arg: Options.params) {
-        this._userManager.CancelRegister(arg.uuid);
+    private async post(req: Request, res: Response, arg: Options.params) {
+        await this._cancelUserRegisterCommand.handle({
+            uuid: arg.uuid
+        })
 
         return {
             status: SUCCESS_STATUS,
