@@ -1,5 +1,5 @@
-import {isUUID, getUUID, getPKCE, makeVerifCode} from '../../src/helpers/randomCodes';
-import {expect} from 'chai';
+import { isUUID, getUUID, getPKCE, makeVerifCode } from '../../src/helpers/randomCodes';
+import { expect } from 'chai';
 
 describe('UUID tests', () => {
     it('isUUID Should return true on valid lower case uuid', () => {
@@ -27,12 +27,12 @@ describe('UUID tests', () => {
 
 describe('Other Random Codes tests', () => {
     it('getPKCE Should return code with length within 2 away from given length', () => {
-        for(let i:number = 0; i < 100; i++){
+        for (let i: number = 0; i < 100; i++) {
             let length = Math.floor((Math.random() * 100) + 1);
 
             let pkce = getPKCE(length);
-            expect(pkce.length).to.be.greaterThan(length-2);
-            expect(pkce.length).to.be.lessThan(length+2);
+            expect(pkce.length).to.be.greaterThan(length - 2);
+            expect(pkce.length).to.be.lessThan(length + 2);
         }
     })
     it('getPKCE Should return url valid code', () => {
@@ -45,6 +45,6 @@ describe('Other Random Codes tests', () => {
         expect(makeVerifCode().length).to.equal(6);
     })
     it('makeVerifCode should return only digits', () => {
-        expect(makeVerifCode().match(/\D/)==null).to.equal(true);
+        expect(makeVerifCode().match(/\D/) == null).to.equal(true);
     })
 })

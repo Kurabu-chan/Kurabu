@@ -1,2 +1,2 @@
-export const ControllerPath =  "authed";
-export const ControllerName =  "log";
+export const ControllerPath = "authed";
+export const ControllerName = "log";

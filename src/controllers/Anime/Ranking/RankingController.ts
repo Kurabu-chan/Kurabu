@@ -4,11 +4,9 @@ import * as Options from "./RankingControllerOptions";
 import State from "../../../decorators/StateDecorator";
 import * as Param from "../../../decorators/ParamDecorator";
 import { GetRanking } from '../../../MALWrapper/Anime/Ranking';
-import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
-import GeneralError from '../../../errors/GeneralError';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 
 const possible = ["all", "airing", "upcoming", "tv", "ova", "movie", "special", "bypopularity", "favorite"];
 
@@ -22,7 +20,7 @@ export class RankingController {
     @Param.Param("offset", Param.ParamType.int, true)
     @LogArg()
     @RequestHandlerDecorator()
-    private async get(req: Request, res: Response, arg: Options.params){
+    private async get(req: Request, res: Response, arg: Options.params) {
         if (arg.limit && arg.limit > 100) {
             arg.limit = 100;
         }
@@ -31,6 +29,6 @@ export class RankingController {
             arg.rankingtype = <"all" | "airing" | "upcoming" | "tv" | "ova" | "movie" | "special" | "bypopularity" | "favorite">req.query.rankingtype;
         }
 
-        return await GetRanking(arg.state,arg.rankingtype,arg.limit,arg.offset)
+        return await GetRanking(arg.state, arg.rankingtype, arg.limit, arg.offset)
     }
 }

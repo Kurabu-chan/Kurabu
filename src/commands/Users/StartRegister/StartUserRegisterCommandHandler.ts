@@ -67,10 +67,10 @@ export class StartUserRegisterCommandHandler implements ICommandHandler<StartUse
                 this._userManager.codeDict.delete(uuid);
             }
         }, 10 * 60 * 1000);
-        
-        return { 
+
+        return {
             success: ICommandResultStatus.SUCCESS,
-            uuid: uuid 
+            uuid: uuid
         };
     }
 }

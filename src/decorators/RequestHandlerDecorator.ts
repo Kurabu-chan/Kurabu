@@ -9,7 +9,7 @@ export default function RequestHandlerDecorator() {
             try {
                 let val = original.apply(this, [req, res, arg]);
 
-                if(val instanceof Promise){
+                if (val instanceof Promise) {
                     val = await val;
                 }
 
@@ -34,8 +34,8 @@ export default function RequestHandlerDecorator() {
                 }
             }
 
-            
-            
+
+
         }
     }
 }

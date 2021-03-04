@@ -6,10 +6,10 @@ import { autoInjectable } from 'tsyringe';
 
 let loaded: string | undefined;
 
-function loadDocs() : string {
+function loadDocs(): string {
     if (!loaded || true) {
         if (fs.existsSync('src/controllers/views/documentation.html')) {
-            loaded = fs.readFileSync("src/controllers/views/documentation.html",'utf-8');
+            loaded = fs.readFileSync("src/controllers/views/documentation.html", 'utf-8');
         } else {
             console.log("no docs file " + resolve("src/controllers/views/documentation.html"));
             loaded = "no docs";
@@ -23,7 +23,7 @@ function loadDocs() : string {
 @autoInjectable()
 export class DocsController {
     @Get("/")
-    private GetDocs(req: Request, res: Response) {        
+    private GetDocs(req: Request, res: Response) {
         res.status(200).send(loadDocs());
     }
 }

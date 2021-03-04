@@ -1,6 +1,5 @@
-import { ResponseMessage, ErrorResponse, tokenResponse, RequestResponse, AnimeNode, ListPagination, AnimePicture, AnimeGenre, ListStatus, Season, Studio } from "../../MALWrapper/BasicTypes";
+import { ErrorResponse, AnimeNode, AnimePicture, AnimeGenre, ListStatus, Season, Studio } from "../../MALWrapper/BasicTypes";
 import { RefreshFetch } from '../../helpers/refresher';
-import { Logger } from '@overnightjs/logger';
 
 export enum Fields {
     id,
@@ -98,22 +97,22 @@ export type Anime = {
 function allFields() {
     let x = []
     for (let index = 0; index < 32; index++) {
-        x[index] = index;        
+        x[index] = index;
     }
     return x;
 }
 
-function FieldsToString(fields: Fields[]) : string {
+function FieldsToString(fields: Fields[]): string {
     return fields.map<string>((field, index, array) => { return Fields[field] }).join(", ");
 }
 
-export async function GetDetails(uuid: string, animeid: number,fields?: Fields[] | undefined): Promise<Anime> {
+export async function GetDetails(uuid: string, animeid: number, fields?: Fields[] | undefined): Promise<Anime> {
     if (!fields || fields.length === 0) {
         fields = allFields();
     }
 
     let url = `https://api.myanimelist.net/v2/anime/${animeid}?fields=${FieldsToString(fields)}`;
-    let data = await RefreshFetch(uuid,url, {
+    let data = await RefreshFetch(uuid, url, {
         method: "GET",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'

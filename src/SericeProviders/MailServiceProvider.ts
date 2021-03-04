@@ -5,11 +5,11 @@ import MailServiceNoSendGridKeyError from '../errors/ServiceProviders/MailServic
 @singleton()
 export class MailServiceProvider {
     constructor() {
-        if(!process.env.SENDGRID_API_KEY) throw new MailServiceNoSendGridKeyError("No sendgrid key on init");
+        if (!process.env.SENDGRID_API_KEY) throw new MailServiceNoSendGridKeyError("No sendgrid key on init");
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     }
 
-    public SendText(recipient: string, subject: string, text: string, sender: string){
+    public SendText(recipient: string, subject: string, text: string, sender: string) {
         sgMail.send({
             from: sender,
             to: recipient,
@@ -18,7 +18,7 @@ export class MailServiceProvider {
         });
     }
 
-    public SendHtml(recipient: string, subject: string, html: string, sender: string){
+    public SendHtml(recipient: string, subject: string, html: string, sender: string) {
         sgMail.send({
             from: sender,
             to: recipient,

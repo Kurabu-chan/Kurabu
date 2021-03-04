@@ -1,5 +1,5 @@
 export abstract class IQuery {
-    
+
 }
 
 export abstract class IQueryResult {
@@ -12,5 +12,5 @@ export enum IQueryResultStatus {
 }
 
 export interface IQueryHandler<TQuery extends IQuery, TResult extends IQueryResult> {
-    handle(query: TQuery) : Promise<TResult>;
+    handle(query: TQuery): Promise<TResult>;
 }

@@ -2,9 +2,7 @@ import * as bodyParser from 'body-parser';
 import controllers from './controllers/Controllers';
 import { Server } from '@overnightjs/core';
 import { Logger } from '@overnightjs/logger';
-import { Server as Serve } from 'http'; 
-import ContainerManager from "./helpers/ContainerManager";
-
+import { Server as Serve } from 'http';
 
 class ExampleServer extends Server {
 
@@ -38,7 +36,7 @@ class ExampleServer extends Server {
         return this.app.listen(port, "0.0.0.0", () => {
             Logger.Imp(this.SERVER_STARTED + port);
         });
-        
+
     }
 }
 
