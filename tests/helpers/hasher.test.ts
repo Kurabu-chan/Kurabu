@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {hash,Verify, encrypt, decrypt, RemoveIterations} from '../../src/helpers/Hasher';
+import { hash,Verify, encrypt, decrypt } from '../../src/helpers/Hasher';
 import {getPKCE} from '../../src/helpers/randomCodes';
 
 describe('Hash tests', ()=> {
