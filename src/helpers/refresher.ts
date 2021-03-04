@@ -2,7 +2,6 @@ import { isErrResp, isTokenResponse } from '../MALWrapper/BasicTypes';
 import * as fetch from 'node-fetch';
 import { RefreshToken } from '../MALWrapper/Authentication'
 import { Logger } from '@overnightjs/logger';
-import { UserManager } from './UserManager';
 import RefreshError from '../errors/Authentication/RefreshError';
 import ContainerManager from "../helpers/ContainerManager";
 import { UpdateUserTokensCommandHandler } from '../commands/Users/UpdateTokens/UpdateUserTokensCommandHandler';
@@ -11,12 +10,11 @@ import { UserTokensFromUUIDQueryHandler } from '../queries/Users/TokensFromUUID/
 export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: fetch.RequestInit | undefined): Promise<any> {
     //get current tokens
     const container = ContainerManager.getInstance().Container;
-    const userManager = container.resolve(UserManager);
     const updateTokensCommand = container.resolve(UpdateUserTokensCommandHandler);
     const tokensFromUUIDQuery = container.resolve(UserTokensFromUUIDQueryHandler);
 
-    let tokens = await tokensFromUUIDQuery.handle({uuid});
-    
+    let tokens = await tokensFromUUIDQuery.handle({ uuid });
+
     //make first request
     let ini = addTokenHeader(tokens.token, init);
     let res = await fetch.default(url, ini);
@@ -37,13 +35,13 @@ export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: 
 
                 //update the tokens
                 await updateTokensCommand.handle({
-                    uuid:uuid,
-                    token:refresh.access_token,
+                    uuid: uuid,
+                    token: refresh.access_token,
                     refreshtoken: refresh.refresh_token
                 });
                 //return new result
                 return res2.json();
-            }else{
+            } else {
                 // refresh token might be bad
                 throw new RefreshError("Refresh token has expired");
             }
@@ -70,11 +68,11 @@ function addTokenHeader(token: string, init?: fetch.RequestInit | undefined): fe
                 'Authorization': "Bearer " + token
             }
         }
-        if (init.headers instanceof fetch.Headers) {      
+        if (init.headers instanceof fetch.Headers) {
             //headers is typeof headers
-            init.headers.set('Authorization',"Bearer " + token)            
+            init.headers.set('Authorization', "Bearer " + token)
         } else {
-            
+
             if (Array.isArray(init.headers)) {
                 //headers is array so we don't know how to deal with this yet
                 Logger.Info(JSON.stringify(init.headers));
@@ -86,5 +84,5 @@ function addTokenHeader(token: string, init?: fetch.RequestInit | undefined): fe
 
         //return new init
         return init;
-    }    
+    }
 }

@@ -5,8 +5,7 @@ import { SUCCESS_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import { UserManager } from '../../../helpers/UserManager';
 import ErrorHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable, injectable } from 'tsyringe';
-import ContainerManager from '../../../helpers/ContainerManager';
+import { injectable } from 'tsyringe';
 
 @Controller(Options.ControllerPath)
 @injectable()
@@ -19,9 +18,9 @@ export class LogController {
     @Get(Options.ControllerName)
     @LogArg()
     @ErrorHandlerDecorator()
-    private get(req: Request, res: Response){
+    private get(req: Request, res: Response) {
         this._userManager.LogDict();
-        return{
+        return {
             status: SUCCESS_STATUS,
             message: "Logged succesfully"
         };

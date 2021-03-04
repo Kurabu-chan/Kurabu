@@ -1,5 +1,5 @@
-export const ControllerPath =  "anime";
-export const ControllerName =  "ranking";
+export const ControllerPath = "anime";
+export const ControllerName = "ranking";
 export type params = {
     state: string,
     rankingtype?: "all" | "airing" | "upcoming" | "tv" | "ova" | "movie" | "special" | "bypopularity" | "favorite",

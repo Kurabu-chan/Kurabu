@@ -1,4 +1,3 @@
-import { UserManager } from '../helpers/UserManager';
 import { Request, Response } from 'express';
 import ContainerManager from "../helpers/ContainerManager";
 import { CheckRequestStateQueryHandler } from '../queries/Request/CheckState/CheckRequestStateQueryHandler';

@@ -4,11 +4,9 @@ import * as Options from "./SearchControllerOptions";
 import State from "../../../decorators/StateDecorator";
 import * as Param from "../../../decorators/ParamDecorator";
 import { GetSearch } from '../../../MALWrapper/Anime/Search';
-import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
-import GeneralError from '../../../errors/GeneralError';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 
 @Controller(Options.ControllerPath)
 @injectable()
@@ -20,11 +18,11 @@ export class SearchController {
     @Param.Param("offset", Param.ParamType.int, true)
     @LogArg()
     @RequestHandlerDecorator()
-    private async get(req: Request, res: Response, arg: Options.params){
+    private async get(req: Request, res: Response, arg: Options.params) {
         if (arg.limit && arg.limit > 100) {
             arg.limit = 100;
         }
 
-        return await GetSearch(arg.state,arg.query,arg.limit, arg.offset);     
+        return await GetSearch(arg.state, arg.query, arg.limit, arg.offset);
     }
 }

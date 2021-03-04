@@ -2,7 +2,6 @@ import { autoInjectable } from "tsyringe";
 import { CheckUserUUIDQueryHandler } from "../CheckUUID/CheckUserUUIDQueryHandler";
 import { DictData, DictEntry, UserManager } from "../../../helpers/UserManager";
 import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
-import { UserLoginQueryResult } from "../Login/UserLoginQueryResult";
 import { UserTokensFromUUIDQuery } from "./UserTokensFromUUIDQuery";
 import { UserTokensFromUUIDQueryResult } from "./UserTokensFromUUIDQueryResult";
 
@@ -12,7 +11,7 @@ export class UserTokensFromUUIDQueryHandler implements IQueryHandler<UserTokensF
         private _checkUserUUIDQuery: CheckUserUUIDQueryHandler) {
     }
 
-    async handle({uuid}: UserTokensFromUUIDQuery): Promise<UserTokensFromUUIDQueryResult> {
+    async handle({ uuid }: UserTokensFromUUIDQuery): Promise<UserTokensFromUUIDQueryResult> {
         var result = await this._checkUserUUIDQuery.handle({
             uuid: uuid
         });

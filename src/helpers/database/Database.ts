@@ -1,7 +1,5 @@
 import { Client, QueryResult, QueryConfig } from 'pg';
 import * as fs from 'fs';
-import * as hasher from '../../helpers/Hasher';
-import BadLoginError from '../../errors/Authentication/BadLoginError';
 
 export type UserDatabaseEntry = {
     id: string,
@@ -38,7 +36,7 @@ export class Database {
         if (!exists) {
             //run setup file
             let res = await this.QueryFile("src/helpers/database/Queries/TableSetup.sql");
-        }        
+        }
     }
 
     /** Run a file as an sql query */
@@ -52,8 +50,8 @@ export class Database {
         }
     }
 
-    public async ParamQuery(query: string,values: any[]) : Promise<QueryResult<any>> {
-        return await this.client.query(query,values);
+    public async ParamQuery(query: string, values: any[]): Promise<QueryResult<any>> {
+        return await this.client.query(query, values);
     }
 
     /** Run an SQL query */

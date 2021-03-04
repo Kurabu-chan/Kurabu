@@ -1,7 +1,6 @@
 import { autoInjectable } from "tsyringe";
 import { DictEntry, UserManager } from "../../../helpers/UserManager";
 import { UserLoginQueryHandler } from "../../../queries/Users/Login/UserLoginQueryHandler";
-import { UserLoginQueryResult } from "../../../queries/Users/Login/USerLoginQueryResult";
 import { ICommandHandler, ICommandResultStatus } from "../../ICommand";
 import { UserLoginCommand } from "./UserLoginCommand";
 import { UserLoginCommandResult } from "./UserLoginCommandResult";

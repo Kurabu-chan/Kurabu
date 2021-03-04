@@ -4,11 +4,9 @@ import * as Options from "./SeasonalControllerOptions";
 import State from "../../../decorators/StateDecorator";
 import * as Param from "../../../decorators/ParamDecorator";
 import { GetSeasonal } from '../../../MALWrapper/Anime/Seasonal';
-import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
-import GeneralError from '../../../errors/GeneralError';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 
 const seasons = ["winter", "spring", "summer", "fall"];
 const sortScore = ["score", "animescore", "anime_score"];
@@ -40,7 +38,7 @@ export class SeasonalController {
         }
 
         arg.sort = arg.sort ?? "anime_score";
-        if (sortScore.includes(arg.sort as string) ) {
+        if (sortScore.includes(arg.sort as string)) {
             arg.sort = "anime_score";
         } else if (sortUsers.includes(arg.sort as string)) {
             arg.sort = "anime_num_list_users";

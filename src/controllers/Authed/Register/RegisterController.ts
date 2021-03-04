@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { Controller, Post } from '@overnightjs/core';
 import * as Options from "./RegisterControllerOptions";
-import { SUCCESS_STATUS, ERROR_STATUS } from '../../../helpers/GLOBALVARS';
-import { UserManager } from '../../../helpers/UserManager';
+import { SUCCESS_STATUS } from '../../../helpers/GLOBALVARS';
 import { Param, ParamType } from '../../../decorators/ParamDecorator';
 import { Logger } from '@overnightjs/logger';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
@@ -15,7 +14,7 @@ export class RegisterController {
     private _startUserRegisterCommand: StartUserRegisterCommandHandler;
     constructor(
         startUserRegisterCommand: StartUserRegisterCommandHandler) {
-            
+
         this._startUserRegisterCommand = startUserRegisterCommand;
     }
 
@@ -29,7 +28,7 @@ export class RegisterController {
         var result = await this._startUserRegisterCommand.handle({
             email: arg.email,
             password: arg.pass
-        });        
+        });
 
         return {
             status: SUCCESS_STATUS,

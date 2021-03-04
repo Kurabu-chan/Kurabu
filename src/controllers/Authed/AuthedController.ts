@@ -7,7 +7,7 @@ import State from '../../decorators/StateDecorator';
 import { Logger } from '@overnightjs/logger';
 import RequestHandlerDecorator from '../../decorators/RequestHandlerDecorator';
 import ParameterError from '../../errors/Parameter/ParameterError';
-import {autoInjectable, injectable} from "tsyringe";
+import { injectable } from "tsyringe";
 import ContainerManager from '../../helpers/ContainerManager';
 import { PendingUserCommandHandler } from '../../commands/Users/Pending/PendingUserCommandHandler';
 
@@ -24,7 +24,7 @@ export class AuthedController {
         this._userManager = userManager;
         this._pendingUserCommand = pendingUserCommand;
     }
-    
+
     @Get(Options.ControllerName)
     @State()
     @Param("error", ParamType.string, true, ParamPos.either, AuthedController.ErrorCallback)
@@ -46,7 +46,7 @@ export class AuthedController {
             uuid: arg.state
         });
 
-        res.redirect(result.url);        
+        res.redirect(result.url);
     }
 
     private static ErrorCallback(req: Request, res: Response, arg: Options.params, success: boolean) {

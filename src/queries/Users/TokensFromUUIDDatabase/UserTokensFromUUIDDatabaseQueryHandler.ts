@@ -1,7 +1,6 @@
 import { autoInjectable } from "tsyringe";
 import { Database } from "../../../helpers/database/Database";
 import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
-import { UserLoginQueryResult } from "../Login/UserLoginQueryResult";
 import { UserTokensFromUUIDDatabaseQuery } from "./UserTokensFromUUIDDatabaseQuery";
 import { UserTokensFromUUIDDatabaseQueryResult } from "./UserTokensFromUUIDDatabaseQueryResult";
 

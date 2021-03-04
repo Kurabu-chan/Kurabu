@@ -3,7 +3,6 @@ import MalformedParameterError from "../../../errors/Parameter/MalformedParamete
 import MissingParameterError from "../../../errors/Parameter/MissingParameterError";
 import { isUUID } from "../../../helpers/randomCodes";
 import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
-import { CheckUserUUIDQuery } from "../../Users/CheckUUID/CheckUserUUIDQuery";
 import { CheckUserUUIDQueryHandler } from "../../Users/CheckUUID/CheckUserUUIDQueryHandler";
 import { CheckRequestStateQuery } from "./CheckRequestStateQuery";
 import { CheckRequestStateQueryResult } from "./CheckRequestStateQueryResult";

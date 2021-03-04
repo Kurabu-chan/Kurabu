@@ -18,9 +18,9 @@ export class UpdateUserTokensCommandHandler implements ICommandHandler<UpdateUse
     ) {
     }
 
-    async handle({token, refreshtoken, uuid}: UpdateUserTokensCommand): Promise<UpdateUserTokensCommandResult> {
+    async handle({ token, refreshtoken, uuid }: UpdateUserTokensCommand): Promise<UpdateUserTokensCommandResult> {
         //check if the tokens have changed
-        let tokens = await this._userTokensFromUUIDQuery.handle({uuid});
+        let tokens = await this._userTokensFromUUIDQuery.handle({ uuid });
         if (tokens.token != token || tokens.refreshtoken != refreshtoken) {
             let dictEntry = <DictEntry>this._userManager.codeDict.get(uuid);
 

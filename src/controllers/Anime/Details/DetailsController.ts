@@ -6,7 +6,7 @@ import * as Param from "../../../decorators/ParamDecorator";
 import { GetDetails } from '../../../MALWrapper/Anime/Details';
 import LogArg from '../../../decorators/LogArgDecorator';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable, injectable } from 'tsyringe';
+import { injectable } from 'tsyringe';
 
 @Controller(Options.ControllerPath)
 @injectable()

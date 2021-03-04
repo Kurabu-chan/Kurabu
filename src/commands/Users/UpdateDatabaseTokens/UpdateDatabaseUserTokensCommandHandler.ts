@@ -12,7 +12,7 @@ export class UpdateDatabaseUserTokensCommandHandler implements ICommandHandler<U
         await Database
             .GetInstance()
             .ParamQuery(query, values);
-            
+
         return {
             success: ICommandResultStatus.SUCCESS
         }

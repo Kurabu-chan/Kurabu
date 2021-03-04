@@ -37,7 +37,7 @@ export type ListPagination<T> = {
     data: T[],
     paging: {
         next: string,
-        previous? : string | undefined
+        previous?: string | undefined
     }
 }
 
@@ -66,7 +66,7 @@ export type Studio = {
     name: string
 }
 
-export function isTokenResponse(obj: any): obj is tokenResponse{
+export function isTokenResponse(obj: any): obj is tokenResponse {
     return 'token_type' in obj;
 }
 
