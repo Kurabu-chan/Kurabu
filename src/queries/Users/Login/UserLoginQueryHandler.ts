@@ -17,7 +17,6 @@ export class UserLoginQueryHandler implements IQueryHandler<UserLoginQuery, User
         if (res.rowCount === 0) throw new BadLoginError("Incorrect login");
         
         let entry = res.rows[0];
-        
         if (await hasher.Verify(query.password, entry.pass) === false) throw new BadLoginError("Incorrect login");
 
         return {
