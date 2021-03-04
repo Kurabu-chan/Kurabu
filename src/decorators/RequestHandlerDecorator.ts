@@ -6,17 +6,17 @@ export default function RequestHandlerDecorator() {
         const original = descriptor.value;
 
         descriptor.value = async function (req: Request, res: Response, arg: any = {}) {
-            let val: any;
             try {
-                val = original.apply(this, [req, res, arg]);
+                let val = original.apply(this, [req, res, arg]);
 
                 if(val instanceof Promise){
                     val = await val;
                 }
 
-                console.log(val);
                 if (val) {
                     res.status(200).json(val);
+
+                    return val;
                 }
             } catch (err) {
                 if (err instanceof GeneralError) {
@@ -26,11 +26,16 @@ export default function RequestHandlerDecorator() {
                         message: err.message
                     });
                 } else {
-                    throw err;
+                    res.status(500).json({
+                        status: "error",
+                        message: "unknown error"
+                    })
+                    console.log(err);
                 }
             }
 
-            return val;
+            
+            
         }
     }
 }
