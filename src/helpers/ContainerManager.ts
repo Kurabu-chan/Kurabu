@@ -7,10 +7,6 @@ export default class ContainerManager {
         this.container = tsyringe.container; 
     }
 
-    private RegisterTypes(){
-
-    }
-
     public get Container(){
         return this.container;
     }

@@ -31,20 +31,24 @@ export async function hash(password: string, iteration?: number):Promise<string>
 /** Compare a password to a hash and see if they the same */
 export async function Verify(password: string, hashed: string) : Promise<boolean>{
     return new Promise((resolve, reject) => {
-        let iterations = RemoveIterations(hashed);
-        let hash = iterations.hash;
-        let iters = iterations.iters;
+        try{
+            let iterations = RemoveIterations(hashed);
+            let hash = iterations.hash;
+            let iters = iterations.iters;
 
-        var buff = Buffer.alloc(keyLength*2,hash, 'base64');
-        var salt = buff.slice(0, keyLength);
-        var keyA = buff.slice(keyLength, keyLength * 2);
+            var buff = Buffer.alloc(keyLength*2,hash, 'base64');
+            var salt = buff.slice(0, keyLength);
+            var keyA = buff.slice(keyLength, keyLength * 2);
 
-        let keyB = crypto.pbkdf2Sync(password, salt, iters, keyLength, digest);
-        
-        resolve(keyA.compare(keyB) == 0);
+            let keyB = crypto.pbkdf2Sync(password, salt, iters, keyLength, digest);
+            
+            resolve(keyA.compare(keyB) == 0);
+        }catch(err){
+            console.log("Maybe wrong key was used for Verifieng :/")
+            resolve(false);
+        }
     });
 }
-
 function RemoveIterations(hash: string) : {hash:string,iters:number}{
     if(!hash.startsWith("-")) return {hash:hash,iters:99999};
     

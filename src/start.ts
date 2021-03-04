@@ -1,20 +1,18 @@
+import { config } from 'dotenv';
+config();
+import { reload } from './helpers/GLOBALVARS';
+reload();
+
 import ExampleServer from './ExampleServer';
 import { Logger } from '@overnightjs/logger';
-import { reload } from './helpers/GLOBALVARS';
-import { config } from 'dotenv';
 import { Database } from './helpers/database/Database';
-import * as MailHelper from './helpers/MailHelper';
 import ContainerManager from './helpers/ContainerManager';
-
-config();
-reload();
 
 let PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 15000;
 
 if (PORT === 15000) {
     Logger.Warn(`env port is ${process.env.PORT}`);
 }
-MailHelper.Setup();
 Database.GetInstance();
 ContainerManager.getInstance();
 

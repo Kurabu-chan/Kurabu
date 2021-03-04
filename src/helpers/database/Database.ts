@@ -28,7 +28,6 @@ export class Database {
         });
 
         this.client.connect();
-
         this.SetupDatabase();
     }
 
@@ -42,62 +41,6 @@ export class Database {
         }        
     }
 
-    /** Create A user in the database */
-    public async CreateUser(uuid: string, email: string, password: string, token: string, refreshToken: string) {
-        let query = "INSERT INTO users VALUES ($1,$2,$3,$4,$5)";
-
-        //hash password
-        let hash = await hasher.hash(password);
-
-        let values = [uuid, email, hash, token, refreshToken];
-        this.ParamQuery(query, values);
-        console.log("Inserted new user into database");
-    }
-
-    /** get a user by his/her login info */
-    public async GetUserLogin(email: string, password: string) {
-        let query = "SELECT * FROM users WHERE EMail = $1;"
-        let res = await this.ParamQuery(query, [email]);
-
-        //user doesn't exist
-        if (res.rowCount === 0) throw new BadLoginError("Incorrect login");
-        
-        let entry = res.rows[0];
-        if (!hasher.Verify(password, entry.pass)) throw new BadLoginError("Incorrect login");
-
-        return {
-            id: entry.id,
-            email: entry.email,
-            token: entry.email,
-            refreshtoken: entry.refreshtoken
-        }
-    }
-
-    /** get a user by his/her id */
-    public async GetUserUUID(uuid: string) : Promise<UserDatabaseEntry> {
-        let query = "SELECT * FROM users WHERE id = $1;";
-        let res = await this.ParamQuery(query, [uuid]);
-
-        if (res.rowCount === 0) throw new Error("User doesn't exist");
-        
-        let entry = res.rows[0];        
-        return {
-            id: entry.id,
-            email: entry.email,
-            token: entry.email,
-            refreshtoken: entry.refreshtoken
-        }
-    }
-
-    public async UpdateTokens(uuid: string, token: string, refreshtoken: string) {
-        let res = await this.ParamQuery("UPDATE users SET token=$1, refreshtoken=$2 WHERE id=$3", [token, refreshtoken, uuid]);
-    }
-
-    public async GetEmailUsed(email: string): Promise<boolean> {
-        let res = await this.ParamQuery("SELECT COUNT(*) FROM users WHERE email = $1;", [email]);
-        let row: {count: number} = res.rows[0];
-        return row.count != 0;
-    }
     /** Run a file as an sql query */
     public async QueryFile(path: string): Promise<QueryResult<any>> {
         if (fs.existsSync(path)) {

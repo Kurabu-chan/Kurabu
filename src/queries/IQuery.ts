@@ -12,5 +12,5 @@ export enum IQueryResultStatus {
 }
 
 export interface IQueryHandler<TQuery extends IQuery, TResult extends IQueryResult> {
-    handle(query: TQuery) : TResult;
+    handle(query: TQuery) : Promise<TResult>;
 }

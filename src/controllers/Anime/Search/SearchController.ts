@@ -8,10 +8,10 @@ import { ERROR_STATUS } from '../../../helpers/GLOBALVARS';
 import LogArg from '../../../decorators/LogArgDecorator';
 import GeneralError from '../../../errors/GeneralError';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
-import { autoInjectable } from 'tsyringe';
+import { autoInjectable, injectable } from 'tsyringe';
 
 @Controller(Options.ControllerPath)
-@autoInjectable()
+@injectable()
 export class SearchController {
     @Get(Options.ControllerName)
     @State()
