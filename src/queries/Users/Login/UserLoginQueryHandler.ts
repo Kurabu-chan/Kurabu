@@ -2,7 +2,7 @@ import BadLoginError from "../../../errors/Authentication/BadLoginError";
 import { Database } from "../../../helpers/database/Database";
 import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
 import { UserLoginQuery } from "./UserLoginQuery";
-import { UserLoginQueryResult } from "./USerLoginQueryResult";
+import { UserLoginQueryResult } from "./UserLoginQueryResult";
 import * as hasher from '../../../helpers/Hasher';
 import { autoInjectable } from "tsyringe";
 
