@@ -25,7 +25,7 @@ export class LoginController {
 
         return {
             status: SUCCESS_STATUS,
-            message: result
+            message: result.uuid
         };
     }
 }
