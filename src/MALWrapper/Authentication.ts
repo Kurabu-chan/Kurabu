@@ -7,41 +7,6 @@ type ErrorResponse = {
     message: string
 }
 
-export async function GetToken(code: string, verifier: string, ourdomain: string): Promise<ResponseMessage | tokenResponse> {
-    let url = `https://myanimelist.net/v1/oauth2/token`;
-    try {
-        let data = await fetch(url, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=authorization_code&code=${code}&code_verifier=${verifier}&redirect_uri=${process.env.LOCALMODE ? "http://localhost:15000/authed" : ourdomain + "/authed"}`
-        });
-
-        try {
-            let jsData: tokenResponse | ErrorResponse = await data.json();
-            if (isErrResp(jsData)) {
-                return {
-                    status: ERROR_STATUS,
-                    message: `error: ${jsData.error} message: ${jsData.message}`
-                }
-            } else {
-                return <tokenResponse>jsData;
-            }
-        } catch (e) {
-            return {
-                status: ERROR_STATUS,
-                message: "Error connecting with MyAnimeList"
-            }
-        }
-    } catch (e) {
-        return {
-            status: ERROR_STATUS,
-            message: "Error connecting with MyAnimeList"
-        };
-    }
-}
-
 export async function RefreshToken(refreshToken: string): Promise<tokenResponse | ResponseMessage> {
     let url = `https://myanimelist.net/v1/oauth2/token`;
     try {

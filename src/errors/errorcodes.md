@@ -21,6 +21,9 @@
 0 3 0: any service provider error e.g. email service error, database initialisation, etc.
 0 3 1: No sendgrid key present
 
+0 4 0: any MyAnimeListErrors e.g. no connection 
+0 4 1: Connecting to MAL failed
+
 
 
 
