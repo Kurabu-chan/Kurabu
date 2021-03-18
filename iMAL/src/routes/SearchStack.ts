@@ -1,12 +1,12 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import { NavigationRouteConfigMap, NavigationRoute, NavigationParams, CreateNavigatorConfig, NavigationStackRouterConfig } from 'react-navigation';
-import Main from './MainScreens/HomeScreen';
+import Search from './MainScreens/SearchScreen';
 import { StackNavigationOptions, StackNavigationProp, StackNavigationConfig } from 'react-navigation-stack/lib/typescript/src/vendor/types';
 import AnimeDetails from './MainScreens/AnimeDetails';
 
 const screens : NavigationRouteConfigMap<StackNavigationOptions,StackNavigationProp<NavigationRoute<NavigationParams>>,unknown>  = {
-    Home: {
-        screen: Main
+    Search: {
+        screen: Search
     },
     Details: {
         screen: AnimeDetails
@@ -30,5 +30,5 @@ const defaultOptions: CreateNavigatorConfig<StackNavigationConfig, NavigationSta
 
 }
 
-const MainStack = createStackNavigator(screens, defaultOptions);
-export default MainStack;
+const SearchStack = createStackNavigator(screens, defaultOptions);
+export default SearchStack;
