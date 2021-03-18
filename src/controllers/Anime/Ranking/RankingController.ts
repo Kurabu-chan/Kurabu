@@ -3,23 +3,29 @@ import { Controller, Get } from '@overnightjs/core';
 import * as Options from "./RankingControllerOptions";
 import State from "../../../decorators/StateDecorator";
 import * as Param from "../../../decorators/ParamDecorator";
-import { GetRanking } from '../../../MALWrapper/Anime/Ranking';
 import LogArg from '../../../decorators/LogArgDecorator';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
 import { injectable } from 'tsyringe';
+import { RankingWebRequestHandler } from '../../../webRequest/Anime/Ranking/RankingWebRequestHandler';
 
 const possible = ["all", "airing", "upcoming", "tv", "ova", "movie", "special", "bypopularity", "favorite"];
 
 @Controller(Options.ControllerPath)
 @injectable()
 export class RankingController {
+    /**
+     *
+     */
+    constructor(private _rankingWebRequest: RankingWebRequestHandler) {
+    }
+
     @Get(Options.ControllerName)
+    @RequestHandlerDecorator()
     @State()
     @Param.Param("rankingtype", Param.ParamType.string, true)
     @Param.Param("limit", Param.ParamType.int, true)
     @Param.Param("offset", Param.ParamType.int, true)
     @LogArg()
-    @RequestHandlerDecorator()
     private async get(req: Request, res: Response, arg: Options.params) {
         if (arg.limit && arg.limit > 100) {
             arg.limit = 100;
@@ -29,6 +35,13 @@ export class RankingController {
             arg.rankingtype = <"all" | "airing" | "upcoming" | "tv" | "ova" | "movie" | "special" | "bypopularity" | "favorite">req.query.rankingtype;
         }
 
-        return await GetRanking(arg.state, arg.rankingtype, arg.limit, arg.offset)
+        var result = await this._rankingWebRequest.handle({
+            uuid: arg.state,
+            rankingtype: arg.rankingtype,
+            limit: arg.limit,
+            offset: arg.offset
+        })
+
+        return result.ranked;
     }
 }

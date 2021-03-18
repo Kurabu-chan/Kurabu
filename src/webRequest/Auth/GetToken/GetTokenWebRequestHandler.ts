@@ -2,7 +2,7 @@ import { CLIENT_ID, CLIENT_SECRET } from "../../../helpers/GLOBALVARS";
 import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
 import { GetTokenWebRequest } from "./GetTokenWebRequest";
 import { GetTokenWebRequestResult } from "./GetTokenWebRequestResult";
-import { isErrResp, tokenResponse } from '../../../MALWrapper/BasicTypes';
+import { isErrResp, tokenResponse } from '../../../helpers/BasicTypes';
 import GeneralError from "../../../errors/GeneralError";
 import MALConnectionError from "../../../errors/MAL/MALConnectionError";
 import { autoInjectable } from "tsyringe";

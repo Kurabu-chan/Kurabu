@@ -1,8 +1,6 @@
-import { isErrResp, isTokenResponse } from '../MALWrapper/BasicTypes';
+import { isErrResp } from './BasicTypes';
 import * as fetch from 'node-fetch';
-import { RefreshToken } from '../MALWrapper/Authentication'
 import { Logger } from '@overnightjs/logger';
-import RefreshError from '../errors/Authentication/RefreshError';
 import ContainerManager from "../helpers/ContainerManager";
 import { UpdateUserTokensCommandHandler } from '../commands/Users/UpdateTokens/UpdateUserTokensCommandHandler';
 import { UserTokensFromUUIDQueryHandler } from '../queries/Users/TokensFromUUID/UserTokensFromUUIDQueryHandler';

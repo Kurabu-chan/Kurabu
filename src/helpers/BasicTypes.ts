@@ -1,5 +1,12 @@
-import { ErrorResponse, AnimeNode, AnimePicture, AnimeGenre, ListStatus, Season, Studio } from "../../MALWrapper/BasicTypes";
-import { RefreshFetch } from '../../helpers/refresher';
+export type ResponseMessage = {
+    status: string,
+    message: any
+}
+
+export type ErrorResponse = {
+    error: string,
+    message?: string
+}
 
 export enum Fields {
     id,
@@ -35,7 +42,6 @@ export enum Fields {
     studios,
     statistics
 }
-//#region types
 
 type Relation = AnimeNode & {
     relation_type: string,
@@ -92,37 +98,69 @@ export type Anime = {
         num_list_users?: number
     }
 }
-//#endregion types
 
-function allFields() {
-    let x = []
-    for (let index = 0; index < 32; index++) {
-        x[index] = index;
-    }
-    return x;
+export type tokenResponse = {
+    token_type: "Bearer",
+    expires_in: number,
+    access_token: string,
+    refresh_token: string
 }
 
-function FieldsToString(fields: Fields[]): string {
-    return fields.map<string>((field, index, array) => { return Fields[field] }).join(", ");
+export type AnimePicture = {
+    medium: string,
+    large: string
 }
 
-export async function GetDetails(uuid: string, animeid: number, fields?: Fields[] | undefined): Promise<Anime> {
-    if (!fields || fields.length === 0) {
-        fields = allFields();
-    }
+export type AnimeGenre = {
+    id: number,
+    name: string
+}
 
-    let url = `https://api.myanimelist.net/v2/anime/${animeid}?fields=${FieldsToString(fields)}`;
-    let data = await RefreshFetch(uuid, url, {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-    });
+export type ListStatus = {
+    status: "watching" | "completed" | "on_hold" | "dropped" | "plan_to_watch",
+    score: number,
+    num_episodes_watched: number,
+    is_rewatching: boolean,
+    updated_at: string
+}
 
-    let json: Anime | ErrorResponse = data;
-    if ((json as ErrorResponse).error) {
-        throw new Error((json as ErrorResponse).error);
+export type ListPagination<T> = {
+    data: T[],
+    paging: {
+        next: string,
+        previous?: string | undefined
     }
-    console.log(data);
-    return (json as Anime);
+}
+
+export type RequestResponse<T> = {
+    response: {
+        response: T,
+        tokens: tokenResponse
+    } | ErrorResponse
+}
+
+export type AnimeNode = {
+    node: {
+        id: number,
+        title: string,
+        main_picture: AnimePicture
+    }
+}
+
+export type Season = {
+    year: number,
+    season: string
+}
+
+export type Studio = {
+    id: number,
+    name: string
+}
+
+export function isTokenResponse(obj: any): obj is tokenResponse {
+    return 'token_type' in obj;
+}
+
+export function isErrResp(obj: any): obj is ErrorResponse {
+    return 'error' in obj;
 }

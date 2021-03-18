@@ -18,9 +18,9 @@ export class CancelRegisterController {
     }
 
     @Post(Options.ControllerName)
+    @RequestHandlerDecorator()
     @Param("uuid", ParamType.string, false)
     @LogArg()
-    @RequestHandlerDecorator()
     private async post(req: Request, res: Response, arg: Options.params) {
         await this._cancelUserRegisterCommand.handle({
             uuid: arg.uuid
