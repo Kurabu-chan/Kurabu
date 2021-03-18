@@ -14,9 +14,9 @@ export class LoginController {
     }
 
     @Post(Options.ControllerName)
+    @RequestHandlerDecorator()
     @Param("email", ParamType.string, false)
     @Param("pass", ParamType.string, false)
-    @RequestHandlerDecorator()
     private async post(req: Request, res: Response, arg: Options.params) {
         var result = await this._userLoginCommand.handle({
             email: arg.email,

@@ -19,9 +19,9 @@ export class RegisterController {
     }
 
     @Post(Options.ControllerName)
+    @RequestHandlerDecorator()
     @Param("email", ParamType.string, false)
     @Param("pass", ParamType.string, false)
-    @RequestHandlerDecorator()
     private async post(req: Request, res: Response, arg: Options.params) {
         Logger.Info(`Starting auth for ${req.ip}`);
 

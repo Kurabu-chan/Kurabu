@@ -18,11 +18,11 @@ export class VerifController {
     }
 
     @Post(Options.ControllerName)
+    @RequestHandlerDecorator()
     @Param("uuid", ParamType.string, false)
     @Param("code", ParamType.string, false)
     @Param("redirect", ParamType.string, true)
     @LogArg()
-    @RequestHandlerDecorator()
     private async post(req: Request, res: Response, arg: Options.params) {
         let ourdomain = `${req.protocol}://${req.hostname}`;
 

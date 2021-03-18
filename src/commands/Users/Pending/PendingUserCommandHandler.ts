@@ -1,10 +1,8 @@
 import { autoInjectable } from "tsyringe";
 import MissingStateError from "../../../errors/Authentication/MissingStateError";
 import StateStatusError from "../../../errors/Authentication/StateStatusError";
-import GeneralError from "../../../errors/GeneralError";
 import { DictEntry, RegisterData, UserManager } from "../../../helpers/UserManager";
-import { GetToken } from "../../../MALWrapper/Authentication";
-import { ResponseMessage, tokenResponse } from "../../../MALWrapper/BasicTypes";
+import { GetTokenWebRequestHandler } from "../../../webRequest/Auth/GetToken/GetTokenWebRequestHandler";
 import { ICommandHandler, ICommandResultStatus } from "../../ICommand";
 import { CreateUserCommandHandler } from "../Create/CreateUserCommandHandler";
 import { PendingUserCommand } from "./PendingUserCommand";
@@ -12,15 +10,11 @@ import { PendingUserCommandResult } from "./PendingUserCommandResult";
 
 @autoInjectable()
 export class PendingUserCommandHandler implements ICommandHandler<PendingUserCommand, PendingUserCommandResult> {
-    private _userManager: UserManager;
-    private _createUserCommand: CreateUserCommandHandler;
     constructor(
-        userManager: UserManager,
-        createUserCommand: CreateUserCommandHandler,
-    ) {
-        this._createUserCommand = createUserCommand;
-        this._userManager = userManager;
-    }
+        private _userManager: UserManager,
+        private _createUserCommand: CreateUserCommandHandler,
+        private _getTokenWebRequest: GetTokenWebRequestHandler
+    ) { }
 
     async handle(command: PendingUserCommand): Promise<PendingUserCommandResult> {
         //check if the uuid exists in the dict
@@ -33,32 +27,27 @@ export class PendingUserCommandHandler implements ICommandHandler<PendingUserCom
         //get the dict data in the correct type
         let dictData = <RegisterData>dictEntry.data;
         //get the tokens from MAL
-        let tokens = await GetToken(command.code, dictData.verifier, command.ourdomain);
-        //check if we errored while connecting to MAL
-        if ((tokens as ResponseMessage).status) {
-            let err = (tokens as ResponseMessage);
-            if (err.status == "error") {
-                throw new GeneralError(err.message);
-            }
-        }
 
-        //get the token data in correct type
-        let tokenData = <tokenResponse>tokens;
+        let tokens = await this._getTokenWebRequest.handle({
+            code: command.code,
+            ourdomain: command.ourdomain,
+            verifier: dictData.verifier
+        });
 
         //All good so add user to the database and update codeDict
         await this._createUserCommand.handle({
             uuid: command.uuid,
             email: dictData.email,
             password: dictData.pass,
-            refreshToken: tokenData.refresh_token,
-            token: tokenData.access_token
+            refreshToken: tokens.refresh_token,
+            token: tokens.access_token
         });
 
         this._userManager.codeDict.set(command.uuid, {
             state: "done",
             data: {
-                token: tokenData.access_token,
-                RefreshToken: tokenData.refresh_token,
+                token: tokens.access_token,
+                RefreshToken: tokens.refresh_token,
                 email: dictData.email
             }
         });

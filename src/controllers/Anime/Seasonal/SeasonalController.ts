@@ -3,10 +3,10 @@ import { Controller, Get } from '@overnightjs/core';
 import * as Options from "./SeasonalControllerOptions";
 import State from "../../../decorators/StateDecorator";
 import * as Param from "../../../decorators/ParamDecorator";
-import { GetSeasonal } from '../../../MALWrapper/Anime/Seasonal';
 import LogArg from '../../../decorators/LogArgDecorator';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
 import { injectable } from 'tsyringe';
+import { SeasonalWebRequestHandler } from '../../../webRequest/Anime/Seasonal/SeasonalWebRequestHandler';
 
 const seasons = ["winter", "spring", "summer", "fall"];
 const sortScore = ["score", "animescore", "anime_score"];
@@ -15,7 +15,11 @@ const sortUsers = ["users", "listed", "list_users", "listusers", "anime_num_list
 @Controller(Options.ControllerPath)
 @injectable()
 export class SeasonalController {
+    constructor(private _seasonalWebRequest: SeasonalWebRequestHandler) {
+    }
+
     @Get(Options.ControllerName)
+    @RequestHandlerDecorator()
     @State()
     @Param.Param("year", Param.ParamType.int, true)
     @Param.Param("season", Param.ParamType.string, true)
@@ -23,7 +27,6 @@ export class SeasonalController {
     @Param.Param("limit", Param.ParamType.int, true)
     @Param.Param("offset", Param.ParamType.int, true)
     @LogArg()
-    @RequestHandlerDecorator()
     private async get(req: Request, res: Response, arg: Options.params) {
         arg.year = arg.year ?? 2020;
         if (arg.year < 1917) {
@@ -48,6 +51,15 @@ export class SeasonalController {
             arg.limit = 100;
         }
 
-        return await GetSeasonal(arg.state, arg.sort, arg.year, arg.season, arg.limit, arg.offset);
+        var result = await this._seasonalWebRequest.handle({
+            uuid: arg.state,
+            sort: arg.sort,
+            year: arg.year,
+            season: arg.season,
+            limit: arg.limit,
+            offset: arg.offset
+        });
+
+        return result.seasonal;
     }
 }

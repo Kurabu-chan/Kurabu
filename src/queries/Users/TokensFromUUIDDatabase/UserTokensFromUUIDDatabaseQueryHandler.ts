@@ -1,4 +1,6 @@
 import { autoInjectable } from "tsyringe";
+import BadLoginError from "../../../errors/Authentication/BadLoginError";
+import GeneralError from "../../../errors/GeneralError";
 import { Database } from "../../../helpers/database/Database";
 import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
 import { UserTokensFromUUIDDatabaseQuery } from "./UserTokensFromUUIDDatabaseQuery";
@@ -12,7 +14,7 @@ export class UserTokensFromUUIDDatabaseQueryHandler implements IQueryHandler<Use
             .GetInstance()
             .ParamQuery(queryStr, [query.uuid]);
 
-        if (res.rowCount === 0) throw new Error("User doesn't exist");
+        if (res.rowCount === 0) throw new BadLoginError("User doesn't exist");
 
         let entry = res.rows[0];
         return {

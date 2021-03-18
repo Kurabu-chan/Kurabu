@@ -26,10 +26,10 @@ export class AuthedController {
     }
 
     @Get(Options.ControllerName)
+    @RequestHandlerDecorator()
     @State()
     @Param("error", ParamType.string, true, ParamPos.either, AuthedController.ErrorCallback)
     @Param("code", ParamType.string, false, ParamPos.either, AuthedController.CodeCallback)
-    @RequestHandlerDecorator()
     private async get(req: Request, res: Response, arg: Options.params) {
         const codeRe = /[0-9a-z]{700,1300}/
         if (!arg.code.match(codeRe)) {

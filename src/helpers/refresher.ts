@@ -1,17 +1,17 @@
-import { isErrResp, isTokenResponse } from '../MALWrapper/BasicTypes';
+import { isErrResp } from './BasicTypes';
 import * as fetch from 'node-fetch';
-import { RefreshToken } from '../MALWrapper/Authentication'
 import { Logger } from '@overnightjs/logger';
-import RefreshError from '../errors/Authentication/RefreshError';
 import ContainerManager from "../helpers/ContainerManager";
 import { UpdateUserTokensCommandHandler } from '../commands/Users/UpdateTokens/UpdateUserTokensCommandHandler';
 import { UserTokensFromUUIDQueryHandler } from '../queries/Users/TokensFromUUID/UserTokensFromUUIDQueryHandler';
+import { RefreshWebRequestHandler } from '../webRequest/Auth/Refresh/RefreshWebRequestHandler';
 
 export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: fetch.RequestInit | undefined): Promise<any> {
     //get current tokens
     const container = ContainerManager.getInstance().Container;
     const updateTokensCommand = container.resolve(UpdateUserTokensCommandHandler);
     const tokensFromUUIDQuery = container.resolve(UserTokensFromUUIDQueryHandler);
+    const refreshWebRequest = container.resolve(RefreshWebRequestHandler);
 
     let tokens = await tokensFromUUIDQuery.handle({ uuid });
 
@@ -25,26 +25,23 @@ export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: 
         //check if the response is invalid_token error
         if (jsonRes.error == "invalid_token") {
             //get new tokens
-            let refresh = await RefreshToken(tokens.refreshtoken);
-            //double check the new token is a token
-            if (isTokenResponse(refresh)) {
-                //put the token in the headers
-                let newInit = addTokenHeader(refresh.access_token, init);
-                //make the request again with new token
-                let res2 = await fetch.default(url, newInit);
+            var refresh = await refreshWebRequest.handle({
+                refreshToken: tokens.refreshtoken
+            });
 
-                //update the tokens
-                await updateTokensCommand.handle({
-                    uuid: uuid,
-                    token: refresh.access_token,
-                    refreshtoken: refresh.refresh_token
-                });
-                //return new result
-                return res2.json();
-            } else {
-                // refresh token might be bad
-                throw new RefreshError("Refresh token has expired");
-            }
+            //put the token in the headers
+            let newInit = addTokenHeader(refresh.access_token, init);
+            //make the request again with new token
+            let res2 = await fetch.default(url, newInit);
+
+            //update the tokens
+            await updateTokensCommand.handle({
+                uuid: uuid,
+                token: refresh.access_token,
+                refreshtoken: refresh.refresh_token
+            });
+            //return new result
+            return res2.json();
         }
     }
 

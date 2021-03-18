@@ -33,9 +33,6 @@ export default function RequestHandlerDecorator() {
                     console.log(err);
                 }
             }
-
-
-
         }
     }
 }

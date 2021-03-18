@@ -16,8 +16,8 @@ export class LogController {
     }
 
     @Get(Options.ControllerName)
-    @LogArg()
     @ErrorHandlerDecorator()
+    @LogArg()
     private get(req: Request, res: Response) {
         this._userManager.LogDict();
         return {
