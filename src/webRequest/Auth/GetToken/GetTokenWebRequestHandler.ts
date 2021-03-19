@@ -7,6 +7,7 @@ import GeneralError from "../../../errors/GeneralError";
 import MALConnectionError from "../../../errors/MAL/MALConnectionError";
 import { autoInjectable } from "tsyringe";
 import fetch from 'node-fetch';
+import { baseRequest, RequestBuilder } from "../../../builders/requests/RequestBuilder";
 
 type ErrorResponse = {
     error: string,
@@ -16,15 +17,13 @@ type ErrorResponse = {
 @autoInjectable()
 export class GetTokenWebRequestHandler implements IWebRequestHandler<GetTokenWebRequest, GetTokenWebRequestResult> {
     async handle(query: GetTokenWebRequest): Promise<GetTokenWebRequestResult> {
-        let url = `https://myanimelist.net/v1/oauth2/token`;
         try {
-            let data = await fetch(url, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=authorization_code&code=${query.code}&code_verifier=${query.verifier}&redirect_uri=${process.env.LOCALMODE ? "http://localhost:15000/authed" : query.ourdomain + "/authed"}`
-            });
+            var request = new RequestBuilder("https", "myanimelist.net")
+                .addPath("v1/oauth2/token")
+                .setHeader('Content-Type', 'application/x-www-form-urlencoded')
+                .setBody(`client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=authorization_code&code=${query.code}&code_verifier=${query.verifier}&redirect_uri=${process.env.LOCALMODE ? "http://localhost:15000/authed" : query.ourdomain + "/authed"}`);
+            
+            let data = await request.request("POST");
 
             let jsData: tokenResponse | ErrorResponse = await data.json();
             if (isErrResp(jsData)) {
