@@ -2,12 +2,13 @@ import React from 'react';
 import SearchBar from 'react-native-dynamic-search-bar';
 import { Dimensions, FlatList, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import AnimeList from '../../components/AnimeList';
+import SearchList from '../../components/SearchList';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import AnimeNodeSource from '../../APIManager/AnimeNodeSource';
 import { Colors } from '../../Configuration/Colors';
 import { AnimeNode } from '../../APIManager/ApiBasicTypes';
 import { SearchSource } from '../../APIManager/AnimeSearch';
+import { ActivityIndicator } from 'react-native';
 
 type StateType = {
     search: {
@@ -17,7 +18,7 @@ type StateType = {
         offset?: number
     },
     searchSource?: AnimeNodeSource,
-    animeList?: AnimeList
+    animeList?: SearchList
 }
 
 export default class Home extends React.Component<NavigationStackScreenProps, StateType>{
@@ -68,7 +69,7 @@ export default class Home extends React.Component<NavigationStackScreenProps, St
                         color: Colors.TEXT
                     }}
                     style={{
-                        backgroundColor: Colors.CYAN,
+                        backgroundColor: Colors.KURABUPURPLE,
                         marginTop: 5,
                         marginLeft: 5,
                         marginRight: 5,
@@ -97,19 +98,22 @@ export default class Home extends React.Component<NavigationStackScreenProps, St
                     onSearchPress={this.DoSearch.bind(this)}
                     onEndEditing={this.DoSearch.bind(this)}
                 />
+                
                 {this.state.searchSource !== undefined ?
-                    <AnimeList title={`Search results for "${this.state.search.searchText}"`}
+                    <SearchList 
+                        title={`Search results for ${this.state.search.searchText}`}
                         animeNodeSource={this.state.searchSource}
                         navigator={this.props.navigation}
                         onCreate={(list)=>{this.setState({...this.state, animeList: list})}} />
                     : undefined}
+                    
             </SafeAreaProvider>
         );
     }
 }
 
-// const pageStyles = StyleSheet.create({
-//     searchBar: {
-//         paddingTop: 10
-//     }
-// });
+const pageStyles = StyleSheet.create({
+    loading: {
+        marginTop: Dimensions.get("window").height / 2.5
+    }
+});

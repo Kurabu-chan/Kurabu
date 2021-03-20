@@ -3,6 +3,7 @@ import { NavigationRouteConfigMap, NavigationRoute, NavigationParams, CreateNavi
 import Search from './MainScreens/SearchScreen';
 import { StackNavigationOptions, StackNavigationProp, StackNavigationConfig } from 'react-navigation-stack/lib/typescript/src/vendor/types';
 import AnimeDetails from './MainScreens/AnimeDetails';
+import { Colors } from '../Configuration/Colors';
 
 const screens : NavigationRouteConfigMap<StackNavigationOptions,StackNavigationProp<NavigationRoute<NavigationParams>>,unknown>  = {
     Search: {
@@ -16,14 +17,15 @@ const screens : NavigationRouteConfigMap<StackNavigationOptions,StackNavigationP
 const defaultOptions: CreateNavigatorConfig<StackNavigationConfig, NavigationStackRouterConfig, StackNavigationOptions, StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>> | undefined = {
     defaultNavigationOptions: {
         headerStyle: {
-            backgroundColor: '#2E51A2'
+            backgroundColor: Colors.KURABUPINK,
         },
         headerTitleStyle: {
             fontFamily: "AGRevueCyr"
         },
         headerTintColor: 'white',
         headerTitleAlign: 'center',
-        title: "iMAL"
+        title: "iMAL",
+        headerStatusBarHeight: 25
     },
     headerMode: "screen"
 

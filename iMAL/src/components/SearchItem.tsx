@@ -1,0 +1,194 @@
+import React from 'react';
+import { StyleSheet, FlatList, View, Text, Image, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
+import { StackNavigationProp } from 'react-navigation-stack/lib/typescript/src/vendor/types';
+import { NavigationRoute, NavigationParams } from 'react-navigation';
+import { Colors } from '../Configuration/Colors';
+import { Anime, GetDetails } from "../APIManager/AnimeDetails";
+import { Dimensions } from 'react-native';
+import { Divider } from './Divider';
+
+export type AnimePicture = {
+    medium: string,
+    large: string
+}
+
+export type AnimeNode = {
+    node: {
+        id: number,
+        title: string,
+        main_picture: AnimePicture
+    }
+}
+
+type SearchItemProps = {
+    item: AnimeNode,
+    navigator: StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>
+}
+
+type SearchItemState = {
+    item: AnimeNode,
+    navigator: StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>
+}
+
+export class SearchItem extends React.Component<SearchItemProps, SearchItemState>{
+    constructor(props: SearchItemProps) {
+        super(props);
+        let item = (props.navigator.getParam("item") as AnimeNode);
+        if (item == undefined) {
+            item = {
+                node: {
+                    id: 1,
+                    title: "failure",
+                    main_picture: {
+                        medium: "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
+                        large: "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg"
+                    }
+                }
+            }
+        }
+
+        this.state = {
+            item: props.item,
+            navigator: props.navigator
+        }
+    }
+
+    public openDetails() {
+        this.state.navigator.push("Details", this.state);
+    }
+
+    NiceString(text: string | undefined) {
+        if (text == undefined) return "";
+        text = text.replace("_", " ");
+        return text.slice(0, 1).toUpperCase() + text.slice(1, text.length);
+    }
+
+    render() {
+        return (
+            <TouchableOpacity style={styles.animeContainer} onPress={this.openDetails.bind(this)}>
+                <Image style={styles.image} source={{ uri: this.state.item.node.main_picture.medium }} />
+                <View style={styles.TitleArea}>
+                    <Text style={styles.title}>{this.state.item.node.title}</Text>
+                    <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                    <View style={TopArea.Data}>
+                        <View style={TopArea.TopLeftLabels}>
+                            <Text style={TopArea.Label}>Score:</Text>
+                            <Text style={TopArea.Label}>Rank:</Text>
+                        </View>
+                        <View style={TopArea.TopLeftValues}>
+                            <Text style={TopArea.Value}>8.88</Text>
+                            <Text style={TopArea.Value}>33333</Text>
+                        </View>
+                        <View style={TopArea.TopRightLabels}>
+                            <Text style={TopArea.Label}>Episodes:</Text>
+                            <Text style={TopArea.Label}>Popularity:</Text>
+                        </View>
+                        <View style={TopArea.TopRightValues}>
+                            <Text style={TopArea.Value}>12</Text>
+                            <Text style={TopArea.Value}>#28138</Text>
+                        </View>
+                    </View>
+                    <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                    <View style={TopArea.Data}>
+                        <View style={TopArea.Labels}>
+                            <Text style={TopArea.Label}>Aired:</Text>
+                            <Text style={TopArea.Label}>Status:</Text>
+                        </View>
+                        <View style={TopArea.Values}>
+                            <Text style={TopArea.Value}>Oct 4, 2006 to Jun 27, 2007</Text>
+                            <Text style={TopArea.Value}>Finished airing</Text>
+                        </View>
+                    </View>
+                    <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                    <View style={TopArea.Data}>
+                        <View style={TopArea.Labels}>
+                            <Text style={TopArea.Label}>Genres:</Text>
+                        </View>
+                        <View style={TopArea.Values}>
+                            <Text style={TopArea.Value}>Action, Adventure, Magic, Game</Text>
+                        </View>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+}
+
+const TopArea = StyleSheet.create({
+    Data: {
+        flexDirection: "row",
+    },
+    Labels: {
+        flexDirection: "column",
+        flex: 1,
+        marginLeft: 5
+    },
+    Label: {
+        color: Colors.TEXT,
+        fontWeight: "bold",
+        fontSize: 12
+    },
+    Values: {
+        flexDirection: "column",
+        flex: 3.5
+    },
+    Value: {
+        color: Colors.TEXT,
+        fontSize: 12
+    },
+
+    TopLeftLabels: {
+        flexDirection: "column",
+        flex: 1,
+        marginLeft: 5
+
+    },
+    TopLeftValues: {
+        flexDirection: "column",
+        flex: 1
+    },
+    TopRightLabels: {
+        flexDirection: "column",
+        flex: 1.75,
+        marginLeft: 5
+    },
+    TopRightValues: {
+        flexDirection: "column",
+        flex: 1
+    }
+
+
+
+});
+
+const styles = StyleSheet.create({
+    page: {
+        margin: 10
+    },
+    animeContainer: {
+        borderRadius: 10,
+        backgroundColor: Colors.KURABUPURPLE,
+        width: Dimensions.get("window").width - 5,
+        height: (Dimensions.get("window").width / 3) * 1.5,
+        marginTop: 10,
+        marginLeft: 0,
+        marginRight: 5,
+        flexDirection: "row"
+    },
+    title: {
+        fontSize: 16,
+        textAlign: "center",
+        color: Colors.TEXT
+    },
+    TitleArea: {
+        flexDirection: "column",
+        flex: 1,
+        padding: 5
+    },
+    image: {
+        width: Dimensions.get("window").width / 3,
+        height: (Dimensions.get("window").width / 3) * 1.5,
+    }
+});
+
+export default SearchItem;
