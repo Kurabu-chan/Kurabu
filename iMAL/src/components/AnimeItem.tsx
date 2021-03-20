@@ -3,19 +3,7 @@ import { StyleSheet, FlatList, View, Text, Image, TouchableOpacity } from 'react
 import { StackNavigationProp } from 'react-navigation-stack/lib/typescript/src/vendor/types';
 import { NavigationRoute, NavigationParams } from 'react-navigation';
 import { Colors } from '../Configuration/Colors';
-
-export type AnimePicture = {
-    medium: string,
-    large: string
-}
-
-export type AnimeNode = {
-    node: {
-        id: number,
-        title: string,
-        main_picture: AnimePicture
-    }
-}
+import { AnimeNode } from '../APIManager/ApiBasicTypes';
 
 type AnimeItemProps = {
     item: AnimeNode,

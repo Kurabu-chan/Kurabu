@@ -16,9 +16,9 @@ const RootDrawerNavigator = createDrawerNavigator({
     drawerBackgroundColor: Colors.ALTERNATE_BACKGROUND,
     contentOptions: {
         labelStyle: {
-            color: "white"
+            color: "white",
         },
-        activeBackgroundColor: Colors.KURABUPINK
+        activeBackgroundColor: Colors.KURABUPINK,
     }
 });
 

@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, FlatList, View, Text } from 'react-native';
-import AnimeItem, { AnimeNode } from './AnimeItem';
+import AnimeItem from './AnimeItem';
 import AnimeNodeSource from '../APIManager/AnimeNodeSource';
 import { NavigationParams, NavigationRoute } from 'react-navigation';
 import { StackNavigationProp } from 'react-navigation-stack/lib/typescript/src/vendor/types';
 import { Colors } from '../Configuration/Colors';
+import { AnimeNode } from '../APIManager/ApiBasicTypes';
 
 type AnimeListState = {
     title: string,

@@ -3,22 +3,11 @@ import { StyleSheet, FlatList, View, Text, Image, TouchableOpacity, ActivityIndi
 import { StackNavigationProp } from 'react-navigation-stack/lib/typescript/src/vendor/types';
 import { NavigationRoute, NavigationParams } from 'react-navigation';
 import { Colors } from '../Configuration/Colors';
-import { Anime, GetDetails } from "../APIManager/AnimeDetails";
+import { GetDetails } from "../APIManager/AnimeDetails";
 import { Dimensions } from 'react-native';
 import { Divider } from './Divider';
-
-export type AnimePicture = {
-    medium: string,
-    large: string
-}
-
-export type AnimeNode = {
-    node: {
-        id: number,
-        title: string,
-        main_picture: AnimePicture
-    }
-}
+import { AnimeNode, Fields } from '../APIManager/ApiBasicTypes';
+import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 
 type SearchItemProps = {
     item: AnimeNode,
@@ -30,7 +19,9 @@ type SearchItemState = {
     navigator: StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>
 }
 
-export class SearchItem extends React.Component<SearchItemProps, SearchItemState>{
+export const SearchItemFields = [Fields.id, Fields.genres, Fields.main_picture, Fields.title, Fields.mean, Fields.rank, Fields.popularity, Fields.num_episodes, Fields.status, Fields.start_date]
+
+export class SearchItem extends React.PureComponent<SearchItemProps, SearchItemState>{
     constructor(props: SearchItemProps) {
         super(props);
         let item = (props.navigator.getParam("item") as AnimeNode);
@@ -66,7 +57,9 @@ export class SearchItem extends React.Component<SearchItemProps, SearchItemState
     render() {
         return (
             <TouchableOpacity style={styles.animeContainer} onPress={this.openDetails.bind(this)}>
-                <Image style={styles.image} source={{ uri: this.state.item.node.main_picture.medium }} />
+                {this.state.item.node.main_picture !== undefined?
+                <Image style={styles.image} source={{ uri: this.state.item.node.main_picture.medium }} />: 
+                <View style={styles.image}><NoImageKurabu style={styles.image} /></View>}
                 <View style={styles.TitleArea}>
                     <Text style={styles.title}>{this.state.item.node.title}</Text>
                     <Divider color={Colors.DIVIDER} widthPercentage={100} />
@@ -76,16 +69,16 @@ export class SearchItem extends React.Component<SearchItemProps, SearchItemState
                             <Text style={TopArea.Label}>Rank:</Text>
                         </View>
                         <View style={TopArea.TopLeftValues}>
-                            <Text style={TopArea.Value}>8.88</Text>
-                            <Text style={TopArea.Value}>33333</Text>
+                            <Text style={TopArea.Value}>{this.state.item.node.mean}</Text>
+                            <Text style={TopArea.Value}>#{this.state.item.node.rank}</Text>
                         </View>
                         <View style={TopArea.TopRightLabels}>
                             <Text style={TopArea.Label}>Episodes:</Text>
                             <Text style={TopArea.Label}>Popularity:</Text>
                         </View>
                         <View style={TopArea.TopRightValues}>
-                            <Text style={TopArea.Value}>12</Text>
-                            <Text style={TopArea.Value}>#28138</Text>
+                            <Text style={TopArea.Value}>{this.state.item.node.num_episodes == 0 ? "N/A" : this.state.item.node.num_episodes}</Text>
+                            <Text style={TopArea.Value}>#{this.state.item.node.popularity}</Text>
                         </View>
                     </View>
                     <Divider color={Colors.DIVIDER} widthPercentage={100} />
@@ -95,8 +88,8 @@ export class SearchItem extends React.Component<SearchItemProps, SearchItemState
                             <Text style={TopArea.Label}>Status:</Text>
                         </View>
                         <View style={TopArea.Values}>
-                            <Text style={TopArea.Value}>Oct 4, 2006 to Jun 27, 2007</Text>
-                            <Text style={TopArea.Value}>Finished airing</Text>
+                            <Text style={TopArea.Value}>{this.state.item.node.start_date}</Text>
+                            <Text style={TopArea.Value}>{this.NiceString(this.state.item.node.status)}</Text>
                         </View>
                     </View>
                     <Divider color={Colors.DIVIDER} widthPercentage={100} />
@@ -105,7 +98,7 @@ export class SearchItem extends React.Component<SearchItemProps, SearchItemState
                             <Text style={TopArea.Label}>Genres:</Text>
                         </View>
                         <View style={TopArea.Values}>
-                            <Text style={TopArea.Value}>Action, Adventure, Magic, Game</Text>
+                            <Text style={TopArea.Value}>{this.state.item.node.genres?.map(x => x.name).join(", ")}</Text>
                         </View>
                     </View>
                 </View>
@@ -149,16 +142,13 @@ const TopArea = StyleSheet.create({
     },
     TopRightLabels: {
         flexDirection: "column",
-        flex: 1.75,
+        flex: 1.5,
         marginLeft: 5
     },
     TopRightValues: {
         flexDirection: "column",
         flex: 1
     }
-
-
-
 });
 
 const styles = StyleSheet.create({
@@ -170,7 +160,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.KURABUPURPLE,
         width: Dimensions.get("window").width - 5,
         height: (Dimensions.get("window").width / 3) * 1.5,
-        marginTop: 10,
+        marginTop: 5,
         marginLeft: 0,
         marginRight: 5,
         flexDirection: "row"
@@ -187,7 +177,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: Dimensions.get("window").width / 3,
-        height: (Dimensions.get("window").width / 3) * 1.5,
+        height: (Dimensions.get("window").width / 3) * 1.5
     }
 });
 

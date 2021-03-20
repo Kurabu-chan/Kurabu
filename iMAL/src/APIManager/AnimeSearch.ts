@@ -1,10 +1,10 @@
 import { Config } from "../Configuration/Config"
 import AnimeNodeSource from "./AnimeNodeSource";
-import { AnimeNode, ListPagination } from "./ApiBasicTypes"
+import { Anime, AnimeNode, Fields, ListPagination } from "./ApiBasicTypes"
 import Authentication from "./Authenticate";
 
 export class SearchSource implements AnimeNodeSource {
-    constructor(private query: string) {
+    constructor(private query: string, private fields: Fields[]) {
 
     }
 
@@ -17,7 +17,8 @@ export class SearchSource implements AnimeNodeSource {
 
         let url = `${root}anime/search?query=${this.query}&state=${code}`;
         url += limit !== undefined ? `&limit=${limit}` : ""
-        url += offset !== undefined ? `&limit=${offset}` : ""
+        url += offset !== undefined ? `&offset=${offset}` : ""
+        url += `&fields=${this.fields.map(x => Fields[x]).join(", ")}`
 
         let res = await fetch(url);
 

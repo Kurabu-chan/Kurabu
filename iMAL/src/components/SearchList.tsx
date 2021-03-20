@@ -1,28 +1,34 @@
 import React from 'react';
-import { StyleSheet, FlatList, View, Text } from 'react-native';
-import SearchItem, { AnimeNode } from './SearchItem';
+import { StyleSheet, FlatList, View, Text, ActivityIndicator } from 'react-native';
+import SearchItem from './SearchItem';
 import AnimeNodeSource from '../APIManager/AnimeNodeSource';
 import { NavigationParams, NavigationRoute } from 'react-navigation';
 import { StackNavigationProp } from 'react-navigation-stack/lib/typescript/src/vendor/types';
 import { Colors } from '../Configuration/Colors';
 import { Dimensions } from 'react-native';
+import { AnimeNode } from '../APIManager/ApiBasicTypes';
+
+const BatchSize = 20
 
 type AnimeListState = {
     title: string,
     data: AnimeNode[],
-    animeNodeSource: AnimeNodeSource,
+    animeNodeSource?: AnimeNodeSource,
     navigator: StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>,
-    offset:number
+    offset: number,
+    needmore: boolean,
+    onDataGather?: () => void
 }
 
 type AnimeListProps = {
     title: string,
     animeNodeSource: AnimeNodeSource,
     navigator: StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>,
-    onCreate?: (anime: AnimeList)=>void
+    onCreate?: (anime: AnimeList) => void,
+    onDataGather?: () => void
 }
 
-class AnimeList extends React.Component<AnimeListProps,AnimeListState> {
+class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
     constructor(props: AnimeListProps) {
         super(props);
         this.state = {
@@ -30,53 +36,92 @@ class AnimeList extends React.Component<AnimeListProps,AnimeListState> {
             data: [],
             animeNodeSource: props.animeNodeSource,
             navigator: props.navigator,
-            offset:0
+            offset: 0,
+            onDataGather: props.onDataGather,
+            needmore: true
         };
 
-        if(this.props.onCreate){
+        if (this.props.onCreate) {
             this.props.onCreate(this);
-        }        
+        }
 
-        this.refresh(this.state.animeNodeSource);     
+        this.refresh();
     }
 
-    public refresh(nodeSource: AnimeNodeSource){
-        console.log(this.state.data.length);
-        nodeSource.MakeRequest(20).then((data) => {
-            this.setState({...this.state, data: data.data});
+    componentWillUnmount(){
+        this.setState({})
+    }
+
+    public changeSearch(title: string, nodeSource: AnimeNodeSource){
+        this.setState({
+            ...this.state,
+            title: title,
+            animeNodeSource: nodeSource,
+            offset: 0,
+            data: []
+        }, () => {
+            this.refresh();
+        });        
+    }
+
+    public refresh() {
+        if (this.state.onDataGather != undefined) {
+            this.state.onDataGather();
+        }
+        console.log(`offset: ${this.state.offset}`)
+        this.state.animeNodeSource?.MakeRequest(BatchSize, this.state.offset).then((data) => {
+            this.setState({ ...this.state, data: data.data, offset: data.data.length });
         });
     }
 
     public loadExtra() {
-        this.state.animeNodeSource.MakeRequest(20, this.state.offset).then((data) => {
-            this.setState(old => {                
+        this.state.animeNodeSource?.MakeRequest(BatchSize, this.state.offset).then((data) => {
+            this.setState(old => {
                 old.data.push(...data.data);
-                
+                if (data.data.length < BatchSize) {
+                    return {
+                        title: old.title,
+                        data: old.data,
+                        animeNodeSource: old.animeNodeSource,
+                        navigator: old.navigator,
+                        offset: old.data.length,
+                        needmore: false
+                    };
+                }
+
                 return {
                     title: old.title,
                     data: old.data,
                     animeNodeSource: old.animeNodeSource,
                     navigator: old.navigator,
-                    offset: old.data.length
+                    offset: old.data.length,
+                    needmore: true
                 };
-            });   
+            });
         });
     }
 
     render() {
-        return (
-            <View style={styles.animeContainer}>
-                <Text style={styles.title}>{this.state.title}</Text>
-                <FlatList
-                    horizontal={false}
-                    data={this.state.data}
-                    onEndReachedThreshold={0.5}
-                    onEndReached={this.loadExtra.bind(this)}
-                    renderItem={(item) => (
-                        <SearchItem item={item.item} navigator={this.state.navigator} />)}
-                    keyExtractor={(item,index) => index.toString()}/>
-            </View>
-        );
+        if (this.state.data.length > 0) {
+            return (
+                <View style={styles.animeContainer}>
+                    <Text style={styles.title}>{this.state.title}</Text>
+                    <FlatList
+                        horizontal={false}
+                        data={this.state.data}
+                        onEndReachedThreshold={0.5}
+                        onEndReached={this.loadExtra.bind(this)}
+                        renderItem={(item) => (
+                            <SearchItem item={item.item} navigator={this.state.navigator} />)}
+                        keyExtractor={(item, index) => index.toString()} />
+                </View>
+            );
+        } else {
+            return (<ActivityIndicator
+                style={styles.loading}
+                size="large"
+                color={Colors.KURABUPINK} />);
+        }
     }
 }
 
@@ -94,6 +139,9 @@ const styles = StyleSheet.create({
     },
     animeList: {
         justifyContent: 'flex-start'
+    },
+    loading: {
+        marginTop: Dimensions.get("window").height / 2.5
     }
 });
 

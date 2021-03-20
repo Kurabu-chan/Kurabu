@@ -6,16 +6,19 @@ import SearchList from '../../components/SearchList';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import AnimeNodeSource from '../../APIManager/AnimeNodeSource';
 import { Colors } from '../../Configuration/Colors';
-import { AnimeNode } from '../../APIManager/ApiBasicTypes';
+import { AnimeNode, Fields } from '../../APIManager/ApiBasicTypes';
 import { SearchSource } from '../../APIManager/AnimeSearch';
 import { ActivityIndicator } from 'react-native';
+import { SearchItemFields } from '../../components/SearchItem';
 
 type StateType = {
     search: {
         searchText: string,
         query: string,
         limit?: number,
-        offset?: number
+        offset?: number,
+        searched: boolean,
+        found: boolean
     },
     searchSource?: AnimeNodeSource,
     animeList?: SearchList
@@ -30,83 +33,97 @@ export default class Home extends React.Component<NavigationStackScreenProps, St
                 searchText: '',
                 query: '',
                 limit: 10,
-                offset: 0
+                offset: 0,
+                searched: false,
+                found: false
             }
         };
     }
 
     async DoSearch() {
-        var nodeSource = new SearchSource(this.state.search.searchText);
-        this.setState({ ...this.state, searchSource: nodeSource })
-        if(this.state.animeList){
-            console.log(this.state.search.searchText)
-            this.state.animeList.setState({
-                ...this.state.animeList.state,
-                title: `Search results for "${this.state.search.searchText}"`,
-                animeNodeSource: nodeSource,
-                data: []
-            });
-            this.state.animeList.refresh(nodeSource)
-            console.log("Refreshing")
+        if(this.state.search.searchText == ""){
+            return;
         }
+
+        const fields = SearchItemFields;
+
+        var nodeSource = new SearchSource(this.state.search.searchText, fields);
+        this.setState({ ...this.state, searchSource: nodeSource, search: { ...this.state.search, searched: true } })
+        if (this.state.animeList) {
+            console.log(this.state.search.searchText)
+            this.state.animeList.changeSearch(`Search results for "${this.state.search.searchText}"`, nodeSource);
+        }
+    }
+
+    createSearchBar() {
+        return (<SearchBar
+            placeholder="Search for an Anime Title.."
+            placeholderTextColor={
+                Colors.TEXT
+            }
+            searchIconImageStyle={{
+                tintColor: Colors.TEXT
+            }}
+            clearIconImageStyle={{
+                tintColor: Colors.TEXT
+            }}
+            textInputStyle={{
+                color: Colors.TEXT
+            }}
+            style={{
+                backgroundColor: Colors.KURABUPURPLE,
+                marginTop: 5,
+                marginLeft: 5,
+                marginRight: 5,
+                width: Dimensions.get('window').width - 10
+            }}
+            onChangeText={(text) => this.setState(
+                {
+                    ...this.state,
+                    search:
+                    {
+                        ...this.state.search,
+                        searchText: text
+                    }
+                }
+            )}
+            onClearPress={() => this.setState(
+                {
+                    ...this.state,
+                    search:
+                    {
+                        ...this.state.search,
+                        searchText: ""
+                    }
+                }
+            )}
+            onSearchPress={this.DoSearch.bind(this)}
+            onEndEditing={this.DoSearch.bind(this)}
+        />);
+    }
+
+    onSearchListCreate(list: SearchList) {
+        this.setState({ ...this.state, animeList: list });
+    }
+
+    onSearchListDataGather() {
+        this.setState({ ...this.state, search: { ...this.state.search, found: true } })
     }
 
     render() {
         return (
             <SafeAreaProvider style={{ backgroundColor: "#1a1a1a" }}>
-                <SearchBar
-                    placeholder="Search for an Anime Title.."
-                    placeholderTextColor={
-                        Colors.TEXT
-                    }
-                    searchIconImageStyle={{
-                        tintColor: Colors.TEXT
-                    }}
-                    clearIconImageStyle={{
-                        tintColor: Colors.TEXT
-                    }}
-                    textInputStyle={{
-                        color: Colors.TEXT
-                    }}
-                    style={{
-                        backgroundColor: Colors.KURABUPURPLE,
-                        marginTop: 5,
-                        marginLeft: 5,
-                        marginRight: 5,
-                        width: Dimensions.get('window').width - 10
-                    }}
-                    onChangeText={(text) => this.setState(
-                        {
-                            ...this.state,
-                            search:
-                            {
-                                ...this.state.search,
-                                searchText: text
-                            }
-                        }
-                    )}
-                    onClearPress={() => this.setState(
-                        {
-                            ...this.state,
-                            search:
-                            {
-                                ...this.state.search,
-                                searchText: ""
-                            }
-                        }
-                    )}
-                    onSearchPress={this.DoSearch.bind(this)}
-                    onEndEditing={this.DoSearch.bind(this)}
-                />
-                
+                {this.createSearchBar()}
                 {this.state.searchSource !== undefined ?
-                    <SearchList 
-                        title={`Search results for ${this.state.search.searchText}`}
+                    <SearchList
+                        title={`Search results for: ${this.state.search.searchText}`}
                         animeNodeSource={this.state.searchSource}
                         navigator={this.props.navigation}
-                        onCreate={(list)=>{this.setState({...this.state, animeList: list})}} />
+                        onCreate={this.onSearchListCreate.bind(this)}
+                        onDataGather={this.onSearchListDataGather.bind(this)} />
                     : undefined}
-                    
+
+
             </SafeAreaProvider>
         );
     }
