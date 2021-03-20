@@ -1,14 +1,12 @@
 import React from 'react';
 import SearchBar from 'react-native-dynamic-search-bar';
-import { Dimensions, FlatList, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SearchList from '../../components/SearchList';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import AnimeNodeSource from '../../APIManager/AnimeNodeSource';
 import { Colors } from '../../Configuration/Colors';
-import { AnimeNode, Fields } from '../../APIManager/ApiBasicTypes';
 import { SearchSource } from '../../APIManager/AnimeSearch';
-import { ActivityIndicator } from 'react-native';
 import { SearchItemFields } from '../../components/SearchItem';
 
 type StateType = {
@@ -51,7 +49,7 @@ export default class Home extends React.Component<NavigationStackScreenProps, St
         this.setState({ ...this.state, searchSource: nodeSource, search: { ...this.state.search, searched: true } })
         if (this.state.animeList) {
             console.log(this.state.search.searchText)
-            this.state.animeList.changeSearch(`Search results for "${this.state.search.searchText}"`, nodeSource);
+            this.state.animeList.changeSearch(`Search results for: ${this.state.search.searchText}`, nodeSource);
         }
     }
 
