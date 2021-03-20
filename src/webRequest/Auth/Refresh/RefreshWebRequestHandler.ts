@@ -5,10 +5,9 @@ import { RefreshWebRequestResult } from "./RefreshWebRequestResult";
 import { tokenResponse } from '../../../helpers/BasicTypes';
 import MALConnectionError from "../../../errors/MAL/MALConnectionError";
 import { autoInjectable } from "tsyringe";
-import MALError from "../../../errors/MAL/MALError";
 import RefreshError from "../../../errors/Authentication/RefreshError";
-import fetch from 'node-fetch';
 import GeneralError from "../../../errors/GeneralError";
+import { baseRequest, RequestBuilder } from "../../../builders/requests/RequestBuilder";
 
 type ErrorResponse = {
     error: string,
@@ -20,13 +19,12 @@ export class RefreshWebRequestHandler implements IWebRequestHandler<RefreshWebRe
     async handle(query: RefreshWebRequest): Promise<RefreshWebRequestResult> {
         let url = `https://myanimelist.net/v1/oauth2/token`;
         try {
-            let data = await fetch(url, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${query.refreshToken}`
-            });
+            var request = new RequestBuilder("https", "myanimelist.net")
+                .addPath("v1/oauth2/token")
+                .setHeader('Content-Type', 'application/x-www-form-urlencoded')
+                .setBody(`client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${query.refreshToken}`);
+            
+            let data = await request.request("POST");
 
             let jsData: tokenResponse | ErrorResponse = await data.json();
             if ((jsData as ErrorResponse).error) {

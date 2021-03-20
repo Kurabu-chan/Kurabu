@@ -6,17 +6,18 @@ import { autoInjectable } from "tsyringe";
 import fetch from "node-fetch";
 import { RefreshFetch } from "../../../helpers/refresher";
 import { ListPagination, AnimeNode, ErrorResponse } from "../../../helpers/BasicTypes";
+import { baseRequest } from "../../../builders/requests/RequestBuilder";
 
 @autoInjectable()
 export class SuggestionsWebRequestHandler implements IWebRequestHandler<SuggestionsWebRequest, SuggestionsWebRequestResult> {
     async handle(query: SuggestionsWebRequest): Promise<SuggestionsWebRequestResult> {
-        let url = `https://api.myanimelist.net/v2/anime/suggestions?limit=${query.limit ? query.limit : 10}&offset=${query.offset ? query.offset : 0}`;
-        let data = await RefreshFetch(query.uuid, url, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
+        var request = baseRequest()
+            .addPath("v2/anime/suggestions")
+            .setQueryParam("limit", (query.limit ? query.limit : 10).toString())
+            .setQueryParam("offset", (query.offset ? query.offset : 0).toString())
+            .setHeader('Content-Type', 'application/x-www-form-urlencoded')
+
+        let data = await request.refreshRequest(query.uuid);
 
         let json: ListPagination<AnimeNode> | ErrorResponse = data;
         if ((json as ErrorResponse).error) {
