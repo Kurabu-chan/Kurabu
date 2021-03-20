@@ -43,6 +43,39 @@ export enum Fields {
     statistics
 }
 
+const fieldNames:string[] = []
+for(var field in Fields){
+    fieldNames.push(field);
+}
+
+export function extractFields(fields: string) : Fields[]{
+    var fieldStrList = fields.split(", ");
+    var fieldsList:Fields[] = []
+    
+    for(var fieldInd in fieldStrList){
+        var field: string = fieldStrList[fieldInd];
+        if(fieldNames.includes(field)){
+            var fieldss: keyof typeof Fields = <keyof typeof Fields>field;
+            fieldsList.push(Fields[fieldss])
+        }
+    }
+
+    return fieldsList;
+}
+
+export function allFields() {
+    let x = []
+    for (let index = 0; index < 32; index++) {
+        x[index] = index;
+    }
+    return x;
+}
+
+export function fieldsToString(fields: Fields[]): string {
+    return fields.map<string>((field, index, array) => { return Fields[field] }).join(", ");
+}
+
+
 type Relation = AnimeNode & {
     relation_type: string,
     relation_type_formatted: string

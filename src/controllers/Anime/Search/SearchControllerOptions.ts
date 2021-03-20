@@ -4,5 +4,6 @@ export type params = {
     state: string,
     query: string,
     limit?: number,
-    offset?: number
+    offset?: number,
+    fields?: string
 }
