@@ -1,19 +1,24 @@
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createAppContainer } from 'react-navigation';
 import MainStack from './HomeStack';
+import SearchStack from './SearchStack';
+import { Colors } from '../Configuration/Colors';
 
 const RootDrawerNavigator = createDrawerNavigator({
     Main: {
         screen: MainStack
+    },
+    Search: {
+        screen: SearchStack
     }
 },
 {
-    drawerBackgroundColor: "#2E51A2",
+    drawerBackgroundColor: Colors.ALTERNATE_BACKGROUND,
     contentOptions: {
         labelStyle: {
-            color: "white"
+            color: "white",
         },
-        activeBackgroundColor: "#24417f"
+        activeBackgroundColor: Colors.KURABUPINK,
     }
 });
 

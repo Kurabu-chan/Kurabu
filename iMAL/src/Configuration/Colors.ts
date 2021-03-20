@@ -1,8 +1,11 @@
 export class Colors {
     public static BLUE = "#2e51a2";
     public static CYAN = "#2893E7";
+    public static KURABUPINK = "#b23ab1";
+    public static KURABUPURPLE = "#661c7a";
     public static TEXT = "#ffffff";
     public static SUBTEXT = "#999999";
+    public static PLACEHOLDERTEXT = "#121212";
     public static ORANGE = "#eb6100";
     public static ORANGE_SELECTED = '#9b5100'
     public static INPUT_UNDERLINE = "#ffffff";

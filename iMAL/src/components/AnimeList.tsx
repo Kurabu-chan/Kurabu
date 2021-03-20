@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, FlatList, View, Text } from 'react-native';
-import AnimeItem, { AnimeNode } from './AnimeItem';
+import AnimeItem from './AnimeItem';
 import AnimeNodeSource from '../APIManager/AnimeNodeSource';
 import { NavigationParams, NavigationRoute } from 'react-navigation';
 import { StackNavigationProp } from 'react-navigation-stack/lib/typescript/src/vendor/types';
 import { Colors } from '../Configuration/Colors';
+import { AnimeNode } from '../APIManager/ApiBasicTypes';
 
 type AnimeListState = {
     title: string,
@@ -17,7 +18,8 @@ type AnimeListState = {
 type AnimeListProps = {
     title: string,
     animeNodeSource: AnimeNodeSource,
-    navigator: StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>
+    navigator: StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>,
+    onCreate?: (anime: AnimeList)=>void
 }
 
 class AnimeList extends React.Component<AnimeListProps,AnimeListState> {
@@ -30,20 +32,19 @@ class AnimeList extends React.Component<AnimeListProps,AnimeListState> {
             navigator: props.navigator,
             offset:0
         };
-        
-        this.state.animeNodeSource.MakeRequest(20).then((data) => {
-            this.setState(old => {
-                old.data.push(...data.data);
-            
-                return {
-                    title: old.title,
-                    data: old.data,
-                    animeNodeSource: old.animeNodeSource,
-                    navigator: old.navigator,
-                    offset: old.data.length
-                };
-            });
-        });        
+
+        if(this.props.onCreate){
+            this.props.onCreate(this);
+        }        
+
+        this.refresh(this.state.animeNodeSource);     
+    }
+
+    public refresh(nodeSource: AnimeNodeSource){
+        console.log(this.state.data.length);
+        nodeSource.MakeRequest(20).then((data) => {
+            this.setState({...this.state, data: data.data});
+        });
     }
 
     public loadExtra() {

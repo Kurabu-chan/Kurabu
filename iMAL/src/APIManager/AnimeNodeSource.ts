@@ -1,4 +1,4 @@
-import { AnimeNode } from "../components/AnimeItem";
+import { Anime, AnimeNode } from "./ApiBasicTypes";
 
 interface AnimeNodeSource {
     MakeRequest(limit?: number, offset?: number): Promise<{ data: AnimeNode[] }>
