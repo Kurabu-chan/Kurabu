@@ -30,7 +30,7 @@ export class DetailsWebRequestHandler implements IWebRequestHandler<DetailsWebRe
             .setQueryParam("fields", FieldsToString(query.fields))
             .setHeader('Content-Type', 'application/x-www-form-urlencoded')
 
-        let data = await request.refreshRequest(query.uuid);
+        let data = await request.refreshRequest(query.user);
     
         let json: Anime | ErrorResponse = data;
         if ((json as ErrorResponse).error) {

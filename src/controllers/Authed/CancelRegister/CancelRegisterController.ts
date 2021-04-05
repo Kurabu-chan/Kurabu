@@ -23,7 +23,7 @@ export class CancelRegisterController {
     @LogArg()
     private async post(req: Request, res: Response, arg: Options.params) {
         await this._cancelUserRegisterCommand.handle({
-            uuid: arg.uuid
+            user: arg.user
         })
 
         return {

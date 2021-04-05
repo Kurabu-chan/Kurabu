@@ -52,7 +52,7 @@ export class SeasonalController {
         }
 
         var result = await this._seasonalWebRequest.handle({
-            uuid: arg.state,
+            user: arg.user,
             sort: arg.sort,
             year: arg.year,
             season: arg.season,

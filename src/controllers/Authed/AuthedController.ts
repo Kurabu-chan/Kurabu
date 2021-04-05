@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { Controller, Get } from '@overnightjs/core';
 import * as Options from "./AuthedControllerOptions";
-import { UserManager } from '../../helpers/UserManager';
 import { Param, ParamPos, ParamType } from '../../decorators/ParamDecorator';
 import State from '../../decorators/StateDecorator';
 import { Logger } from '@overnightjs/logger';
@@ -14,15 +13,8 @@ import { PendingUserCommandHandler } from '../../commands/Users/Pending/PendingU
 @Controller(Options.ControllerPath)
 @injectable()
 export class AuthedController {
-    private _userManager: UserManager;
-    private _pendingUserCommand: PendingUserCommandHandler;
-
     constructor(
-        userManager: UserManager,
-        pendingUserCommand: PendingUserCommandHandler) {
-
-        this._userManager = userManager;
-        this._pendingUserCommand = pendingUserCommand;
+        private _pendingUserCommand: PendingUserCommandHandler) {
     }
 
     @Get(Options.ControllerName)
@@ -35,7 +27,7 @@ export class AuthedController {
         if (!arg.code.match(codeRe)) {
             Logger.Warn("Code parameter was of incorrect format in request to /authed");
 
-            this._userManager.SetErrored(arg.state);
+            arg.user.destroy();
             throw new ParameterError("There is a problem with one of your parameters");
         }
 
@@ -50,18 +42,14 @@ export class AuthedController {
     }
 
     private static ErrorCallback(req: Request, res: Response, arg: Options.params, success: boolean) {
-        const userManager = ContainerManager.getInstance().Container.resolve(UserManager);
-
-        if (!success) {
-            userManager.SetCanceled(arg.state);
+        if(!success){
+            arg.user.destroy();
         }
     }
 
     private static CodeCallback(req: Request, res: Response, arg: Options.params, success: boolean) {
-        const userManager = ContainerManager.getInstance().Container.resolve(UserManager);
-
-        if (!success) {
-            userManager.SetErrored(arg.state);
+        if(!success){
+            arg.user.destroy();
         }
     }
 }

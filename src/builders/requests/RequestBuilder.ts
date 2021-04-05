@@ -1,5 +1,6 @@
 import fetch, { Response, HeadersInit, BodyInit } from 'node-fetch';
 import { RefreshFetch } from '../../helpers/refresher';
+import { User } from '../../models/User';
 
 export type RequestBuilderBuildType = {
     url: string, method?: string, body?: BodyInit, headers?: HeadersInit
@@ -96,12 +97,12 @@ export class RequestBuilder {
         });
     }
 
-    public refreshRequest(uuid: string): Promise<any>;
-    public refreshRequest(uuid: string, method?: string): Promise<any>;
-    public refreshRequest(uuid: string, method?: string): Promise<any> {
+    public refreshRequest(user: User): Promise<any>;
+    public refreshRequest(user: User, method?: string): Promise<any>;
+    public refreshRequest(user: User, method?: string): Promise<any> {
         var buildResult = this.build(method);
 
-        return RefreshFetch(uuid, buildResult.url, {
+        return RefreshFetch(user, buildResult.url, {
             method: buildResult.method,
             body: buildResult.body,
             headers: buildResult.headers

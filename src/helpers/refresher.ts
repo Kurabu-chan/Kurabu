@@ -2,21 +2,22 @@ import { isErrResp } from './BasicTypes';
 import * as fetch from 'node-fetch';
 import { Logger } from '@overnightjs/logger';
 import ContainerManager from "../helpers/ContainerManager";
-import { UpdateUserTokensCommandHandler } from '../commands/Users/UpdateTokens/UpdateUserTokensCommandHandler';
-import { UserTokensFromUUIDQueryHandler } from '../queries/Users/TokensFromUUID/UserTokensFromUUIDQueryHandler';
 import { RefreshWebRequestHandler } from '../webRequest/Auth/Refresh/RefreshWebRequestHandler';
+import { User } from '../models/User';
+import TokensNotPresentError from '../errors/Authentication/TokensNotPresentError';
+import { UpdateDatabaseUserTokensCommandHandler } from '../commands/Users/UpdateDatabaseTokens/UpdateDatabaseUserTokensCommandHandler';
 
-export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: fetch.RequestInit | undefined): Promise<any> {
+export async function RefreshFetch(user: User, url: fetch.RequestInfo, init?: fetch.RequestInit | undefined): Promise<any> {
     //get current tokens
     const container = ContainerManager.getInstance().Container;
-    const updateTokensCommand = container.resolve(UpdateUserTokensCommandHandler);
-    const tokensFromUUIDQuery = container.resolve(UserTokensFromUUIDQueryHandler);
+    const updateTokensCommand = container.resolve(UpdateDatabaseUserTokensCommandHandler);
     const refreshWebRequest = container.resolve(RefreshWebRequestHandler);
 
-    let tokens = await tokensFromUUIDQuery.handle({ uuid });
+    if(!user.tokens || !user.tokens.token || !user.tokens.refreshtoken) throw new TokensNotPresentError("User has no tokens");
+    let tokens = user.tokens;
 
     //make first request
-    let ini = addTokenHeader(tokens.token, init);
+    let ini = addTokenHeader(tokens.token as string, init);
     let res = await fetch.default(url, ini);
     //get json from the request
     let jsonRes = await res.json();
@@ -26,7 +27,7 @@ export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: 
         if (jsonRes.error == "invalid_token") {
             //get new tokens
             var refresh = await refreshWebRequest.handle({
-                refreshToken: tokens.refreshtoken
+                refreshToken: tokens.refreshtoken as string
             });
 
             //put the token in the headers
@@ -36,7 +37,7 @@ export async function RefreshFetch(uuid: string, url: fetch.RequestInfo, init?: 
 
             //update the tokens
             await updateTokensCommand.handle({
-                uuid: uuid,
+                user: user,
                 token: refresh.access_token,
                 refreshtoken: refresh.refresh_token
             });

@@ -8,11 +8,19 @@ export class Tokens extends Model {
     @Column
     id!: number;
     
-    @AllowNull(false)
+    @AllowNull(true)
     @Column(DataType.TEXT)
-    token!: string;
+    token?: string;
     
-    @AllowNull(false)
+    @AllowNull(true)
     @Column(DataType.TEXT)
-    refreshtoken!: string;
+    refreshtoken?: string;
+
+    @AllowNull(true)
+    @Column(DataType.TEXT)
+    verifier?: string;
+
+    @AllowNull(true)
+    @Column(DataType.TEXT)
+    redirect?: string;
 }

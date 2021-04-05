@@ -1,7 +1,9 @@
 import { autoInjectable } from "tsyringe";
 import MissingStateError from "../../../errors/Authentication/MissingStateError";
 import StateStatusError from "../../../errors/Authentication/StateStatusError";
-import { DictEntry, RegisterData, UserManager } from "../../../helpers/UserManager";
+import TokensNotPresentError from "../../../errors/Authentication/TokensNotPresentError";
+import { Database } from "../../../helpers/Database";
+import { Tokens } from "../../../models/Tokens";
 import { GetTokenWebRequestHandler } from "../../../webRequest/Auth/GetToken/GetTokenWebRequestHandler";
 import { ICommandHandler, ICommandResultStatus } from "../../ICommand";
 import { CreateUserCommandHandler } from "../Create/CreateUserCommandHandler";
@@ -11,50 +13,49 @@ import { PendingUserCommandResult } from "./PendingUserCommandResult";
 @autoInjectable()
 export class PendingUserCommandHandler implements ICommandHandler<PendingUserCommand, PendingUserCommandResult> {
     constructor(
-        private _userManager: UserManager,
         private _createUserCommand: CreateUserCommandHandler,
-        private _getTokenWebRequest: GetTokenWebRequestHandler
+        private _getTokenWebRequest: GetTokenWebRequestHandler,
+        private _database: Database
     ) { }
 
     async handle(command: PendingUserCommand): Promise<PendingUserCommandResult> {
         //check if the uuid exists in the dict
-        if (!this._userManager.codeDict.has(command.uuid)) throw new MissingStateError("uuid does not exist yet");
-
-        //get the dict entry and check if the state is pending
-        let dictEntry = <DictEntry>this._userManager.codeDict.get(command.uuid);
-        if (dictEntry.state != "pending") throw new StateStatusError("uuid is not pending, it is: " + dictEntry.state);
-
-        //get the dict data in the correct type
-        let dictData = <RegisterData>dictEntry.data;
-        //get the tokens from MAL
-
-        let tokens = await this._getTokenWebRequest.handle({
-            code: command.code,
-            ourdomain: command.ourdomain,
-            verifier: dictData.verifier
-        });
-
-        //All good so add user to the database and update codeDict
-        await this._createUserCommand.handle({
-            uuid: command.uuid,
-            email: dictData.email,
-            password: dictData.pass,
-            refreshToken: tokens.refresh_token,
-            token: tokens.access_token
-        });
-
-        this._userManager.codeDict.set(command.uuid, {
-            state: "done",
-            data: {
-                token: tokens.access_token,
-                RefreshToken: tokens.refresh_token,
-                email: dictData.email
+        var user = await this._database.Models.user.findOne({
+            where: {id: command.uuid},
+            include: {
+                model: Tokens,
+                attributes: ["token", "refreshtoken", "verifier", "redirect"]
             }
         });
 
-        if (dictData.redirect) {
+        if (!user) throw new MissingStateError("uuid does not exist yet");
+
+        //get the dict entry and check if the state is pending
+        if ( !user.tokens || !user.tokens.verifier) throw new StateStatusError("uuid is not pending");
+
+        //get the tokens from MAL
+        let tokens = await this._getTokenWebRequest.handle({
+            code: command.code,
+            ourdomain: command.ourdomain,
+            verifier: user.tokens.verifier
+        });
+
+        var tokenModel = await this._database.Models.tokens.findOne({
+            where: {
+                id: user.tokensId
+            }
+        })
+        if(!tokenModel) throw new TokensNotPresentError("No tokens for pending user");
+        await tokenModel.update({
+            token: tokens.access_token,
+            refreshtoken: tokens.refresh_token,
+            verifier: undefined,
+            redirect: undefined
+        });
+
+        if (user.tokens.redirect) {
             return {
-                url: `${dictData.redirect}${command.uuid}`,
+                url: `${user.tokens.redirect}${command.uuid}`,
                 success: ICommandResultStatus.SUCCESS
             }
         }

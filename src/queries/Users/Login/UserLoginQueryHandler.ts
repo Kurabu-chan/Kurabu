@@ -23,13 +23,15 @@ export class UserLoginQueryHandler implements IQueryHandler<UserLoginQuery, User
             }
         })
 
-        if (user === null) throw new BadLoginError("Incorrect login");
+        if (!user) throw new BadLoginError("Incorrect login");
 
         if (await hasher.Verify(query.password, user.pass) === false) throw new BadLoginError("Incorrect login");
 
-        if(user.tokensId === null) throw new TokensNotPresentError("No tokens present on database");
+        if(!user.tokensId) throw new TokensNotPresentError("No tokens present on database");
         
         var tokens: Tokens = user.tokens as Tokens;
+
+        if(!tokens.token || !tokens.refreshtoken) throw new TokensNotPresentError("No tokens during login");
 
         return {
             success: IQueryResultStatus.SUCCESS,
