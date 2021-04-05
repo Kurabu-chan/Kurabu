@@ -1,21 +1,20 @@
 import { autoInjectable } from "tsyringe";
-import { Database } from "../../../helpers/database/Database";
+import { Database } from "../../../helpers/Database";
 import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
 import { UserEmailUsedQuery } from "./UserEmailUsedQuery";
 import { UserEmailUsedQueryResult } from "./UserEmailUsedQueryResult";
 
 @autoInjectable()
 export class UserEmailUsedQueryHandler implements IQueryHandler<UserEmailUsedQuery, UserEmailUsedQueryResult>{
-    async handle(query: UserEmailUsedQuery): Promise<UserEmailUsedQueryResult> {
-        const queryStr = "SELECT COUNT(*) FROM users WHERE email = $1;";
-        const queryValues = [query.email];
+    constructor(private database: Database){}
 
-        const res = await Database
-            .GetInstance()
-            .ParamQuery(queryStr, queryValues);
+    async handle(query: UserEmailUsedQuery): Promise<UserEmailUsedQueryResult> {
+        var count = await this.database.Models.user.count({
+            where: {email: query.email}
+        })
 
         return {
-            emailIsUsed: res.rows[0].count != 0,
+            emailIsUsed: count != 0,
             success: IQueryResultStatus.SUCCESS
         }
     }

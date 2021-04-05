@@ -17,6 +17,7 @@
 0 2 5: mail in use
 0 2 6: too many attempts (e.g. when verificating)
 0 2 7: wrong code (e.g. when verificating)
+0 2 8: tokens were not present on database
 
 0 3 0: any service provider error e.g. email service error, database initialisation, etc.
 0 3 1: No sendgrid key present

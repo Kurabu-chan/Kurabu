@@ -2,19 +2,29 @@ import { ICommandHandler, ICommandResult, ICommandResultStatus } from "../../ICo
 import { CreateUserCommand } from "./CreateUserCommand";
 import { CreateUserCommandResult } from "./CreateUserCommandResult";
 import * as hasher from '../../../helpers/Hasher';
-import { Database } from "../../../helpers/database/Database";
+import { Database } from "../../../helpers/Database";
 import { autoInjectable } from "tsyringe";
 
 /** Create A user in the database */
 @autoInjectable()
 export class CreateUserCommandHandler implements ICommandHandler<CreateUserCommand, CreateUserCommandResult>{
-    async handle(command: CreateUserCommand): Promise<CreateUserCommandResult> {
-        let query = "INSERT INTO users VALUES ($1,$2,$3,$4,$5)";
+    constructor(private database: Database){}
 
+    async handle(command: CreateUserCommand): Promise<CreateUserCommandResult> {
         let hash = await hasher.hash(command.password);
 
-        let values = [command.uuid, command.email, hash, command.token, command.refreshToken];
-        Database.GetInstance().ParamQuery(query, values);
+        var tokens = await this.database.Models.tokens.create({
+            token: command.token,
+            refreshtoken: command.refreshToken
+        });
+
+        await this.database.Models.user.create({
+            id: command.uuid,
+            email: command.email,
+            pass: hash,
+            tokensId: tokens.id
+        })
+
         console.log("Inserted new user into database");
 
         return {

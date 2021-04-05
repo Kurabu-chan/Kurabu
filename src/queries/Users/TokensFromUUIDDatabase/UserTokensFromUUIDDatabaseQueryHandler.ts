@@ -1,28 +1,35 @@
 import { autoInjectable } from "tsyringe";
 import BadLoginError from "../../../errors/Authentication/BadLoginError";
+import TokensNotPresentError from "../../../errors/Authentication/TokensNotPresentError";
 import GeneralError from "../../../errors/GeneralError";
-import { Database } from "../../../helpers/database/Database";
+import { Database } from "../../../helpers/Database";
+import { Tokens } from "../../../models/Tokens";
 import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
 import { UserTokensFromUUIDDatabaseQuery } from "./UserTokensFromUUIDDatabaseQuery";
 import { UserTokensFromUUIDDatabaseQueryResult } from "./UserTokensFromUUIDDatabaseQueryResult";
 
 @autoInjectable()
 export class UserTokensFromUUIDDatabaseQueryHandler implements IQueryHandler<UserTokensFromUUIDDatabaseQuery, UserTokensFromUUIDDatabaseQueryResult> {
+    constructor(private database: Database){}
+
     async handle(query: UserTokensFromUUIDDatabaseQuery): Promise<UserTokensFromUUIDDatabaseQueryResult> {
-        let queryStr = "SELECT * FROM users WHERE id = $1;";
-        let res = await Database
-            .GetInstance()
-            .ParamQuery(queryStr, [query.uuid]);
 
-        if (res.rowCount === 0) throw new BadLoginError("User doesn't exist");
+        var res = await this.database.Models.user.findOne({
+            where: {id: query.uuid}
+        });
 
-        let entry = res.rows[0];
+        if (res === null) throw new BadLoginError("User doesn't exist");
+        
+        if(res.tokens === null) throw new TokensNotPresentError("No tokens present on database");
+
+        var tokens: Tokens = (res.tokens as Tokens);
+
         return {
             success: IQueryResultStatus.SUCCESS,
-            id: entry.id,
-            email: entry.email,
-            token: entry.token,
-            refreshtoken: entry.refreshtoken
+            id: res.id,
+            email: res.email,
+            token: tokens.token,
+            refreshtoken: tokens.refreshtoken
         }
     }
 }
