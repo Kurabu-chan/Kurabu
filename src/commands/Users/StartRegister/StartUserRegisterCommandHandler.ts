@@ -38,7 +38,6 @@ export class StartUserRegisterCommandHandler implements ICommandHandler<StartUse
         let uuid = getUUID();
         let code = makeVerifCode();
 
-        //TODO move to create user command handler
         let hash = await hasher.hash(command.password);
         this._database.Models.user.create({
             id: uuid,

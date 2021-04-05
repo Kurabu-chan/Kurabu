@@ -6,14 +6,12 @@ import { Database } from "../../../helpers/Database";
 import { Tokens } from "../../../models/Tokens";
 import { GetTokenWebRequestHandler } from "../../../webRequest/Auth/GetToken/GetTokenWebRequestHandler";
 import { ICommandHandler, ICommandResultStatus } from "../../ICommand";
-import { CreateUserCommandHandler } from "../Create/CreateUserCommandHandler";
 import { PendingUserCommand } from "./PendingUserCommand";
 import { PendingUserCommandResult } from "./PendingUserCommandResult";
 
 @autoInjectable()
 export class PendingUserCommandHandler implements ICommandHandler<PendingUserCommand, PendingUserCommandResult> {
     constructor(
-        private _createUserCommand: CreateUserCommandHandler,
         private _getTokenWebRequest: GetTokenWebRequestHandler,
         private _database: Database
     ) { }
