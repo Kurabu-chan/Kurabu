@@ -16,15 +16,19 @@ export class UserLoginQueryHandler implements IQueryHandler<UserLoginQuery, User
 
     async handle(query: UserLoginQuery): Promise<UserLoginQueryResult> {
         var user = await this.database.Models.user.findOne({
-            where: {email: query.email}
+            where: {email: query.email},
+            include: {
+                model: Tokens,
+                attributes: ["token", "refreshtoken"]
+            }
         })
 
         if (user === null) throw new BadLoginError("Incorrect login");
 
         if (await hasher.Verify(query.password, user.pass) === false) throw new BadLoginError("Incorrect login");
 
-        if(user.tokensId === undefined) throw new TokensNotPresentError("No tokens present on database");
-
+        if(user.tokensId === null) throw new TokensNotPresentError("No tokens present on database");
+        
         var tokens: Tokens = user.tokens as Tokens;
 
         return {

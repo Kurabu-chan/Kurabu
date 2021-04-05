@@ -22,7 +22,7 @@ export class CreateUserCommandHandler implements ICommandHandler<CreateUserComma
             id: command.uuid,
             email: command.email,
             pass: hash,
-            tokens: tokens
+            tokensId: tokens.id
         })
 
         console.log("Inserted new user into database");
