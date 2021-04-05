@@ -17,7 +17,7 @@ export class SuggestionsWebRequestHandler implements IWebRequestHandler<Suggesti
             .setQueryParam("offset", (query.offset ? query.offset : 0).toString())
             .setHeader('Content-Type', 'application/x-www-form-urlencoded')
 
-        let data = await request.refreshRequest(query.uuid);
+        let data = await request.refreshRequest(query.user);
 
         let json: ListPagination<AnimeNode> | ErrorResponse = data;
         if ((json as ErrorResponse).error) {

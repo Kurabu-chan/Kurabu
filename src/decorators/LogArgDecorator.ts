@@ -11,7 +11,9 @@ export default function LogArg() {
 
             const requestCode = getUUID()
 
-            Logger.Info(`${requestCode} ${target.constructor.name}: ${JSON.stringify(arg, null, 2)}`);
+            const {user, ...logArg} = arg;
+
+            Logger.Info(`${requestCode} ${target.constructor.name}: ${JSON.stringify(logArg, null, 2)}`);
             let val = original.apply(this, [req, res, arg]);
 
             return val;

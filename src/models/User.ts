@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo, CreatedAt, PrimaryKey, UpdatedAt, AllowNull } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, CreatedAt, PrimaryKey, UpdatedAt, AllowNull, Default } from 'sequelize-typescript';
 import { Tokens } from "./Tokens";
 
 
@@ -17,6 +17,15 @@ export class User extends Model {
     @Column(DataType.TEXT)
     pass!: string;
 
+    @AllowNull(true)
+    @Column(DataType.STRING)
+    verifCode?: string;
+
+    @AllowNull(true)
+    @Default(0)
+    @Column
+    VerifAttemptCount?: number;
+
     @ForeignKey(() => Tokens)
     @AllowNull(true)
     @Column
@@ -24,5 +33,4 @@ export class User extends Model {
 
     @BelongsTo(() => Tokens)
     tokens?: Tokens
-
 }

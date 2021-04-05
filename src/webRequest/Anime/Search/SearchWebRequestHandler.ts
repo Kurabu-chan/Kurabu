@@ -19,7 +19,7 @@ export class SearchWebRequestHandler implements IWebRequestHandler<SearchWebRequ
             request.setQueryParam("fields", fieldsToString((query.fields as Fields[])))
         }
 
-        let data = await request.refreshRequest(query.uuid);
+        let data = await request.refreshRequest(query.user);
 
         let json: ListPagination<Anime> | ErrorResponse = data;
         if ((json as ErrorResponse).error) {
