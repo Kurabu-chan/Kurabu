@@ -5,7 +5,6 @@ reload();
 
 import ExampleServer from './ExampleServer';
 import { Logger } from '@overnightjs/logger';
-import { Database } from './helpers/database/Database';
 import ContainerManager from './helpers/ContainerManager';
 
 let PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 15000;
@@ -13,7 +12,7 @@ let PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 15000;
 if (PORT === 15000) {
     Logger.Warn(`env port is ${process.env.PORT}`);
 }
-Database.GetInstance();
+
 ContainerManager.getInstance();
 
 const exampleServer = new ExampleServer();
