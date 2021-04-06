@@ -13,11 +13,11 @@ export type UserDatabaseEntry = {
 
 @singleton()
 export class Database {
-    private sequilize!: Sequelize;
+    private sequelize!: Sequelize;
     private models!: ModelsType;
 
-    get Sequilize(){
-        return this.sequilize;
+    get Sequelize(){
+        return this.sequelize;
     }
 
     get Models(){
@@ -26,7 +26,7 @@ export class Database {
 
     constructor(){
         this.models = Models;
-        this.sequilize = new Sequelize(process.env.DATABASE_URL as string, {
+        this.sequelize = new Sequelize(process.env.DATABASE_URL as string, {
             models: ModelsArray,
             dialect: "postgres",
             dialectOptions: {
@@ -35,8 +35,7 @@ export class Database {
                 }
             }
         });
-        this.sequilize.sync();
-        this.sequilize.databaseVersion().then((version)=> {
+        this.sequelize.databaseVersion().then((version)=> {
             console.log(`Database initialized with db version ${version}`);
         })
     }
