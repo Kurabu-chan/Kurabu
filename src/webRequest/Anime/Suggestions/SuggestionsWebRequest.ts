@@ -1,7 +1,8 @@
+import { User } from "../../../models/User";
 import { IWebRequest } from "../../IWebRequest";
 
 export class SuggestionsWebRequest extends IWebRequest {
-    uuid!: string;
+    user!: User;
     limit?: number | undefined;
     offset?: number | undefined
 }

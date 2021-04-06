@@ -1,5 +1,6 @@
 import { ICommandResult } from "../../../commands/ICommand";
+import { User } from "../../../models/User";
 
 export class CheckUserUUIDQueryResult extends ICommandResult {
-    status!: "pending" | "done" | "errored" | "canceled" | "verif";
+    user!: User
 }

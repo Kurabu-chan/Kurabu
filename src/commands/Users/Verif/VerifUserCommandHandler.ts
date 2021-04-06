@@ -3,60 +3,53 @@ import AttemptError from "../../../errors/Authentication/AttemptError";
 import IncorrectCodeError from "../../../errors/Authentication/IncorrectCodeError";
 import MissingStateError from "../../../errors/Authentication/MissingStateError";
 import StateStatusError from "../../../errors/Authentication/StateStatusError";
+import { Database } from "../../../helpers/Database";
 import { CLIENT_ID } from "../../../helpers/GLOBALVARS";
 import { getPKCE } from "../../../helpers/randomCodes";
-import { DictEntry, UserManager, VerifData } from "../../../helpers/UserManager";
 import { ICommandHandler, ICommandResultStatus } from "../../ICommand";
 import { VerifUserCommand } from "./VerifUserCommand";
 import { VerifUserCommandResult } from "./VerifUserCommandResult";
 
 @autoInjectable()
 export class VerifUserCommandHandler implements ICommandHandler<VerifUserCommand, VerifUserCommandResult> {
-    private _userManager: UserManager;
-
     constructor(
-        userManager: UserManager
-    ) {
-        this._userManager = userManager;
-    }
+        private _database: Database
+    ) {}
 
     async handle(command: VerifUserCommand): Promise<VerifUserCommandResult> {
-        if (!this._userManager.codeDict.has(command.uuid)) throw new MissingStateError("verif uuid doesn't exist");
+        var user = await this._database.Models.user.findOne({
+            where: {
+                id: command.uuid
+            }
+        })
 
-        let dictVal = <DictEntry>this._userManager.codeDict.get(command.uuid);
-        if (dictVal.state != "verif") throw new StateStatusError("uuid is not a verif uuid")
+        if (user === null) throw new MissingStateError("verif uuid doesn't exist");
 
-        let verifVal: { state: "verif", data: VerifData } = (dictVal as { state: "verif", data: VerifData });
-        if (command.code != verifVal.data.code) {
-            verifVal.data.attempt++;
+        if (user.verifCode == undefined) throw new StateStatusError("uuid is not a verif uuid")
 
-            if (verifVal.data.attempt > 4) {
-                this._userManager.codeDict.delete(command.uuid);
+        if (command.code != user.verifCode) {
+            await user.update({
+                VerifAttemptCount: (user.VerifAttemptCount??0) + 1
+            });
+
+            if (user.VerifAttemptCount??1 > 4) {
+                user.destroy();
                 throw new AttemptError("Too many attempts");
             }
             throw new IncorrectCodeError("Incorrect code");
         }
 
         let codeVerifier: string = getPKCE(128);
+        let tokens = await this._database.Models.tokens.create({
+            verifier: codeVerifier,
+            redirect: command.redirect
+        });
 
-        this._userManager.codeDict.delete(command.uuid);
-        let dictEntry: DictEntry = {
-            state: "pending",
-            data: {
-                email: verifVal.data.email,
-                pass: verifVal.data.pass,
-                verifier: codeVerifier,
-                redirect: command.redirect
-            }
-        }
-
-        this._userManager.codeDict.set(command.uuid, dictEntry);
-        setTimeout(() => {
-            let dictEntry = <DictEntry>this._userManager.codeDict.get(command.uuid);
-            if (dictEntry.state == "pending") {
-                this._userManager.codeDict.delete(command.uuid);
-            }
-        }, 10 * 60 * 1000);
+        await user.update({
+            VerifAttemptCount: undefined,
+            verifCode: undefined,
+            tokensId: tokens.id
+        });
 
         return {
             success: ICommandResultStatus.SUCCESS,

@@ -24,7 +24,7 @@ export class DetailsController {
 
         var result = await this._detailsWebRequest.handle({
             animeid: arg.animeid,
-            uuid: arg.state
+            user: arg.user
         })
 
         return result.anime;

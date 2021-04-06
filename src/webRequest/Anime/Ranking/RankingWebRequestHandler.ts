@@ -15,7 +15,7 @@ export class RankingWebRequestHandler implements IWebRequestHandler<RankingWebRe
             .setQueryParam("offset", (query.offset ? query.offset : 0).toString())
             .setHeader('Content-Type', 'application/x-www-form-urlencoded')
 
-        let data = await request.refreshRequest(query.uuid);
+        let data = await request.refreshRequest(query.user);
 
         let json: ListPagination<RankingWebRequestResultType> | ErrorResponse = data;
         if ((json as ErrorResponse).error) {

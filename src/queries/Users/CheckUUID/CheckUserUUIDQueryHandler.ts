@@ -1,44 +1,33 @@
 import { autoInjectable } from "tsyringe";
-import { DictEntry, UserManager } from "../../../helpers/UserManager";
-import { UserTokensFromUUIDDatabaseQueryHandler } from "../TokensFromUUIDDatabase/UserTokensFromUUIDDatabaseQueryHandler";
 import { ICommandHandler, ICommandResultStatus } from "../../../commands/ICommand";
 import { CheckUserUUIDQuery } from "./CheckUserUUIDQuery";
 import { CheckUserUUIDQueryResult } from "./CheckUserUUIDQueryResult";
+import { Database } from "../../../helpers/Database";
+import { Tokens } from "../../../models/Tokens";
+import MissingStateError from "../../../errors/Authentication/MissingStateError";
 
 @autoInjectable()
 export class CheckUserUUIDQueryHandler implements ICommandHandler<CheckUserUUIDQuery, CheckUserUUIDQueryResult> {
-    private _userManager: UserManager;
-    private _userTokensFromUUIDQuery: UserTokensFromUUIDDatabaseQueryHandler;
     constructor(
-        userManager: UserManager, userTokensFromUUIDQuery: UserTokensFromUUIDDatabaseQueryHandler,
-    ) {
-        this._userTokensFromUUIDQuery = userTokensFromUUIDQuery;
-        this._userManager = userManager;
-    }
+        private _database: Database
+    ) {}
 
     async handle(command: CheckUserUUIDQuery): Promise<CheckUserUUIDQueryResult> {
-        if (this._userManager.codeDict.has(command.uuid)) {
-            let entry = <DictEntry>this._userManager.codeDict.get(command.uuid);
+        var user = await this._database.Models.user.findOne({
+            where: {id: command.uuid},
+            include: {
+                model: Tokens,
+                attributes: ["token", "refreshtoken", "verifier", "redirect"]
+            }
+        })
+        if (user) {
             return {
                 success: ICommandResultStatus.SUCCESS,
-                status: entry.state
+                user: user
             };
+        }else{
+            //TODO better error
+            throw new MissingStateError("user doesn't exist");
         }
-
-        var queryResult = await this._userTokensFromUUIDQuery.handle({ uuid: command.uuid })
-
-        let dictEntry: DictEntry = {
-            state: "done",
-            data: {
-                email: queryResult.email,
-                token: queryResult.token,
-                RefreshToken: queryResult.refreshtoken
-            }
-        }
-        this._userManager.codeDict.set(queryResult.id, dictEntry);
-        return {
-            status: "done",
-            success: ICommandResultStatus.SUCCESS
-        };
     }
 }

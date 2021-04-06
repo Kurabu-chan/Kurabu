@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import ContainerManager from "../helpers/ContainerManager";
+import { User } from '../models/User';
 import { CheckRequestStateQueryHandler } from '../queries/Request/CheckState/CheckRequestStateQueryHandler';
 
 export default function State() {
@@ -12,7 +13,7 @@ export default function State() {
 
             let state = await checkRequestStateQuery.handle({ req: req, res: res });
 
-            return original.apply(this, [req, res, { ...arg, state: state.state }]);
+            return original.apply(this, [req, res, { ...arg, state: state.state, user: state.user }]);
         }
     }
 }

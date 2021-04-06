@@ -1,32 +1,25 @@
 import { autoInjectable } from "tsyringe";
 import MissingStateError from "../../../errors/Authentication/MissingStateError";
 import StateStatusError from "../../../errors/Authentication/StateStatusError";
-import { UserManager } from "../../../helpers/UserManager";
+import { Database } from "../../../helpers/Database";
 import { ICommandHandler, ICommandResultStatus } from "../../ICommand"
 import { CancelUserRegisterCommand } from "./CancelUserRegisterCommand";
 import { CancelUserRegisterCommandResult } from "./CancelUserRegisterCommandResult";
 
 @autoInjectable()
 export class CancelUserRegisterCommandHandler implements ICommandHandler<CancelUserRegisterCommand, CancelUserRegisterCommandResult>{
-    private _userManager: UserManager;
     constructor(
-        userManager: UserManager) {
-        this._userManager = userManager;
+        private _database: Database) {
     }
 
-    async handle(command: CancelUserRegisterCommand): Promise<CancelUserRegisterCommandResult> {
-        if (this._userManager.codeDict.has(command.uuid)) {
-            let current = this._userManager.codeDict.get(command.uuid);
-            if (current?.state == "verif") {
-                this._userManager.SetCanceled(command.uuid);
-                return {
-                    success: ICommandResultStatus.SUCCESS
-                };
-            } else {
-                throw new StateStatusError("State had wrong status during cancel");
-            }
-        } else {
-            throw new MissingStateError("State missing during cancel");
-        }
+    async handle({ user }: CancelUserRegisterCommand): Promise<CancelUserRegisterCommandResult> {
+        if (!user) throw new MissingStateError("State missing during cancel");
+
+        if (user.tokens && user.tokens) throw new StateStatusError("State had wrong status during cancel");
+
+        user.destroy();
+        return {
+            success: ICommandResultStatus.SUCCESS
+        };
     }
 }

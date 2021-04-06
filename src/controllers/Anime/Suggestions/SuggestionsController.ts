@@ -27,7 +27,7 @@ export class SuggestionsController {
         }
 
         var result = await this._suggestionsWebRequest.handle({
-            uuid: arg.state,
+            user: arg.user,
             limit: arg.limit,
             offset: arg.offset
         })

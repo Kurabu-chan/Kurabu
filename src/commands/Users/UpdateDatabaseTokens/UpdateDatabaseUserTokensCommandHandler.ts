@@ -12,21 +12,21 @@ export class UpdateDatabaseUserTokensCommandHandler implements ICommandHandler<U
     constructor(private database: Database){}
 
     async handle(command: UpdateDatabaseUserTokensCommand): Promise<UpdateDatabaseUserTokensCommandResult> {
-        var userRes = await this.database.Models.user.findOne({
-            where: {id: command.uuid}
-        });
+        if(command.user === undefined) throw new MissingStateError("state doesn't belong to a user");
 
-        if(userRes === undefined) throw new MissingStateError("state doesn't belong to a user");
-
-        if(userRes?.tokensId == undefined){
+        if(command.user.tokensId == undefined){
             var token = await this.database.Models.tokens.create({
                 token: command.token,
                 refreshtoken: command.refreshtoken        
             });
-            userRes?.set("tokens", token)
+            command.user.update({
+                tokens: token
+            })
         }else{
-            userRes?.tokens?.set("token", command.token);
-            userRes?.tokens?.set("refreshtoken", command.refreshtoken);
+            command.user.tokens?.update({
+                token: command.token,
+                refreshtoken: command.refreshtoken
+            });
         }
 
         return {

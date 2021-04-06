@@ -36,7 +36,7 @@ export class SearchController {
         }       
 
         var result = await this._searchWebRequest.handle({
-            uuid: arg.state,
+            user: arg.user,
             query: arg.query,
             limit: arg.limit,
             offset: arg.offset,

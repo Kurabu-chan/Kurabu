@@ -2,31 +2,22 @@ import { autoInjectable } from "tsyringe";
 import MailUsedError from "../../../errors/Authentication/MailUsedError";
 import MalformedParameterError from "../../../errors/Parameter/MalformedParameterError";
 import PasswordStrengthError from "../../../errors/Parameter/PasswordStrengthError";
+import { Database } from "../../../helpers/Database";
 import { getUUID, makeVerifCode } from "../../../helpers/randomCodes";
-import { DictEntry, UserManager } from "../../../helpers/UserManager";
 import { UserEmailUsedQueryHandler } from "../../../queries/Users/EmailUsed/UserEmailUsedQueryHandler";
 import { MailServiceProvider } from "../../../SericeProviders/MailServiceProvider";
 import { ICommandHandler, ICommandResultStatus } from "../../ICommand";
 import { StartUserRegisterCommand } from "./StartUserRegisterCommand";
 import { StartUserRegisterCommandResult } from "./StartUserRegisterCommandResult";
+import * as hasher from '../../../helpers/Hasher';
 
 @autoInjectable()
 export class StartUserRegisterCommandHandler implements ICommandHandler<StartUserRegisterCommand, StartUserRegisterCommandResult> {
-    private _userEmailUsedQuery: UserEmailUsedQueryHandler;
-    private _userManager: UserManager;
-
-    private _mailServiceProvider: MailServiceProvider;
-
     constructor(
-        userEmailUsedQuery: UserEmailUsedQueryHandler,
-        mailServiceProvider: MailServiceProvider,
-        userManager: UserManager
-    ) {
-        this._userEmailUsedQuery = userEmailUsedQuery;
-        this._userManager = userManager;
-        this._mailServiceProvider = mailServiceProvider;
-
-    }
+        private _userEmailUsedQuery: UserEmailUsedQueryHandler,
+        private _mailServiceProvider: MailServiceProvider,
+        private _database: Database
+    ) {}
 
     async handle(command: StartUserRegisterCommand): Promise<StartUserRegisterCommandResult> {
         //Check format for email and password
@@ -46,27 +37,16 @@ export class StartUserRegisterCommandHandler implements ICommandHandler<StartUse
         //Create a uuid and code verifier
         let uuid = getUUID();
         let code = makeVerifCode();
-        //create a dict entry with state pendign and the email, password and verifier
-        let dictEntry: DictEntry = {
-            state: "verif",
-            data: {
-                email: command.email,
-                pass: command.password,
-                code: code,
-                attempt: 0
-            }
-        }
+
+        let hash = await hasher.hash(command.password);
+        this._database.Models.user.create({
+            id: uuid,
+            email: command.email,
+            pass: hash,
+            verifCode: code
+        });
 
         this._mailServiceProvider.SendHtml(command.email, "Verification imal", `<b>Your verification code is ${code}</b>`, "verification@imal.ml");
-
-        //add the entry to the dict with the uuid
-        this._userManager.codeDict.set(uuid, dictEntry);
-        setTimeout(() => {
-            let dictEntry = <DictEntry>this._userManager.codeDict.get(uuid);
-            if (dictEntry.state == "verif") {
-                this._userManager.codeDict.delete(uuid);
-            }
-        }, 10 * 60 * 1000);
 
         return {
             success: ICommandResultStatus.SUCCESS,

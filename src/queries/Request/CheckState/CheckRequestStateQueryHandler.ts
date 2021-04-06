@@ -28,12 +28,13 @@ export class CheckRequestStateQueryHandler implements IQueryHandler<CheckRequest
             throw new MalformedParameterError("State incorrect format");
         }
 
-        await this._checkUserUUIDQuery.handle({
+        var result = await this._checkUserUUIDQuery.handle({
             uuid: state
         });
 
         return {
             state: state,
+            user: result.user,
             success: IQueryResultStatus.SUCCESS
         };
     }

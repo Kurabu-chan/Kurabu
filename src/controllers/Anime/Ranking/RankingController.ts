@@ -36,7 +36,7 @@ export class RankingController {
         }
 
         var result = await this._rankingWebRequest.handle({
-            uuid: arg.state,
+            user: arg.user,
             rankingtype: arg.rankingtype,
             limit: arg.limit,
             offset: arg.offset
