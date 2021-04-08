@@ -6,6 +6,7 @@ import { Param, ParamType } from '../../../decorators/ParamDecorator';
 import RequestHandlerDecorator from '../../../decorators/RequestHandlerDecorator';
 import { injectable } from 'tsyringe';
 import { UserLoginQueryHandler } from '../../../queries/Users/Login/UserLoginQueryHandler';
+import { UserStatus } from '../../../models/User';
 
 @Controller(Options.ControllerPath)
 @injectable()
@@ -25,7 +26,8 @@ export class LoginController {
 
         return {
             status: SUCCESS_STATUS,
-            message: result.id
+            message: result.id,
+            userStatus: UserStatus[result.status]
         };
     }
 }

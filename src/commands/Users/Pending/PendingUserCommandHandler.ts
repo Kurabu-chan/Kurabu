@@ -47,8 +47,8 @@ export class PendingUserCommandHandler implements ICommandHandler<PendingUserCom
         await tokenModel.update({
             token: tokens.access_token,
             refreshtoken: tokens.refresh_token,
-            verifier: undefined,
-            redirect: undefined
+            verifier: null,
+            redirect: null
         });
 
         if (user.tokens.redirect) {

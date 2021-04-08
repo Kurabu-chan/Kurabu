@@ -46,8 +46,8 @@ export class VerifUserCommandHandler implements ICommandHandler<VerifUserCommand
         });
 
         await user.update({
-            VerifAttemptCount: undefined,
-            verifCode: undefined,
+            VerifAttemptCount: null,
+            verifCode: null,
             tokensId: tokens.id
         });
 

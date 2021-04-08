@@ -1,3 +1,4 @@
+import { UserStatus } from "../../../models/User";
 import { IQueryResult } from "../../IQuery";
 
 export class UserLoginQueryResult extends IQueryResult {
@@ -5,4 +6,5 @@ export class UserLoginQueryResult extends IQueryResult {
     email!: string;
     token!: string;
     refreshtoken!: string;
+    status!: UserStatus;
 }
