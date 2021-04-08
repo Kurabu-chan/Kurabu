@@ -9,6 +9,7 @@
       "emitDecoratorMetadata": true,
       "moduleResolution": "node",
       "importHelpers": true,
+      "sourceMap": true,
       "types": [
         "node",
         "mocha"

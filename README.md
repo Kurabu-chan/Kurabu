@@ -20,3 +20,6 @@ After commiting and having the pull request started
 * ensure that the staging database is also in the `config.json` from earlier under the environment `staging`
 * run `npm sequelize-cli db:migrate --env staging`
 * test if everything works
+
+# TODO
+* add reauth controller and command which returns the link and sets the verifier and optionally the redirect 

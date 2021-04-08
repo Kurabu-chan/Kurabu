@@ -30,12 +30,17 @@ export class Tokens extends Model {
 export async function ensureTokensOnUser(user: User) : Promise<User>{
     if(user.tokens) return user;
 
+    if(!user.tokensId){
+        //insert tokens
+        var userTokens = await Tokens.create();
+        await user.update({
+            tokensId: userTokens.id
+        });
+    }
+
     var loadedUser = await User.findOne({
         where: {id: user.id},
-        include: {
-            model: Tokens,
-            attributes: ["id", "token", "refreshtoken", "verifier", "redirect"]
-        }
+        include: Tokens
     });
 
     if(!loadedUser) throw new AuthenticationError("user doesn't exist");

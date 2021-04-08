@@ -15,10 +15,7 @@ export class CheckUserUUIDQueryHandler implements ICommandHandler<CheckUserUUIDQ
     async handle(command: CheckUserUUIDQuery): Promise<CheckUserUUIDQueryResult> {
         var user = await this._database.Models.user.findOne({
             where: {id: command.uuid},
-            include: {
-                model: Tokens,
-                attributes: ["token", "refreshtoken", "verifier", "redirect"]
-            }
+            include: Tokens
         })
         if (user) {
             return {
