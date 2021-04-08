@@ -5,8 +5,6 @@ import { UserLoginQuery } from "./UserLoginQuery";
 import { UserLoginQueryResult } from "./UserLoginQueryResult";
 import * as hasher from '../../../helpers/Hasher';
 import { autoInjectable } from "tsyringe";
-import MissingStateError from "../../../errors/Authentication/MissingStateError";
-import GeneralError from "../../../errors/GeneralError";
 import { Tokens } from "../../../models/Tokens";
 import TokensNotPresentError from "../../../errors/Authentication/TokensNotPresentError";
 import { getStatus } from "../../../models/User";
@@ -18,10 +16,7 @@ export class UserLoginQueryHandler implements IQueryHandler<UserLoginQuery, User
     async handle(query: UserLoginQuery): Promise<UserLoginQueryResult> {
         var user = await this.database.Models.user.findOne({
             where: {email: query.email},
-            include: {
-                model: Tokens,
-                attributes: ["token", "refreshtoken"]
-            }
+            include: Tokens
         })
 
         if (!user) throw new BadLoginError("Incorrect login");

@@ -6,6 +6,8 @@ import { RefreshWebRequestHandler } from '../webRequest/Auth/Refresh/RefreshWebR
 import { User } from '../models/User';
 import TokensNotPresentError from '../errors/Authentication/TokensNotPresentError';
 import { UpdateDatabaseUserTokensCommandHandler } from '../commands/Users/UpdateDatabaseTokens/UpdateDatabaseUserTokensCommandHandler';
+import { RefreshWebRequestResult } from '../webRequest/Auth/Refresh/RefreshWebRequestResult';
+import RefreshError from '../errors/Authentication/RefreshError';
 
 export async function RefreshFetch(user: User, url: fetch.RequestInfo, init?: fetch.RequestInit | undefined): Promise<any> {
     //get current tokens
@@ -26,9 +28,21 @@ export async function RefreshFetch(user: User, url: fetch.RequestInfo, init?: fe
         //check if the response is invalid_token error
         if (jsonRes.error == "invalid_token") {
             //get new tokens
-            var refresh = await refreshWebRequest.handle({
-                refreshToken: tokens.refreshtoken as string
-            });
+            var refresh: RefreshWebRequestResult;
+            try{
+                refresh = await refreshWebRequest.handle({
+                    refreshToken: tokens.refreshtoken as string
+                });
+            }catch(err){
+                if(err instanceof RefreshError){
+                    await user.tokens.update({
+                        token: null,
+                        refreshtoken: null
+                    });
+                }
+
+                throw err;
+            }
 
             //put the token in the headers
             let newInit = addTokenHeader(refresh.access_token, init);
