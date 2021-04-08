@@ -11,6 +11,7 @@ import { CancelRegisterController } from "./Authed/CancelRegister/CancelRegister
 import { RegisterController } from "./Authed/Register/RegisterController";
 import { VerifController } from "./Authed/Verif/VerifController";
 import { LoginController } from "./Authed/Login/LoginController";
+import { StatusController } from "./Authed/Status/StatusController";
 
 var container = ContainerManager.getInstance().Container;
 
@@ -25,6 +26,7 @@ export default [
     container.resolve(LoginController),
     container.resolve(RegisterController),
     container.resolve(VerifController),
+    container.resolve(StatusController),
 
     container.resolve(AuthedController),
 
