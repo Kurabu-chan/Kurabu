@@ -9,6 +9,7 @@ import MissingStateError from "../../../errors/Authentication/MissingStateError"
 import GeneralError from "../../../errors/GeneralError";
 import { Tokens } from "../../../models/Tokens";
 import TokensNotPresentError from "../../../errors/Authentication/TokensNotPresentError";
+import { getStatus } from "../../../models/User";
 
 @autoInjectable()
 export class UserLoginQueryHandler implements IQueryHandler<UserLoginQuery, UserLoginQueryResult>{
@@ -38,7 +39,8 @@ export class UserLoginQueryHandler implements IQueryHandler<UserLoginQuery, User
             id: user.id,
             email: user.email,
             token: tokens.token,
-            refreshtoken: tokens.refreshtoken
+            refreshtoken: tokens.refreshtoken,
+            status: await getStatus(user)
         }
     }
 }

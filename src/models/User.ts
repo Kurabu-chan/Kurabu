@@ -1,5 +1,5 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo, CreatedAt, PrimaryKey, UpdatedAt, AllowNull, Default } from 'sequelize-typescript';
-import { Tokens } from "./Tokens";
+import { ensureTokensOnUser, Tokens } from "./Tokens";
 
 
 @Table
@@ -33,4 +33,19 @@ export class User extends Model {
 
     @BelongsTo(() => Tokens)
     tokens?: Tokens
+}
+
+export enum UserStatus{
+    done,
+    verif,
+    tokens
+}
+
+export async function getStatus(user: User) : Promise<UserStatus>{
+    user = await ensureTokensOnUser(user);
+
+    if(user.verifCode) return UserStatus.verif;
+    if(!user.tokens || user.tokens.verifier) return UserStatus.tokens;
+
+    return UserStatus.done;
 }
