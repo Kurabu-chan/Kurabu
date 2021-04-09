@@ -3,5 +3,7 @@
 	"semi": true,
 	"singleQuote": false,
 	"bracketSpacing": true,
-	"useTabs": true
+	"useTabs": true,
+	"arrowParens": "always",
+	"jsxBracketSameLine": true
 }
