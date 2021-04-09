@@ -1,6 +1,3 @@
 import { ICommandResult } from "../../ICommand";
 
-
-export class UpdateDatabaseUserTokensCommandResult extends ICommandResult {
-
-}
+export class UpdateDatabaseUserTokensCommandResult extends ICommandResult {}

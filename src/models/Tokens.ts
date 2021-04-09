@@ -1,49 +1,57 @@
-import { Table, Column, Model, DataType,AutoIncrement, AllowNull, PrimaryKey } from 'sequelize-typescript';
-import AuthenticationError from '../errors/Authentication/AuthenticationError';
-import { User } from './User';
+import {
+	Table,
+	Column,
+	Model,
+	DataType,
+	AutoIncrement,
+	AllowNull,
+	PrimaryKey,
+} from "sequelize-typescript";
+import AuthenticationError from "../errors/Authentication/AuthenticationError";
+import { User } from "./User";
 
 @Table
 export class Tokens extends Model {
-    @AutoIncrement
-    @AllowNull(false)
-    @PrimaryKey
-    @Column
-    id!: number;
-    
-    @AllowNull(true)
-    @Column(DataType.TEXT)
-    token?: string;
-    
-    @AllowNull(true)
-    @Column(DataType.TEXT)
-    refreshtoken?: string;
+	@AutoIncrement
+	@AllowNull(false)
+	@PrimaryKey
+	@Column
+	id!: number;
 
-    @AllowNull(true)
-    @Column(DataType.TEXT)
-    verifier?: string;
+	@AllowNull(true)
+	@Column(DataType.TEXT)
+	token?: string;
 
-    @AllowNull(true)
-    @Column(DataType.TEXT)
-    redirect?: string;
+	@AllowNull(true)
+	@Column(DataType.TEXT)
+	refreshtoken?: string;
+
+	@AllowNull(true)
+	@Column(DataType.TEXT)
+	verifier?: string;
+
+	@AllowNull(true)
+	@Column(DataType.TEXT)
+	redirect?: string;
 }
 
-export async function ensureTokensOnUser(user: User) : Promise<User>{
-    if(user.tokens) return user;
+export async function ensureTokensOnUser(user: User): Promise<User> {
+	if (user.tokens) return user;
 
-    if(!user.tokensId){
-        //insert tokens
-        var userTokens = await Tokens.create();
-        await user.update({
-            tokensId: userTokens.id
-        });
-    }
+	if (!user.tokensId) {
+		//insert tokens
+		var userTokens = await Tokens.create();
+		await user.update({
+			tokensId: userTokens.id,
+		});
+	}
 
-    var loadedUser = await User.findOne({
-        where: {id: user.id},
-        include: Tokens
-    });
+	var loadedUser = await User.findOne({
+		where: { id: user.id },
+		include: Tokens,
+	});
 
-    if(!loadedUser) throw new AuthenticationError("user doesn't exist");
+	if (!loadedUser) throw new AuthenticationError("user doesn't exist");
 
-    return loadedUser;
+	return loadedUser;
 }

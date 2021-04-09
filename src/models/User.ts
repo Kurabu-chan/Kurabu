@@ -1,53 +1,62 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo, PrimaryKey, AllowNull, Default } from 'sequelize-typescript';
+import {
+	Table,
+	Column,
+	Model,
+	DataType,
+	ForeignKey,
+	BelongsTo,
+	PrimaryKey,
+	AllowNull,
+	Default,
+} from "sequelize-typescript";
 import { ensureTokensOnUser, Tokens } from "./Tokens";
-
 
 @Table
 export class User extends Model {
-    @PrimaryKey
-    @AllowNull(false)
-    @Column(DataType.UUID)
-    id!: string;
+	@PrimaryKey
+	@AllowNull(false)
+	@Column(DataType.UUID)
+	id!: string;
 
-    @AllowNull(false)
-    @Column(DataType.STRING)
-    email!: string;
+	@AllowNull(false)
+	@Column(DataType.STRING)
+	email!: string;
 
-    @AllowNull(false)
-    @Column(DataType.TEXT)
-    pass!: string;
+	@AllowNull(false)
+	@Column(DataType.TEXT)
+	pass!: string;
 
-    @AllowNull(true)
-    @Column(DataType.STRING)
-    verifCode?: string;
+	@AllowNull(true)
+	@Column(DataType.STRING)
+	verifCode?: string;
 
-    @AllowNull(true)
-    @Default(0)
-    @Column
-    VerifAttemptCount?: number;
+	@AllowNull(true)
+	@Default(0)
+	@Column
+	VerifAttemptCount?: number;
 
-    @ForeignKey(() => Tokens)
-    @AllowNull(true)
-    @Column
-    tokensId?: number;
+	@ForeignKey(() => Tokens)
+	@AllowNull(true)
+	@Column
+	tokensId?: number;
 
-    @BelongsTo(() => Tokens)
-    tokens?: Tokens
+	@BelongsTo(() => Tokens)
+	tokens?: Tokens;
 }
 
 export enum UserStatus {
-    done,
-    verif,
-    authing,
-    tokens
+	done,
+	verif,
+	authing,
+	tokens,
 }
 
-export async function getStatus(user: User) : Promise<UserStatus>{
-    user = await ensureTokensOnUser(user);
+export async function getStatus(user: User): Promise<UserStatus> {
+	user = await ensureTokensOnUser(user);
 
-    if(user.verifCode) return UserStatus.verif;
-    if(user.tokens && user.tokens.verifier) return UserStatus.authing;
-    if(!user.tokens || !user.tokens.token) return UserStatus.tokens;    
+	if (user.verifCode) return UserStatus.verif;
+	if (user.tokens && user.tokens.verifier) return UserStatus.authing;
+	if (!user.tokens || !user.tokens.token) return UserStatus.tokens;
 
-    return UserStatus.done;
+	return UserStatus.done;
 }

@@ -7,35 +7,39 @@ import { CheckUserUUIDQueryHandler } from "../../Users/CheckUUID/CheckUserUUIDQu
 import { CheckRequestStateQuery } from "./CheckRequestStateQuery";
 import { CheckRequestStateQueryResult } from "./CheckRequestStateQueryResult";
 
-
 @autoInjectable()
-export class CheckRequestStateQueryHandler implements IQueryHandler<CheckRequestStateQuery, CheckRequestStateQueryResult>{
-    constructor(private _checkUserUUIDQuery: CheckUserUUIDQueryHandler) { }
+export class CheckRequestStateQueryHandler
+	implements
+		IQueryHandler<CheckRequestStateQuery, CheckRequestStateQueryResult> {
+	constructor(private _checkUserUUIDQuery: CheckUserUUIDQueryHandler) {}
 
-    async handle({ req, res }: CheckRequestStateQuery): Promise<CheckRequestStateQueryResult> {
-        //state is one of the paramaters
-        let query = req.query["state"]?.toString();
-        let body = req.body["state"]?.toString();
+	async handle({
+		req,
+		res,
+	}: CheckRequestStateQuery): Promise<CheckRequestStateQueryResult> {
+		//state is one of the paramaters
+		let query = req.query["state"]?.toString();
+		let body = req.body["state"]?.toString();
 
-        let state: string = query ?? body;
+		let state: string = query ?? body;
 
-        if (!state || state == "") {
-            throw new MissingParameterError("Missing required parameter state");
-        }
+		if (!state || state == "") {
+			throw new MissingParameterError("Missing required parameter state");
+		}
 
-        //state is valid format
-        if (!isUUID(state)) {
-            throw new MalformedParameterError("State incorrect format");
-        }
+		//state is valid format
+		if (!isUUID(state)) {
+			throw new MalformedParameterError("State incorrect format");
+		}
 
-        var result = await this._checkUserUUIDQuery.handle({
-            uuid: state
-        });
+		var result = await this._checkUserUUIDQuery.handle({
+			uuid: state,
+		});
 
-        return {
-            state: state,
-            user: result.user,
-            success: IQueryResultStatus.SUCCESS
-        };
-    }
+		return {
+			state: state,
+			user: result.user,
+			success: IQueryResultStatus.SUCCESS,
+		};
+	}
 }

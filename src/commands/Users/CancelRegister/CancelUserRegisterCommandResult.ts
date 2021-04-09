@@ -1,5 +1,3 @@
-import { ICommandResult } from "../../ICommand"
+import { ICommandResult } from "../../ICommand";
 
-export class CancelUserRegisterCommandResult extends ICommandResult {
-
-}
+export class CancelUserRegisterCommandResult extends ICommandResult {}

@@ -1,6 +1,9 @@
 # success
+
 1 0 0: any success
+
 # error
+
 0 0 0: general error (specifics unknown)
 
 0 1 0: any parameter error
@@ -22,14 +25,10 @@
 0 3 0: any service provider error e.g. email service error, database initialisation, etc.
 0 3 1: No sendgrid key present
 
-0 4 0: any MyAnimeListErrors e.g. no connection 
+0 4 0: any MyAnimeListErrors e.g. no connection
 0 4 1: Connecting to MAL failed
 
-
-
-
 first number is status so success/error
-
 
 incase of error
 second number is type of error. e.g. parameter, general, connection, etc.
