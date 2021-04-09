@@ -1,9 +1,7 @@
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Frafaeltab%2FiMal_API%2Fbadge%3Fref%3Dmaster&style=flat)](https://actions-badge.atrox.dev/rafaeltab/iMal_API/goto?ref=master) [![rafaeltab](https://circleci.com/gh/rafaeltab/iMal_API.svg?style=shield)](https://app.circleci.com/pipelines/github/rafaeltab) [![Total alerts](https://img.shields.io/lgtm/alerts/g/rafaeltab/iMal_API.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rafaeltab/iMal_API/alerts/) [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/rafaeltab/iMal_API.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/rafaeltab/iMal_API/context:javascript)
 
 # iMAL2.0
-iMAL version 2.0
-
-
+Soon to be renamed to kurabu inside code hopefully some time :)
 
 # migrations
 * edit or create some models
