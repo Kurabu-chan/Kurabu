@@ -3,7 +3,7 @@ import { User } from "../../../models/User";
 import { IWebRequest } from "../../IWebRequest";
 
 export class DetailsWebRequest extends IWebRequest {
-    user!: User;
-    animeid!: number;
-    fields?: Fields[] | undefined
+	user!: User;
+	animeid!: number;
+	fields?: Fields[] | undefined;
 }

@@ -1,16 +1,17 @@
-export abstract class ICommand {
-
-}
+export abstract class ICommand {}
 
 export abstract class ICommandResult {
-    success!: ICommandResultStatus
+	success!: ICommandResultStatus;
 }
 
 export enum ICommandResultStatus {
-    SUCCESS,
-    FAILURE
+	SUCCESS,
+	FAILURE,
 }
 
-export interface ICommandHandler<TCommand extends ICommand, TResult extends ICommandResult> {
-    handle(command: TCommand): Promise<TResult>;
+export interface ICommandHandler<
+	TCommand extends ICommand,
+	TResult extends ICommandResult
+> {
+	handle(command: TCommand): Promise<TResult>;
 }

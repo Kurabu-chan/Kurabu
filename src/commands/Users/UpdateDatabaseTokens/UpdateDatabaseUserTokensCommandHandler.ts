@@ -6,29 +6,37 @@ import { UpdateDatabaseUserTokensCommand } from "./UpdateDatabaseUserTokensComma
 import { UpdateDatabaseUserTokensCommandResult } from "./UpdateDatabaseUserTokensCommandResult";
 
 @autoInjectable()
-export class UpdateDatabaseUserTokensCommandHandler implements ICommandHandler<UpdateDatabaseUserTokensCommand, UpdateDatabaseUserTokensCommandResult> {
-    constructor(private database: Database){}
+export class UpdateDatabaseUserTokensCommandHandler
+	implements
+		ICommandHandler<
+			UpdateDatabaseUserTokensCommand,
+			UpdateDatabaseUserTokensCommandResult
+		> {
+	constructor(private database: Database) {}
 
-    async handle(command: UpdateDatabaseUserTokensCommand): Promise<UpdateDatabaseUserTokensCommandResult> {
-        if(command.user === undefined) throw new MissingStateError("state doesn't belong to a user");
+	async handle(
+		command: UpdateDatabaseUserTokensCommand
+	): Promise<UpdateDatabaseUserTokensCommandResult> {
+		if (command.user === undefined)
+			throw new MissingStateError("state doesn't belong to a user");
 
-        if(command.user.tokensId == undefined){
-            var token = await this.database.Models.tokens.create({
-                token: command.token,
-                refreshtoken: command.refreshtoken        
-            });
-            command.user.update({
-                tokens: token
-            })
-        }else{
-            command.user.tokens?.update({
-                token: command.token,
-                refreshtoken: command.refreshtoken
-            });
-        }
+		if (command.user.tokensId == undefined) {
+			var token = await this.database.Models.tokens.create({
+				token: command.token,
+				refreshtoken: command.refreshtoken,
+			});
+			command.user.update({
+				tokens: token,
+			});
+		} else {
+			command.user.tokens?.update({
+				token: command.token,
+				refreshtoken: command.refreshtoken,
+			});
+		}
 
-        return {
-            success: ICommandResultStatus.SUCCESS
-        }
-    }
+		return {
+			success: ICommandResultStatus.SUCCESS,
+		};
+	}
 }

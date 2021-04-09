@@ -1,6 +1,6 @@
 {
-  "watch": ["src"],
-  "ext": "ts",
-  "ignore": ["src/public"],
-  "exec": "set NODE_ENV=development && ts-node src/start.ts"
+	"watch": ["src"],
+	"ext": "ts",
+	"ignore": ["src/public"],
+	"exec": "set NODE_ENV=development && ts-node src/start.ts"
 }
