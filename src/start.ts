@@ -16,4 +16,4 @@ if (PORT === 15000) {
 ContainerManager.getInstance();
 
 const exampleServer = new ExampleServer();
-const httpServe = exampleServer.start(PORT);
+exampleServer.start(PORT);

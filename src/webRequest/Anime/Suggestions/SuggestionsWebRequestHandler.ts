@@ -1,10 +1,7 @@
-import { CLIENT_ID, CLIENT_SECRET } from "../../../helpers/GLOBALVARS";
 import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
 import { SuggestionsWebRequest } from "./SuggestionsWebRequest";
 import { SuggestionsWebRequestResult } from "./SuggestionsWebRequestResult";
 import { autoInjectable } from "tsyringe";
-import fetch from "node-fetch";
-import { RefreshFetch } from "../../../helpers/refresher";
 import { ListPagination, AnimeNode, ErrorResponse } from "../../../helpers/BasicTypes";
 import { baseRequest } from "../../../builders/requests/RequestBuilder";
 

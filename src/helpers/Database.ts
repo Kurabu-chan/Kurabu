@@ -1,5 +1,3 @@
-import { Client, QueryResult, QueryConfig } from 'pg';
-import * as fs from 'fs';
 import { singleton } from 'tsyringe';
 import { Sequelize } from 'sequelize-typescript';
 import ModelsArray, { ModelsType, Models } from "../models";

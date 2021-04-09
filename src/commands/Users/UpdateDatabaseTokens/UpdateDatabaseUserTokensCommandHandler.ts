@@ -1,8 +1,6 @@
 import { autoInjectable } from "tsyringe";
-import BadLoginError from "../../../errors/Authentication/BadLoginError";
 import MissingStateError from "../../../errors/Authentication/MissingStateError";
 import { Database } from "../../../helpers/Database";
-import { User } from "../../../models/User";
 import { ICommandHandler, ICommandResultStatus } from "../../ICommand";
 import { UpdateDatabaseUserTokensCommand } from "./UpdateDatabaseUserTokensCommand";
 import { UpdateDatabaseUserTokensCommandResult } from "./UpdateDatabaseUserTokensCommandResult";

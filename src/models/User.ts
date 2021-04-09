@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo, CreatedAt, PrimaryKey, UpdatedAt, AllowNull, Default } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, PrimaryKey, AllowNull, Default } from 'sequelize-typescript';
 import { ensureTokensOnUser, Tokens } from "./Tokens";
 
 

@@ -2,7 +2,7 @@ import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
 import { SearchWebRequest } from "./SearchWebRequest";
 import { SearchWebRequestResult } from "./SearchWebRequestResult";
 import { autoInjectable } from "tsyringe";
-import { Anime, AnimeNode, ErrorResponse, Fields, fieldsToString, ListPagination } from "../../../helpers/BasicTypes";
+import { Anime, ErrorResponse, Fields, fieldsToString, ListPagination } from "../../../helpers/BasicTypes";
 import { baseRequest } from "../../../builders/requests/RequestBuilder";
 
 @autoInjectable()

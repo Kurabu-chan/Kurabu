@@ -2,7 +2,6 @@ import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
 import { SeasonalWebRequest } from "./SeasonalWebRequest";
 import { SeasonalWebRequestResult } from "./SeasonalWebRequestResult";
 import { autoInjectable } from "tsyringe";
-import { RefreshFetch } from "../../../helpers/refresher";
 import { ListPagination, AnimeNode, Season, ErrorResponse } from "../../../helpers/BasicTypes";
 import { baseRequest } from "../../../builders/requests/RequestBuilder";
 
