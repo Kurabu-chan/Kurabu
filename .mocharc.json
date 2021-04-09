@@ -1,0 +1,6 @@
+{
+    "package": "./package.json",
+    "spec": "tests/**/*.ts",
+    "files": "tests/**/*.ts",
+    "require": "ts-node/register"
+}
