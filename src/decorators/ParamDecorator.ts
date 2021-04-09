@@ -56,7 +56,7 @@ export function Param(
 			val = val as string;
 			if (paramType == ParamType.int) {
 				var parsedInt = parseInt(val);
-				if (parsedInt == NaN) {
+				if (isNaN(parsedInt)) {
 					callback(req, res, arg, false);
 					res.status(403).json({
 						status: "error",
@@ -71,7 +71,7 @@ export function Param(
 
 			if (paramType == ParamType.number) {
 				var parsedFloat = parseFloat(val);
-				if (parsedFloat == NaN) {
+				if (isNaN(parsedFloat)) {
 					callback(req, res, arg, false);
 					res.status(403).json({
 						status: "error",
