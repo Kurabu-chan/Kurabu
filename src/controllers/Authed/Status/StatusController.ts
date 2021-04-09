@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Controller, Get, Post } from "@overnightjs/core";
+import { Controller, Get } from "@overnightjs/core";
 import * as Options from "./StatusControllerOptions";
 import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
 import LogArg from "../../../decorators/LogArgDecorator";
