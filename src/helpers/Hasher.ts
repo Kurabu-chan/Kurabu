@@ -44,7 +44,7 @@ export async function Verify(password: string, hashed: string): Promise<boolean>
 
             resolve(keyA.compare(keyB) == 0);
         } catch (err) {
-            console.log("Maybe wrong key was used for Verifieng :/")
+            console.log("Maybe wrong key was used for Verifyieng :/");
             resolve(false);
         }
     });

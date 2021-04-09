@@ -7,7 +7,7 @@ import MALConnectionError from "../../../errors/MAL/MALConnectionError";
 import { autoInjectable } from "tsyringe";
 import RefreshError from "../../../errors/Authentication/RefreshError";
 import GeneralError from "../../../errors/GeneralError";
-import { baseRequest, RequestBuilder } from "../../../builders/requests/RequestBuilder";
+import { RequestBuilder } from "../../../builders/requests/RequestBuilder";
 
 type ErrorResponse = {
     error: string,
@@ -17,7 +17,6 @@ type ErrorResponse = {
 @autoInjectable()
 export class RefreshWebRequestHandler implements IWebRequestHandler<RefreshWebRequest, RefreshWebRequestResult> {
     async handle(query: RefreshWebRequest): Promise<RefreshWebRequestResult> {
-        let url = `https://myanimelist.net/v1/oauth2/token`;
         try {
             var request = new RequestBuilder("https", "myanimelist.net")
                 .addPath("v1/oauth2/token")

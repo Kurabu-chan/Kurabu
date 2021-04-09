@@ -39,8 +39,8 @@ export function Param(paramName: string, paramType: ParamType, optional: boolean
             if (paramType == ParamType.object) original.apply(this, [req, res, { ...arg, paramName: val }]);
             val = val as string;
             if (paramType == ParamType.int) {
-                var int = parseInt(val)
-                if (int == NaN) {
+                var parsedInt = parseInt(val);
+                if (parsedInt == NaN) {
                     callback(req, res, arg, false);
                     res.status(403).json({
                         status: "error",
@@ -48,14 +48,14 @@ export function Param(paramName: string, paramType: ParamType, optional: boolean
                     });
                     return;
                 }
-                arg[paramName] = int;
+                arg[paramName] = parsedInt;
                 callback(req, res, arg, true);
                 return original.apply(this, [req, res, arg]);
             }
 
             if (paramType == ParamType.number) {
-                var float = parseFloat(val)
-                if (float == NaN) {
+                var parsedFloat = parseFloat(val);
+                if (parsedFloat == NaN) {
                     callback(req, res, arg, false);
                     res.status(403).json({
                         status: "error",
@@ -63,7 +63,7 @@ export function Param(paramName: string, paramType: ParamType, optional: boolean
                     });
                     return;
                 }
-                arg[paramName] = float;
+                arg[paramName] = parsedFloat;
                 callback(req, res, arg, true);
                 return original.apply(this, [req, res, arg]);
             }

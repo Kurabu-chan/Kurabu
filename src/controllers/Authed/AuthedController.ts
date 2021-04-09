@@ -7,7 +7,6 @@ import { Logger } from '@overnightjs/logger';
 import RequestHandlerDecorator from '../../decorators/RequestHandlerDecorator';
 import ParameterError from '../../errors/Parameter/ParameterError';
 import { injectable } from "tsyringe";
-import ContainerManager from '../../helpers/ContainerManager';
 import { PendingUserCommandHandler } from '../../commands/Users/Pending/PendingUserCommandHandler';
 
 @Controller(Options.ControllerPath)

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import ContainerManager from "../helpers/ContainerManager";
-import { User } from '../models/User';
 import { CheckRequestStateQueryHandler } from '../queries/Request/CheckState/CheckRequestStateQueryHandler';
 
 export default function State() {

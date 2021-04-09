@@ -1,6 +1,5 @@
 import { autoInjectable } from "tsyringe";
 import TokensNotPresentError from "../../../errors/Authentication/TokensNotPresentError";
-import { Database } from "../../../helpers/Database";
 import { CLIENT_ID } from "../../../helpers/GLOBALVARS";
 import { getPKCE } from "../../../helpers/randomCodes";
 import { ensureTokensOnUser } from "../../../models/Tokens";

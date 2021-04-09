@@ -6,8 +6,7 @@ import { isErrResp, tokenResponse } from '../../../helpers/BasicTypes';
 import GeneralError from "../../../errors/GeneralError";
 import MALConnectionError from "../../../errors/MAL/MALConnectionError";
 import { autoInjectable } from "tsyringe";
-import fetch from 'node-fetch';
-import { baseRequest, RequestBuilder } from "../../../builders/requests/RequestBuilder";
+import { RequestBuilder } from "../../../builders/requests/RequestBuilder";
 
 type ErrorResponse = {
     error: string,

@@ -4,9 +4,7 @@ import IncorrectCodeError from "../../../errors/Authentication/IncorrectCodeErro
 import MissingStateError from "../../../errors/Authentication/MissingStateError";
 import StateStatusError from "../../../errors/Authentication/StateStatusError";
 import { Database } from "../../../helpers/Database";
-import { CLIENT_ID } from "../../../helpers/GLOBALVARS";
-import { getPKCE } from "../../../helpers/randomCodes";
-import { ICommandHandler, ICommandResultStatus } from "../../ICommand";
+import { ICommandHandler } from "../../ICommand";
 import { ReAuthUserCommandHandler } from "../ReAuth/ReAuthUserCommandHandler";
 import { VerifUserCommand } from "./VerifUserCommand";
 import { VerifUserCommandResult } from "./VerifUserCommandResult";
