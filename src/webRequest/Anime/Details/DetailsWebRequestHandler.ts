@@ -2,24 +2,13 @@ import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
 import { DetailsWebRequest } from "./DetailsWebRequest";
 import { DetailsWebRequestResult } from "./DetailsWebRequestResult";
 import { autoInjectable } from "tsyringe";
-import { Anime, ErrorResponse, Fields } from "../../../helpers/BasicTypes";
+import {
+	allFields,
+	Anime,
+	ErrorResponse,
+	Fields,
+} from "../../../helpers/BasicTypes";
 import { baseRequest } from "../../../builders/requests/RequestBuilder";
-
-function allFields() {
-	let x = [];
-	for (let index = 0; index < 32; index++) {
-		x[index] = index;
-	}
-	return x;
-}
-
-function FieldsToString(fields: Fields[]): string {
-	return fields
-		.map<string>((field, index, array) => {
-			return Fields[field];
-		})
-		.join(", ");
-}
 
 @autoInjectable()
 export class DetailsWebRequestHandler
@@ -47,4 +36,7 @@ export class DetailsWebRequestHandler
 			anime: json as Anime,
 		};
 	}
+}
+function FieldsToString(fields: Fields[]): string {
+	throw new Error("Function not implemented.");
 }
