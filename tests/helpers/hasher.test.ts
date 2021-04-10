@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { hash, Verify, encrypt, decrypt } from "../../src/helpers/Hasher";
 import { getPKCE } from "../../src/helpers/randomCodes";
 
-describe("Hash tests", () => {
+describe("Hasher", () => {
 	it("Hashing then verifying should return true", async () => {
 		let allNonHashed: string[] = [];
 		let allHashedPromise: Promise<string>[] = [];
