@@ -33,14 +33,30 @@ export function Param(
 		const original = descriptor.value;
 
 		descriptor.value = function (req: Request, res: Response, arg: any = {}) {
-			let query = req.query[paramName]?.toString();
-			let body = req.body[paramName]?.toString();
+			let query = req.query[paramName];
+			let body = req.body[paramName];
 
 			let val: any;
 
 			if (paramPos == ParamPos.either) val = query ?? body;
 			if (paramPos == ParamPos.body) val = body;
 			if (paramPos == ParamPos.query) val = query;
+
+			if (
+				paramType == ParamType.object &&
+				(optional == true || val != undefined)
+			) {
+				arg[paramName] = val;
+				callback(req, res, arg, true);
+				return original.apply(this, [req, res, arg]);
+			}
+
+			val = val?.toString();
+
+			if ((!val || val == "") && optional == true) {
+				callback(req, res, arg, true);
+				return original.apply(this, [req, res, arg]);
+			}
 
 			if ((!val || val == "") && optional == false) {
 				callback(req, res, arg, false);
@@ -51,8 +67,6 @@ export function Param(
 				return;
 			}
 
-			if (paramType == ParamType.object)
-				original.apply(this, [req, res, { ...arg, paramName: val }]);
 			val = val as string;
 			if (paramType == ParamType.int) {
 				var parsedInt = parseInt(val);
