@@ -14,8 +14,8 @@ export function State() {
 	describe("State Decorator", () => {
 		ContainerManager.getInstance({
 			resolve: (a: any) => {
-				console.log("resolve called");
-				console.log(a);
+				// console.log("resolve called");
+				// console.log(a);
 				return {
 					handle: (req: Request, res: Response) => {
 						return {
