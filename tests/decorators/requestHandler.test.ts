@@ -11,12 +11,12 @@ class RequestHandlerMock {
 		};
 	}
 
-	@RequestHandlerDecorator()
+	@RequestHandlerDecorator(false)
 	public async handle_auth_err(req: Request, res: Response, arg: any) {
 		throw new AuthenticationError("yeah");
 	}
 
-	@RequestHandlerDecorator()
+	@RequestHandlerDecorator(false)
 	public async handle_random_err(req: Request, res: Response, arg: any) {
 		throw new TypeError("yeah");
 	}
