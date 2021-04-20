@@ -4,7 +4,10 @@ import StateStatusError from "../../../errors/Authentication/StateStatusError";
 import TokensNotPresentError from "../../../errors/Authentication/TokensNotPresentError";
 import { Database } from "../../../helpers/Database";
 import { Tokens } from "../../../models/Tokens";
-import { getStatus, UserStatus } from "../../../models/User";
+import {
+	UserStatus,
+	UserStatusQueryHandler,
+} from "../../../queries/Users/Status/UserStatusQueryHandler";
 import { GetTokenWebRequestHandler } from "../../../webRequest/Auth/GetToken/GetTokenWebRequestHandler";
 import { ICommandHandler, ICommandResultStatus } from "../../ICommand";
 import { PendingUserCommand } from "./PendingUserCommand";
@@ -15,7 +18,8 @@ export class PendingUserCommandHandler
 	implements ICommandHandler<PendingUserCommand, PendingUserCommandResult> {
 	constructor(
 		private _getTokenWebRequest: GetTokenWebRequestHandler,
-		private _database: Database
+		private _database: Database,
+		private _getUserStatus: UserStatusQueryHandler
 	) {}
 
 	async handle(command: PendingUserCommand): Promise<PendingUserCommandResult> {
@@ -27,8 +31,10 @@ export class PendingUserCommandHandler
 
 		if (!user) throw new MissingStateError("uuid does not exist yet");
 
+		var status = (await this._getUserStatus.handle({ user: user })).status;
+
 		//get the dict entry and check if the state is pending
-		if ((await getStatus(user)) != UserStatus.authing)
+		if (status != UserStatus.authing)
 			throw new StateStatusError("uuid is not pending");
 
 		var userTokens: Tokens = user.tokens as Tokens;

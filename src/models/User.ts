@@ -43,20 +43,3 @@ export class User extends Model {
 	@BelongsTo(() => Tokens)
 	tokens?: Tokens;
 }
-
-export enum UserStatus {
-	done,
-	verif,
-	authing,
-	tokens,
-}
-
-export async function getStatus(user: User): Promise<UserStatus> {
-	user = await ensureTokensOnUser(user);
-
-	if (user.verifCode) return UserStatus.verif;
-	if (user.tokens && user.tokens.verifier) return UserStatus.authing;
-	if (!user.tokens || !user.tokens.token) return UserStatus.tokens;
-
-	return UserStatus.done;
-}
