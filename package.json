@@ -34,6 +34,7 @@
 		"sequelize": "^6.6.2",
 		"sequelize-typescript": "^2.1.0",
 		"sequelize-typescript-migration": "0.0.1-beta.3",
+		"ts-mockito": "^2.6.1",
 		"tslib": "^2.1.0",
 		"tsyringe": "^4.4.0"
 	},

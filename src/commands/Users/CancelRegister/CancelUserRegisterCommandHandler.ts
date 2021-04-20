@@ -21,9 +21,9 @@ export class CancelUserRegisterCommandHandler
 	async handle({
 		user,
 	}: CancelUserRegisterCommand): Promise<CancelUserRegisterCommandResult> {
-		var status = await this._getUserStatus.handle({ user: user });
-
 		if (!user) throw new MissingStateError("State missing during cancel");
+
+		var status = await this._getUserStatus.handle({ user: user });
 		if (status.status != UserStatus.verif)
 			throw new StateStatusError("State had wrong status during cancel");
 

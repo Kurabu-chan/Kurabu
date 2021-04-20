@@ -5,100 +5,109 @@ import {
 	UserStatus,
 	UserStatusQueryHandler,
 } from "../../../src/queries/Users/Status/UserStatusQueryHandler";
+import { mock, instance, verify, when, anything } from "ts-mockito";
+import { IQueryResultStatus } from "../../../src/queries/IQuery";
+import { ICommandResultStatus } from "../../../src/commands/ICommand";
 
 export function CancelRegisterCommand() {
 	describe("CancelRegisterCommand", async () => {
+		let userMock: User;
+		let userMockInstance: User;
+		beforeEach(() => {
+			userMock = mock(User);
+			userMockInstance = instance(userMock);
+		});
+
 		it("Should check the users status", async () => {
-			var checkedStatus = false;
-			var sut = new CancelUserRegisterCommandHandler({
-				handle: (user: User) => {
-					checkedStatus = true;
-					return { status: UserStatus.done };
-				},
-			} as any);
+			var userStatusMock = mock(UserStatusQueryHandler);
+			when(userStatusMock.handle(anything())).thenResolve({
+				status: UserStatus.done,
+				success: IQueryResultStatus.SUCCESS,
+			});
+			var userStatusMockInstance = instance(userStatusMock);
 
-			var destroyed = false;
-
+			var sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
+			var result = undefined;
 			try {
-				var result = await sut.handle({
-					user: {
-						destroy: () => {
-							destroyed = true;
-						},
-					},
+				result = await sut.handle({
+					user: userMockInstance,
 				} as any);
 			} catch (err) {}
 
-			expect(checkedStatus).to.be.true;
+			verify(userMock.destroy()).never();
+			verify(userStatusMock.handle(anything())).once();
+			expect(result?.success).to.be.undefined;
 		});
 
 		it("Should destroy with verif status", async () => {
-			var checkedStatus = false;
-			var sut = new CancelUserRegisterCommandHandler({
-				handle: (user: User) => {
-					checkedStatus = true;
-					return { status: UserStatus.verif };
-				},
-			} as any);
+			var userStatusMock = mock(UserStatusQueryHandler);
+			when(userStatusMock.handle(anything())).thenResolve({
+				status: UserStatus.verif,
+				success: IQueryResultStatus.SUCCESS,
+			});
+			var userStatusMockInstance = instance(userStatusMock);
 
-			var destroyed = false;
+			var sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
 
 			var result = await sut.handle({
-				user: {
-					destroy: () => {
-						destroyed = true;
-					},
-				},
+				user: userMockInstance,
 			} as any);
 
-			expect(checkedStatus).to.be.true;
-			expect(destroyed).to.be.true;
+			verify(userMock.destroy()).once();
+			verify(userStatusMock.handle(anything())).once();
+			expect(result?.success).to.be.equal(ICommandResultStatus.SUCCESS);
 		});
 
 		it("Should throw with non verif status", async () => {
-			var checkedStatus = false;
-			var sut = new CancelUserRegisterCommandHandler({
-				handle: (user: User) => {
-					checkedStatus = true;
-					return { status: UserStatus.done };
-				},
-			} as any);
+			var userStatusMock = mock(UserStatusQueryHandler);
+			when(userStatusMock.handle(anything())).thenResolve({
+				status: UserStatus.done,
+				success: IQueryResultStatus.SUCCESS,
+			});
+			var userStatusMockInstance = instance(userStatusMock);
 
-			var destroyed = false;
-			var thrown = false;
+			var sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
+
+			var thrown = "";
+			var result = undefined;
 			try {
-				var result = await sut.handle({
-					user: {
-						destroy: () => {
-							destroyed = true;
-						},
-					},
+				result = await sut.handle({
+					user: userMockInstance,
 				} as any);
 			} catch (err) {
-				thrown = true;
+				thrown = err.message;
 			}
 
-			expect(thrown).to.be.true;
+			verify(userMock.destroy()).never();
+			verify(userStatusMock.handle(anything())).once();
+			expect(result?.success).to.be.undefined;
+			expect(thrown).to.be.equal("State had wrong status during cancel");
 		});
 
 		it("Should throw with no user", async () => {
-			var checkedStatus = false;
-			var sut = new CancelUserRegisterCommandHandler({
-				handle: (user: User) => {
-					checkedStatus = true;
-					return { status: UserStatus.done };
-				},
-			} as any);
+			var userStatusMock = mock(UserStatusQueryHandler);
+			when(userStatusMock.handle(anything())).thenResolve({
+				status: UserStatus.done,
+				success: IQueryResultStatus.SUCCESS,
+			});
+			var userStatusMockInstance = instance(userStatusMock);
 
-			var destroyed = false;
-			var thrown = false;
+			var sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
+
+			var thrown = "";
+			var result = undefined;
 			try {
-				var result = await sut.handle({ user: undefined } as any);
+				result = await sut.handle({
+					user: undefined,
+				} as any);
 			} catch (err) {
-				thrown = true;
+				thrown = err.message;
 			}
 
-			expect(thrown).to.be.true;
+			verify(userMock.destroy()).never();
+			verify(userStatusMock.handle(anything())).never();
+			expect(result?.success).to.be.undefined;
+			expect(thrown).to.be.equal("State missing during cancel");
 		});
 	});
 }
