@@ -1,7 +1,6 @@
 import { autoInjectable } from "tsyringe";
 import MissingStateError from "../../../errors/Authentication/MissingStateError";
 import StateStatusError from "../../../errors/Authentication/StateStatusError";
-import { Database } from "../../../helpers/Database";
 import {
 	UserStatus,
 	UserStatusQueryHandler,
@@ -17,10 +16,7 @@ export class CancelUserRegisterCommandHandler
 			CancelUserRegisterCommand,
 			CancelUserRegisterCommandResult
 		> {
-	constructor(
-		private _database: Database,
-		private _getUserStatus: UserStatusQueryHandler
-	) {}
+	constructor(private _getUserStatus: UserStatusQueryHandler) {}
 
 	async handle({
 		user,
@@ -28,7 +24,7 @@ export class CancelUserRegisterCommandHandler
 		var status = await this._getUserStatus.handle({ user: user });
 
 		if (!user) throw new MissingStateError("State missing during cancel");
-		if (status.status == UserStatus.verif)
+		if (status.status != UserStatus.verif)
 			throw new StateStatusError("State had wrong status during cancel");
 
 		user.destroy();
