@@ -5,6 +5,15 @@ import {
 	ParamType,
 } from "../../src/decorators/ParamDecorator";
 import { Request, Response } from "express";
+import {
+	mock,
+	instance,
+	verify,
+	when,
+	anyNumber,
+	anything,
+	capture,
+} from "ts-mockito";
 
 var callbackListener: (success: any) => void = () => {};
 
@@ -111,13 +120,16 @@ export function ParamDecorator() {
 				callbackListener = (success) => {
 					succeeded = success;
 				};
+
+				var reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({
+					cool: "21",
+				});
+				when(reqMock.body).thenReturn({});
+				var reqMockInstance = instance(reqMock);
+
 				var argResultQuery = await mockClass.cool_int_false(
-					{
-						query: {
-							cool: "21",
-						},
-						body: {},
-					} as any,
+					reqMockInstance,
 					undefined as any,
 					undefined as any
 				);
@@ -126,10 +138,7 @@ export function ParamDecorator() {
 				expect(succeeded).to.equal(true);
 
 				var argResultBody = await mockClass.cool_int_false(
-					{
-						query: {},
-						body: { cool: "21" },
-					} as any,
+					reqMockInstance,
 					undefined as any,
 					undefined as any
 				);
@@ -144,11 +153,13 @@ export function ParamDecorator() {
 					succeeded = success;
 				};
 
+				var reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({});
+				when(reqMock.body).thenReturn({});
+				var reqMockInstance = instance(reqMock);
+
 				var argResult = await mockClass.cool_int_true(
-					{
-						query: {},
-						body: {},
-					} as any,
+					reqMockInstance,
 					undefined as any,
 					undefined as any
 				);
@@ -163,11 +174,13 @@ export function ParamDecorator() {
 					succeeded = success;
 				};
 
+				var reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({ cool: "21" });
+				when(reqMock.body).thenReturn({});
+				var reqMockInstance = instance(reqMock);
+
 				var argResultQuery = await mockClass.cool_int_true_body_only(
-					{
-						query: { cool: "21" },
-						body: {},
-					} as any,
+					reqMockInstance,
 					undefined as any,
 					undefined as any
 				);
@@ -175,11 +188,13 @@ export function ParamDecorator() {
 				expect(argResultQuery.cool).to.equal(undefined);
 				expect(succeeded).to.equal(true);
 
+				reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({});
+				when(reqMock.body).thenReturn({ cool: "21" });
+				reqMockInstance = instance(reqMock);
+
 				var argResultBody = await mockClass.cool_int_true_body_only(
-					{
-						query: {},
-						body: { cool: "21" },
-					} as any,
+					reqMockInstance,
 					undefined as any,
 					undefined as any
 				);
@@ -194,13 +209,13 @@ export function ParamDecorator() {
 					succeeded = success;
 				};
 
+				var reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({ cool: "21.01" });
+				when(reqMock.body).thenReturn({});
+				var reqMockInstance = instance(reqMock);
+
 				var argResultQuery = await mockClass.cool_float_true(
-					{
-						query: {
-							cool: "21.01",
-						},
-						body: {},
-					} as any,
+					reqMockInstance,
 					undefined as any,
 					undefined as any
 				);
@@ -219,15 +234,15 @@ export function ParamDecorator() {
 					alright: "yeah",
 				};
 
+				var reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({
+					cool: expected,
+				});
+				when(reqMock.body).thenReturn({});
+				var reqMockInstance = instance(reqMock);
+
 				var argResultQuery = await mockClass.cool_object_true(
-					{
-						query: {
-							cool: {
-								alright: "yeah",
-							},
-						},
-						body: {},
-					} as any,
+					reqMockInstance,
 					undefined as any,
 					undefined as any
 				);
@@ -245,13 +260,15 @@ export function ParamDecorator() {
 					succeeded = success;
 				};
 
+				var reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({
+					cool: "yeah",
+				});
+				when(reqMock.body).thenReturn({});
+				var reqMockInstance = instance(reqMock);
+
 				var argResultQuery = await mockClass.cool_string_true(
-					{
-						query: {
-							cool: "yeah",
-						},
-						body: {},
-					} as any,
+					reqMockInstance,
 					undefined as any,
 					undefined as any
 				);
@@ -268,35 +285,30 @@ export function ParamDecorator() {
 					succeeded = success;
 				};
 
-				var request = {
-					query: {},
-					body: {},
-				} as any;
+				var reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({});
+				when(reqMock.body).thenReturn({});
+				var reqMockInstance = instance(reqMock);
 
-				var errorCode: number = -1;
-				var jsonResult: any;
-
-				var response = {
-					status: (code: number) => {
-						errorCode = code;
-						return {
-							json: (obj: any) => {
-								jsonResult = obj;
-							},
-						};
-					},
-				} as any;
+				var resMock = mock<Response>();
+				when(resMock.json(anything())).thenReturn();
+				var resMockInstance = instance(resMock);
+				when(resMock.status(anyNumber())).thenReturn(resMockInstance);
+				resMockInstance = instance(resMock);
 
 				var argResult = await mockClass.cool_int_false(
-					request,
-					response,
+					reqMockInstance,
+					resMockInstance,
 					undefined as any
 				);
+
+				var [json] = capture(resMock.json).last();
+				var [errorCode] = capture(resMock.status).last();
 
 				expect(succeeded).to.be.false;
 				expect(argResult).to.equal(undefined);
 				expect(errorCode).to.equal(403);
-				expect(jsonResult.status).to.equal("error");
+				expect(json.status).to.equal("error");
 			});
 
 			it("ParamDecorator should return nothing and send 403 with status 'error' if argument wrong format on query on non optional endpoint", async () => {
@@ -305,48 +317,44 @@ export function ParamDecorator() {
 					succeeded = success;
 				};
 
-				var request = {
-					query: {
-						cool: "yeah",
-					},
-					body: {},
-				} as any;
+				var reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({});
+				when(reqMock.body).thenReturn({});
+				var reqMockInstance = instance(reqMock);
 
-				var errorCode: number = -1;
-				var jsonResult: any;
-
-				var response = {
-					status: (code: number) => {
-						errorCode = code;
-						return {
-							json: (obj: any) => {
-								jsonResult = obj;
-							},
-						};
-					},
-				} as any;
+				var resMock = mock<Response>();
+				when(resMock.json(anything())).thenReturn();
+				var resMockInstance = instance(resMock);
+				when(resMock.status(anyNumber())).thenReturn(resMockInstance);
+				resMockInstance = instance(resMock);
 
 				var argResult = await mockClass.cool_int_false(
-					request,
-					response,
+					reqMockInstance,
+					resMockInstance,
 					undefined as any
 				);
+
+				var [json] = capture(resMock.json).last();
+				var [errorCode] = capture(resMock.status).last();
 
 				expect(succeeded).to.be.false;
 				expect(argResult).to.equal(undefined);
 				expect(errorCode).to.equal(403);
-				expect(jsonResult.status).to.equal("error");
+				expect(json.status).to.equal("error");
 
 				var argResult = await mockClass.cool_float_false(
-					request,
-					response,
+					reqMockInstance,
+					resMockInstance,
 					undefined as any
 				);
+
+				var [json] = capture(resMock.json).last();
+				var [errorCode] = capture(resMock.status).last();
 
 				expect(succeeded).to.be.false;
 				expect(argResult).to.equal(undefined);
 				expect(errorCode).to.equal(403);
-				expect(jsonResult.status).to.equal("error");
+				expect(json.status).to.equal("error");
 			});
 		});
 	});
