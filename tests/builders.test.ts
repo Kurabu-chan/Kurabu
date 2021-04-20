@@ -1,5 +1,5 @@
 import { requestBuilder } from "./builders/requestbuilder.test";
 
-describe("builders", () => {
+describe("Builders", () => {
 	requestBuilder();
 });

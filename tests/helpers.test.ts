@@ -3,7 +3,7 @@ import { hasher } from "./helpers/hasher.test";
 import { randomCodes } from "./helpers/randomCodes.test";
 import { refresher } from "./helpers/refresher.test";
 
-describe("helpers", () => {
+describe("Helpers", () => {
 	basicTypes();
 	hasher();
 	randomCodes();
