@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { Request, Response } from "express";
 import RequestHandlerDecorator from "../../src/decorators/RequestHandlerDecorator";
 import AuthenticationError from "../../src/errors/Authentication/AuthenticationError";
+import { mock, when, anything, instance, anyNumber, capture } from "ts-mockito";
 
 class RequestHandlerMock {
 	@RequestHandlerDecorator()
@@ -25,76 +26,81 @@ class RequestHandlerMock {
 export function requestHandler() {
 	describe("RequestHandlerDecorator", () => {
 		it("Should send a result when endpoint returns", async () => {
-			var mock = new RequestHandlerMock();
+			var sut = new RequestHandlerMock();
 
-			var code: number | undefined = undefined;
-			var json: string | undefined = undefined;
+			var reqMock = mock<Request>();
+			when(reqMock.query).thenReturn({});
+			when(reqMock.body).thenReturn({});
+			var reqMockInstance = instance(reqMock);
 
-			var req = {} as any;
-			var res = {
-				status: (statusCode: number) => {
-					code = statusCode;
-					return {
-						json: (jsonStuff: string) => {
-							json = jsonStuff;
-						},
-					};
-				},
-			} as any;
+			var resMock = mock<Response>();
+			when(resMock.json(anything())).thenReturn();
+			var resMockInstance = instance(resMock);
+			when(resMock.status(anyNumber())).thenReturn(resMockInstance);
+			resMockInstance = instance(resMock);
 
-			var result = await mock.handle(req, res, {});
+			var result = await sut.handle(reqMockInstance, resMockInstance, {});
 
-			expect(code).to.equal(200);
+			var [json] = capture(resMock.json).last();
+			var [errorCode] = capture(resMock.status).last();
+
+			expect(errorCode).to.equal(200);
 			expect(JSON.stringify(json)).to.equal(JSON.stringify({ cool: "yeah" }));
 		});
 
 		it("Should send an error result when endpoint throws one of our errors", async () => {
-			var mock = new RequestHandlerMock();
+			var sut = new RequestHandlerMock();
 
-			var code: number | undefined = undefined;
-			var json: any | undefined = undefined;
+			var reqMock = mock<Request>();
+			when(reqMock.query).thenReturn({});
+			when(reqMock.body).thenReturn({});
+			var reqMockInstance = instance(reqMock);
 
-			var req = {} as any;
-			var res = {
-				status: (statusCode: number) => {
-					code = statusCode;
-					return {
-						json: (jsonStuff: any) => {
-							json = jsonStuff;
-						},
-					};
-				},
-			} as any;
+			var resMock = mock<Response>();
+			when(resMock.json(anything())).thenReturn();
+			var resMockInstance = instance(resMock);
+			when(resMock.status(anyNumber())).thenReturn(resMockInstance);
+			resMockInstance = instance(resMock);
 
-			var result = await mock.handle_auth_err(req, res, {});
+			var result = await sut.handle_auth_err(
+				reqMockInstance,
+				resMockInstance,
+				{}
+			);
 
-			expect(code).to.equal(403);
+			var [json] = capture(resMock.json).last();
+			var [errorCode] = capture(resMock.status).last();
+
+			expect(errorCode).to.equal(403);
 			expect(json.status).to.equal("error");
 			expect(json.code).to.equal("020");
 			expect(json.message).to.equal("yeah");
 		});
 
 		it("Should send an error result when endpoint throws one a random error", async () => {
-			var mock = new RequestHandlerMock();
+			var sut = new RequestHandlerMock();
 
-			var code: number | undefined = undefined;
-			var json: any | undefined = undefined;
+			var reqMock = mock<Request>();
+			when(reqMock.query).thenReturn({});
+			when(reqMock.body).thenReturn({});
+			var reqMockInstance = instance(reqMock);
 
-			var req = {} as any;
-			var res = {
-				status: (statusCode: number) => {
-					code = statusCode;
-					return {
-						json: (jsonStuff: any) => {
-							json = jsonStuff;
-						},
-					};
-				},
-			} as any;
+			var resMock = mock<Response>();
+			when(resMock.json(anything())).thenReturn();
+			var resMockInstance = instance(resMock);
+			when(resMock.status(anyNumber())).thenReturn(resMockInstance);
+			resMockInstance = instance(resMock);
 
-			var result = await mock.handle_random_err(req, res, {});
+			var result = await sut.handle_random_err(
+				reqMockInstance,
+				resMockInstance,
+				{}
+			);
 
-			expect(code).to.equal(500);
+			var [json] = capture(resMock.json).last();
+			var [errorCode] = capture(resMock.status).last();
+
+			expect(errorCode).to.equal(500);
 			expect(json.status).to.equal("error");
 			expect(json.message).to.equal("unknown error");
 		});
