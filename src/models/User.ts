@@ -9,7 +9,7 @@ import {
 	AllowNull,
 	Default,
 } from "sequelize-typescript";
-import { ensureTokensOnUser, Tokens } from "./Tokens";
+import { Tokens } from "./Tokens";
 
 @Table
 export class User extends Model {
