@@ -24,7 +24,12 @@ export class PendingUserCommandHandler
 
 	async handle(command: PendingUserCommand): Promise<PendingUserCommandResult> {
 		//check if the uuid exists in the dict
-		var user = await this._database.Models.user.findOne({
+
+		var db = this._database;
+		var Models = db.Models;
+		var usr = Models.user;
+
+		var user = await usr.findOne({
 			where: { id: command.uuid },
 			include: Tokens,
 		});
@@ -39,13 +44,6 @@ export class PendingUserCommandHandler
 
 		var userTokens: Tokens = user.tokens as Tokens;
 
-		//get the tokens from MAL
-		let tokens = await this._getTokenWebRequest.handle({
-			code: command.code,
-			ourdomain: command.ourdomain,
-			verifier: userTokens.verifier as string,
-		});
-
 		var tokenModel = await this._database.Models.tokens.findOne({
 			where: {
 				id: user.tokensId,
@@ -53,6 +51,14 @@ export class PendingUserCommandHandler
 		});
 		if (!tokenModel)
 			throw new TokensNotPresentError("No tokens for pending user");
+
+		//get the tokens from MAL
+		let tokens = await this._getTokenWebRequest.handle({
+			code: command.code,
+			ourdomain: command.ourdomain,
+			verifier: userTokens.verifier as string,
+		});
+
 		await tokenModel.update({
 			token: tokens.access_token,
 			refreshtoken: tokens.refresh_token,
