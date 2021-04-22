@@ -6,8 +6,10 @@ import LogArg from "../../../decorators/LogArgDecorator";
 import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
 import { injectable } from "tsyringe";
 import State from "../../../decorators/StateDecorator";
-import { UserStatusQueryHandler } from "../../../queries/Users/Status/UserStatusQueryHandler";
-import { UserStatus } from "../../../models/User";
+import {
+	UserStatus,
+	UserStatusQueryHandler,
+} from "../../../queries/Users/Status/UserStatusQueryHandler";
 
 @Controller(Options.ControllerPath)
 @injectable()

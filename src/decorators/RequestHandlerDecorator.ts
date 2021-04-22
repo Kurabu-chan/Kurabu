@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import GeneralError from "../errors/GeneralError";
 
-export default function RequestHandlerDecorator() {
+export default function RequestHandlerDecorator(log: boolean = true) {
 	return function (
 		target: Object,
 		key: string | symbol,
@@ -38,7 +38,7 @@ export default function RequestHandlerDecorator() {
 						status: "error",
 						message: "unknown error",
 					});
-					console.log(err);
+					if (log) console.log(err);
 				}
 			}
 		};

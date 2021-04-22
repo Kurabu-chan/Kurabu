@@ -2,5 +2,6 @@
 	"package": "./package.json",
 	"spec": "tests/**/*.ts",
 	"files": "tests/**/*.ts",
-	"require": "ts-node/register"
+	"require": "ts-node/register",
+	"recursive": true
 }

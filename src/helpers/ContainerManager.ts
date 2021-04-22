@@ -3,8 +3,8 @@ import * as tsyringe from "tsyringe";
 
 export default class ContainerManager {
 	private container: tsyringe.DependencyContainer;
-	constructor() {
-		this.container = tsyringe.container;
+	constructor(container = tsyringe.container) {
+		this.container = container;
 	}
 
 	public get Container() {
@@ -12,9 +12,11 @@ export default class ContainerManager {
 	}
 
 	private static _instance: ContainerManager;
-	public static getInstance() {
-		if (!this._instance) {
+	public static getInstance(mock?: any) {
+		if (!this._instance && mock === undefined) {
 			this._instance = new ContainerManager();
+		} else if (mock !== undefined) {
+			this._instance = new ContainerManager(mock);
 		}
 		return this._instance;
 	}

@@ -9,7 +9,7 @@ import {
 	AllowNull,
 	Default,
 } from "sequelize-typescript";
-import { ensureTokensOnUser, Tokens } from "./Tokens";
+import { Tokens } from "./Tokens";
 
 @Table
 export class User extends Model {
@@ -42,21 +42,4 @@ export class User extends Model {
 
 	@BelongsTo(() => Tokens)
 	tokens?: Tokens;
-}
-
-export enum UserStatus {
-	done,
-	verif,
-	authing,
-	tokens,
-}
-
-export async function getStatus(user: User): Promise<UserStatus> {
-	user = await ensureTokensOnUser(user);
-
-	if (user.verifCode) return UserStatus.verif;
-	if (user.tokens && user.tokens.verifier) return UserStatus.authing;
-	if (!user.tokens || !user.tokens.token) return UserStatus.tokens;
-
-	return UserStatus.done;
 }

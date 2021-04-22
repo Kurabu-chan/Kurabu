@@ -29,6 +29,7 @@ export class RequestBuilder {
 
 	public addPath(path: string) {
 		if (!path.endsWith("/")) path += "/";
+		if (path.startsWith("/")) path = path.substr(1, path.length - 1);
 		this.path += path;
 
 		return this;

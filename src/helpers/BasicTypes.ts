@@ -49,11 +49,11 @@ for (var field in Fields) {
 }
 
 export function extractFields(fields: string): Fields[] {
-	var fieldStrList = fields.split(", ");
+	var fieldStrList = fields.split(",");
 	var fieldsList: Fields[] = [];
 
 	for (var fieldInd in fieldStrList) {
-		var field: string = fieldStrList[fieldInd];
+		var field: string = fieldStrList[fieldInd].trim();
 		if (fieldNames.includes(field)) {
 			var fieldss: keyof typeof Fields = <keyof typeof Fields>field;
 			fieldsList.push(Fields[fieldss]);

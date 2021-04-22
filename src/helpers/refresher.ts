@@ -72,7 +72,7 @@ export async function RefreshFetch(
 }
 
 //updata a request init with new tokens
-function addTokenHeader(
+export function addTokenHeader(
 	token: string,
 	init?: fetch.RequestInit | undefined
 ): fetch.RequestInit {

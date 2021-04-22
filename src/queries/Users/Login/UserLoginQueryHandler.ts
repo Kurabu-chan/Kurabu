@@ -7,12 +7,15 @@ import * as hasher from "../../../helpers/Hasher";
 import { autoInjectable } from "tsyringe";
 import { Tokens } from "../../../models/Tokens";
 import TokensNotPresentError from "../../../errors/Authentication/TokensNotPresentError";
-import { getStatus } from "../../../models/User";
+import { UserStatusQueryHandler } from "../Status/UserStatusQueryHandler";
 
 @autoInjectable()
 export class UserLoginQueryHandler
 	implements IQueryHandler<UserLoginQuery, UserLoginQueryResult> {
-	constructor(private database: Database) {}
+	constructor(
+		private database: Database,
+		private _userStatus: UserStatusQueryHandler
+	) {}
 
 	async handle(query: UserLoginQuery): Promise<UserLoginQueryResult> {
 		var user = await this.database.Models.user.findOne({
@@ -33,13 +36,15 @@ export class UserLoginQueryHandler
 		if (!tokens.token || !tokens.refreshtoken)
 			throw new TokensNotPresentError("No tokens during login");
 
+		var status = await this._userStatus.handle({ user: user });
+
 		return {
 			success: IQueryResultStatus.SUCCESS,
 			id: user.id,
 			email: user.email,
 			token: tokens.token,
 			refreshtoken: tokens.refreshtoken,
-			status: await getStatus(user),
+			status: status.status,
 		};
 	}
 }

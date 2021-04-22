@@ -6,7 +6,7 @@ import { Param, ParamType } from "../../../decorators/ParamDecorator";
 import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
 import { injectable } from "tsyringe";
 import { UserLoginQueryHandler } from "../../../queries/Users/Login/UserLoginQueryHandler";
-import { UserStatus } from "../../../models/User";
+import { UserStatus } from "../../../queries/Users/Status/UserStatusQueryHandler";
 
 @Controller(Options.ControllerPath)
 @injectable()
