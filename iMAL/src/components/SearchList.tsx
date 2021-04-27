@@ -83,7 +83,6 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
         if (this.state.onDataGather != undefined) {
             this.state.onDataGather();
         }
-        console.log(`offset: ${this.state.offset}`);
         this.state.animeNodeSource
             ?.MakeRequest(BatchSize, this.state.offset)
             .then((data) => {
