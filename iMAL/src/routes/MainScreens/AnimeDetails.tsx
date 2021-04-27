@@ -1,5 +1,13 @@
 import React from "react";
-import { ActivityIndicator, Dimensions, StyleSheet, Text, View, Image, FlatList } from "react-native";
+import {
+    ActivityIndicator,
+    Dimensions,
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    FlatList,
+} from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationParams, NavigationRoute } from "react-navigation";
@@ -13,37 +21,48 @@ import { LargeText } from "../../components/LargeText";
 import { Colors } from "../../Configuration/Colors";
 
 type Props = {
-    navigator: StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>,
-}
+    navigator: StackNavigationProp<
+        NavigationRoute<NavigationParams>,
+        NavigationParams
+    >;
+};
 
 type State = {
-    animeNode?: AnimeNode,
-    anime?: Anime,
-    navigation: StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>
-}
+    animeNode?: AnimeNode;
+    anime?: Anime;
+    navigation: StackNavigationProp<
+        NavigationRoute<NavigationParams>,
+        NavigationParams
+    >;
+};
 
 //TODO Everything
-export default class AnimeDetails extends React.Component<NavigationStackScreenProps, State>{
+export default class AnimeDetails extends React.Component<
+    NavigationStackScreenProps,
+    State
+> {
     private styles = StyleSheet.create({
         appContainer: {
-            backgroundColor: "#1a1a1a"
-        }
+            backgroundColor: "#1a1a1a",
+        },
     });
 
     constructor(props: NavigationStackScreenProps) {
         super(props);
-        let animeNode = (props.navigation.getParam("item") as AnimeNode);
+        let animeNode = props.navigation.getParam("item") as AnimeNode;
         if (animeNode == undefined) {
             animeNode = {
                 node: {
                     id: 1,
                     title: "failure",
                     main_picture: {
-                        medium: "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
-                        large: "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg"
-                    }
-                }
-            }
+                        medium:
+                            "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
+                        large:
+                            "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
+                    },
+                },
+            };
         }
         //#region state
         // this.state = {
@@ -337,19 +356,20 @@ export default class AnimeDetails extends React.Component<NavigationStackScreenP
         //#endregion state
         this.state = {
             navigation: props.navigation,
-            animeNode: animeNode
-        }
+            animeNode: animeNode,
+        };
 
-        GetDetails(animeNode.node.id).then((res) => {
-            this.setState({
-                animeNode: animeNode,
-                anime: res
+        GetDetails(animeNode.node.id)
+            .then((res) => {
+                this.setState({
+                    animeNode: animeNode,
+                    anime: res,
+                });
+            })
+            .catch((err) => {
+                console.log("Anime details error weewooweewoo");
+                console.log(err);
             });
-        })
-        .catch((err) => {
-            console.log("Anime details error weewooweewoo");
-            console.log(err);
-        });
     }
 
     NiceString(text: string | undefined) {
@@ -361,66 +381,122 @@ export default class AnimeDetails extends React.Component<NavigationStackScreenP
     render() {
         return (
             <SafeAreaProvider style={this.styles.appContainer}>
-                {this.state.anime == undefined ?
+                {this.state.anime == undefined ? (
                     <ActivityIndicator
                         style={styles.loading}
                         size="large"
-                        color={Colors.BLUE} /> :
+                        color={Colors.BLUE}
+                    />
+                ) : (
                     <ScrollView style={styles.page}>
                         <View style={styles.TopArea}>
-                            <Image style={styles.image} source={{ uri: this.state.anime?.main_picture?.large }} />
+                            <Image
+                                style={styles.image}
+                                source={{
+                                    uri: this.state.anime?.main_picture?.large,
+                                }}
+                            />
                             <View style={styles.TitleArea}>
-                                <Text style={styles.title}>{this.state.anime.title}</Text>
-                                {
-                                    this.state.anime.title != this.state.anime.alternative_titles?.en ?
-                                        <Text style={styles.alternateTitle}>{this.state.anime.alternative_titles?.en}</Text>
-                                        :
-                                        (undefined)
-                                }
-                                <Text style={styles.alternateTitle}>{this.state.anime.alternative_titles?.ja}</Text>
-                                <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                                <Text style={styles.title}>
+                                    {this.state.anime.title}
+                                </Text>
+                                {this.state.anime.title !=
+                                this.state.anime.alternative_titles?.en ? (
+                                    <Text style={styles.alternateTitle}>
+                                        {
+                                            this.state.anime.alternative_titles
+                                                ?.en
+                                        }
+                                    </Text>
+                                ) : undefined}
+                                <Text style={styles.alternateTitle}>
+                                    {this.state.anime.alternative_titles?.ja}
+                                </Text>
+                                <Divider
+                                    color={Colors.DIVIDER}
+                                    widthPercentage={100}
+                                />
                                 <View style={styles.TopAreaData}>
                                     <View style={styles.TopAreaLabels}>
-                                        <Text style={styles.TopAreaLabel}>Score:</Text>
-                                        <Text style={styles.TopAreaLabel}>Rank:</Text>
-                                        <Text style={styles.TopAreaLabel}>Popularity:</Text>
+                                        <Text style={styles.TopAreaLabel}>
+                                            Score:
+                                        </Text>
+                                        <Text style={styles.TopAreaLabel}>
+                                            Rank:
+                                        </Text>
+                                        <Text style={styles.TopAreaLabel}>
+                                            Popularity:
+                                        </Text>
                                     </View>
                                     <View style={styles.TopAreaValues}>
-                                        <Text style={styles.TopAreaValue}>{this.state.anime.mean}</Text>
-                                        <Text style={styles.TopAreaValue}>#{this.state.anime.rank}</Text>
-                                        <Text style={styles.TopAreaValue}>#{this.state.anime.popularity}</Text>
+                                        <Text style={styles.TopAreaValue}>
+                                            {this.state.anime.mean}
+                                        </Text>
+                                        <Text style={styles.TopAreaValue}>
+                                            #{this.state.anime.rank}
+                                        </Text>
+                                        <Text style={styles.TopAreaValue}>
+                                            #{this.state.anime.popularity}
+                                        </Text>
                                     </View>
                                 </View>
-                                <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                                <Divider
+                                    color={Colors.DIVIDER}
+                                    widthPercentage={100}
+                                />
                                 <View style={styles.TopAreaData}>
                                     <View style={styles.TopAreaLabels}>
-                                        <Text style={styles.TopAreaLabel}>Status:</Text>
-                                        <Text style={styles.TopAreaLabel}>Aired:</Text>
-                                        <Text style={styles.TopAreaLabel}>Episodes:</Text>
-                                        <Text style={styles.TopAreaLabel}>Genres:</Text>
+                                        <Text style={styles.TopAreaLabel}>
+                                            Status:
+                                        </Text>
+                                        <Text style={styles.TopAreaLabel}>
+                                            Aired:
+                                        </Text>
+                                        <Text style={styles.TopAreaLabel}>
+                                            Episodes:
+                                        </Text>
+                                        <Text style={styles.TopAreaLabel}>
+                                            Genres:
+                                        </Text>
                                     </View>
                                     <View style={styles.TopAreaValues}>
-                                        <Text style={styles.TopAreaValue}>{this.NiceString(this.state.anime.status)}</Text>
-                                        <Text style={styles.TopAreaValue}>{this.state.anime.start_date}</Text>
-                                        <Text style={styles.TopAreaValue}>{this.state.anime.num_episodes == 0 ? "N/A" : this.state.anime.num_episodes}</Text>
-                                        <Text style={styles.TopAreaValue}>{this.state.anime.genres?.map(x => x.name).join(", ")}</Text>
+                                        <Text style={styles.TopAreaValue}>
+                                            {this.NiceString(
+                                                this.state.anime.status
+                                            )}
+                                        </Text>
+                                        <Text style={styles.TopAreaValue}>
+                                            {this.state.anime.start_date}
+                                        </Text>
+                                        <Text style={styles.TopAreaValue}>
+                                            {this.state.anime.num_episodes == 0
+                                                ? "N/A"
+                                                : this.state.anime.num_episodes}
+                                        </Text>
+                                        <Text style={styles.TopAreaValue}>
+                                            {this.state.anime.genres
+                                                ?.map((x) => x.name)
+                                                .join(", ")}
+                                        </Text>
                                     </View>
                                 </View>
-
                             </View>
                         </View>
 
                         <Text style={styles.head2}>Synopsis</Text>
                         <Divider color={Colors.DIVIDER} widthPercentage={100} />
                         <LargeText text={this.state.anime.synopsis} />
-                        {
-                            this.state.anime.background != undefined && this.state.anime.background != "" ?
-                                <View>
-                                    <Text style={styles.head2}>Background</Text>
-                                    <Divider color={Colors.DIVIDER} widthPercentage={100} />
-                                    <LargeText text={this.state.anime.background} />
-                                </View> : undefined
-                        }
+                        {this.state.anime.background != undefined &&
+                        this.state.anime.background != "" ? (
+                            <View>
+                                <Text style={styles.head2}>Background</Text>
+                                <Divider
+                                    color={Colors.DIVIDER}
+                                    widthPercentage={100}
+                                />
+                                <LargeText text={this.state.anime.background} />
+                            </View>
+                        ) : undefined}
                         <Divider color={Colors.DIVIDER} widthPercentage={0} />
                         <Text style={styles.head2}>Recommendations</Text>
                         <Divider color={Colors.DIVIDER} widthPercentage={100} />
@@ -428,11 +504,17 @@ export default class AnimeDetails extends React.Component<NavigationStackScreenP
                             horizontal={true}
                             data={this.state.anime.recommendations}
                             renderItem={(item) => (
-                                <AnimeItem item={item.item} navigator={this.state.navigation} />)}
-                            keyExtractor={(item, index) => index.toString()} />
-                         <Divider color={Colors.DIVIDER} widthPercentage={0} />   
+                                <AnimeItem
+                                    item={item.item}
+                                    width={100}
+                                    navigator={this.state.navigation}
+                                />
+                            )}
+                            keyExtractor={(item, index) => index.toString()}
+                        />
+                        <Divider color={Colors.DIVIDER} widthPercentage={0} />
                     </ScrollView>
-                }
+                )}
             </SafeAreaProvider>
         );
     }
@@ -440,57 +522,57 @@ export default class AnimeDetails extends React.Component<NavigationStackScreenP
 
 const styles = StyleSheet.create({
     loading: {
-        marginTop: Dimensions.get("window").height / 2
+        marginTop: Dimensions.get("window").height / 2,
     },
     image: {
         width: Dimensions.get("window").width / 2.5,
-        height: (Dimensions.get("window").width / 2.5) * 1.5
+        height: (Dimensions.get("window").width / 2.5) * 1.5,
     },
     title: {
         color: Colors.TEXT,
         fontSize: 17,
-        marginLeft: 5
+        marginLeft: 5,
     },
     alternateTitle: {
         color: Colors.SUBTEXT,
         marginLeft: 5,
-        fontSize: 13
+        fontSize: 13,
     },
     page: {
-        margin: 10
+        margin: 10,
     },
     TopArea: {
         flexDirection: "row",
         alignItems: "stretch",
         width: Dimensions.get("window").width - 20,
-        marginBottom: 10
+        marginBottom: 10,
     },
     TitleArea: {
         flexDirection: "column",
         marginLeft: 10,
-        flex: 1
+        flex: 1,
     },
     Synopsis: {
-        color: Colors.TEXT
+        color: Colors.TEXT,
     },
     ReadMore: {
         color: Colors.BLUE,
         textDecorationStyle: "solid",
         textDecorationLine: "underline",
         textDecorationColor: Colors.BLUE,
-        fontSize: 15
+        fontSize: 15,
     },
     head2: {
         fontSize: 17,
-        color: Colors.TEXT
+        color: Colors.TEXT,
     },
     TopAreaLabels: {
         flexDirection: "column",
-        flex: 1.3
+        flex: 1.3,
     },
     TopAreaValues: {
         flexDirection: "column",
-        flex: 2
+        flex: 2,
     },
     TopAreaData: {
         flexDirection: "row",
@@ -498,10 +580,10 @@ const styles = StyleSheet.create({
     TopAreaLabel: {
         color: Colors.TEXT,
         fontWeight: "bold",
-        fontSize: 12
+        fontSize: 12,
     },
     TopAreaValue: {
         color: Colors.TEXT,
-        fontSize: 12
-    }
+        fontSize: 12,
+    },
 });

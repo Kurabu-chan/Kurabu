@@ -14,7 +14,7 @@ type StateType = {
     };
 };
 
-export default class Home extends React.Component<
+export default class Suggestions extends React.Component<
     NavigationStackScreenProps,
     StateType
 > {
@@ -22,8 +22,8 @@ export default class Home extends React.Component<
         super(props);
         this.state = {
             node: {
-                key: "Currently Airing",
-                nodeSource: new SeasonalSource(2021, "spring"),
+                key: "Suggestions for you",
+                nodeSource: new SuggestionsSource(),
             },
         };
     }

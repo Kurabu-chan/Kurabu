@@ -6,7 +6,7 @@ import {
     CreateNavigatorConfig,
     NavigationStackRouterConfig,
 } from "react-navigation";
-import Main from "./MainScreens/HomeScreen";
+import Search from "./MainScreens/SearchScreen";
 import {
     StackNavigationOptions,
     StackNavigationProp,
@@ -14,14 +14,15 @@ import {
 } from "react-navigation-stack/lib/typescript/src/vendor/types";
 import AnimeDetails from "./MainScreens/AnimeDetails";
 import { Colors } from "../Configuration/Colors";
+import Suggestions from "./MainScreens/SuggestionsScreen";
 
 const screens: NavigationRouteConfigMap<
     StackNavigationOptions,
     StackNavigationProp<NavigationRoute<NavigationParams>>,
     unknown
 > = {
-    Home: {
-        screen: Main,
+    Suggestions: {
+        screen: Suggestions,
     },
     Details: {
         screen: AnimeDetails,
@@ -54,5 +55,5 @@ const defaultOptions:
     headerMode: "screen",
 };
 
-const MainStack = createStackNavigator(screens, defaultOptions);
-export default MainStack;
+const SuggestionsStack = createStackNavigator(screens, defaultOptions);
+export default SuggestionsStack;

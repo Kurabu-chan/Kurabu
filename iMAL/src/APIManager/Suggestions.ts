@@ -9,10 +9,6 @@ type JSONType = {
         next?: string;
         previous?: string;
     };
-    season: {
-        year: number;
-        season: string;
-    };
 };
 
 function isIterable(obj: any) {
@@ -23,18 +19,7 @@ function isIterable(obj: any) {
     return typeof obj[Symbol.iterator] === "function";
 }
 
-class SeasonalSource implements AnimeNodeSource {
-    private year?: number;
-    private season?: "winter" | "summer" | "spring" | "fall";
-
-    constructor(
-        year?: number,
-        season?: "winter" | "summer" | "spring" | "fall"
-    ) {
-        this.year = year;
-        this.season = season;
-    }
-
+class SuggestionsSource implements AnimeNodeSource {
     public async MakeRequest(
         limit?: number,
         offset?: number
@@ -44,11 +29,9 @@ class SeasonalSource implements AnimeNodeSource {
         let auther = await Authentication.getInstance();
         let stateCode = auther.GetStateCode();
         try {
-            let url = `${config.GetApiRoot()}anime/seasonal?season=${
-                this.season ? this.season : "summer"
-            }&year=${this.year ? this.year : 2021}&state=${stateCode}${
+            let url = `${config.GetApiRoot()}anime/suggestions?state=${stateCode}${
                 limit ? "&limit=" + limit : ""
-            }${offset ? "&offset=" + offset : ""}&sort=users`;
+            }${offset ? "&offset=" + offset : ""}`;
             let res: Response = await fetch(url);
             let json: JSONType = await res.json();
             let ret = json as JSONType;
@@ -63,12 +46,8 @@ class SeasonalSource implements AnimeNodeSource {
         return {
             data: [],
             paging: {},
-            season: {
-                year: -1,
-                season: "",
-            },
         };
     }
 }
 
-export default SeasonalSource;
+export default SuggestionsSource;
