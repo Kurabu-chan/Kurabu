@@ -55,7 +55,7 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
 
     public loadExtra() {
         this.state.animeNodeSource
-            .MakeRequest(20, this.state.offset)
+            .MakeRequest(20, this.state.offset + 20)
             .then((data) => {
                 this.setState((old) => {
                     old.data.push(...data.data);
