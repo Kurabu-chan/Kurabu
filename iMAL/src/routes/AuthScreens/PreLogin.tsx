@@ -1,40 +1,35 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import {Dimensions } from "react-native";
-import Auth from '../../APIManager/Authenticate';
-import { NavigationSwitchScreenProps } from 'react-navigation';
+import React from "react";
+import { Text, View } from "react-native";
+import { Dimensions } from "react-native";
+import { SetRootSwitch } from "../../../App";
+import Auth from "../../APIManager/Authenticate";
 
 //uncomment to reset saved uuid and go into developer mode for the Auth system
 //Auth.devMode = true;
 //Auth.ClearAsync();
 
-class PreLogin extends React.Component<NavigationSwitchScreenProps,NavigationSwitchScreenProps> {
-    constructor(props: NavigationSwitchScreenProps) {
+class PreLogin extends React.Component {
+    constructor(props: any) {
         super(props);
-        this.state = {
-            navigation: props.navigation,
-            theme: props.theme,
-            screenProps: props.screenProps
-        };
 
         //this.state.navigation.navigate("Details");
-        
+
         Auth.getInstance().then((auth) => {
             if (auth.getLoaded()) {
-                this.state.navigation.navigate("Main");
+                SetRootSwitch("Drawer");
             } else {
-                this.state.navigation.navigate("Login");
+                SetRootSwitch("Auth");
             }
         });
     }
 
     render() {
         return (
-            <View style={
-                {
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: Dimensions.get('window').height
+            <View
+                style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: Dimensions.get("window").height,
                 }}>
                 <Text>Loading</Text>
             </View>

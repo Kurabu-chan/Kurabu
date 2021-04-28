@@ -8,11 +8,10 @@ import {
 } from "react-native";
 import SearchItem from "./SearchItem";
 import AnimeNodeSource from "../APIManager/AnimeNodeSource";
-import { NavigationParams, NavigationRoute } from "react-navigation";
-import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
 import { Colors } from "../Configuration/Colors";
 import { Dimensions } from "react-native";
 import { AnimeNode } from "../APIManager/ApiBasicTypes";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 const BatchSize = 20;
 
@@ -20,10 +19,7 @@ type AnimeListState = {
     title: string;
     data: AnimeNode[];
     animeNodeSource?: AnimeNodeSource;
-    navigator: StackNavigationProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >;
+    navigator: StackNavigationProp<any, any>;
     offset: number;
     needmore: boolean;
     onDataGather?: () => void;
@@ -32,10 +28,7 @@ type AnimeListState = {
 type AnimeListProps = {
     title: string;
     animeNodeSource: AnimeNodeSource;
-    navigator: StackNavigationProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >;
+    navigator: StackNavigationProp<any, any>;
     onCreate?: (anime: AnimeList) => void;
     onDataGather?: () => void;
 };

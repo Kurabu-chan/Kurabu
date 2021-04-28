@@ -1,32 +1,34 @@
 /*
 All authentication screen stuff goes here
 */
-import { createStackNavigator } from 'react-navigation-stack';
-import { NavigationRouteConfigMap, NavigationRoute, NavigationParams, CreateNavigatorConfig, NavigationStackRouterConfig } from 'react-navigation';
-import { StackNavigationOptions, StackNavigationProp, StackNavigationConfig } from 'react-navigation-stack/lib/typescript/src/vendor/types';
-import Register from './AuthScreens/Register';
-import Login from './AuthScreens/Login';
-import PreLogin from './AuthScreens/PreLogin';
-import Verify from './AuthScreens/Verification';
+import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
+import Register from "./AuthScreens/Register";
+import Login from "./AuthScreens/Login";
+import PreLogin from "./AuthScreens/PreLogin";
+import Verify from "./AuthScreens/Verification";
 
-const screens : NavigationRouteConfigMap<StackNavigationOptions,StackNavigationProp<NavigationRoute<NavigationParams>>,unknown>  = {
-    PreLogin: {
-        screen: PreLogin
-    },
-    Login: {
-        screen: Login
-    },    
-    Register: {
-        screen: Register
-    }, 
+const Stack = createStackNavigator();
+export default function MainStack() {
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                headerShown: false,
+            }}
+            initialRouteName="PreLogin">
+            <Stack.Screen name="PreLogin" component={PreLogin} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="Verify" component={Verify} />
+        </Stack.Navigator>
+    );
+}
+
+export type AuthStackParamList = {
+    PreLogin: undefined;
+    Login: undefined;
+    Register: undefined;
     Verify: {
-        screen: Verify
-    }   
-}
-
-const defaultOptions: CreateNavigatorConfig<StackNavigationConfig, NavigationStackRouterConfig, StackNavigationOptions, StackNavigationProp<NavigationRoute<NavigationParams>, NavigationParams>> | undefined = {
-    headerMode: "none"
-}
-
-const AuthStack = createStackNavigator(screens, defaultOptions);
-export default AuthStack;
+        uuid: string;
+    };
+};

@@ -1,45 +1,60 @@
 import React from "react";
-import { NavigationStackScreenProps } from "react-navigation-stack";
-import { Text, View, Linking, Button, Dimensions, StyleSheet } from 'react-native';
+import {
+    Text,
+    View,
+    Linking,
+    Button,
+    Dimensions,
+    StyleSheet,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Cursor from "react-native-confirmation-code-field/esm/Cursor";
-import { CodeField } from "react-native-confirmation-code-field";
+import { CodeField, Cursor } from "react-native-confirmation-code-field";
 import Authentication from "../../APIManager/Authenticate";
 import { Alert } from "react-native";
-import { navigate } from "../../APIManager/helper/NavigationService";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Colors } from "../../Configuration/Colors";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+import { AuthStackParamList } from "../AuthStack";
+import * as RootNavigator from "../RootNavigator";
+
+type RegisterProps = {
+    navigation: StackNavigationProp<AuthStackParamList, "Verify">;
+    route: RouteProp<AuthStackParamList, "Verify">;
+};
 
 type State = {
-    uuid: string,
-    code: string,
-    failed: boolean,
-    attempt: number
-}
+    uuid: string;
+    code: string;
+    failed: boolean;
+    attempt: number;
+};
 
-export default class Verif extends React.Component<NavigationStackScreenProps, State>{
-    constructor(props: NavigationStackScreenProps) {
+export default class Verif extends React.Component<RegisterProps, State> {
+    constructor(props: RegisterProps) {
         super(props);
         this.state = {
-            uuid: (props.navigation.getParam("uuid") as string),
+            uuid: props.route.params.uuid,
             code: "",
             failed: false,
-            attempt: 0
+            attempt: 0,
         };
     }
 
-    async Submit(code: string) : Promise<boolean>{
+    async Submit(code: string): Promise<boolean> {
         let auth = await Authentication.getInstance();
         let uuid = auth.GetStateCode();
-        if(uuid == undefined){
-            Alert.alert("An error occured during the authentication process, please retry entering the verification code. If that doesn't work close and open the app.")
+        if (uuid == undefined) {
+            Alert.alert(
+                "An error occured during the authentication process, please retry entering the verification code. If that doesn't work close and open the app."
+            );
             return false;
         }
         let resp = await auth.TryVerif(uuid, code);
-        if(resp.status == "error"){
-            Alert.alert(resp.message)
+        if (resp.status == "error") {
+            Alert.alert(resp.message);
             return false;
-        }else{
+        } else {
             //open browser
             Linking.openURL(resp.message);
             return true;
@@ -49,30 +64,34 @@ export default class Verif extends React.Component<NavigationStackScreenProps, S
     async Cancel() {
         let auth = await Authentication.getInstance();
         let uuid = auth.GetStateCode();
-        if(uuid == undefined){
-            Alert.alert("An error occured during the authentication process, please retry canceling. If that doesn't work close and open the app.")
+        if (uuid == undefined) {
+            Alert.alert(
+                "An error occured during the authentication process, please retry canceling. If that doesn't work close and open the app."
+            );
             return false;
         }
-        let result = await auth.TryCancelRegister(uuid);        
-        if(result){
+        let result = await auth.TryCancelRegister(uuid);
+        if (result) {
             console.log("Going to register and clearing stateCode");
             auth.ClearCode();
 
-            navigate("Register", undefined);
+            RootNavigator.navigate("Register", undefined);
         }
     }
 
     async SetCode(code: string) {
         if (code.match(/.*\D.*/)) return;
 
-        this.setState({ ...this.state, code: code })
+        this.setState({ ...this.state, code: code });
 
         if (code.length == 6) {
-            if(!await this.Submit(code)){
-                this.setState({ ...this.state, code: "", failed: true})
+            if (!(await this.Submit(code))) {
+                this.setState({ ...this.state, code: "", failed: true });
             }
-        }else{
-            console.log("hey: " + code.length.toString() + " " + this.state.failed)
+        } else {
+            console.log(
+                "hey: " + code.length.toString() + " " + this.state.failed
+            );
         }
     }
 
@@ -80,18 +99,27 @@ export default class Verif extends React.Component<NavigationStackScreenProps, S
         const CELL_COUNT = 6;
 
         type renderCell = {
-            index: any, symbol: any, isFocused: any
-        }
+            index: any;
+            symbol: any;
+            isFocused: any;
+        };
 
         return (
             <View style={styles.appContainer}>
                 <SafeAreaView style={styles.safeContainer} />
                 <View style={styles.content}>
                     <Text style={styles.head}>iMAL</Text>
+                    <Text style={styles.sentMailText}>
+                        We've sent you an email with a verification code, please
+                        enter it below.
+                    </Text>
                     <Text
-                        style={styles.sentMailText}>
-                        We've sent you an email with a verification code, please enter it below.</Text>
-                    <Text style={[styles.hidden,this.state.failed && styles.incorrect]}>Incorrect Code</Text>
+                        style={[
+                            styles.hidden,
+                            this.state.failed && styles.incorrect,
+                        ]}>
+                        Incorrect Code
+                    </Text>
                     <CodeField
                         value={this.state.code}
                         onChangeText={this.SetCode.bind(this)}
@@ -102,14 +130,20 @@ export default class Verif extends React.Component<NavigationStackScreenProps, S
                         renderCell={(data: renderCell) => (
                             <Text
                                 key={data.index}
-                                style={[styles.cell, data.isFocused && styles.focusCell]}>
-                                {data.symbol || (data.isFocused ? <Cursor /> : null)}
+                                style={[
+                                    styles.cell,
+                                    data.isFocused && styles.focusCell,
+                                ]}>
+                                {data.symbol ||
+                                    (data.isFocused ? <Cursor /> : null)}
                             </Text>
                         )}
                     />
                     <TouchableOpacity
-                    style={styles.cancel}
-                    onPress={this.Cancel.bind(this)}><Text>Cancel</Text></TouchableOpacity>
+                        style={styles.cancel}
+                        onPress={this.Cancel.bind(this)}>
+                        <Text>Cancel</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -118,7 +152,7 @@ export default class Verif extends React.Component<NavigationStackScreenProps, S
 
 const styles = StyleSheet.create({
     root: { flex: 1, padding: 20 },
-    title: { textAlign: 'center', fontSize: 30 },
+    title: { textAlign: "center", fontSize: 30 },
     codeFieldRoot: { marginTop: 20 },
     cell: {
         width: 40,
@@ -128,19 +162,19 @@ const styles = StyleSheet.create({
         margin: 5,
         borderWidth: 2,
         borderColor: Colors.ORANGE,
-        textAlign: 'center',
-        color: Colors.ORANGE
+        textAlign: "center",
+        color: Colors.ORANGE,
     },
     focusCell: {
         borderColor: Colors.ORANGE_SELECTED,
     },
     appContainer: {
         backgroundColor: Colors.BLUE,
-        alignItems: 'center',
-        justifyContent: 'center'
+        alignItems: "center",
+        justifyContent: "center",
     },
     safeContainer: {
-        backgroundColor: Colors.BLUE
+        backgroundColor: Colors.BLUE,
     },
     VerifInput: {
         width: 240,
@@ -149,36 +183,36 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         color: Colors.TEXT,
         fontSize: 50,
-        letterSpacing: 10
+        letterSpacing: 10,
     },
     content: {
-        height: Dimensions.get('window').height,
-        alignItems: 'center',
-        justifyContent: 'center'
+        height: Dimensions.get("window").height,
+        alignItems: "center",
+        justifyContent: "center",
     },
     text: {
         color: Colors.TEXT,
-        fontSize: 15
+        fontSize: 15,
     },
     incorrect: {
         color: Colors.ERROR,
         fontSize: 20,
-        opacity: 100
+        opacity: 100,
     },
     hidden: {
-        opacity: 0
+        opacity: 0,
     },
     sentMailText: {
         color: Colors.TEXT,
-        width: Dimensions.get('window').width * 0.8,
+        width: Dimensions.get("window").width * 0.8,
         fontSize: 14,
-        fontFamily: "AGRevueCyr"
+        fontFamily: "AGRevueCyr",
     },
     head: {
         color: Colors.TEXT,
         fontSize: 60,
-        fontFamily: 'AGRevueCyr',
-        marginBottom: 100
+        fontFamily: "AGRevueCyr",
+        marginBottom: 100,
     },
     cancel: {
         marginTop: 30,
@@ -187,6 +221,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 3,
         borderColor: Colors.ORANGE_SELECTED,
-        borderWidth: 1
-    }
+        borderWidth: 1,
+    },
 });

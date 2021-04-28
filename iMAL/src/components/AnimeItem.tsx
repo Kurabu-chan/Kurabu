@@ -8,27 +8,20 @@ import {
     TouchableOpacity,
     Dimensions,
 } from "react-native";
-import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
-import { NavigationRoute, NavigationParams } from "react-navigation";
 import { Colors } from "../Configuration/Colors";
 import { AnimeNode } from "../APIManager/ApiBasicTypes";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 type AnimeItemProps = {
     item: AnimeNode;
     width?: number;
-    navigator: StackNavigationProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >;
+    navigator: StackNavigationProp<any, any>;
 };
 
 type AnimeItemState = {
     item: AnimeNode;
-    navigator: StackNavigationProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >;
+    navigator: StackNavigationProp<any, any>;
 };
 
 class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
