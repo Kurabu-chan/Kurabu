@@ -7,6 +7,7 @@ import {
 	Anime,
 	ErrorResponse,
 	Fields,
+	fieldsToString,
 } from "../../../helpers/BasicTypes";
 import { baseRequest } from "../../../builders/requests/RequestBuilder";
 
@@ -21,7 +22,7 @@ export class DetailsWebRequestHandler
 		var request = baseRequest()
 			.addPath("v2/anime")
 			.addPath(query.animeid.toString())
-			.setQueryParam("fields", FieldsToString(query.fields))
+			.setQueryParam("fields", fieldsToString(query.fields))
 			.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
 		let data = await request.refreshRequest(query.user);
@@ -36,7 +37,4 @@ export class DetailsWebRequestHandler
 			anime: json as Anime,
 		};
 	}
-}
-function FieldsToString(fields: Fields[]): string {
-	throw new Error("Function not implemented.");
 }

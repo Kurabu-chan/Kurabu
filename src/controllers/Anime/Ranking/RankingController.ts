@@ -7,6 +7,7 @@ import LogArg from "../../../decorators/LogArgDecorator";
 import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
 import { injectable } from "tsyringe";
 import { RankingWebRequestHandler } from "../../../webRequest/Anime/Ranking/RankingWebRequestHandler";
+import { extractFields, Fields } from "../../../helpers/BasicTypes";
 
 const possible = [
 	"all",
@@ -34,6 +35,7 @@ export class RankingController {
 	@Param.Param("rankingtype", Param.ParamType.string, true)
 	@Param.Param("limit", Param.ParamType.int, true)
 	@Param.Param("offset", Param.ParamType.int, true)
+	@Param.Param("fields", Param.ParamType.string, true)
 	@LogArg()
 	private async get(req: Request, res: Response, arg: Options.params) {
 		if (arg.limit && arg.limit > 100) {
@@ -53,12 +55,17 @@ export class RankingController {
 				| "favorite"
 			>req.query.rankingtype;
 		}
+		var fields: Fields[] | undefined;
+		if (arg.fields) {
+			fields = extractFields(arg.fields);
+		}
 
 		var result = await this._rankingWebRequest.handle({
 			user: arg.user,
 			rankingtype: arg.rankingtype,
 			limit: arg.limit,
 			offset: arg.offset,
+			fields: fields,
 		});
 
 		return result.ranked;

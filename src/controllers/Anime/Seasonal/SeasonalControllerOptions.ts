@@ -11,4 +11,5 @@ export type params = {
 	sort?: "anime_score" | "anime_num_list_users";
 	limit?: number;
 	offset?: number;
+	fields?: string;
 };

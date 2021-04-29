@@ -17,4 +17,5 @@ export type params = {
 		| "favorite";
 	limit?: number;
 	offset?: number;
+	fields?: string;
 };
