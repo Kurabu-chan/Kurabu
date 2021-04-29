@@ -51,7 +51,9 @@ class Register extends React.Component<RegisterProps, RegisterState> {
                     //we got the uuid for the verification
                     auth.setCode(res);
                     console.log("Obtained uuid: " + res);
-                    this.props.navigation.replace("Verify");
+                    this.props.navigation.replace("Verify", {
+                        uuid: res,
+                    });
                 }
             });
         });

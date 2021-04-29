@@ -6,8 +6,8 @@ import Auth from "../../APIManager/Authenticate";
 import * as RootNavigator from "../RootNavigator";
 
 //uncomment to reset saved uuid and go into developer mode for the Auth system
-//Auth.devMode = true;
-//Auth.ClearAsync();
+Auth.devMode = true;
+Auth.ClearAsync();
 
 class PreLogin extends React.Component {
     constructor(props: any) {

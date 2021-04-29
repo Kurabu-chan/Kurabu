@@ -9,7 +9,7 @@ import { Config } from "./src/Configuration/Config";
 import { NavigationContainer } from "@react-navigation/native";
 import Drawer from "./src/routes/MainDrawer";
 import Auth from "./src/routes/AuthStack";
-import { navigationRef } from "./src/routes/RootNavigator";
+import { navigationRef, navigationRefReady } from "./src/routes/RootNavigator";
 
 const prefix = Linking.makeUrl("/");
 
@@ -81,16 +81,12 @@ export default class Application extends React.Component<any, StateType> {
                 console.log(uuid);
                 Authentication.getInstance()
                     .then((auth) => {
-                        console.log("save");
                         auth.setCode(uuid);
-                        console.log("Change page");
                         try {
                             SetRootSwitch("Drawer");
                         } catch (e) {
                             console.log(e);
                         }
-
-                        console.log("changed?");
                     })
                     .catch((e) => {});
             }
@@ -99,13 +95,14 @@ export default class Application extends React.Component<any, StateType> {
 
     render() {
         const setFontsLoaded = (yes: boolean) => {
-            console.log("loaded fonts");
             this.setState({ ...this.state, fonts: yes });
         };
         if (this.state.fonts == true) {
             console.log(`if ${this.state.fonts} ${this.state.RootSwitch}`);
             return (
-                <NavigationContainer ref={navigationRef}>
+                <NavigationContainer
+                    ref={navigationRef}
+                    onReady={navigationRefReady}>
                     {this.state.RootSwitch == "Auth" ? <Auth /> : <Drawer />}
                 </NavigationContainer>
 
