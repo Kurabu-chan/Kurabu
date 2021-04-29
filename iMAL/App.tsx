@@ -9,9 +9,12 @@ import { Config } from "./src/Configuration/Config";
 import { NavigationContainer } from "@react-navigation/native";
 import Drawer from "./src/routes/MainDrawer";
 import Auth from "./src/routes/AuthStack";
-import { navigationRef, navigationRefReady } from "./src/routes/RootNavigator";
-
-const prefix = Linking.makeUrl("/");
+import {
+    DoSwitch,
+    navigationRef,
+    navigationRefReady,
+} from "./src/routes/RootNavigator";
+import { registerSwitchListener } from "./src/routes/RootNavigator";
 
 type StateType = {
     fonts: boolean;
@@ -19,18 +22,10 @@ type StateType = {
     RootSwitch: "Auth" | "Drawer";
 };
 
-var application: Application | undefined;
-
-export function SetRootSwitch(sw: "Auth" | "Drawer") {
-    application?.setState((old) => {
-        return { ...old, RootSwitch: sw };
-    });
-}
-
 export default class Application extends React.Component<any, StateType> {
     constructor(props: any) {
         super(props);
-        application = this;
+        registerSwitchListener(this.setRootSwitch.bind(this));
 
         Config.GetInstance().then((config) => {
             console.log("Config loaded");
@@ -52,6 +47,14 @@ export default class Application extends React.Component<any, StateType> {
         });
     }
 
+    setRootSwitch(sw: "Auth" | "Drawer") {
+        console.log(sw);
+        this.setState((prevState) => ({
+            ...prevState,
+            RootSwitch: sw,
+        }));
+    }
+
     componentWillUnmount() {
         AppState.removeEventListener("change", this._handleAppStateChange);
     }
@@ -63,7 +66,10 @@ export default class Application extends React.Component<any, StateType> {
         ) {
             this._checkInitialUrl();
         }
-        this.setState({ ...this.state, appstate: nextAppState });
+        this.setState((prevState) => ({
+            ...prevState,
+            appstate: nextAppState,
+        }));
     };
 
     private _checkInitialUrl = async () => {
@@ -82,7 +88,7 @@ export default class Application extends React.Component<any, StateType> {
                     .then((auth) => {
                         auth.setCode(uuid);
                         try {
-                            SetRootSwitch("Drawer");
+                            DoSwitch("Drawer");
                         } catch (e) {
                             console.log(e);
                         }
@@ -94,7 +100,7 @@ export default class Application extends React.Component<any, StateType> {
 
     render() {
         const setFontsLoaded = (yes: boolean) => {
-            this.setState({ ...this.state, fonts: yes });
+            this.setState((prevState) => ({ ...prevState, fonts: yes }));
         };
         if (this.state.fonts == true) {
             return (

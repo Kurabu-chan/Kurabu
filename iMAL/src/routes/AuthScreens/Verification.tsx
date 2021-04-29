@@ -75,11 +75,15 @@ export default class Verif extends React.Component<RegisterProps, State> {
     async SetCode(code: string) {
         if (code.match(/.*\D.*/)) return;
 
-        this.setState({ ...this.state, code: code });
+        this.setState((prevState) => ({ ...prevState, code: code }));
 
         if (code.length == 6) {
             if (!(await this.Submit(code))) {
-                this.setState({ ...this.state, code: "", failed: true });
+                this.setState((prevState) => ({
+                    ...prevState,
+                    code: "",
+                    failed: true,
+                }));
             }
         } else {
             console.log(

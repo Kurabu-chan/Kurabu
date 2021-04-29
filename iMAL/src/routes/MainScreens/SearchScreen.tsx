@@ -1,6 +1,6 @@
 import React from "react";
 import SearchBar from "react-native-dynamic-search-bar";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SearchList from "../../components/SearchList";
 import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
@@ -44,11 +44,11 @@ export default class Home extends React.Component<any, StateType> {
         const fields = SearchItemFields;
 
         var nodeSource = new SearchSource(this.state.search.searchText, fields);
-        this.setState({
-            ...this.state,
+        this.setState((prevState) => ({
+            ...prevState,
             searchSource: nodeSource,
-            search: { ...this.state.search, searched: true },
-        });
+            search: { ...prevState.search, searched: true },
+        }));
         if (this.state.animeList) {
             console.log(this.state.search.searchText);
             this.state.animeList.changeSearch(
@@ -80,22 +80,22 @@ export default class Home extends React.Component<any, StateType> {
                     width: Dimensions.get("window").width - 10,
                 }}
                 onChangeText={(text) =>
-                    this.setState({
-                        ...this.state,
+                    this.setState((prevState) => ({
+                        ...prevState,
                         search: {
-                            ...this.state.search,
+                            ...prevState.search,
                             searchText: text,
                         },
-                    })
+                    }))
                 }
                 onClearPress={() =>
-                    this.setState({
-                        ...this.state,
+                    this.setState((prevState) => ({
+                        ...prevState,
                         search: {
-                            ...this.state.search,
+                            ...prevState.search,
                             searchText: "",
                         },
-                    })
+                    }))
                 }
                 onSearchPress={this.DoSearch.bind(this)}
                 onEndEditing={this.DoSearch.bind(this)}
@@ -104,14 +104,14 @@ export default class Home extends React.Component<any, StateType> {
     }
 
     onSearchListCreate(list: SearchList) {
-        this.setState({ ...this.state, animeList: list });
+        this.setState((prevState) => ({ ...prevState, animeList: list }));
     }
 
     onSearchListDataGather() {
-        this.setState({
-            ...this.state,
-            search: { ...this.state.search, found: true },
-        });
+        this.setState((prevState) => ({
+            ...prevState,
+            search: { ...prevState.search, found: true },
+        }));
     }
 
     render() {
@@ -131,9 +131,3 @@ export default class Home extends React.Component<any, StateType> {
         );
     }
 }
-
-const pageStyles = StyleSheet.create({
-    loading: {
-        marginTop: Dimensions.get("window").height / 2.5,
-    },
-});

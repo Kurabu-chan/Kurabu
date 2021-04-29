@@ -53,7 +53,7 @@ export class SearchItem extends React.PureComponent<
         }
 
         this.state = {
-            item: props.item,
+            item: item,
             navigator: props.navigator,
         };
     }

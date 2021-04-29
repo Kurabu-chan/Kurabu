@@ -33,15 +33,15 @@ class Register extends React.Component<RegisterProps, RegisterState> {
     }
 
     private changeEmail(newstr: string) {
-        this.setState({ ...this.state, email: newstr });
+        this.setState((prevState) => ({ ...prevState, email: newstr }));
     }
 
     private changePass(newstr: string) {
-        this.setState({ ...this.state, pass: newstr });
+        this.setState((prevState) => ({ ...prevState, pass: newstr }));
     }
 
     private changeRetype(newstr: string) {
-        this.setState({ ...this.state, retype: newstr });
+        this.setState((prevState) => ({ ...prevState, retype: newstr }));
     }
 
     private DoSignup() {

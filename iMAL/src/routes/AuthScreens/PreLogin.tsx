@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { Dimensions } from "react-native";
-import { SetRootSwitch } from "../../../App";
+import { DoSwitch } from "../RootNavigator";
 import Auth from "../../APIManager/Authenticate";
 import * as RootNavigator from "../RootNavigator";
 
@@ -9,14 +9,13 @@ import * as RootNavigator from "../RootNavigator";
 //Auth.devMode = true;
 //Auth.ClearAsync();
 
-class PreLogin extends React.Component {
+class PreLogin extends React.Component<any> {
     constructor(props: any) {
         super(props);
 
-        //this.state.navigation.navigate("Details");
         Auth.getInstance().then((auth) => {
             if (auth.getLoaded()) {
-                SetRootSwitch("Drawer");
+                DoSwitch("Drawer");
             } else {
                 RootNavigator.navigate("Login", undefined);
             }

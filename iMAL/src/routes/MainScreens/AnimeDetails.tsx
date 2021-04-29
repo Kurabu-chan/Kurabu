@@ -28,7 +28,6 @@ type Props = {
 type State = {
     animeNode?: AnimeNode;
     anime?: Anime;
-    navigation: StackNavigationProp<HomeStackParamList, "Details">;
 };
 
 export default class AnimeDetails extends React.Component<Props, State> {
@@ -346,7 +345,6 @@ export default class AnimeDetails extends React.Component<Props, State> {
         // }
         //#endregion state
         this.state = {
-            navigation: props.navigation,
             animeNode: animeNode,
         };
 
@@ -498,10 +496,10 @@ export default class AnimeDetails extends React.Component<Props, State> {
                                 <AnimeItem
                                     item={item.item}
                                     width={100}
-                                    navigator={this.state.navigation}
+                                    navigator={this.props.navigation}
                                 />
                             )}
-                            keyExtractor={(item, index) => index.toString()}
+                            keyExtractor={(_, index) => index.toString()}
                         />
                         <Divider color={Colors.DIVIDER} widthPercentage={0} />
                     </ScrollView>

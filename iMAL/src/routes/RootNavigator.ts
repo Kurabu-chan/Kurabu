@@ -15,10 +15,21 @@ export function navigationRefReady() {
     }
 }
 
-export function navigate(name: string, params: any) {
+export function navigate(name: string, params?: any) {
     if (ready) {
         navigationRef.current?.navigate(name, params);
     } else {
         navQueue.push({ name, params });
     }
+}
+
+type swListener = (sw: "Auth" | "Drawer") => void;
+var listeners: swListener[] = [];
+
+export function registerSwitchListener(listener: swListener) {
+    listeners.push(listener);
+}
+
+export function DoSwitch(switchTo: "Auth" | "Drawer") {
+    listeners.forEach((x) => x(switchTo));
 }

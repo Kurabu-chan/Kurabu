@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, View } from "react-native";
+import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AnimeList from "../../components/AnimeList";
 import SeasonalSource from "../../APIManager/Seasonal";

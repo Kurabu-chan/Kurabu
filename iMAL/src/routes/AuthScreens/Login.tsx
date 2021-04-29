@@ -9,7 +9,7 @@ import Kurabu from "../../../assets/pinklogin.svg";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AuthStackParamList } from "../AuthStack";
 import { RouteProp } from "@react-navigation/core";
-import { SetRootSwitch } from "../../../App";
+import { DoSwitch } from "../RootNavigator";
 
 type LoginProps = {
     navigation: StackNavigationProp<AuthStackParamList, "Login">;
@@ -33,18 +33,18 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
 
     private changeEmail(newstr: string) {
-        this.setState({ ...this.state, email: newstr });
+        this.setState((prevState) => ({ ...prevState, email: newstr }));
     }
 
     private changePass(newstr: string) {
-        this.setState({ ...this.state, pass: newstr });
+        this.setState((prevState) => ({ ...prevState, pass: newstr }));
     }
 
     private DoLogin() {
         Auth.getInstance().then((auth) => {
             auth.Trylogin(this.state.email, this.state.pass).then((res) => {
                 if (res === true) {
-                    SetRootSwitch("Drawer");
+                    DoSwitch("Drawer");
                 }
             });
         });
