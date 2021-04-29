@@ -1,15 +1,7 @@
+import Suggestions from "#routes/MainScreens/SuggestionsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import Search from "./MainScreens/SearchScreen";
-import AnimeDetails from "./MainScreens/AnimeDetails";
-import { AnimeNode } from "../APIManager/ApiBasicTypes";
+import AnimeDetails from "#routes/MainScreens/AnimeDetails";
 import React from "react";
-
-export type SearchStackParamList = {
-    Search: undefined;
-    Details: {
-        item: AnimeNode;
-    };
-};
 
 const Stack = createStackNavigator();
 export default function SearchStack() {
@@ -18,8 +10,8 @@ export default function SearchStack() {
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="SearchScreen">
-            <Stack.Screen name="SearchScreen" component={Search} />
+            initialRouteName="SuggestionsScreen">
+            <Stack.Screen name="SuggestionsScreen" component={Suggestions} />
             <Stack.Screen name="DetailsScreen" component={AnimeDetails} />
         </Stack.Navigator>
     );

@@ -17,7 +17,7 @@ import AnimeItem from "../../components/AnimeItem";
 import { Divider } from "../../components/Divider";
 import { LargeText } from "../../components/LargeText";
 import { Colors } from "../../Configuration/Colors";
-import { HomeStackParamList } from "../HomeStack";
+import { HomeStackParamList } from "../MainStacks/HomeStack";
 import { RouteProp } from "@react-navigation/native";
 
 type Props = {
