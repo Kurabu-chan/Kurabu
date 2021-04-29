@@ -4,6 +4,7 @@ import SearchStack from "./SearchStack";
 import { Colors } from "../Configuration/Colors";
 import Suggestions from "./MainScreens/SuggestionsScreen";
 import SuggestionsStack from "./SuggestionsStack";
+import React from "react";
 
 export const Drawer = createDrawerNavigator();
 
@@ -12,8 +13,21 @@ export default function DrawerComp() {
         <Drawer.Navigator
             initialRouteName="Main"
             screenOptions={{
-                drawerActiveBackgroundColor: Colors.ALTERNATE_BACKGROUND,
+                drawerActiveBackgroundColor: Colors.KURABUPINK,
                 drawerInactiveBackgroundColor: Colors.ALTERNATE_BACKGROUND,
+                drawerActiveTintColor: "white",
+                drawerInactiveTintColor: "white",
+
+                drawerStyle: {
+                    backgroundColor: Colors.ALTERNATE_BACKGROUND,
+                    borderStyle: undefined,
+                    padding: 0,
+                },
+                drawerItemStyle: {
+                    width: "100%",
+                    margin: 0,
+                    borderRadius: 2,
+                },
                 headerStyle: {
                     backgroundColor: Colors.KURABUPINK,
                 },
@@ -22,8 +36,8 @@ export default function DrawerComp() {
                 },
                 headerTintColor: "white",
                 headerTitleAlign: "center",
-                title: "Kurabu",
-                headerStatusBarHeight: 25,
+                //title: "Kurabu",
+                //headerStatusBarHeight: 25,
             }}>
             <Drawer.Screen name="Main" component={MainStack} />
             <Drawer.Screen name="Search" component={SearchStack} />

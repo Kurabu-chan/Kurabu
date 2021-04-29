@@ -3,6 +3,7 @@ import Search from "./MainScreens/SearchScreen";
 import AnimeDetails from "./MainScreens/AnimeDetails";
 import { Colors } from "../Configuration/Colors";
 import { AnimeNode } from "../APIManager/ApiBasicTypes";
+import React from "react";
 
 export type SearchStackParamList = {
     Search: undefined;
@@ -16,17 +17,7 @@ export default function SearchStack() {
     return (
         <Stack.Navigator
             screenOptions={{
-                headerMode: "screen",
-                headerStyle: {
-                    backgroundColor: Colors.KURABUPINK,
-                },
-                headerTitleStyle: {
-                    fontFamily: "AGRevueCyr",
-                },
-                headerTintColor: "white",
-                headerTitleAlign: "center",
-                title: "Kurabu",
-                headerStatusBarHeight: 25,
+                headerShown: false,
             }}
             initialRouteName="Search">
             <Stack.Screen name="Search" component={Search} />

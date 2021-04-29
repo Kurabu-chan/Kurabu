@@ -1,4 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
 import Main from "./MainScreens/HomeScreen";
 import AnimeDetails from "./MainScreens/AnimeDetails";
 import { Colors } from "../Configuration/Colors";
@@ -16,17 +17,7 @@ export default function HomeStack() {
     return (
         <Stack.Navigator
             screenOptions={{
-                headerMode: "screen",
-                headerStyle: {
-                    backgroundColor: Colors.KURABUPINK,
-                },
-                headerTitleStyle: {
-                    fontFamily: "AGRevueCyr",
-                },
-                headerTintColor: "white",
-                headerTitleAlign: "center",
-                title: "Kurabu",
-                headerStatusBarHeight: 25,
+                headerShown: false,
             }}
             initialRouteName="Home">
             <Stack.Screen name="Home" component={Main} />

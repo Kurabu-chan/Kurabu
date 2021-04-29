@@ -41,9 +41,13 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
 
     private DoLogin() {
+        console.log("login do login");
         Auth.getInstance().then((auth) => {
+            console.log("login get auth");
             auth.Trylogin(this.state.email, this.state.pass).then((res) => {
+                console.log("login before if");
                 if (res === true) {
+                    console.log("login drawer");
                     SetRootSwitch("Drawer");
                 }
             });
