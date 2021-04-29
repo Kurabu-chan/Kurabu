@@ -7,6 +7,8 @@ import {
 	AnimeNode,
 	Season,
 	ErrorResponse,
+	fieldsToString,
+	Fields,
 } from "../../../helpers/BasicTypes";
 import { baseRequest } from "../../../builders/requests/RequestBuilder";
 
@@ -22,6 +24,10 @@ export class SeasonalWebRequestHandler
 			.setQueryParam("limit", (query.limit ? query.limit : 10).toString())
 			.setQueryParam("offset", (query.offset ? query.offset : 0).toString())
 			.setHeader("Content-Type", "application/x-www-form-urlencoded");
+
+		if (query.fields !== undefined && query.fields.length !== 0) {
+			request.setQueryParam("fields", fieldsToString(query.fields as Fields[]));
+		}
 
 		let data = await request.refreshRequest(query.user);
 
