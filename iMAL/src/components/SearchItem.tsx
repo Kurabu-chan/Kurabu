@@ -59,7 +59,7 @@ export class SearchItem extends React.PureComponent<
     }
 
     public openDetails() {
-        this.state.navigator.push("Details", this.state);
+        this.state.navigator.push("DetailsScreen", this.state);
     }
 
     NiceString(text: string | undefined) {

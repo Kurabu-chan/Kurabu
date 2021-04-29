@@ -19,9 +19,9 @@ export default function SearchStack() {
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="Search">
-            <Stack.Screen name="Search" component={Search} />
-            <Stack.Screen name="Details" component={AnimeDetails} />
+            initialRouteName="SearchScreen">
+            <Stack.Screen name="SearchScreen" component={Search} />
+            <Stack.Screen name="DetailsScreen" component={AnimeDetails} />
         </Stack.Navigator>
     );
 }

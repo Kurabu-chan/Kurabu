@@ -19,9 +19,9 @@ export default function HomeStack() {
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="Home">
-            <Stack.Screen name="Home" component={Main} />
-            <Stack.Screen name="Details" component={AnimeDetails} />
+            initialRouteName="HomeScreen">
+            <Stack.Screen name="HomeScreen" component={Main} />
+            <Stack.Screen name="DetailsScreen" component={AnimeDetails} />
         </Stack.Navigator>
     );
 }

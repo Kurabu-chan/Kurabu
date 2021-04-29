@@ -36,8 +36,7 @@ export default function DrawerComp() {
                 },
                 headerTintColor: "white",
                 headerTitleAlign: "center",
-                //title: "Kurabu",
-                //headerStatusBarHeight: 25,
+                headerTitle: "Kurabu",
             }}>
             <Drawer.Screen name="Main" component={MainStack} />
             <Drawer.Screen name="Search" component={SearchStack} />

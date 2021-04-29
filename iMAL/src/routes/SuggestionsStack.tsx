@@ -11,9 +11,9 @@ export default function SearchStack() {
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="Suggestions">
-            <Stack.Screen name="Suggestions" component={Suggestions} />
-            <Stack.Screen name="Details" component={AnimeDetails} />
+            initialRouteName="SuggestionsScreen">
+            <Stack.Screen name="SuggestionsScreen" component={Suggestions} />
+            <Stack.Screen name="DetailsScreen" component={AnimeDetails} />
         </Stack.Navigator>
     );
 }
