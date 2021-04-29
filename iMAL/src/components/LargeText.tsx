@@ -3,21 +3,21 @@ import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { Colors } from "../Configuration/Colors";
 
 type Props = {
-    text?: string
-}
+    text?: string;
+};
 
 type State = {
-    readmore: boolean,
-    text?: string
-}
+    readmore: boolean;
+    text?: string;
+};
 
 export class LargeText extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
             text: props.text,
-            readmore: false
-        }
+            readmore: false,
+        };
     }
 
     ShortedText(text: string) {
@@ -29,7 +29,7 @@ export class LargeText extends React.Component<Props, State> {
     }
 
     render() {
-        if (this.state.text == undefined) return (<Text>No synopsis</Text>)
+        if (this.state.text == undefined) return <Text>No synopsis</Text>;
 
         let text: string | undefined;
         let read: string | undefined;
@@ -45,11 +45,17 @@ export class LargeText extends React.Component<Props, State> {
         return (
             <View>
                 <Text style={styles.text}>{text}</Text>
-                {this.state.text.length > 300 ? <TouchableOpacity onPress={() => {
-                    this.setState({ ...this.state, readmore: !this.state.readmore })
-                }}>
-                    <Text style={styles.ReadMore}>{read}</Text>
-                </TouchableOpacity> : undefined}
+                {this.state.text.length > 300 ? (
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.setState((prevState) => ({
+                                ...prevState,
+                                readmore: !prevState.readmore,
+                            }));
+                        }}>
+                        <Text style={styles.ReadMore}>{read}</Text>
+                    </TouchableOpacity>
+                ) : undefined}
             </View>
         );
     }
@@ -58,7 +64,7 @@ export class LargeText extends React.Component<Props, State> {
 const styles = StyleSheet.create({
     text: {
         color: Colors.TEXT,
-        fontSize: 13
+        fontSize: 13,
     },
     ReadMore: {
         color: Colors.BLUE,
@@ -66,6 +72,6 @@ const styles = StyleSheet.create({
         textDecorationLine: "underline",
         textDecorationColor: Colors.BLUE,
         fontSize: 12,
-        marginBottom: 15
-    }
+        marginBottom: 15,
+    },
 });

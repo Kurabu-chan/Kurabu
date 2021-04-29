@@ -8,48 +8,38 @@ import {
     Image,
     FlatList,
 } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { NavigationParams, NavigationRoute } from "react-navigation";
-import { NavigationStackScreenProps } from "react-navigation-stack";
-import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { GetDetails } from "../../APIManager/AnimeDetails";
-import { Anime, AnimeGenre, AnimeNode } from "../../APIManager/ApiBasicTypes";
+import { Anime, AnimeNode } from "../../APIManager/ApiBasicTypes";
 import AnimeItem from "../../components/AnimeItem";
 import { Divider } from "../../components/Divider";
 import { LargeText } from "../../components/LargeText";
 import { Colors } from "../../Configuration/Colors";
+import { HomeStackParamList } from "../HomeStack";
+import { RouteProp } from "@react-navigation/native";
 
 type Props = {
-    navigator: StackNavigationProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >;
+    navigation: StackNavigationProp<HomeStackParamList, "Details">;
+    route: RouteProp<HomeStackParamList, "Details">;
 };
 
 type State = {
     animeNode?: AnimeNode;
     anime?: Anime;
-    navigation: StackNavigationProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >;
 };
 
-//TODO Everything
-export default class AnimeDetails extends React.Component<
-    NavigationStackScreenProps,
-    State
-> {
+export default class AnimeDetails extends React.Component<Props, State> {
     private styles = StyleSheet.create({
         appContainer: {
             backgroundColor: "#1a1a1a",
         },
     });
 
-    constructor(props: NavigationStackScreenProps) {
+    constructor(props: Props) {
         super(props);
-        let animeNode = props.navigation.getParam("item") as AnimeNode;
+        let animeNode = props.route.params.item;
         if (animeNode == undefined) {
             animeNode = {
                 node: {
@@ -355,7 +345,6 @@ export default class AnimeDetails extends React.Component<
         // }
         //#endregion state
         this.state = {
-            navigation: props.navigation,
             animeNode: animeNode,
         };
 
@@ -507,10 +496,10 @@ export default class AnimeDetails extends React.Component<
                                 <AnimeItem
                                     item={item.item}
                                     width={100}
-                                    navigator={this.state.navigation}
+                                    navigator={this.props.navigation}
                                 />
                             )}
-                            keyExtractor={(item, index) => index.toString()}
+                            keyExtractor={(_, index) => index.toString()}
                         />
                         <Divider color={Colors.DIVIDER} widthPercentage={0} />
                     </ScrollView>

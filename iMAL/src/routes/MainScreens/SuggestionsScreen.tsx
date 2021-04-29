@@ -1,9 +1,7 @@
 import React from "react";
-import { FlatList, View } from "react-native";
+import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AnimeList from "../../components/AnimeList";
-import SeasonalSource from "../../APIManager/Seasonal";
-import { NavigationStackScreenProps } from "react-navigation-stack";
 import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
 import SuggestionsSource from "../../APIManager/Suggestions";
 
@@ -14,11 +12,8 @@ type StateType = {
     };
 };
 
-export default class Suggestions extends React.Component<
-    NavigationStackScreenProps,
-    StateType
-> {
-    constructor(props: NavigationStackScreenProps) {
+export default class Suggestions extends React.Component<any, StateType> {
+    constructor(props: any) {
         super(props);
         this.state = {
             node: {

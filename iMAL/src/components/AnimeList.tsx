@@ -2,29 +2,22 @@ import React from "react";
 import { StyleSheet, FlatList, View, Text } from "react-native";
 import AnimeItem from "./AnimeItem";
 import AnimeNodeSource from "../APIManager/AnimeNodeSource";
-import { NavigationParams, NavigationRoute } from "react-navigation";
-import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
 import { Colors } from "../Configuration/Colors";
 import { AnimeNode } from "../APIManager/ApiBasicTypes";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 type AnimeListState = {
     title: string;
     data: AnimeNode[];
     animeNodeSource: AnimeNodeSource;
-    navigator: StackNavigationProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >;
+    navigator: StackNavigationProp<any, any>;
     offset: number;
 };
 
 type AnimeListProps = {
     title: string;
     animeNodeSource: AnimeNodeSource;
-    navigator: StackNavigationProp<
-        NavigationRoute<NavigationParams>,
-        NavigationParams
-    >;
+    navigator: StackNavigationProp<any, any>;
     onCreate?: (anime: AnimeList) => void;
 };
 
@@ -47,9 +40,8 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
     }
 
     public refresh(nodeSource: AnimeNodeSource) {
-        console.log(this.state.data.length);
         nodeSource.MakeRequest(20).then((data) => {
-            this.setState({ ...this.state, data: data.data });
+            this.setState((prevState) => ({ ...prevState, data: data.data }));
         });
     }
 
