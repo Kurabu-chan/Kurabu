@@ -40,7 +40,6 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
     }
 
     public refresh(nodeSource: AnimeNodeSource) {
-        console.log(this.state.data.length);
         nodeSource.MakeRequest(20).then((data) => {
             this.setState({ ...this.state, data: data.data });
         });

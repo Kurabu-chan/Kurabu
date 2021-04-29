@@ -6,19 +6,16 @@ import Auth from "../../APIManager/Authenticate";
 import * as RootNavigator from "../RootNavigator";
 
 //uncomment to reset saved uuid and go into developer mode for the Auth system
-Auth.devMode = true;
-Auth.ClearAsync();
+//Auth.devMode = true;
+//Auth.ClearAsync();
 
 class PreLogin extends React.Component {
     constructor(props: any) {
         super(props);
 
         //this.state.navigation.navigate("Details");
-        console.log("prelogin");
         Auth.getInstance().then((auth) => {
-            console.log("auth done");
             if (auth.getLoaded()) {
-                console.log("auth done drawer");
                 SetRootSwitch("Drawer");
             } else {
                 RootNavigator.navigate("Login", undefined);

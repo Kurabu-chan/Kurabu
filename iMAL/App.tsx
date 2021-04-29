@@ -74,7 +74,6 @@ export default class Application extends React.Component<any, StateType> {
     };
 
     private _handleUrl = (url: string | null) => {
-        console.log(`received url ${url}`);
         if (url != null) {
             if (url.includes("auth")) {
                 let uuid = url.split("auth/")[1];
@@ -98,26 +97,14 @@ export default class Application extends React.Component<any, StateType> {
             this.setState({ ...this.state, fonts: yes });
         };
         if (this.state.fonts == true) {
-            console.log(`if ${this.state.fonts} ${this.state.RootSwitch}`);
             return (
                 <NavigationContainer
                     ref={navigationRef}
                     onReady={navigationRefReady}>
                     {this.state.RootSwitch == "Auth" ? <Auth /> : <Drawer />}
                 </NavigationContainer>
-
-                // <App
-                //     uriPrefix={prefix}
-                //     enableURLHandling={false}
-                //     // ref={(navigationRef) => {
-                //     //     if (navigationRef != null) {
-                //     //         setTopLevelNavigator(navigationRef);
-                //     //     }
-                //     // }}
-                // />
             );
         } else {
-            console.log(`else ${this.state.fonts}`);
             return (
                 <AppLoading
                     startAsync={getFonts}
