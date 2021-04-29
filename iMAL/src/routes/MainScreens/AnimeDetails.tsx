@@ -8,16 +8,15 @@ import {
     Image,
     FlatList,
 } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { GetDetails } from "../../APIManager/AnimeDetails";
-import { Anime, AnimeGenre, AnimeNode } from "../../APIManager/ApiBasicTypes";
+import { Anime, AnimeNode } from "../../APIManager/ApiBasicTypes";
 import AnimeItem from "../../components/AnimeItem";
 import { Divider } from "../../components/Divider";
 import { LargeText } from "../../components/LargeText";
 import { Colors } from "../../Configuration/Colors";
-import { CompositeNavigationProp } from "@react-navigation/core";
 import { HomeStackParamList } from "../HomeStack";
 import { RouteProp } from "@react-navigation/native";
 

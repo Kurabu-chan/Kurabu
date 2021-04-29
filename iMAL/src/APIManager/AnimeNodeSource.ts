@@ -1,7 +1,10 @@
-import { Anime, AnimeNode } from "./ApiBasicTypes";
+import { AnimeNode } from "./ApiBasicTypes";
 
 interface AnimeNodeSource {
-    MakeRequest(limit?: number, offset?: number): Promise<{ data: AnimeNode[] }>
+    MakeRequest(
+        limit?: number,
+        offset?: number
+    ): Promise<{ data: AnimeNode[] }>;
 }
 
 export default AnimeNodeSource;

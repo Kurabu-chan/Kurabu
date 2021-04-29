@@ -2,7 +2,6 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import MainStack from "./HomeStack";
 import SearchStack from "./SearchStack";
 import { Colors } from "../Configuration/Colors";
-import Suggestions from "./MainScreens/SuggestionsScreen";
 import SuggestionsStack from "./SuggestionsStack";
 import React from "react";
 

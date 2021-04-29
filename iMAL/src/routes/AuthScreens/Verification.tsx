@@ -1,12 +1,5 @@
 import React from "react";
-import {
-    Text,
-    View,
-    Linking,
-    Button,
-    Dimensions,
-    StyleSheet,
-} from "react-native";
+import { Text, View, Linking, Dimensions, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CodeField, Cursor } from "react-native-confirmation-code-field";
 import Authentication from "../../APIManager/Authenticate";

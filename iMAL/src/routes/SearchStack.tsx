@@ -1,7 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import Search from "./MainScreens/SearchScreen";
 import AnimeDetails from "./MainScreens/AnimeDetails";
-import { Colors } from "../Configuration/Colors";
 import { AnimeNode } from "../APIManager/ApiBasicTypes";
 import React from "react";
 
