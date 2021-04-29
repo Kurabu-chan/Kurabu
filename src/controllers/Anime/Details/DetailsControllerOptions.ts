@@ -6,4 +6,5 @@ export type params = {
 	state: string;
 	user: User;
 	animeid?: number;
+	fields?: string;
 };

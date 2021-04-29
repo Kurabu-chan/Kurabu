@@ -7,4 +7,5 @@ export type params = {
 	user: User;
 	limit?: number;
 	offset?: number;
+	fields?: string;
 };

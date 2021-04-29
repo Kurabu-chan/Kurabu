@@ -7,6 +7,7 @@ import LogArg from "../../../decorators/LogArgDecorator";
 import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
 import { injectable } from "tsyringe";
 import { SeasonalWebRequestHandler } from "../../../webRequest/Anime/Seasonal/SeasonalWebRequestHandler";
+import { extractFields, Fields } from "../../../helpers/BasicTypes";
 
 const seasons = ["winter", "spring", "summer", "fall"];
 const sortScore = ["score", "animescore", "anime_score"];
@@ -33,6 +34,7 @@ export class SeasonalController {
 	@Param.Param("sort", Param.ParamType.string, true)
 	@Param.Param("limit", Param.ParamType.int, true)
 	@Param.Param("offset", Param.ParamType.int, true)
+	@Param.Param("fields", Param.ParamType.string, true)
 	@LogArg()
 	private async get(req: Request, res: Response, arg: Options.params) {
 		arg.year = arg.year ?? 2020;
@@ -58,6 +60,11 @@ export class SeasonalController {
 			arg.limit = 100;
 		}
 
+		var fields: Fields[] | undefined;
+		if (arg.fields) {
+			fields = extractFields(arg.fields);
+		}
+
 		var result = await this._seasonalWebRequest.handle({
 			user: arg.user,
 			sort: arg.sort,
@@ -65,6 +72,7 @@ export class SeasonalController {
 			season: arg.season,
 			limit: arg.limit,
 			offset: arg.offset,
+			fields: fields,
 		});
 
 		return result.seasonal;
