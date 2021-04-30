@@ -21,7 +21,7 @@ type StateType = {
     animeList?: SearchList;
 };
 
-export default class Home extends React.Component<any, StateType> {
+export default class Search extends React.Component<any, StateType> {
     constructor(props: any) {
         super(props);
         this.state = {

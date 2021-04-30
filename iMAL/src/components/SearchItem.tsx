@@ -64,7 +64,7 @@ export class SearchItem extends React.PureComponent<
 
     NiceString(text: string | undefined) {
         if (text == undefined) return "";
-        text = text.replace("_", " ");
+        text = text.replace(/_/g, " ");
         return text.slice(0, 1).toUpperCase() + text.slice(1, text.length);
     }
 
@@ -97,10 +97,12 @@ export class SearchItem extends React.PureComponent<
                         </View>
                         <View style={TopArea.TopLeftValues}>
                             <Text style={TopArea.Value}>
-                                {this.state.item.node.mean}
+                                {this.state.item.node.mean ?? "NA"}
                             </Text>
                             <Text style={TopArea.Value}>
-                                #{this.state.item.node.rank}
+                                {this.state.item.node.rank
+                                    ? "#" + this.state.item.node.rank
+                                    : "NA"}
                             </Text>
                         </View>
                         <View style={TopArea.TopRightLabels}>

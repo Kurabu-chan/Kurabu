@@ -1,7 +1,7 @@
 {
     "api": {
-        "domain" : "api.imal.ml",
-        "scheme" : "http",
-        "root" : "/"
+        "domain": "api.imal.ml",
+        "scheme": "http",
+        "root": "/"
     }
 }
