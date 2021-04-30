@@ -1,16 +1,18 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "jsx": "react-native",
-    "lib": [
-      "dom",
-      "esnext"
-    ],
-    "moduleResolution": "node",
-    "noEmit": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "strict": true
-  },
-  "extends": "expo/tsconfig.base"
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react-native",
+        "lib": ["dom", "esnext"],
+        "moduleResolution": "node",
+        "noEmit": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "strict": true,
+        "paths": {
+            "#api/*": ["./src/APIManager/*"],
+            "#routes/*": ["./src/routes/*"],
+            "#comps/*": ["./src/components/*"]
+        }
+    },
+    "extends": "expo/tsconfig.base"
 }

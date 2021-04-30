@@ -1,8 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import Main from "./MainScreens/HomeScreen";
-import AnimeDetails from "./MainScreens/AnimeDetails";
-import { AnimeNode } from "../APIManager/ApiBasicTypes";
+import Main from "#routes/MainScreens/HomeScreen";
+import AnimeDetails from "#routes/MainScreens/AnimeDetails";
+import { AnimeNode } from "#api/ApiBasicTypes";
 
 const Stack = createStackNavigator();
 export type HomeStackParamList = {

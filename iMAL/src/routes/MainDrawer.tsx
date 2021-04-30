@@ -1,8 +1,9 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import MainStack from "./HomeStack";
-import SearchStack from "./SearchStack";
+import MainStack from "./MainStacks/HomeStack";
+import SearchStack from "./MainStacks/SearchStack";
 import { Colors } from "../Configuration/Colors";
-import SuggestionsStack from "./SuggestionsStack";
+import SuggestionsStack from "./MainStacks/SuggestionsStack";
+import RankingStack from "./MainStacks/RankingStack";
 import React from "react";
 
 export const Drawer = createDrawerNavigator();
@@ -40,6 +41,7 @@ export default function DrawerComp() {
             <Drawer.Screen name="Main" component={MainStack} />
             <Drawer.Screen name="Search" component={SearchStack} />
             <Drawer.Screen name="Suggestions" component={SuggestionsStack} />
+            <Drawer.Screen name="Ranking" component={RankingStack} />
         </Drawer.Navigator>
     );
 }
