@@ -6,7 +6,7 @@ import {
     Text,
     ActivityIndicator,
 } from "react-native";
-import SearchItem from "./SearchItem";
+import DetailedUpdateItem from "./DetailedUpdateItem";
 import AnimeNodeSource from "../APIManager/AnimeNodeSource";
 import { Colors } from "../Configuration/Colors";
 import { Dimensions } from "react-native";
@@ -15,7 +15,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 const BatchSize = 20;
 
-type AnimeListState = {
+type DetailedUpdateListState = {
     title: string;
     data: AnimeNode[];
     animeNodeSource?: AnimeNodeSource;
@@ -25,16 +25,19 @@ type AnimeListState = {
     onDataGather?: () => void;
 };
 
-type AnimeListProps = {
+type DetailedUpdateListProps = {
     title: string;
     animeNodeSource: AnimeNodeSource;
     navigator: StackNavigationProp<any, any>;
-    onCreate?: (anime: AnimeList) => void;
+    onCreate?: (anime: DetailedUpdateList) => void;
     onDataGather?: () => void;
 };
 
-class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
-    constructor(props: AnimeListProps) {
+class DetailedUpdateList extends React.Component<
+    DetailedUpdateListProps,
+    DetailedUpdateListState
+> {
+    constructor(props: DetailedUpdateListProps) {
         super(props);
         this.state = {
             title: props.title,
@@ -57,7 +60,7 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
         this.setState({});
     }
 
-    public changeSearch(title: string, nodeSource: AnimeNodeSource) {
+    public changeSource(title: string, nodeSource: AnimeNodeSource) {
         this.setState(
             (prevState) => ({
                 ...prevState,
@@ -127,7 +130,7 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
                         onEndReachedThreshold={0.5}
                         onEndReached={this.loadExtra.bind(this)}
                         renderItem={(item) => (
-                            <SearchItem
+                            <DetailedUpdateItem
                                 item={item.item}
                                 navigator={this.state.navigator}
                             />
@@ -159,7 +162,7 @@ const styles = StyleSheet.create({
         fontSize: fontSize * 1.6,
         textAlign: "center",
         color: Colors.TEXT,
-        paddingBottom: 5,
+        paddingBottom: 10,
     },
     animeList: {
         justifyContent: "flex-start",
@@ -169,4 +172,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AnimeList;
+export default DetailedUpdateList;

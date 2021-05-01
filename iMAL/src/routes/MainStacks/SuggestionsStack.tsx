@@ -3,6 +3,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import AnimeDetails from "#routes/MainScreens/AnimeDetails";
 import React from "react";
 
+export type SuggestedStackParamList = {
+    Seasonal: undefined;
+    Details: {
+        item: number;
+    };
+};
+
 const Stack = createStackNavigator();
 export default function SearchStack() {
     return (

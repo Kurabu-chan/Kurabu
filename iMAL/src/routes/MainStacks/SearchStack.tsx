@@ -7,7 +7,7 @@ import React from "react";
 export type SearchStackParamList = {
     Search: undefined;
     Details: {
-        item: AnimeNode;
+        item: number;
     };
 };
 

@@ -5,10 +5,10 @@ import { AnimeNode } from "#api/ApiBasicTypes";
 import React from "react";
 import Ranking from "#routes/MainScreens/RankingScreen";
 
-export type SearchStackParamList = {
+export type RankingStackParamList = {
     Ranking: undefined;
     Details: {
-        item: AnimeNode;
+        item: number;
     };
 };
 
