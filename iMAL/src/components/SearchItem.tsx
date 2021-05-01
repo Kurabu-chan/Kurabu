@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.KURABUPURPLE,
         width: Dimensions.get("window").width - 5,
         height: (Dimensions.get("window").width / 3) * 1.5,
-        marginTop: 5,
+        marginBottom: 5,
         marginLeft: 0,
         marginRight: 5,
         flexDirection: "row",

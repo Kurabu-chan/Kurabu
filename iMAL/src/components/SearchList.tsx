@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
         fontSize: fontSize * 1.6,
         textAlign: "center",
         color: Colors.TEXT,
-        paddingBottom: 5,
+        paddingBottom: 10,
     },
     animeList: {
         justifyContent: "flex-start",
