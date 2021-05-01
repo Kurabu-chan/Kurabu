@@ -110,15 +110,19 @@ export default class Ranking extends React.Component<any, StateType> {
                     width: Dimensions.get("window").width - 10,
                     color: Colors.TEXT,
                 }}>
-                <Picker.Item label="All" value="all" />
-                <Picker.Item label="Airing" value="airing" />
-                <Picker.Item label="Upcoming" value="upcoming" />
-                <Picker.Item label="Tv" value="tv" />
-                <Picker.Item label="Ova" value="ova" />
-                <Picker.Item label="Movie" value="movie" />
-                <Picker.Item label="Special" value="special" />
-                <Picker.Item label="Popularity" value="bypopularity" />
-                <Picker.Item label="Favorite" value="favorite" />
+                <Picker.Item key="all" label="All" value="all" />
+                <Picker.Item key="airing" label="Airing" value="airing" />
+                <Picker.Item key="upcoming" label="Upcoming" value="upcoming" />
+                <Picker.Item key="tv" label="Tv" value="tv" />
+                <Picker.Item key="ova" label="Ova" value="ova" />
+                <Picker.Item key="movie" label="Movie" value="movie" />
+                <Picker.Item key="special" label="Special" value="special" />
+                <Picker.Item
+                    key="bypopularity"
+                    label="Popularity"
+                    value="bypopularity"
+                />
+                <Picker.Item key="favorite" label="Favorite" value="favorite" />
             </Picker>
         );
     }

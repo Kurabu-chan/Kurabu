@@ -29,7 +29,7 @@ type StateType = {
 var currYear = new Date().getFullYear();
 var currSeason = getSeason();
 
-export default class Ranking extends React.Component<any, StateType> {
+export default class Seasonal extends React.Component<any, StateType> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -160,6 +160,7 @@ export default class Ranking extends React.Component<any, StateType> {
                         .reverse()
                         .map((x) => (
                             <Picker.Item
+                                key={x.toString()}
                                 label={x.toString()}
                                 value={x.toString()}
                             />
