@@ -1,11 +1,17 @@
 import ContainerManager from "../helpers/ContainerManager";
 
 import { DocsController } from "./DocsController";
+
 import { AnimeDetailsController } from "./Anime/Details/AnimeDetailsController";
 import { AnimeRankingController } from "./Anime/Ranking/AnimeRankingController";
 import { AnimeSearchController } from "./Anime/Search/AnimeSearchController";
 import { AnimeSeasonalController } from "./Anime/Seasonal/AnimeSeasonalController";
 import { AnimeSuggestionsController } from "./Anime/Suggestions/AnimeSuggestionsController";
+
+import { MangaDetailsController } from "./Manga/Details/MangaDetailsController";
+import { MangaRankingController } from "./Manga/Ranking/MangaRankingController";
+import { MangaSearchController } from "./Manga/Search/MangaSearchController";
+
 import { AuthedController } from "./Authed/AuthedController";
 import { CancelRegisterController } from "./Authed/CancelRegister/CancelRegisterController";
 import { RegisterController } from "./Authed/Register/RegisterController";
@@ -22,6 +28,10 @@ export default [
 	container.resolve(AnimeSearchController),
 	container.resolve(AnimeSeasonalController),
 	container.resolve(AnimeSuggestionsController),
+
+	container.resolve(MangaDetailsController),
+	container.resolve(MangaRankingController),
+	container.resolve(MangaSearchController),
 
 	container.resolve(CancelRegisterController),
 	container.resolve(LoginController),
