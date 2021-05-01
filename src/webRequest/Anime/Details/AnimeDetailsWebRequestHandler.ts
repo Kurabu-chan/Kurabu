@@ -6,7 +6,6 @@ import {
 	allFields,
 	Anime,
 	ErrorResponse,
-	Fields,
 	fieldsToString,
 } from "../../../helpers/BasicTypes";
 import { baseRequest } from "../../../builders/requests/RequestBuilder";
