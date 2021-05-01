@@ -12,6 +12,7 @@ import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { RankingSource } from "#api/Ranking";
 import SeasonalSource from "#api/Seasonal";
 import { FlatList } from "react-native-gesture-handler";
+import { changeActivePage } from "#routes/MainDrawer";
 
 type StateType = {
     seasonal: {
@@ -24,6 +25,7 @@ type StateType = {
     };
     rankingSource?: AnimeNodeSource;
     animeList?: SearchList;
+    listenerToUnMount: any;
 };
 
 var currYear = new Date().getFullYear();
@@ -41,12 +43,28 @@ export default class Seasonal extends React.Component<any, StateType> {
                 searched: false,
                 found: false,
             },
+            listenerToUnMount: undefined,
         };
     }
 
     componentDidMount() {
         console.log("mount");
         this.DoSeasonal();
+
+        const unsubscribe = this.props.navigation.addListener("focus", () => {
+            changeActivePage("Seasonal");
+            // The screen is focused
+            // Call any action
+        });
+
+        this.setState((prevState) => ({
+            ...prevState,
+            listenerToUnMount: unsubscribe,
+        }));
+    }
+
+    componentWillUnmount() {
+        if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
     async DoSeasonal() {

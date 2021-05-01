@@ -7,6 +7,7 @@ import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
 import { Colors } from "../../Configuration/Colors";
 import { SearchSource } from "../../APIManager/AnimeSearch";
 import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
+import { changeActivePage } from "#routes/MainDrawer";
 
 type StateType = {
     search: {
@@ -19,6 +20,7 @@ type StateType = {
     };
     searchSource?: AnimeNodeSource;
     animeList?: SearchList;
+    listenerToUnMount: any;
 };
 
 export default class Search extends React.Component<any, StateType> {
@@ -33,7 +35,25 @@ export default class Search extends React.Component<any, StateType> {
                 searched: false,
                 found: false,
             },
+            listenerToUnMount: undefined,
         };
+    }
+
+    componentDidMount() {
+        const unsubscribe = this.props.navigation.addListener("focus", () => {
+            changeActivePage("Search");
+            // The screen is focused
+            // Call any action
+        });
+
+        this.setState((prevState) => ({
+            ...prevState,
+            listenerToUnMount: unsubscribe,
+        }));
+    }
+
+    componentWillUnmount() {
+        if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
     async DoSearch() {

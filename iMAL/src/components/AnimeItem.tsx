@@ -12,6 +12,7 @@ import { AnimeNode } from "../APIManager/ApiBasicTypes";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Console } from "node:console";
+import { changeTopRightButton } from "#routes/MainDrawer";
 
 type AnimeItemProps = {
     item: AnimeNode;
@@ -35,6 +36,11 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
     }
 
     public openDetails() {
+        // changeTopRightButton(() => {
+        //     this.state.navigator.popToTop();
+        //     changeTopRightButton(undefined);
+        // });
+
         this.state.navigator.push("DetailsScreen", {
             item: this.state.item.node.id,
         });
@@ -57,18 +63,18 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
             title: {
                 fontSize: fontSize,
                 color: Colors.TEXT,
-                textAlign: 'center',
-                position: 'absolute',
+                textAlign: "center",
+                position: "absolute",
                 backgroundColor: Colors.TRANSPARENT_BACKGROUND,
-                // top: (1.5 * width) - 50 * sizer, 
+                // top: (1.5 * width) - 50 * sizer,
                 left: 0,
-                right: 0, 
+                right: 0,
                 bottom: 0,
                 paddingTop: 5,
                 paddingBottom: 5,
                 paddingRight: 5,
                 paddingLeft: 5,
-                minHeight: 40 * sizer
+                minHeight: 40 * sizer,
             },
             image: {
                 width: width,

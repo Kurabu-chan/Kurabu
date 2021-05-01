@@ -10,6 +10,7 @@ import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { RankingSource } from "#api/Ranking";
+import { changeActivePage } from "#routes/MainDrawer";
 
 type StateType = {
     ranking: {
@@ -22,6 +23,7 @@ type StateType = {
     };
     rankingSource?: AnimeNodeSource;
     animeList?: SearchList;
+    listenerToUnMount: any;
 };
 
 export default class Ranking extends React.Component<any, StateType> {
@@ -36,12 +38,28 @@ export default class Ranking extends React.Component<any, StateType> {
                 searched: false,
                 found: false,
             },
+            listenerToUnMount: undefined,
         };
     }
 
     componentDidMount() {
         console.log("mount");
         this.DoRanking();
+
+        const unsubscribe = this.props.navigation.addListener("focus", () => {
+            changeActivePage("Ranking");
+            // The screen is focused
+            // Call any action
+        });
+
+        this.setState((prevState) => ({
+            ...prevState,
+            listenerToUnMount: unsubscribe,
+        }));
+    }
+
+    componentWillUnmount() {
+        if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
     async DoRanking() {
