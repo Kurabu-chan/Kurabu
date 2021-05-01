@@ -4,6 +4,7 @@ import SearchStack from "./MainStacks/SearchStack";
 import { Colors } from "../Configuration/Colors";
 import SuggestionsStack from "./MainStacks/SuggestionsStack";
 import RankingStack from "./MainStacks/RankingStack";
+import SeasonalStack from "./MainStacks/SeasonalStack";
 import React from "react";
 import { Dimensions } from "react-native";
 
@@ -47,6 +48,7 @@ export default function DrawerComp() {
             <Drawer.Screen name="Search" component={SearchStack} />
             <Drawer.Screen name="Suggestions" component={SuggestionsStack} />
             <Drawer.Screen name="Ranking" component={RankingStack} />
+            <Drawer.Screen name="Seasonal" component={SeasonalStack} />
         </Drawer.Navigator>
     );
 }

@@ -1,7 +1,7 @@
 import AnimeNodeSource from "./AnimeNodeSource";
 import Authentication from "./Authenticate";
 import { Config } from "../Configuration/Config";
-import { AnimeNode } from "./ApiBasicTypes";
+import { AnimeNode, Fields } from "./ApiBasicTypes";
 
 type JSONType = {
     data: AnimeNode[];
@@ -24,16 +24,11 @@ function isIterable(obj: any) {
 }
 
 class SeasonalSource implements AnimeNodeSource {
-    private year?: number;
-    private season?: "winter" | "summer" | "spring" | "fall";
-
     constructor(
-        year?: number,
-        season?: "winter" | "summer" | "spring" | "fall"
-    ) {
-        this.year = year;
-        this.season = season;
-    }
+        private year?: number,
+        private season?: "winter" | "summer" | "spring" | "fall",
+        private fields?: Fields[]
+    ) {}
 
     public async MakeRequest(
         limit?: number,
@@ -49,6 +44,11 @@ class SeasonalSource implements AnimeNodeSource {
             }&year=${this.year ? this.year : 2021}&state=${stateCode}${
                 limit ? "&limit=" + limit : ""
             }${offset ? "&offset=" + offset : ""}&sort=users`;
+            if (this.fields) {
+                url += `&fields=${this.fields
+                    .map((x) => Fields[x])
+                    .join(", ")}`;
+            }
             let res: Response = await fetch(url);
             let json: JSONType = await res.json();
             let ret = json as JSONType;

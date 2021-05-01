@@ -1,6 +1,6 @@
 {
     "api": {
-        "domain": "api.imal.ml",
+        "domain": "stage.imal.ml",
         "scheme": "http",
         "root": "/"
     }
