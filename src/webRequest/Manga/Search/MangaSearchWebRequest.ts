@@ -2,11 +2,9 @@ import { Fields } from "../../../helpers/BasicTypes";
 import { User } from "../../../models/User";
 import { IWebRequest } from "../../IWebRequest";
 
-export class SeasonalWebRequest extends IWebRequest {
+export class MangaSearchWebRequest extends IWebRequest {
 	user!: User;
-	sort!: "anime_score" | "anime_num_list_users";
-	year!: number;
-	season!: "summer" | "winter" | "fall" | "spring";
+	query!: string;
 	limit?: number | undefined;
 	offset?: number | undefined;
 	fields?: Fields[];

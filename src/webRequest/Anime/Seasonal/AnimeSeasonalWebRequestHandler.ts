@@ -1,6 +1,6 @@
 import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
-import { SeasonalWebRequest } from "./SeasonalWebRequest";
-import { SeasonalWebRequestResult } from "./SeasonalWebRequestResult";
+import { AnimeSeasonalWebRequest } from "./AnimeSeasonalWebRequest";
+import { AnimeSeasonalWebRequestResult } from "./AnimeSeasonalWebRequestResult";
 import { autoInjectable } from "tsyringe";
 import {
 	ListPagination,
@@ -14,8 +14,11 @@ import { baseRequest } from "../../../builders/requests/RequestBuilder";
 
 @autoInjectable()
 export class SeasonalWebRequestHandler
-	implements IWebRequestHandler<SeasonalWebRequest, SeasonalWebRequestResult> {
-	async handle(query: SeasonalWebRequest): Promise<SeasonalWebRequestResult> {
+	implements
+		IWebRequestHandler<AnimeSeasonalWebRequest, AnimeSeasonalWebRequestResult> {
+	async handle(
+		query: AnimeSeasonalWebRequest
+	): Promise<AnimeSeasonalWebRequestResult> {
 		var request = baseRequest()
 			.addPath("v2/anime/season")
 			.addPath(query.year.toString())

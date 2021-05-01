@@ -1,20 +1,22 @@
 import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
-import { DetailsWebRequest } from "./DetailsWebRequest";
-import { DetailsWebRequestResult } from "./DetailsWebRequestResult";
+import { AnimeDetailsWebRequest } from "./AnimeDetailsWebRequest";
+import { AnimeDetailsWebRequestResult } from "./AnimeDetailsWebRequestResult";
 import { autoInjectable } from "tsyringe";
 import {
 	allFields,
 	Anime,
 	ErrorResponse,
-	Fields,
 	fieldsToString,
 } from "../../../helpers/BasicTypes";
 import { baseRequest } from "../../../builders/requests/RequestBuilder";
 
 @autoInjectable()
-export class DetailsWebRequestHandler
-	implements IWebRequestHandler<DetailsWebRequest, DetailsWebRequestResult> {
-	async handle(query: DetailsWebRequest): Promise<DetailsWebRequestResult> {
+export class AnimeDetailsWebRequestHandler
+	implements
+		IWebRequestHandler<AnimeDetailsWebRequest, AnimeDetailsWebRequestResult> {
+	async handle(
+		query: AnimeDetailsWebRequest
+	): Promise<AnimeDetailsWebRequestResult> {
 		if (!query.fields || query.fields.length === 0) {
 			query.fields = allFields();
 		}

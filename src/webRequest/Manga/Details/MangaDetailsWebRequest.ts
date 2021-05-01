@@ -2,8 +2,8 @@ import { Fields } from "../../../helpers/BasicTypes";
 import { User } from "../../../models/User";
 import { IWebRequest } from "../../IWebRequest";
 
-export class DetailsWebRequest extends IWebRequest {
+export class MangaDetailsWebRequest extends IWebRequest {
 	user!: User;
-	animeid!: number;
+	mangaid!: number;
 	fields?: Fields[] | undefined;
 }

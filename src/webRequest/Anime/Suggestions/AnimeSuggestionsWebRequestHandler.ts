@@ -1,6 +1,6 @@
 import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
-import { SuggestionsWebRequest } from "./SuggestionsWebRequest";
-import { SuggestionsWebRequestResult } from "./SuggestionsWebRequestResult";
+import { AnimeSuggestionsWebRequest } from "./AnimeSuggestionsWebRequest";
+import { AnimeSuggestionsWebRequestResult } from "./AnimeSuggestionsWebRequestResult";
 import { autoInjectable } from "tsyringe";
 import {
 	ListPagination,
@@ -14,10 +14,13 @@ import { baseRequest } from "../../../builders/requests/RequestBuilder";
 @autoInjectable()
 export class SuggestionsWebRequestHandler
 	implements
-		IWebRequestHandler<SuggestionsWebRequest, SuggestionsWebRequestResult> {
+		IWebRequestHandler<
+			AnimeSuggestionsWebRequest,
+			AnimeSuggestionsWebRequestResult
+		> {
 	async handle(
-		query: SuggestionsWebRequest
-	): Promise<SuggestionsWebRequestResult> {
+		query: AnimeSuggestionsWebRequest
+	): Promise<AnimeSuggestionsWebRequestResult> {
 		var request = baseRequest()
 			.addPath("v2/anime/suggestions")
 			.setQueryParam("limit", (query.limit ? query.limit : 10).toString())
