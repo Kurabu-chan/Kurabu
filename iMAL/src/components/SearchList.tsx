@@ -147,7 +147,7 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
         }
     }
 }
-
+var fontSize = Dimensions.get("window").width / 36;
 const styles = StyleSheet.create({
     animeContainer: {
         height: Dimensions.get("window").height,
@@ -156,9 +156,10 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     title: {
-        fontSize: 20,
+        fontSize: fontSize * 1.6,
         textAlign: "center",
         color: Colors.TEXT,
+        paddingBottom: 5,
     },
     animeList: {
         justifyContent: "flex-start",

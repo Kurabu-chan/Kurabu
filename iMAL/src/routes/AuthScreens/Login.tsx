@@ -67,7 +67,8 @@ class Login extends React.Component<LoginProps, LoginState> {
                 />
                 <SafeAreaView style={styles.safeContainer} />
                 <View style={styles.content}>
-                    <View style={{ width: 10, height: "30%" }}></View>
+                    <View
+                        style={{ width: 10, height: `${30 * sizer}%` }}></View>
                     <TextInput
                         onChangeText={this.changeEmail.bind(this)}
                         placeholder="Email"
@@ -102,6 +103,9 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
 }
 
+var fontSize = Dimensions.get("window").width / 36;
+var sizer = Dimensions.get("window").width / 400;
+
 const styles = StyleSheet.create({
     appContainer: {
         // backgroundColor: Colors.BLUE
@@ -116,43 +120,43 @@ const styles = StyleSheet.create({
     },
     head: {
         color: Colors.TEXT,
-        fontSize: 60,
+        fontSize: fontSize * 5,
         fontFamily: "AGRevueCyr",
     },
     Input: {
-        width: 250,
-        height: 50,
+        width: sizer * 250,
+        height: sizer * 50,
         borderBottomColor: Colors.INPUT_UNDERLINE,
         borderBottomWidth: 1,
         color: Colors.TEXT,
-        fontSize: 20,
-        marginTop: 15,
+        fontSize: fontSize * 2,
+        marginTop: sizer * 15,
     },
     LoginButton: {
         borderRadius: 4,
         backgroundColor: Colors.CYAN,
-        paddingHorizontal: 97,
-        paddingVertical: 10,
-        marginTop: 90,
-        marginBottom: 40,
+        paddingHorizontal: sizer * 97,
+        paddingVertical: sizer * 10,
+        marginTop: sizer * 90,
+        marginBottom: sizer * 40,
         color: Colors.TEXT,
     },
     LoginButtonText: {
         color: Colors.TEXT,
-        fontSize: 18,
+        fontSize: fontSize * 1.5,
         fontWeight: "bold",
     },
     SignupButton: {
         borderRadius: 4,
         backgroundColor: Colors.CYAN,
-        paddingHorizontal: 60,
-        paddingVertical: 6,
-        marginTop: 5,
+        paddingHorizontal: sizer * 60,
+        paddingVertical: sizer * 6,
+        marginTop: sizer * 5,
         color: Colors.TEXT,
     },
     SignupButtonText: {
         color: Colors.TEXT,
-        fontSize: 18,
+        fontSize: fontSize * 1.5,
         fontWeight: "bold",
     },
 });

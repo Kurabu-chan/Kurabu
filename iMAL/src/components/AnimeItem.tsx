@@ -40,6 +40,8 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
     render() {
         var width = this.props.width ?? Dimensions.get("window").width / 2 - 15;
 
+        var fontSize = Dimensions.get("window").width / 34;
+
         const styles = StyleSheet.create({
             animeContainer: {
                 // height: 200,
@@ -48,7 +50,7 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
                 marginLeft: 10,
             },
             title: {
-                fontSize: 14,
+                fontSize: fontSize,
                 marginLeft: 5,
                 color: Colors.TEXT,
             },

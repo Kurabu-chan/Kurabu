@@ -5,10 +5,12 @@ import { Colors } from "../Configuration/Colors";
 import SuggestionsStack from "./MainStacks/SuggestionsStack";
 import RankingStack from "./MainStacks/RankingStack";
 import React from "react";
+import { Dimensions } from "react-native";
 
 export const Drawer = createDrawerNavigator();
 
 export default function DrawerComp() {
+    var fontSize = Dimensions.get("window").width / 36;
     return (
         <Drawer.Navigator
             initialRouteName="Main"
@@ -34,9 +36,12 @@ export default function DrawerComp() {
                 headerTitleStyle: {
                     fontFamily: "AGRevueCyr",
                 },
-                headerTintColor: "white",
+                headerTintColor: Colors.TEXT,
                 headerTitleAlign: "center",
                 headerTitle: "Kurabu",
+                drawerLabelStyle: {
+                    fontSize: fontSize * 1.2,
+                },
             }}>
             <Drawer.Screen name="Main" component={MainStack} />
             <Drawer.Screen name="Search" component={SearchStack} />

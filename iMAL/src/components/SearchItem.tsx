@@ -154,6 +154,8 @@ export class SearchItem extends React.PureComponent<
     }
 }
 
+var fontSize = Dimensions.get("window").width / 36;
+
 const TopArea = StyleSheet.create({
     Data: {
         flexDirection: "row",
@@ -166,7 +168,7 @@ const TopArea = StyleSheet.create({
     Label: {
         color: Colors.TEXT,
         fontWeight: "bold",
-        fontSize: 12,
+        fontSize: fontSize,
     },
     Values: {
         flexDirection: "column",
@@ -174,7 +176,7 @@ const TopArea = StyleSheet.create({
     },
     Value: {
         color: Colors.TEXT,
-        fontSize: 12,
+        fontSize: fontSize,
     },
 
     TopLeftLabels: {
@@ -212,7 +214,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     title: {
-        fontSize: 16,
+        fontSize: fontSize * 1.2,
+        fontWeight: "bold",
         textAlign: "center",
         color: Colors.TEXT,
     },
