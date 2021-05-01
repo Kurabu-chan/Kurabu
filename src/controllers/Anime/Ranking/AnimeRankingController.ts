@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./RankingControllerOptions";
+import * as Options from "./AnimeRankingControllerOptions";
 import State from "../../../decorators/StateDecorator";
 import * as Param from "../../../decorators/ParamDecorator";
 import LogArg from "../../../decorators/LogArgDecorator";
 import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
 import { injectable } from "tsyringe";
-import { RankingWebRequestHandler } from "../../../webRequest/Anime/Ranking/RankingWebRequestHandler";
+import { AnimeRankingWebRequestHandler } from "../../../webRequest/Anime/Ranking/AnimeRankingWebRequestHandler";
 import { extractFields, Fields } from "../../../helpers/BasicTypes";
 
 const possible = [
@@ -23,11 +23,11 @@ const possible = [
 
 @Controller(Options.ControllerPath)
 @injectable()
-export class RankingController {
+export class AnimeRankingController {
 	/**
 	 *
 	 */
-	constructor(private _rankingWebRequest: RankingWebRequestHandler) {}
+	constructor(private _rankingWebRequest: AnimeRankingWebRequestHandler) {}
 
 	@Get(Options.ControllerName)
 	@RequestHandlerDecorator()

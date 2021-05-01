@@ -1,23 +1,28 @@
 import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
-import { SearchWebRequest } from "./SearchWebRequest";
-import { SearchWebRequestResult } from "./SearchWebRequestResult";
+import { AnimeSuggestionsWebRequest } from "./AnimeSuggestionsWebRequest";
+import { AnimeSuggestionsWebRequestResult } from "./AnimeSuggestionsWebRequestResult";
 import { autoInjectable } from "tsyringe";
 import {
-	Anime,
-	ErrorResponse,
-	Fields,
-	fieldsToString,
 	ListPagination,
+	AnimeNode,
+	ErrorResponse,
+	fieldsToString,
+	Fields,
 } from "../../../helpers/BasicTypes";
 import { baseRequest } from "../../../builders/requests/RequestBuilder";
 
 @autoInjectable()
-export class SearchWebRequestHandler
-	implements IWebRequestHandler<SearchWebRequest, SearchWebRequestResult> {
-	async handle(query: SearchWebRequest): Promise<SearchWebRequestResult> {
+export class SuggestionsWebRequestHandler
+	implements
+		IWebRequestHandler<
+			AnimeSuggestionsWebRequest,
+			AnimeSuggestionsWebRequestResult
+		> {
+	async handle(
+		query: AnimeSuggestionsWebRequest
+	): Promise<AnimeSuggestionsWebRequestResult> {
 		var request = baseRequest()
-			.addPath("v2/anime")
-			.setQueryParam("q", query.query)
+			.addPath("v2/anime/suggestions")
 			.setQueryParam("limit", (query.limit ? query.limit : 10).toString())
 			.setQueryParam("offset", (query.offset ? query.offset : 0).toString())
 			.setHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -28,14 +33,14 @@ export class SearchWebRequestHandler
 
 		let data = await request.refreshRequest(query.user);
 
-		let json: ListPagination<Anime> | ErrorResponse = data;
+		let json: ListPagination<AnimeNode> | ErrorResponse = data;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
 		}
 
 		return {
 			success: IWebRequestResultStatus.SUCCESS,
-			search: json as ListPagination<Anime>,
+			suggestions: json as ListPagination<AnimeNode>,
 		};
 	}
 }

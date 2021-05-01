@@ -1,5 +1,5 @@
 import { singleton } from "tsyringe";
-import { Sequelize } from "sequelize-typescript";
+import { Sequelize, SequelizeOptions } from "sequelize-typescript";
 import ModelsArray, { ModelsType, Models } from "../models";
 
 export type UserDatabaseEntry = {
@@ -24,7 +24,7 @@ export class Database {
 
 	constructor() {
 		this.models = Models;
-		this.sequelize = new Sequelize(process.env.DATABASE_URL as string, {
+		var sequelizeOptions: SequelizeOptions = {
 			models: ModelsArray,
 			dialect: "postgres",
 			dialectOptions: {
@@ -32,7 +32,13 @@ export class Database {
 					rejectUnauthorized: false, // very important
 				},
 			},
-		});
+			logging: false,
+		};
+
+		this.sequelize = new Sequelize(
+			process.env.DATABASE_URL as string,
+			sequelizeOptions
+		);
 		this.sequelize.databaseVersion().then((version) => {
 			console.log(`Database initialized with db version ${version}`);
 		});

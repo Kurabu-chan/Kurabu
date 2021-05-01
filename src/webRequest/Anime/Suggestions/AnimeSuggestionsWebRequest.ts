@@ -2,8 +2,9 @@ import { Fields } from "../../../helpers/BasicTypes";
 import { User } from "../../../models/User";
 import { IWebRequest } from "../../IWebRequest";
 
-export class DetailsWebRequest extends IWebRequest {
+export class AnimeSuggestionsWebRequest extends IWebRequest {
 	user!: User;
-	animeid!: number;
-	fields?: Fields[] | undefined;
+	limit?: number | undefined;
+	offset?: number | undefined;
+	fields?: Fields[];
 }

@@ -1,25 +1,31 @@
 import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
-import { SuggestionsWebRequest } from "./SuggestionsWebRequest";
-import { SuggestionsWebRequestResult } from "./SuggestionsWebRequestResult";
+import { AnimeRankingWebRequest } from "./AnimeRankingWebRequest";
+import {
+	AnimeRankingWebRequestResult,
+	AnimeRankingWebRequestResultType,
+} from "./AnimeRankingWebRequestResult";
 import { autoInjectable } from "tsyringe";
 import {
-	ListPagination,
-	AnimeNode,
 	ErrorResponse,
-	fieldsToString,
 	Fields,
+	fieldsToString,
+	ListPagination,
 } from "../../../helpers/BasicTypes";
 import { baseRequest } from "../../../builders/requests/RequestBuilder";
 
 @autoInjectable()
-export class SuggestionsWebRequestHandler
+export class AnimeRankingWebRequestHandler
 	implements
-		IWebRequestHandler<SuggestionsWebRequest, SuggestionsWebRequestResult> {
+		IWebRequestHandler<AnimeRankingWebRequest, AnimeRankingWebRequestResult> {
 	async handle(
-		query: SuggestionsWebRequest
-	): Promise<SuggestionsWebRequestResult> {
+		query: AnimeRankingWebRequest
+	): Promise<AnimeRankingWebRequestResult> {
 		var request = baseRequest()
-			.addPath("v2/anime/suggestions")
+			.addPath("v2/anime/ranking")
+			.setQueryParam(
+				"ranking_type",
+				query.rankingtype != undefined ? query.rankingtype : "all"
+			)
 			.setQueryParam("limit", (query.limit ? query.limit : 10).toString())
 			.setQueryParam("offset", (query.offset ? query.offset : 0).toString())
 			.setHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -30,14 +36,16 @@ export class SuggestionsWebRequestHandler
 
 		let data = await request.refreshRequest(query.user);
 
-		let json: ListPagination<AnimeNode> | ErrorResponse = data;
+		let json:
+			| ListPagination<AnimeRankingWebRequestResultType>
+			| ErrorResponse = data;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
 		}
 
 		return {
 			success: IWebRequestResultStatus.SUCCESS,
-			suggestions: json as ListPagination<AnimeNode>,
+			ranked: json as ListPagination<AnimeRankingWebRequestResultType>,
 		};
 	}
 }
