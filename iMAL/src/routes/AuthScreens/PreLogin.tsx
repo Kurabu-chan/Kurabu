@@ -4,10 +4,11 @@ import { Dimensions } from "react-native";
 import { DoSwitch } from "../RootNavigator";
 import Auth from "../../APIManager/Authenticate";
 import * as RootNavigator from "../RootNavigator";
+import Kurabu from "../../../assets/pinklogin.svg";
 
 //uncomment to reset saved uuid and go into developer mode for the Auth system
-Auth.devMode = true;
-Auth.ClearAsync();
+// Auth.devMode = true;
+// Auth.ClearAsync();
 
 class PreLogin extends React.Component<any> {
     constructor(props: any) {
@@ -29,8 +30,16 @@ class PreLogin extends React.Component<any> {
                     alignItems: "center",
                     justifyContent: "center",
                     height: Dimensions.get("window").height,
+                    backgroundColor: "#1a1a1a"
                 }}>
-                <Text>Loading</Text>
+                <Kurabu
+                    height={Dimensions.get("window").height * 1.5}
+                    width={Dimensions.get("window").width * 3}
+                    preserveAspectRatio="xMinYMin slice"
+                    style={{
+                        position: "absolute",
+                    }}
+                />
             </View>
         );
     }
