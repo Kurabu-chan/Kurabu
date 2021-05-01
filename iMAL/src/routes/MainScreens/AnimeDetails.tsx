@@ -26,7 +26,7 @@ type Props = {
 };
 
 type State = {
-    animeNode?: AnimeNode;
+    animeNode?: number;
     anime?: Anime;
 };
 
@@ -41,18 +41,7 @@ export default class AnimeDetails extends React.Component<Props, State> {
         super(props);
         let animeNode = props.route.params.item;
         if (animeNode == undefined) {
-            animeNode = {
-                node: {
-                    id: 1,
-                    title: "failure",
-                    main_picture: {
-                        medium:
-                            "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
-                        large:
-                            "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
-                    },
-                },
-            };
+            animeNode = 1;
         }
         //#region state
         // this.state = {
@@ -348,7 +337,7 @@ export default class AnimeDetails extends React.Component<Props, State> {
             animeNode: animeNode,
         };
 
-        GetDetails(animeNode.node.id)
+        GetDetails(animeNode)
             .then((res) => {
                 this.setState({
                     animeNode: animeNode,

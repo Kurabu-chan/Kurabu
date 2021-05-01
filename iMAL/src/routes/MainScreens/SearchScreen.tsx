@@ -2,11 +2,11 @@ import React from "react";
 import SearchBar from "react-native-dynamic-search-bar";
 import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import SearchList from "../../components/SearchList";
+import SearchList from "../../components/DetailedUpdateList";
 import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
 import { Colors } from "../../Configuration/Colors";
 import { SearchSource } from "../../APIManager/AnimeSearch";
-import { SearchItemFields } from "../../components/SearchItem";
+import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
 
 type StateType = {
     search: {
@@ -41,7 +41,7 @@ export default class Search extends React.Component<any, StateType> {
             return;
         }
 
-        const fields = SearchItemFields;
+        const fields = DetailedUpdateItemFields;
 
         var nodeSource = new SearchSource(this.state.search.searchText, fields);
         this.setState((prevState) => ({
@@ -51,7 +51,7 @@ export default class Search extends React.Component<any, StateType> {
         }));
         if (this.state.animeList) {
             console.log(this.state.search.searchText);
-            this.state.animeList.changeSearch(
+            this.state.animeList.changeSource(
                 `Search results for: ${this.state.search.searchText}`,
                 nodeSource
             );

@@ -2,11 +2,11 @@ import React from "react";
 import SearchBar from "react-native-dynamic-search-bar";
 import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import SearchList from "../../components/SearchList";
+import SearchList from "../../components/DetailedUpdateList";
 import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
 import { Colors } from "../../Configuration/Colors";
 import { SearchSource } from "../../APIManager/AnimeSearch";
-import { SearchItemFields } from "../../components/SearchItem";
+import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { RankingSource } from "#api/Ranking";
@@ -49,7 +49,7 @@ export default class Ranking extends React.Component<any, StateType> {
             return;
         }
 
-        const fields = SearchItemFields;
+        const fields = DetailedUpdateItemFields;
 
         var nodeSource = new RankingSource(
             this.state.ranking.rankingValue,
@@ -74,7 +74,7 @@ export default class Ranking extends React.Component<any, StateType> {
             };
 
             console.log(this.state.ranking.rankingValue);
-            this.state.animeList.changeSearch(
+            this.state.animeList.changeSource(
                 `Top ${
                     goodNamingMapping[this.state.ranking.rankingValue]
                 } Rankings`,

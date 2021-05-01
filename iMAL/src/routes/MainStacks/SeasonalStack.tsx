@@ -5,10 +5,10 @@ import { AnimeNode } from "#api/ApiBasicTypes";
 import React from "react";
 import Seasonal from "#routes/MainScreens/SeasonalScreen";
 
-export type SearchStackParamList = {
+export type SeasonalStackParamList = {
     Seasonal: undefined;
     Details: {
-        item: AnimeNode;
+        item: number;
     };
 };
 

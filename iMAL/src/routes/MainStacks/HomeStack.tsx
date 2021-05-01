@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 export type HomeStackParamList = {
     Home: undefined;
     Details: {
-        item: AnimeNode;
+        item: number;
     };
 };
 

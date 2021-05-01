@@ -2,11 +2,11 @@ import React from "react";
 import SearchBar from "react-native-dynamic-search-bar";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import SearchList from "../../components/SearchList";
+import SearchList from "../../components/DetailedUpdateList";
 import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
 import { Colors } from "../../Configuration/Colors";
 import { SearchSource } from "../../APIManager/AnimeSearch";
-import { SearchItemFields } from "../../components/SearchItem";
+import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { RankingSource } from "#api/Ranking";
@@ -50,7 +50,7 @@ export default class Ranking extends React.Component<any, StateType> {
     }
 
     async DoSeasonal() {
-        const fields = SearchItemFields;
+        const fields = DetailedUpdateItemFields;
 
         var nodeSource = new SeasonalSource(
             this.state.seasonal.yearValue,
@@ -64,7 +64,7 @@ export default class Ranking extends React.Component<any, StateType> {
         }));
         if (this.state.animeList) {
             console.log(this.state.seasonal.seasonValue);
-            this.state.animeList.changeSearch(
+            this.state.animeList.changeSource(
                 `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${
                     this.state.seasonal.yearValue
                 }`,

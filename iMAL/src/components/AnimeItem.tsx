@@ -34,7 +34,9 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
     }
 
     public openDetails() {
-        this.state.navigator.push("DetailsScreen", this.state);
+        this.state.navigator.push("DetailsScreen", {
+            item: this.state.item.node.id,
+        });
     }
 
     render() {
