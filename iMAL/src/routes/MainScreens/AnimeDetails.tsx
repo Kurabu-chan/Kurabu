@@ -30,6 +30,8 @@ type State = {
     anime?: Anime;
 };
 
+var sizer = Dimensions.get("window").width / 400;
+
 export default class AnimeDetails extends React.Component<Props, State> {
     private styles = StyleSheet.create({
         appContainer: {
@@ -484,7 +486,7 @@ export default class AnimeDetails extends React.Component<Props, State> {
                             renderItem={(item) => (
                                 <AnimeItem
                                     item={item.item}
-                                    width={100}
+                                    width={150 * sizer}
                                     navigator={this.props.navigation}
                                 />
                             )}

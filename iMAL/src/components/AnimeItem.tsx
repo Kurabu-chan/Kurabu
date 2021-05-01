@@ -11,6 +11,7 @@ import { Colors } from "../Configuration/Colors";
 import { AnimeNode } from "../APIManager/ApiBasicTypes";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Console } from "node:console";
 
 type AnimeItemProps = {
     item: AnimeNode;
@@ -44,6 +45,8 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
 
         var fontSize = Dimensions.get("window").width / 34;
 
+        var sizer = Dimensions.get("window").width / 400;
+
         const styles = StyleSheet.create({
             animeContainer: {
                 // height: 200,
@@ -53,8 +56,19 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
             },
             title: {
                 fontSize: fontSize,
-                marginLeft: 5,
                 color: Colors.TEXT,
+                textAlign: 'center',
+                position: 'absolute',
+                backgroundColor: Colors.TRANSPARENT_BACKGROUND,
+                // top: (1.5 * width) - 50 * sizer, 
+                left: 0,
+                right: 0, 
+                bottom: 0,
+                paddingTop: 5,
+                paddingBottom: 5,
+                paddingRight: 5,
+                paddingLeft: 5,
+                minHeight: 40 * sizer
             },
             image: {
                 width: width,
