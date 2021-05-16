@@ -11,6 +11,7 @@ import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { RankingSource } from "#api/Ranking";
 import { changeActivePage } from "#routes/MainDrawer";
+import { LinearGradient } from "expo-linear-gradient";
 
 type StateType = {
     ranking: {
@@ -93,8 +94,7 @@ export default class Ranking extends React.Component<any, StateType> {
 
             console.log(this.state.ranking.rankingValue);
             this.state.animeList.changeSource(
-                `Top ${
-                    goodNamingMapping[this.state.ranking.rankingValue]
+                `Top ${goodNamingMapping[this.state.ranking.rankingValue]
                 } Rankings`,
                 nodeSource
             );
@@ -159,16 +159,30 @@ export default class Ranking extends React.Component<any, StateType> {
     render() {
         return (
             <SafeAreaProvider style={{ backgroundColor: "#1a1a1a" }}>
-                {this.createSearchBar()}
-                {this.state.rankingSource !== undefined ? (
-                    <SearchList
-                        title={`Top Overall Rankings`}
-                        animeNodeSource={this.state.rankingSource}
-                        navigator={this.props.navigation}
-                        onCreate={this.onSearchListCreate.bind(this)}
-                        onDataGather={this.onSearchListDataGather.bind(this)}
-                    />
-                ) : undefined}
+                <LinearGradient
+                    // Background Linear Gradient
+                    colors={[
+                        Colors.KURABUPINK,
+                        Colors.KURABUPURPLE,
+                        Colors.BACKGROUNDGRADIENT_COLOR1,
+                        Colors.BACKGROUNDGRADIENT_COLOR2
+                    ]}
+                    style={{
+                        width: Dimensions.get("window").width,
+                        height: Dimensions.get("window").height
+                    }}
+                >
+                    {this.createSearchBar()}
+                    {this.state.rankingSource !== undefined ? (
+                        <SearchList
+                            title={`Top Overall Rankings`}
+                            animeNodeSource={this.state.rankingSource}
+                            navigator={this.props.navigation}
+                            onCreate={this.onSearchListCreate.bind(this)}
+                            onDataGather={this.onSearchListDataGather.bind(this)}
+                        />
+                    ) : undefined}
+                </LinearGradient>
             </SafeAreaProvider>
         );
     }
