@@ -2,6 +2,7 @@ import { Config } from "../Configuration/Config";
 import AnimeNodeSource from "./AnimeNodeSource";
 import { AnimeNode, Fields, ListPagination } from "./ApiBasicTypes";
 import Authentication from "./Authenticate";
+import { handleError } from "./ErrorHandler";
 
 export class SearchSource implements AnimeNodeSource {
     constructor(private query: string, private fields: Fields[]) {}
@@ -24,6 +25,7 @@ export class SearchSource implements AnimeNodeSource {
         let res = await fetch(url);
 
         let json: any = await res.json();
+        handleError(json);
         let ret = json as ListPagination<AnimeNode>;
         if (ret.paging) {
             return ret;

@@ -1,6 +1,7 @@
 import { Config } from "../Configuration/Config";
 import { Anime } from "./ApiBasicTypes";
 import Authentication from "./Authenticate";
+import { handleError } from "./ErrorHandler";
 
 export async function GetDetails(animeid: number): Promise<Anime> {
     let config = await Config.GetInstance();
@@ -14,6 +15,7 @@ export async function GetDetails(animeid: number): Promise<Anime> {
     let res = await fetch(url);
 
     let json: any = await res.json();
+    handleError(json);
     let ret = json as Anime;
     if (ret.id) {
         return ret;

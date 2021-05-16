@@ -1,12 +1,13 @@
-import { AsyncStorage, Alert } from 'react-native';
-import { isUUID } from './helper/FormatChecker';
-import * as Linking from 'expo-linking';
-import { Config } from '../Configuration/Config';
+import { AsyncStorage, Alert } from "react-native";
+import { isUUID } from "./helper/FormatChecker";
+import * as Linking from "expo-linking";
+import { Config } from "../Configuration/Config";
+import { handleError } from "./ErrorHandler";
 
 type JsonType = {
-    status: "success" | "error",
-    message: string
-}
+    status: "success" | "error";
+    message: string;
+};
 
 class Authentication {
     private static instance: Authentication;
@@ -39,10 +40,10 @@ class Authentication {
                     resolve(false);
                 }
             });
-        });        
+        });
     }
 
-    public ClearCode(){
+    public ClearCode() {
         this.loaded = false;
         this.stateCode = undefined;
         AsyncStorage.removeItem("stateCode");
@@ -68,8 +69,8 @@ class Authentication {
     }
 
     public GetStateCode(): string | undefined {
-        if(this.stateCode == undefined){
-            this.LoadStorage().then(()=>{
+        if (this.stateCode == undefined) {
+            this.LoadStorage().then(() => {
                 return this.stateCode;
             });
         }
@@ -82,22 +83,23 @@ class Authentication {
         let url = `${Authentication.root}authed/login`;
         //the body of the request
         let body = {
-            email: email.replace(' ',''),
-            pass: password.replace(' ','')
-        }
+            email: email.replace(" ", ""),
+            pass: password.replace(" ", ""),
+        };
         //make the request
         let res = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         });
         //is the response an error !?!?!?
         let json: JsonType = await res.json();
+        handleError(json);
         if (json.status == "error") {
             //oh fuck
-            Alert.alert("Something bad happened",json.message);
+            Alert.alert("Something bad happened", json.message);
             return false;
         }
 
@@ -106,65 +108,65 @@ class Authentication {
             this.SetCode(json.message);
             return true;
         }
-        
+
         //oh no we not
         return false;
     }
 
-    public async TryRegister(email: string, password: string) : Promise<string> {
+    public async TryRegister(email: string, password: string): Promise<string> {
         //url to make request to
         let url = `${Authentication.root}authed/register`;
         //the body of the request
 
         let body = {
-            email: email.replace(' ',''),
-            pass: password.replace(' ','')
-        }
+            email: email.replace(" ", ""),
+            pass: password.replace(" ", ""),
+        };
         //make the request
         let res = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         });
         //is the response an error !?!?!?
         let json: JsonType = await res.json();
         if (json.status == "error") {
             //oh fuck
-            Alert.alert("Something bad happened",json.message);
+            Alert.alert("Something bad happened", json.message);
             return "";
         }
 
         return json.message;
     }
 
-    public async TryCancelRegister(uuid: string) : Promise<boolean>{
+    public async TryCancelRegister(uuid: string): Promise<boolean> {
         let url = `${Authentication.root}authed/cancelRegister`;
 
         let body = {
-            uuid: uuid
-        }
+            uuid: uuid,
+        };
 
         let res = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type" : "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         });
 
         let json: JsonType = await res.json();
-        if(json.status == "error"){
+        if (json.status == "error") {
             //oh fuck
-            Alert.alert("Something bad happened",json.message);
+            Alert.alert("Something bad happened", json.message);
             return false;
         }
 
         return true;
     }
 
-    public async TryVerif(uuid:string,code: string) : Promise<JsonType>{
+    public async TryVerif(uuid: string, code: string): Promise<JsonType> {
         //url to make request to
         let url = `${Authentication.root}authed/verif`;
         //the body of the request
@@ -172,40 +174,39 @@ class Authentication {
         let body = {
             uuid: uuid,
             code: code,
-            redirect: this.MakeRedirect()
-        }
+            redirect: this.MakeRedirect(),
+        };
         //make the request
         let res = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         });
         //is the response an error !?!?!?
         let json: JsonType = await res.json();
         if (json.status == "error") {
             //oh fuck
-            Alert.alert("Something bad happened",json.message);
+            Alert.alert("Something bad happened", json.message);
             return json;
         }
 
         return json;
     }
 
-    private MakeRedirect(): string{
-        const expoScheme = "imal://"
+    private MakeRedirect(): string {
+        const expoScheme = "imal://";
         // Technically you need to pass the correct redirectUrl to the web browser.
         let redir = Linking.makeUrl();
-        if (redir.startsWith('exp://1')) {
+        if (redir.startsWith("exp://1")) {
             // handle simulator(localhost) and device(Lan)
-            redir = redir + '/--/';
-        } else
-        if (redir === expoScheme) {
+            redir = redir + "/--/";
+        } else if (redir === expoScheme) {
             // dont do anything
         } else {
             // handle the expo client
-            redir = redir + '/';
+            redir = redir + "/";
         }
 
         return redir + "auth/";
@@ -216,10 +217,10 @@ class Authentication {
             Authentication.instance = new Authentication();
             if (!this.devMode) {
                 await Authentication.instance.LoadStorage();
-            } 
+            }
         }
 
-        if(!Authentication.root){
+        if (!Authentication.root) {
             let config = await Config.GetInstance();
             Authentication.root = config.GetApiRoot();
         }
@@ -230,9 +231,9 @@ class Authentication {
     public static async ClearAsync() {
         return new Promise((resolve, reject) => {
             AsyncStorage.removeItem("stateCode", () => {
-                resolve();
+                resolve(undefined);
             });
-        });        
+        });
     }
 }
 

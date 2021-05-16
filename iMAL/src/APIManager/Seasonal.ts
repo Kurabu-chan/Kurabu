@@ -2,6 +2,7 @@ import AnimeNodeSource from "./AnimeNodeSource";
 import Authentication from "./Authenticate";
 import { Config } from "../Configuration/Config";
 import { AnimeNode, Fields } from "./ApiBasicTypes";
+import { handleError } from "./ErrorHandler";
 
 type JSONType = {
     data: AnimeNode[];
@@ -51,6 +52,7 @@ class SeasonalSource implements AnimeNodeSource {
             }
             let res: Response = await fetch(url);
             let json: JSONType = await res.json();
+            handleError(json);
             let ret = json as JSONType;
             if (ret.data && isIterable(ret.data)) {
                 return json;
