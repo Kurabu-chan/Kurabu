@@ -2,14 +2,15 @@ import React from "react";
 import SearchBar from "react-native-dynamic-search-bar";
 import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import SearchList from "../../components/SearchList";
+import SearchList from "../../components/DetailedUpdateList";
 import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
 import { Colors } from "../../Configuration/Colors";
 import { SearchSource } from "../../APIManager/AnimeSearch";
-import { SearchItemFields } from "../../components/SearchItem";
+import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { RankingSource } from "#api/Ranking";
+import { changeActivePage } from "#routes/MainDrawer";
 
 type StateType = {
     ranking: {
@@ -22,6 +23,7 @@ type StateType = {
     };
     rankingSource?: AnimeNodeSource;
     animeList?: SearchList;
+    listenerToUnMount: any;
 };
 
 export default class Ranking extends React.Component<any, StateType> {
@@ -36,12 +38,28 @@ export default class Ranking extends React.Component<any, StateType> {
                 searched: false,
                 found: false,
             },
+            listenerToUnMount: undefined,
         };
     }
 
     componentDidMount() {
         console.log("mount");
         this.DoRanking();
+
+        const unsubscribe = this.props.navigation.addListener("focus", () => {
+            changeActivePage("Ranking");
+            // The screen is focused
+            // Call any action
+        });
+
+        this.setState((prevState) => ({
+            ...prevState,
+            listenerToUnMount: unsubscribe,
+        }));
+    }
+
+    componentWillUnmount() {
+        if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
     async DoRanking() {
@@ -49,7 +67,7 @@ export default class Ranking extends React.Component<any, StateType> {
             return;
         }
 
-        const fields = SearchItemFields;
+        const fields = DetailedUpdateItemFields;
 
         var nodeSource = new RankingSource(
             this.state.ranking.rankingValue,
@@ -74,7 +92,7 @@ export default class Ranking extends React.Component<any, StateType> {
             };
 
             console.log(this.state.ranking.rankingValue);
-            this.state.animeList.changeSearch(
+            this.state.animeList.changeSource(
                 `Top ${
                     goodNamingMapping[this.state.ranking.rankingValue]
                 } Rankings`,
@@ -110,15 +128,19 @@ export default class Ranking extends React.Component<any, StateType> {
                     width: Dimensions.get("window").width - 10,
                     color: Colors.TEXT,
                 }}>
-                <Picker.Item label="All" value="all" />
-                <Picker.Item label="Airing" value="airing" />
-                <Picker.Item label="Upcoming" value="upcoming" />
-                <Picker.Item label="Tv" value="tv" />
-                <Picker.Item label="Ova" value="ova" />
-                <Picker.Item label="Movie" value="movie" />
-                <Picker.Item label="Special" value="special" />
-                <Picker.Item label="Popularity" value="bypopularity" />
-                <Picker.Item label="Favorite" value="favorite" />
+                <Picker.Item key="all" label="All" value="all" />
+                <Picker.Item key="airing" label="Airing" value="airing" />
+                <Picker.Item key="upcoming" label="Upcoming" value="upcoming" />
+                <Picker.Item key="tv" label="Tv" value="tv" />
+                <Picker.Item key="ova" label="Ova" value="ova" />
+                <Picker.Item key="movie" label="Movie" value="movie" />
+                <Picker.Item key="special" label="Special" value="special" />
+                <Picker.Item
+                    key="bypopularity"
+                    label="Popularity"
+                    value="bypopularity"
+                />
+                <Picker.Item key="favorite" label="Favorite" value="favorite" />
             </Picker>
         );
     }

@@ -8,11 +8,11 @@ const Stack = createStackNavigator();
 export type HomeStackParamList = {
     Home: undefined;
     Details: {
-        item: AnimeNode;
+        item: number;
     };
 };
 
-export default function HomeStack() {
+export default function HomeStack(params: any) {
     return (
         <Stack.Navigator
             screenOptions={{
