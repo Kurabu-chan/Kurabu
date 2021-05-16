@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import Search from "#routes/MainScreens/SearchScreen";
+import Search from "#routes/MainScreens/Search/SearchScreen";
 import AnimeDetails from "#routes/MainScreens/AnimeDetails";
 import { AnimeNode } from "#api/ApiBasicTypes";
 import React from "react";

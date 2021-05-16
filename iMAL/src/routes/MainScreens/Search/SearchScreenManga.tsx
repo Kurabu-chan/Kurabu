@@ -2,11 +2,11 @@ import React from "react";
 import SearchBar from "react-native-dynamic-search-bar";
 import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import SearchList from "../../components/DetailedUpdateList";
-import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
-import { Colors } from "../../Configuration/Colors";
-import { SearchSource } from "../../APIManager/AnimeSearch";
-import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
+import SearchList from "../../../components/DetailedUpdateList";
+import AnimeNodeSource from "../../../APIManager/AnimeNodeSource";
+import { Colors } from "../../../Configuration/Colors";
+import { SearchSource } from "../../../APIManager/AnimeSearch";
+import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
 import { changeActivePage } from "#routes/MainDrawer";
 
 type StateType = {
@@ -72,7 +72,7 @@ export default class Search extends React.Component<any, StateType> {
         if (this.state.animeList) {
             console.log(this.state.search.searchText);
             this.state.animeList.changeSource(
-                `Search results for: ${this.state.search.searchText}`,
+                `Manga search results for: ${this.state.search.searchText}`,
                 nodeSource
             );
         }
@@ -81,7 +81,7 @@ export default class Search extends React.Component<any, StateType> {
     createSearchBar() {
         return (
             <SearchBar
-                placeholder="Search for an Anime Title.."
+                placeholder="Search for a Manga Title.."
                 placeholderTextColor={Colors.TEXT}
                 searchIconImageStyle={{
                     tintColor: Colors.TEXT,
@@ -140,7 +140,7 @@ export default class Search extends React.Component<any, StateType> {
                 {this.createSearchBar()}
                 {this.state.searchSource !== undefined ? (
                     <SearchList
-                        title={`Search results for: ${this.state.search.searchText}`}
+                        title={`Manga search results for: ${this.state.search.searchText}`}
                         animeNodeSource={this.state.searchSource}
                         navigator={this.props.navigation}
                         onCreate={this.onSearchListCreate.bind(this)}

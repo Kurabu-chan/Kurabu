@@ -1,9 +1,9 @@
 import React from "react";
 import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import AnimeList from "../../components/AnimeList";
-import SeasonalSource from "../../APIManager/Seasonal";
-import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
+import AnimeList from "../../../components/AnimeList";
+import SeasonalSource from "../../../APIManager/Seasonal";
+import AnimeNodeSource from "../../../APIManager/AnimeNodeSource";
 import { RouteProp, useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
@@ -27,7 +27,7 @@ export default class Home extends React.Component<PropsType, StateType> {
         super(props);
         this.state = {
             node: {
-                key: "Currently Airing",
+                key: "Currently Airing Manga",
                 nodeSource: new SeasonalSource(2021, "spring"),
             },
             listenerToUnMount: undefined,

@@ -2,11 +2,11 @@ import React from "react";
 import SearchBar from "react-native-dynamic-search-bar";
 import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import SearchList from "../../components/DetailedUpdateList";
-import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
-import { Colors } from "../../Configuration/Colors";
-import { SearchSource } from "../../APIManager/AnimeSearch";
-import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
+import SearchList from "../../../components/DetailedUpdateList";
+import AnimeNodeSource from "../../../APIManager/AnimeNodeSource";
+import { Colors } from "../../../Configuration/Colors";
+import { SearchSource } from "../../../APIManager/AnimeSearch";
+import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { RankingSource } from "#api/Ranking";
@@ -95,7 +95,7 @@ export default class Ranking extends React.Component<any, StateType> {
             this.state.animeList.changeSource(
                 `Top ${
                     goodNamingMapping[this.state.ranking.rankingValue]
-                } Rankings`,
+                } Rankings Manga`,
                 nodeSource
             );
         }
@@ -162,7 +162,7 @@ export default class Ranking extends React.Component<any, StateType> {
                 {this.createSearchBar()}
                 {this.state.rankingSource !== undefined ? (
                     <SearchList
-                        title={`Top Overall Rankings`}
+                        title={`Top Overall Rankings Manga`}
                         animeNodeSource={this.state.rankingSource}
                         navigator={this.props.navigation}
                         onCreate={this.onSearchListCreate.bind(this)}
