@@ -7,17 +7,17 @@ import { AnimeNode, Fields } from "../APIManager/ApiBasicTypes";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type SearchItemProps = {
+type DetailedUpdateItemProps = {
     item: AnimeNode;
     navigator: StackNavigationProp<any, any>;
 };
 
-type SearchItemState = {
+type DetailedUpdateItemState = {
     item: AnimeNode;
     navigator: StackNavigationProp<any, any>;
 };
 
-export const SearchItemFields = [
+export const DetailedUpdateItemFields = [
     Fields.id,
     Fields.genres,
     Fields.main_picture,
@@ -30,11 +30,11 @@ export const SearchItemFields = [
     Fields.start_date,
 ];
 
-export class SearchItem extends React.PureComponent<
-    SearchItemProps,
-    SearchItemState
+export class DetailedUpdateItem extends React.PureComponent<
+    DetailedUpdateItemProps,
+    DetailedUpdateItemState
 > {
-    constructor(props: SearchItemProps) {
+    constructor(props: DetailedUpdateItemProps) {
         super(props);
         let item = props.item;
         if (item == undefined) {
@@ -59,7 +59,9 @@ export class SearchItem extends React.PureComponent<
     }
 
     public openDetails() {
-        this.state.navigator.push("DetailsScreen", this.state);
+        this.state.navigator.push("DetailsScreen", {
+            item: this.state.item.node.id,
+        });
     }
 
     NiceString(text: string | undefined) {
@@ -208,7 +210,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.KURABUPURPLE,
         width: Dimensions.get("window").width - 5,
         height: (Dimensions.get("window").width / 3) * 1.5,
-        marginTop: 5,
+        marginBottom: 5,
         marginLeft: 0,
         marginRight: 5,
         flexDirection: "row",
@@ -230,4 +232,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SearchItem;
+export default DetailedUpdateItem;

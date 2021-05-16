@@ -7,8 +7,8 @@ import * as RootNavigator from "../RootNavigator";
 import Kurabu from "../../../assets/pinklogin.svg";
 
 //uncomment to reset saved uuid and go into developer mode for the Auth system
-// Auth.devMode = true;
-// Auth.ClearAsync();
+//Auth.devMode = true;
+//Auth.ClearAsync();
 
 class PreLogin extends React.Component<any> {
     constructor(props: any) {
@@ -30,7 +30,7 @@ class PreLogin extends React.Component<any> {
                     alignItems: "center",
                     justifyContent: "center",
                     height: Dimensions.get("window").height,
-                    backgroundColor: "#1a1a1a"
+                    backgroundColor: "#1a1a1a",
                 }}>
                 <Kurabu
                     height={Dimensions.get("window").height * 1.5}
