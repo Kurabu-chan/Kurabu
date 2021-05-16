@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AnimeList from "../../components/AnimeList";
 import SeasonalSource from "../../APIManager/Seasonal";
@@ -8,6 +8,8 @@ import { RouteProp, useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
 import { changeActivePage } from "#routes/MainDrawer";
+import { LinearGradient } from "expo-linear-gradient";
+import { Colors } from "../../Configuration/Colors";
 
 type PropsType = {
     navigation: StackNavigationProp<HomeStackParamList, "Home">;
@@ -53,17 +55,31 @@ export default class Home extends React.Component<PropsType, StateType> {
 
     render() {
         return (
-            <SafeAreaProvider style={{ backgroundColor: "#1a1a1a" }}>
-                <View
+            <SafeAreaProvider style={{ backgroundColor: Colors.BACKGROUND }}>
+                <LinearGradient
+                    // Background Linear Gradient
+                    colors={[
+                        Colors.KURABUPINK,
+                        Colors.KURABUPURPLE,
+                        Colors.BACKGROUNDGRADIENT_COLOR1,
+                        Colors.BACKGROUNDGRADIENT_COLOR2
+                    ]}
                     style={{
-                        flexDirection: "row",
-                    }}>
-                    <AnimeList
-                        title={this.state.node.key}
-                        animeNodeSource={this.state.node.nodeSource}
-                        navigator={this.props.navigation as any}
-                    />
-                </View>
+                        width: Dimensions.get("window").width,
+                        height: Dimensions.get("window").height
+                    }}
+                >
+                    <View
+                        style={{
+                            flexDirection: "row",
+                        }}>
+                        <AnimeList
+                            title={this.state.node.key}
+                            animeNodeSource={this.state.node.nodeSource}
+                            navigator={this.props.navigation as any}
+                        />
+                    </View>
+                </LinearGradient>
             </SafeAreaProvider>
         );
     }

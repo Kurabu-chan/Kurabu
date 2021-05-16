@@ -18,9 +18,14 @@ export class Colors {
         GOOD: "#0F0",
         EXCELLENT: "#00F",
         BACKGROUND: "#bbb"
-    }
-    public static BACKGROUND = ""
-    public static ALTERNATE_BACKGROUND = "#1a1a1a"
-    public static TRANSPARENT_BACKGROUND = "rgba(26,26,26, 0.75)"
-    public static ERROR: "#FF0000"
+    };
+    public static BACKGROUND = "";
+    public static ALTERNATE_BACKGROUND = "#1a1a1a";
+    public static TRANSPARENT_BACKGROUND = "rgba(26,26,26, 0.75)";
+    public static INVISIBLE_BACKGROUND = "rgba(0,0,0, 1)";
+    public static ERROR: "#FF0000";
+
+    
+    public static BACKGROUNDGRADIENT_COLOR1 = "#191919";
+    public static BACKGROUNDGRADIENT_COLOR2 = "#060606";
 }
