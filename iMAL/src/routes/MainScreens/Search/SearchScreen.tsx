@@ -42,7 +42,7 @@ export default class Search extends React.Component<any, StateType> {
             return;
         }
 
-        const fields = SearchItemFields;
+        const fields = DetailedUpdateItemFields;
 
         var nodeSource = new SearchSource(this.state.search.searchText, fields);
         this.setState((prevState) => ({
@@ -52,7 +52,7 @@ export default class Search extends React.Component<any, StateType> {
         }));
         if (this.state.animeList) {
             console.log(this.state.search.searchText);
-            this.state.animeList.changeSearch(
+            this.state.animeList.changeSource(
                 `Search results for: ${this.state.search.searchText}`,
                 nodeSource
             );

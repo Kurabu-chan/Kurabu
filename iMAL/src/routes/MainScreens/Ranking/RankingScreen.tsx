@@ -49,7 +49,7 @@ export default class Ranking extends React.Component<any, StateType> {
             return;
         }
 
-        const fields = SearchItemFields;
+        const fields = DetailedUpdateItemFields;
 
         var nodeSource = new RankingSource(
             this.state.ranking.rankingValue,
@@ -74,7 +74,7 @@ export default class Ranking extends React.Component<any, StateType> {
             };
 
             console.log(this.state.ranking.rankingValue);
-            this.state.animeList.changeSearch(
+            this.state.animeList.changeSource(
                 `Top ${
                     goodNamingMapping[this.state.ranking.rankingValue]
                 } Rankings`,
