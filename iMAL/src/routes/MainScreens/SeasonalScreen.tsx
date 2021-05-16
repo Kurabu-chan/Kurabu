@@ -13,6 +13,7 @@ import { AnimeRankingSource } from "#api/Anime/AnimeRanking";
 import AnimeSeasonalSource from "#api/Anime/AnimeSeasonal";
 import { FlatList } from "react-native-gesture-handler";
 import { changeActivePage } from "#routes/MainDrawer";
+import { LinearGradient } from "expo-linear-gradient";
 
 type StateType = {
     seasonal: {
@@ -83,8 +84,7 @@ export default class Seasonal extends React.Component<any, StateType> {
         if (this.state.animeList) {
             console.log(this.state.seasonal.seasonValue);
             this.state.animeList.changeSource(
-                `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${
-                    this.state.seasonal.yearValue
+                `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${this.state.seasonal.yearValue
                 }`,
                 nodeSource
             );
@@ -134,57 +134,71 @@ export default class Seasonal extends React.Component<any, StateType> {
             maxSeason(this.state.seasonal.yearValue)
         );
         return (
-            <View
+            <LinearGradient
+                // Background Linear Gradient
+                colors={[
+                    Colors.KURABUPINK,
+                    Colors.KURABUPURPLE,
+                    Colors.BACKGROUNDGRADIENT_COLOR1,
+                    Colors.BACKGROUNDGRADIENT_COLOR2
+                ]}
                 style={{
-                    flexDirection: "row",
-                }}>
-                <Picker
-                    selectedValue={this.state.seasonal.seasonValue}
-                    onValueChange={this.changeSeason.bind(this)}
+                    width: Dimensions.get("window").width,
+                    height: Dimensions.get("window").height
+                }}
+            >
+                <View
                     style={{
-                        backgroundColor: Colors.KURABUPURPLE,
-                        marginTop: 5,
-                        marginLeft: 5,
-                        marginRight: 5,
-                        width: (Dimensions.get("window").width - 20) / 2,
-                        color: Colors.TEXT,
+                        flexDirection: "row",
                     }}>
-                    <Picker.Item label="Winter" value="winter" />
-                    {allowedSeasons.includes("spring") ? (
-                        <Picker.Item label="Spring" value="spring" />
-                    ) : undefined}
-                    {allowedSeasons.includes("summer") ? (
-                        <Picker.Item label="Summer" value="summer" />
-                    ) : undefined}
-                    {allowedSeasons.includes("fall") ? (
-                        <Picker.Item label="Fall" value="fall" />
-                    ) : undefined}
-                </Picker>
-                <Picker
-                    selectedValue={this.state.seasonal.yearValue.toString()}
-                    onValueChange={this.changeYear.bind(this)}
-                    style={{
-                        backgroundColor: Colors.KURABUPURPLE,
-                        marginTop: 5,
-                        marginLeft: 5,
-                        marginRight: 5,
-                        width: (Dimensions.get("window").width - 20) / 2,
-                        color: Colors.TEXT,
-                    }}>
-                    {arrayFromXToY(
-                        1917,
-                        maxYear(this.state.seasonal.seasonValue) + 1
-                    )
-                        .reverse()
-                        .map((x) => (
-                            <Picker.Item
-                                key={x.toString()}
-                                label={x.toString()}
-                                value={x.toString()}
-                            />
-                        ))}
-                </Picker>
-            </View>
+                    <Picker
+                        selectedValue={this.state.seasonal.seasonValue}
+                        onValueChange={this.changeSeason.bind(this)}
+                        style={{
+                            backgroundColor: Colors.KURABUPURPLE,
+                            marginTop: 5,
+                            marginLeft: 5,
+                            marginRight: 5,
+                            width: (Dimensions.get("window").width - 20) / 2,
+                            color: Colors.TEXT,
+                        }}>
+                        <Picker.Item label="Winter" value="winter" />
+                        {allowedSeasons.includes("spring") ? (
+                            <Picker.Item label="Spring" value="spring" />
+                        ) : undefined}
+                        {allowedSeasons.includes("summer") ? (
+                            <Picker.Item label="Summer" value="summer" />
+                        ) : undefined}
+                        {allowedSeasons.includes("fall") ? (
+                            <Picker.Item label="Fall" value="fall" />
+                        ) : undefined}
+                    </Picker>
+                    <Picker
+                        selectedValue={this.state.seasonal.yearValue.toString()}
+                        onValueChange={this.changeYear.bind(this)}
+                        style={{
+                            backgroundColor: Colors.KURABUPURPLE,
+                            marginTop: 5,
+                            marginLeft: 5,
+                            marginRight: 5,
+                            width: (Dimensions.get("window").width - 20) / 2,
+                            color: Colors.TEXT,
+                        }}>
+                        {arrayFromXToY(
+                            1917,
+                            maxYear(this.state.seasonal.seasonValue) + 1
+                        )
+                            .reverse()
+                            .map((x) => (
+                                <Picker.Item
+                                    key={x.toString()}
+                                    label={x.toString()}
+                                    value={x.toString()}
+                                />
+                            ))}
+                    </Picker>
+                </View>
+            </LinearGradient>
         );
     }
 

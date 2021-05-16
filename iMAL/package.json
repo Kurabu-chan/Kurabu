@@ -41,7 +41,8 @@
     "react-native-svg-transformer": "^0.14.3",
     "react-native-web": "~0.13.12",
     "tslib": "^2.1.0",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "expo-linear-gradient": "~9.1.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
