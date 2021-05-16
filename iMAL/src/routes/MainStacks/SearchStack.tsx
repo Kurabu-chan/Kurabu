@@ -3,12 +3,11 @@ import Search from "#routes/MainScreens/Search/SearchTabs";
 import AnimeDetails from "#routes/MainScreens/AnimeDetails";
 import { AnimeNode } from "#api/ApiBasicTypes";
 import React from "react";
+import DetailsStackParams from "./DetailsStackParams";
 
 export type SearchStackParamList = {
     Search: undefined;
-    Details: {
-        item: number;
-    };
+    Details: DetailsStackParams;
 };
 
 const Stack = createStackNavigator();

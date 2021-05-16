@@ -5,12 +5,13 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import SearchList from "../../../components/DetailedUpdateList";
 import AnimeNodeSource from "../../../APIManager/AnimeNodeSource";
 import { Colors } from "../../../Configuration/Colors";
-import { SearchSource } from "../../../APIManager/AnimeSearch";
+import { AnimeSearchSource } from "../../../APIManager/Anime/AnimeSearch";
 import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
-import { RankingSource } from "#api/Ranking";
+import { AnimeRankingSource } from "#api/Anime/AnimeRanking";
 import { changeActivePage } from "#routes/MainDrawer";
+import { MangaRankingSource } from "#api/Manga/MangaRanking";
 
 type StateType = {
     ranking: {
@@ -69,7 +70,7 @@ export default class Ranking extends React.Component<any, StateType> {
 
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new RankingSource(
+        var nodeSource = new MangaRankingSource(
             this.state.ranking.rankingValue,
             fields
         );
@@ -81,12 +82,13 @@ export default class Ranking extends React.Component<any, StateType> {
         if (this.state.animeList) {
             var goodNamingMapping: { [index: string]: string } = {
                 all: "Overall",
-                airing: "Airing anime",
-                upcoming: "Upcoming anime",
-                tv: "Tv",
-                ova: "Ova",
-                movie: "Movie",
-                special: "Special",
+                manga: "Manga",
+                oneshots: "One-shots",
+                doujin: "Doujinshi",
+                lightnovels: "Light Novels",
+                novels: "Novels",
+                manhwa: "Manhwa",
+                manhua: "Manhua",
                 bypopularity: "Popularity",
                 favorite: "Favorites",
             };
@@ -129,18 +131,31 @@ export default class Ranking extends React.Component<any, StateType> {
                     color: Colors.TEXT,
                 }}>
                 <Picker.Item key="all" label="All" value="all" />
-                <Picker.Item key="airing" label="Airing" value="airing" />
-                <Picker.Item key="upcoming" label="Upcoming" value="upcoming" />
-                <Picker.Item key="tv" label="Tv" value="tv" />
-                <Picker.Item key="ova" label="Ova" value="ova" />
-                <Picker.Item key="movie" label="Movie" value="movie" />
-                <Picker.Item key="special" label="Special" value="special" />
+                <Picker.Item key="manga" label="Manga" value="manga" />
+                <Picker.Item
+                    key="oneshots"
+                    label="One-shots"
+                    value="oneshots"
+                />
+                <Picker.Item key="doujin" label="Doujinshi" value="doujin" />
+                <Picker.Item
+                    key="lightnovels"
+                    label="Light Novels"
+                    value="lightnovels"
+                />
+                <Picker.Item key="novels" label="Novels" value="novels" />
+                <Picker.Item key="manhwa" label="Manhwa" value="manhwa" />
+                <Picker.Item key="manhua" label="Manhua" value="manhua" />
                 <Picker.Item
                     key="bypopularity"
                     label="Popularity"
                     value="bypopularity"
                 />
-                <Picker.Item key="favorite" label="Favorite" value="favorite" />
+                <Picker.Item
+                    key="favorite"
+                    label="Favorites"
+                    value="favorite"
+                />
             </Picker>
         );
     }

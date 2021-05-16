@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AnimeList from "../../components/AnimeList";
 import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
-import SuggestionsSource from "../../APIManager/Suggestions";
+import AnimeSuggestionsSource from "../../APIManager/Anime/AnimeSuggestions";
 import { changeActivePage } from "#routes/MainDrawer";
 
 type StateType = {
@@ -20,7 +20,7 @@ export default class Suggestions extends React.Component<any, StateType> {
         this.state = {
             node: {
                 key: "Suggestions for you",
-                nodeSource: new SuggestionsSource(),
+                nodeSource: new AnimeSuggestionsSource(),
             },
             listenerToUnMount: undefined,
         };

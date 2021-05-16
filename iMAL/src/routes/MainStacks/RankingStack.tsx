@@ -4,12 +4,11 @@ import AnimeDetails from "#routes/MainScreens/AnimeDetails";
 import { AnimeNode } from "#api/ApiBasicTypes";
 import React from "react";
 import Ranking from "#routes/MainScreens/Ranking/RankingTabs";
+import DetailsStackParams from "./DetailsStackParams";
 
 export type RankingStackParamList = {
     Ranking: undefined;
-    Details: {
-        item: number;
-    };
+    Details: DetailsStackParams;
 };
 
 const Stack = createStackNavigator();

@@ -43,10 +43,8 @@ export class DetailedUpdateItem extends React.PureComponent<
                     id: 1,
                     title: "failure",
                     main_picture: {
-                        medium:
-                            "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
-                        large:
-                            "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
+                        medium: "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
+                        large: "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
                     },
                 },
             };
@@ -60,7 +58,8 @@ export class DetailedUpdateItem extends React.PureComponent<
 
     public openDetails() {
         this.state.navigator.push("DetailsScreen", {
-            item: this.state.item.node.id,
+            id: this.state.item.node.id,
+            media_type: this.state.item.node.media_type,
         });
     }
 

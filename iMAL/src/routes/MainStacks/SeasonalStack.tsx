@@ -4,12 +4,11 @@ import AnimeDetails from "#routes/MainScreens/AnimeDetails";
 import { AnimeNode } from "#api/ApiBasicTypes";
 import React from "react";
 import Seasonal from "#routes/MainScreens/SeasonalScreen";
+import DetailsStackParams from "./DetailsStackParams";
 
 export type SeasonalStackParamList = {
     Seasonal: undefined;
-    Details: {
-        item: number;
-    };
+    Details: DetailsStackParams;
 };
 
 const Stack = createStackNavigator();

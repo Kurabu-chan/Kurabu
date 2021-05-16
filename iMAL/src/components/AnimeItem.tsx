@@ -42,7 +42,8 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
         // });
 
         this.state.navigator.push("DetailsScreen", {
-            item: this.state.item.node.id,
+            id: this.state.item.node.id,
+            media_type: this.state.item.node.media_type,
         });
     }
 

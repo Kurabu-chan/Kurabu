@@ -5,7 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import SearchList from "../../../components/DetailedUpdateList";
 import AnimeNodeSource from "../../../APIManager/AnimeNodeSource";
 import { Colors } from "../../../Configuration/Colors";
-import { SearchSource } from "../../../APIManager/AnimeSearch";
+import { AnimeSearchSource } from "../../../APIManager/Anime/AnimeSearch";
 import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
 import { changeActivePage } from "#routes/MainDrawer";
 
@@ -44,7 +44,10 @@ export default class Search extends React.Component<any, StateType> {
 
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new SearchSource(this.state.search.searchText, fields);
+        var nodeSource = new AnimeSearchSource(
+            this.state.search.searchText,
+            fields
+        );
         this.setState((prevState) => ({
             ...prevState,
             searchSource: nodeSource,

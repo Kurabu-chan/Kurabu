@@ -5,12 +5,12 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import SearchList from "../../components/DetailedUpdateList";
 import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
 import { Colors } from "../../Configuration/Colors";
-import { SearchSource } from "../../APIManager/AnimeSearch";
+import { AnimeSearchSource } from "../../APIManager/Anime/AnimeSearch";
 import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
-import { RankingSource } from "#api/Ranking";
-import SeasonalSource from "#api/Seasonal";
+import { AnimeRankingSource } from "#api/Anime/AnimeRanking";
+import AnimeSeasonalSource from "#api/Anime/AnimeSeasonal";
 import { FlatList } from "react-native-gesture-handler";
 import { changeActivePage } from "#routes/MainDrawer";
 
@@ -70,7 +70,7 @@ export default class Seasonal extends React.Component<any, StateType> {
     async DoSeasonal() {
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new SeasonalSource(
+        var nodeSource = new AnimeSeasonalSource(
             this.state.seasonal.yearValue,
             this.state.seasonal.seasonValue,
             fields

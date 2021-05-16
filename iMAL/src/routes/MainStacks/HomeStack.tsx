@@ -4,13 +4,12 @@ import Main from "#routes/MainScreens/Home/HomeScreen";
 import AnimeDetails from "#routes/MainScreens/AnimeDetails";
 import { AnimeNode } from "#api/ApiBasicTypes";
 import HomeTabs from "#routes/MainScreens/Home/HomeTabs";
+import DetailsStackParams from "./DetailsStackParams";
 
 const Stack = createStackNavigator();
 export type HomeStackParamList = {
     Home: undefined;
-    Details: {
-        item: number;
-    };
+    Details: DetailsStackParams;
 };
 
 export default function HomeStack(params: any) {

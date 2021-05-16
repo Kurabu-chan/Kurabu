@@ -5,11 +5,11 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import SearchList from "../../../components/DetailedUpdateList";
 import AnimeNodeSource from "../../../APIManager/AnimeNodeSource";
 import { Colors } from "../../../Configuration/Colors";
-import { SearchSource } from "../../../APIManager/AnimeSearch";
+import { AnimeSearchSource } from "../../../APIManager/Anime/AnimeSearch";
 import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
-import { RankingSource } from "#api/Ranking";
+import { AnimeRankingSource } from "#api/Anime/AnimeRanking";
 
 type StateType = {
     ranking: {
@@ -51,7 +51,7 @@ export default class Ranking extends React.Component<any, StateType> {
 
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new RankingSource(
+        var nodeSource = new AnimeRankingSource(
             this.state.ranking.rankingValue,
             fields
         );

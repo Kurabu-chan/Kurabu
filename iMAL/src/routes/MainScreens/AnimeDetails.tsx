@@ -11,7 +11,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { GetDetails } from "../../APIManager/AnimeDetails";
+import { GetAnimeDetails } from "../../APIManager/Anime/AnimeDetails";
 import { Anime, AnimeNode } from "../../APIManager/ApiBasicTypes";
 import AnimeItem from "../../components/AnimeItem";
 import { Divider } from "../../components/Divider";
@@ -24,6 +24,7 @@ import {
     changeTopRightButton,
     getActiveScreen,
 } from "#routes/MainDrawer";
+import { GetMangaDetails } from "#api/Manga/MangaDetails";
 
 type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "Details">;
@@ -35,6 +36,7 @@ type State = {
     anime?: Anime;
     listenerToUnMount: any;
     page: string;
+    mediaType: string;
 };
 
 var sizer = Dimensions.get("window").width / 400;
@@ -48,7 +50,8 @@ export default class AnimeDetails extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        let animeNode = props.route.params.item;
+        let animeNode = props.route.params.id;
+        let mediaType = props.route.params.media_type;
         if (animeNode == undefined) {
             animeNode = 1;
         }
@@ -57,19 +60,46 @@ export default class AnimeDetails extends React.Component<Props, State> {
             animeNode: animeNode,
             listenerToUnMount: undefined,
             page: getActiveScreen(),
+            mediaType: mediaType,
         };
 
-        GetDetails(animeNode)
-            .then((res) => {
-                this.setState({
-                    animeNode: animeNode,
-                    anime: res,
+        console.log(mediaType);
+
+        const mangaMediatTypes = [
+            "manga",
+            "light_novel",
+            "manhwa",
+            "one_shot",
+            "manhua",
+            "doujinshi",
+            "novel",
+        ];
+
+        if (mangaMediatTypes.includes(mediaType)) {
+            GetMangaDetails(animeNode)
+                .then((res) => {
+                    this.setState({
+                        animeNode: animeNode,
+                        anime: res,
+                    });
+                })
+                .catch((err) => {
+                    console.log("Manga details error weewooweewoo");
+                    console.log(err);
                 });
-            })
-            .catch((err) => {
-                console.log("Anime details error weewooweewoo");
-                console.log(err);
-            });
+        } else {
+            GetAnimeDetails(animeNode)
+                .then((res) => {
+                    this.setState({
+                        animeNode: animeNode,
+                        anime: res,
+                    });
+                })
+                .catch((err) => {
+                    console.log("Anime details error weewooweewoo");
+                    console.log(err);
+                });
+        }
     }
 
     componentDidMount() {
@@ -227,7 +257,13 @@ export default class AnimeDetails extends React.Component<Props, State> {
                             data={this.state.anime.recommendations}
                             renderItem={(item) => (
                                 <AnimeItem
-                                    item={item.item}
+                                    item={{
+                                        ...item.item,
+                                        node: {
+                                            ...item.item.node,
+                                            media_type: this.state.mediaType,
+                                        },
+                                    }}
                                     width={150 * sizer}
                                     navigator={this.props.navigation}
                                 />

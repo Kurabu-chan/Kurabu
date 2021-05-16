@@ -12,11 +12,16 @@ export default function RankingTabs() {
     return (
         <Tab.Navigator
             tabBarOptions={{
-                activeBackgroundColor: Colors.KURABUPURPLE,
-                inactiveBackgroundColor: Colors.KURABUPINK,
+                activeBackgroundColor: Colors.KURABUPINK,
+                inactiveBackgroundColor: Colors.KURABUPURPLE,
                 labelStyle: {
                     fontFamily: "AGRevueCyr",
                     color: Colors.TEXT,
+                    padding: 5,
+                    fontSize: 12,
+                },
+                style: {
+                    height: 55,
                 },
             }}>
             <Tab.Screen
@@ -40,7 +45,16 @@ function createIconAnime(props: {
     color: string;
     size: number;
 }) {
-    return <Icon name="film" type="font-awesome-5" color={Colors.TEXT} />;
+    return (
+        <Icon
+            name="film"
+            type="font-awesome-5"
+            color={Colors.TEXT}
+            style={{
+                padding: 5,
+            }}
+        />
+    );
 }
 
 function createIconManga(props: {
@@ -48,5 +62,14 @@ function createIconManga(props: {
     color: string;
     size: number;
 }) {
-    return <Icon name="book" type="font-awesome-5" color={Colors.TEXT} />;
+    return (
+        <Icon
+            name="book"
+            type="font-awesome-5"
+            color={Colors.TEXT}
+            style={{
+                padding: 10,
+            }}
+        />
+    );
 }

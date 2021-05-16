@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AnimeList from "../../../components/AnimeList";
-import SeasonalSource from "../../../APIManager/Seasonal";
+import AnimeSeasonalSource from "../../../APIManager/Anime/AnimeSeasonal";
 import AnimeNodeSource from "../../../APIManager/AnimeNodeSource";
 import { RouteProp, useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -27,7 +27,7 @@ export default class Home extends React.Component<any, StateType> {
         this.state = {
             node: {
                 key: "Currently Airing",
-                nodeSource: new SeasonalSource(2021, "spring"),
+                nodeSource: new AnimeSeasonalSource(2021, "spring"),
             },
         };
     }
