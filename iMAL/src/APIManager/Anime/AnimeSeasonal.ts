@@ -1,12 +1,12 @@
-import AnimeNodeSource from "../AnimeNodeSource";
+import MediaNodeSource from "../MediaNodeSource";
 import Authentication from "../Authenticate";
 import { Config } from "../../Configuration/Config";
-import { AnimeNode, Fields } from "../ApiBasicTypes";
+import { MediaNode, Fields } from "../ApiBasicTypes";
 import { handleError } from "../ErrorHandler";
 import { baseRequest } from "../helper/RequestBuilder";
 
 type JSONType = {
-    data: AnimeNode[];
+    data: MediaNode[];
     paging: {
         next?: string;
         previous?: string;
@@ -25,7 +25,7 @@ function isIterable(obj: any) {
     return typeof obj[Symbol.iterator] === "function";
 }
 
-class AnimeSeasonalSource implements AnimeNodeSource {
+class AnimeSeasonalSource implements MediaNodeSource {
     constructor(
         private year?: number,
         private season?: "winter" | "summer" | "spring" | "fall",

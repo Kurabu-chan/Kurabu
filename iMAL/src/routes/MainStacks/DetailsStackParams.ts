@@ -1,4 +1,4 @@
-import { AnimeNode } from "#api/ApiBasicTypes";
+import { MediaNode } from "#api/ApiBasicTypes";
 
 type params = {
     id: number;

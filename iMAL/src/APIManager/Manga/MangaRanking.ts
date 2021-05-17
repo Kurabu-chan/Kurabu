@@ -1,11 +1,11 @@
 import { Config } from "../../Configuration/Config";
-import AnimeNodeSource from "../AnimeNodeSource";
-import { AnimeNode, Fields, ListPagination } from "../ApiBasicTypes";
+import MediaNodeSource from "../MediaNodeSource";
+import { MediaNode, Fields, ListPagination } from "../ApiBasicTypes";
 import Authentication from "../Authenticate";
 import { handleError } from "../ErrorHandler";
 import { baseRequest } from "../helper/RequestBuilder";
 
-export class MangaRankingSource implements AnimeNodeSource {
+export class MangaRankingSource implements MediaNodeSource {
     constructor(private rankingtype: string, private fields?: Fields[]) {
         if (!this.fields) {
             this.fields = [Fields.media_type];
@@ -15,7 +15,7 @@ export class MangaRankingSource implements AnimeNodeSource {
     async MakeRequest(
         limit?: number,
         offset?: number
-    ): Promise<{ data: AnimeNode[] }> {
+    ): Promise<{ data: MediaNode[] }> {
         let auth = await Authentication.getInstance();
 
         let code = auth.GetStateCode();
@@ -50,7 +50,7 @@ export class MangaRankingSource implements AnimeNodeSource {
         let json: any = await res.json();
 
         handleError(json);
-        let ret = json as ListPagination<AnimeNode>;
+        let ret = json as ListPagination<MediaNode>;
         if (ret.paging) {
             return ret;
         } else {

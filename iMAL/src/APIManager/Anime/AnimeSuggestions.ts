@@ -1,12 +1,12 @@
-import AnimeNodeSource from "../AnimeNodeSource";
+import MediaNodeSource from "../MediaNodeSource";
 import Authentication from "../Authenticate";
 import { Config } from "../../Configuration/Config";
-import { AnimeNode, Fields } from "../ApiBasicTypes";
+import { MediaNode, Fields } from "../ApiBasicTypes";
 import { handleError } from "../ErrorHandler";
 import { baseRequest } from "../helper/RequestBuilder";
 
 type JSONType = {
-    data: AnimeNode[];
+    data: MediaNode[];
     paging: {
         next?: string;
         previous?: string;
@@ -21,7 +21,7 @@ function isIterable(obj: any) {
     return typeof obj[Symbol.iterator] === "function";
 }
 
-class AnimeSuggestionsSource implements AnimeNodeSource {
+class AnimeSuggestionsSource implements MediaNodeSource {
     constructor(private fields?: Fields[]) {
         if (!this.fields) {
             this.fields = [Fields.media_type];

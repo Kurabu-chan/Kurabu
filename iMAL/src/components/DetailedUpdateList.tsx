@@ -7,18 +7,18 @@ import {
     ActivityIndicator,
 } from "react-native";
 import DetailedUpdateItem from "./DetailedUpdateItem";
-import AnimeNodeSource from "../APIManager/AnimeNodeSource";
+import MediaNodeSource from "../APIManager/MediaNodeSource";
 import { Colors } from "../Configuration/Colors";
 import { Dimensions } from "react-native";
-import { AnimeNode } from "../APIManager/ApiBasicTypes";
+import { MediaNode } from "../APIManager/ApiBasicTypes";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 const BatchSize = 20;
 
 type DetailedUpdateListState = {
     title: string;
-    data: AnimeNode[];
-    animeNodeSource?: AnimeNodeSource;
+    data: MediaNode[];
+    mediaNodeSource?: MediaNodeSource;
     navigator: StackNavigationProp<any, any>;
     offset: number;
     needmore: boolean;
@@ -27,9 +27,9 @@ type DetailedUpdateListState = {
 
 type DetailedUpdateListProps = {
     title: string;
-    animeNodeSource: AnimeNodeSource;
+    mediaNodeSource: MediaNodeSource;
     navigator: StackNavigationProp<any, any>;
-    onCreate?: (anime: DetailedUpdateList) => void;
+    onCreate?: (media: DetailedUpdateList) => void;
     onDataGather?: () => void;
 };
 
@@ -42,7 +42,7 @@ class DetailedUpdateList extends React.Component<
         this.state = {
             title: props.title,
             data: [],
-            animeNodeSource: props.animeNodeSource,
+            mediaNodeSource: props.mediaNodeSource,
             navigator: props.navigator,
             offset: 0,
             onDataGather: props.onDataGather,
@@ -60,12 +60,12 @@ class DetailedUpdateList extends React.Component<
         this.setState({});
     }
 
-    public changeSource(title: string, nodeSource: AnimeNodeSource) {
+    public changeSource(title: string, nodeSource: MediaNodeSource) {
         this.setState(
             (prevState) => ({
                 ...prevState,
                 title: title,
-                animeNodeSource: nodeSource,
+                mediaNodeSource: nodeSource,
                 offset: 0,
                 data: [],
             }),
@@ -79,7 +79,7 @@ class DetailedUpdateList extends React.Component<
         if (this.state.onDataGather != undefined) {
             this.state.onDataGather();
         }
-        this.state.animeNodeSource
+        this.state.mediaNodeSource
             ?.MakeRequest(BatchSize, this.state.offset)
             .then((data) => {
                 this.setState((prevState) => ({
@@ -91,7 +91,7 @@ class DetailedUpdateList extends React.Component<
     }
 
     public loadExtra() {
-        this.state.animeNodeSource
+        this.state.mediaNodeSource
             ?.MakeRequest(BatchSize, this.state.offset)
             .then((data) => {
                 this.setState((old) => {
@@ -100,7 +100,7 @@ class DetailedUpdateList extends React.Component<
                         return {
                             title: old.title,
                             data: old.data,
-                            animeNodeSource: old.animeNodeSource,
+                            mediaNodeSource: old.mediaNodeSource,
                             navigator: old.navigator,
                             offset: old.data.length,
                             needmore: false,
@@ -110,7 +110,7 @@ class DetailedUpdateList extends React.Component<
                     return {
                         title: old.title,
                         data: old.data,
-                        animeNodeSource: old.animeNodeSource,
+                        mediaNodeSource: old.mediaNodeSource,
                         navigator: old.navigator,
                         offset: old.data.length,
                         needmore: true,
@@ -122,7 +122,7 @@ class DetailedUpdateList extends React.Component<
     render() {
         if (this.state.data.length > 0) {
             return (
-                <View style={styles.animeContainer}>
+                <View style={styles.mediaContainer}>
                     <Text style={styles.title}>{this.state.title}</Text>
                     <FlatList
                         horizontal={false}
@@ -152,7 +152,7 @@ class DetailedUpdateList extends React.Component<
 }
 var fontSize = Dimensions.get("window").width / 36;
 const styles = StyleSheet.create({
-    animeContainer: {
+    mediaContainer: {
         height: Dimensions.get("window").height,
         width: Dimensions.get("window").width,
         marginTop: 10,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
         color: Colors.TEXT,
         paddingBottom: 10,
     },
-    animeList: {
+    mediaList: {
         justifyContent: "flex-start",
     },
     loading: {

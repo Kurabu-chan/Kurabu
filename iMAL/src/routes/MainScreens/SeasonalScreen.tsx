@@ -3,7 +3,7 @@ import SearchBar from "react-native-dynamic-search-bar";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SearchList from "../../components/DetailedUpdateList";
-import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
+import MediaNodeSource from "../../APIManager/MediaNodeSource";
 import { Colors } from "../../Configuration/Colors";
 import { AnimeSearchSource } from "../../APIManager/Anime/AnimeSearch";
 import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
@@ -24,7 +24,7 @@ type StateType = {
         searched: boolean;
         found: boolean;
     };
-    rankingSource?: AnimeNodeSource;
+    rankingSource?: MediaNodeSource;
     animeList?: SearchList;
     listenerToUnMount: any;
 };
@@ -84,7 +84,8 @@ export default class Seasonal extends React.Component<any, StateType> {
         if (this.state.animeList) {
             console.log(this.state.seasonal.seasonValue);
             this.state.animeList.changeSource(
-                `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${this.state.seasonal.yearValue
+                `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${
+                    this.state.seasonal.yearValue
                 }`,
                 nodeSource
             );
@@ -140,13 +141,12 @@ export default class Seasonal extends React.Component<any, StateType> {
                     Colors.KURABUPINK,
                     Colors.KURABUPURPLE,
                     Colors.BACKGROUNDGRADIENT_COLOR1,
-                    Colors.BACKGROUNDGRADIENT_COLOR2
+                    Colors.BACKGROUNDGRADIENT_COLOR2,
                 ]}
                 style={{
                     width: Dimensions.get("window").width,
-                    height: Dimensions.get("window").height
-                }}
-            >
+                    height: Dimensions.get("window").height,
+                }}>
                 <View
                     style={{
                         flexDirection: "row",
@@ -222,7 +222,7 @@ export default class Seasonal extends React.Component<any, StateType> {
                         title={`${capitalizeFirstLetter(
                             this.state.seasonal.seasonValue
                         )} ${this.state.seasonal.yearValue}`}
-                        animeNodeSource={this.state.rankingSource}
+                        mediaNodeSource={this.state.rankingSource}
                         navigator={this.props.navigation}
                         onCreate={this.onSearchListCreate.bind(this)}
                         onDataGather={this.onSearchListDataGather.bind(this)}

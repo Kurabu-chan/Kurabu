@@ -12,8 +12,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { GetAnimeDetails } from "../../APIManager/Anime/AnimeDetails";
-import { Anime, AnimeNode } from "../../APIManager/ApiBasicTypes";
-import AnimeItem from "../../components/AnimeItem";
+import { Media, MediaNode } from "../../APIManager/ApiBasicTypes";
+import MediaItem from "../../components/MediaItem";
 import { Divider } from "../../components/Divider";
 import { LargeText } from "../../components/LargeText";
 import { Colors } from "../../Configuration/Colors";
@@ -33,8 +33,8 @@ type Props = {
 };
 
 type State = {
-    animeNode?: number;
-    anime?: Anime;
+    mediaId?: number;
+    anime?: Media;
     listenerToUnMount: any;
     page: string;
     mediaType: string;
@@ -42,7 +42,7 @@ type State = {
 
 var sizer = Dimensions.get("window").width / 400;
 
-export default class AnimeDetails extends React.Component<Props, State> {
+export default class Details extends React.Component<Props, State> {
     private styles = StyleSheet.create({
         appContainer: {
             backgroundColor: Colors.INVISIBLE_BACKGROUND,
@@ -51,14 +51,14 @@ export default class AnimeDetails extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        let animeNode = props.route.params.id;
+        let mediaId = props.route.params.id;
         let mediaType = props.route.params.media_type;
-        if (animeNode == undefined) {
-            animeNode = 1;
+        if (mediaId == undefined) {
+            mediaId = 1;
         }
 
         this.state = {
-            animeNode: animeNode,
+            mediaId: mediaId,
             listenerToUnMount: undefined,
             page: getActiveScreen(),
             mediaType: mediaType,
@@ -77,10 +77,10 @@ export default class AnimeDetails extends React.Component<Props, State> {
         ];
 
         if (mangaMediatTypes.includes(mediaType)) {
-            GetMangaDetails(animeNode)
+            GetMangaDetails(mediaId)
                 .then((res) => {
                     this.setState({
-                        animeNode: animeNode,
+                        mediaId: mediaId,
                         anime: res,
                     });
                 })
@@ -89,10 +89,10 @@ export default class AnimeDetails extends React.Component<Props, State> {
                     console.log(err);
                 });
         } else {
-            GetAnimeDetails(animeNode)
+            GetAnimeDetails(mediaId)
                 .then((res) => {
                     this.setState({
-                        animeNode: animeNode,
+                        mediaId: mediaId,
                         anime: res,
                     });
                 })
@@ -299,7 +299,7 @@ export default class AnimeDetails extends React.Component<Props, State> {
                                 horizontal={true}
                                 data={this.state.anime.recommendations}
                                 renderItem={(item) => (
-                                    <AnimeItem
+                                    <MediaItem
                                         item={item.item}
                                         width={150 * sizer}
                                         navigator={this.props.navigation}

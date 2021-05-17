@@ -8,25 +8,25 @@ import {
     Dimensions,
 } from "react-native";
 import { Colors } from "../Configuration/Colors";
-import { AnimeNode } from "../APIManager/ApiBasicTypes";
+import { MediaNode } from "../APIManager/ApiBasicTypes";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Console } from "node:console";
 import { changeTopRightButton } from "#routes/MainDrawer";
 
-type AnimeItemProps = {
-    item: AnimeNode;
+type MediaItemProps = {
+    item: MediaNode;
     width?: number;
     navigator: StackNavigationProp<any, any>;
 };
 
-type AnimeItemState = {
-    item: AnimeNode;
+type MediaItemState = {
+    item: MediaNode;
     navigator: StackNavigationProp<any, any>;
 };
 
-class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
-    constructor(props: AnimeItemProps) {
+class MediaItem extends React.Component<MediaItemProps, MediaItemState> {
+    constructor(props: MediaItemProps) {
         super(props);
 
         this.state = {
@@ -55,7 +55,7 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
         var sizer = Dimensions.get("window").width / 400;
 
         const styles = StyleSheet.create({
-            animeContainer: {
+            mediaContainer: {
                 // height: 200,
                 width: width,
                 marginTop: 10,
@@ -85,7 +85,7 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
 
         return (
             <TouchableOpacity
-                style={styles.animeContainer}
+                style={styles.mediaContainer}
                 onPress={this.openDetails.bind(this)}>
                 {this.state.item.node.main_picture !== undefined ? (
                     <Image
@@ -105,4 +105,4 @@ class AnimeItem extends React.Component<AnimeItemProps, AnimeItemState> {
     }
 }
 
-export default AnimeItem;
+export default MediaItem;

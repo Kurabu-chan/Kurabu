@@ -3,7 +3,7 @@ import SearchBar from "react-native-dynamic-search-bar";
 import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SearchList from "../../../components/DetailedUpdateList";
-import AnimeNodeSource from "../../../APIManager/AnimeNodeSource";
+import MediaNodeSource from "../../../APIManager/MediaNodeSource";
 import { Colors } from "../../../Configuration/Colors";
 import { AnimeSearchSource } from "../../../APIManager/Anime/AnimeSearch";
 import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
@@ -19,7 +19,7 @@ type StateType = {
         searched: boolean;
         found: boolean;
     };
-    searchSource?: AnimeNodeSource;
+    searchSource?: MediaNodeSource;
     animeList?: SearchList;
 };
 
@@ -128,23 +128,24 @@ export default class Search extends React.Component<any, StateType> {
                         Colors.KURABUPINK,
                         Colors.KURABUPURPLE,
                         Colors.BACKGROUNDGRADIENT_COLOR1,
-                        Colors.BACKGROUNDGRADIENT_COLOR2
+                        Colors.BACKGROUNDGRADIENT_COLOR2,
                     ]}
                     style={{
                         width: Dimensions.get("window").width,
-                        height: Dimensions.get("window").height
-                    }}
-                >
-                {this.createSearchBar()}
-                {this.state.searchSource !== undefined ? (
-                    <SearchList
-                        title={`Search results for: ${this.state.search.searchText}`}
-                        animeNodeSource={this.state.searchSource}
-                        navigator={this.props.navigation}
-                        onCreate={this.onSearchListCreate.bind(this)}
-                        onDataGather={this.onSearchListDataGather.bind(this)}
-                    />
-                ) : undefined}
+                        height: Dimensions.get("window").height,
+                    }}>
+                    {this.createSearchBar()}
+                    {this.state.searchSource !== undefined ? (
+                        <SearchList
+                            title={`Search results for: ${this.state.search.searchText}`}
+                            mediaNodeSource={this.state.searchSource}
+                            navigator={this.props.navigation}
+                            onCreate={this.onSearchListCreate.bind(this)}
+                            onDataGather={this.onSearchListDataGather.bind(
+                                this
+                            )}
+                        />
+                    ) : undefined}
                 </LinearGradient>
             </SafeAreaProvider>
         );

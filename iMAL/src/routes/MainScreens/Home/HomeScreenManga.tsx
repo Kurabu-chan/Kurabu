@@ -1,9 +1,9 @@
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import AnimeList from "../../../components/AnimeList";
+import MediaList from "../../../components/MediaList";
 import AnimeSeasonalSource from "../../../APIManager/Anime/AnimeSeasonal";
-import AnimeNodeSource from "../../../APIManager/AnimeNodeSource";
+import MediaNodeSource from "../../../APIManager/MediaNodeSource";
 import { RouteProp, useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
@@ -20,7 +20,7 @@ type PropsType = {
 type StateType = {
     node: {
         key: string;
-        nodeSource: AnimeNodeSource;
+        nodeSource: MediaNodeSource;
     };
     listenerToUnMount: any;
 };
@@ -73,9 +73,9 @@ export default class Home extends React.Component<PropsType, StateType> {
                         style={{
                             flexDirection: "row",
                         }}>
-                        <AnimeList
+                        <MediaList
                             title={this.state.node.key}
-                            animeNodeSource={this.state.node.nodeSource}
+                            mediaNodeSource={this.state.node.nodeSource}
                             navigator={this.props.navigation as any}
                         />
                     </View>

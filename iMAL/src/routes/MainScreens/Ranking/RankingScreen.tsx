@@ -3,7 +3,7 @@ import SearchBar from "react-native-dynamic-search-bar";
 import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SearchList from "../../../components/DetailedUpdateList";
-import AnimeNodeSource from "../../../APIManager/AnimeNodeSource";
+import MediaNodeSource from "../../../APIManager/MediaNodeSource";
 import { Colors } from "../../../Configuration/Colors";
 import { AnimeSearchSource } from "../../../APIManager/Anime/AnimeSearch";
 import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
@@ -20,7 +20,7 @@ type StateType = {
         searched: boolean;
         found: boolean;
     };
-    rankingSource?: AnimeNodeSource;
+    rankingSource?: MediaNodeSource;
     animeList?: SearchList;
 };
 
@@ -141,7 +141,7 @@ export default class Ranking extends React.Component<any, StateType> {
                 {this.state.rankingSource !== undefined ? (
                     <SearchList
                         title={`Top Overall Rankings`}
-                        animeNodeSource={this.state.rankingSource}
+                        mediaNodeSource={this.state.rankingSource}
                         navigator={this.props.navigation}
                         onCreate={this.onSearchListCreate.bind(this)}
                         onDataGather={this.onSearchListDataGather.bind(this)}

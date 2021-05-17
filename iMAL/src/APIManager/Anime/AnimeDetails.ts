@@ -1,10 +1,10 @@
 import { Config } from "../../Configuration/Config";
-import { Anime } from "../ApiBasicTypes";
+import { Media } from "../ApiBasicTypes";
 import Authentication from "../Authenticate";
 import { handleError } from "../ErrorHandler";
 import { baseRequest } from "../helper/RequestBuilder";
 
-export async function GetAnimeDetails(animeid: number): Promise<Anime> {
+export async function GetAnimeDetails(animeid: number): Promise<Media> {
     let auth = await Authentication.getInstance();
 
     let code = auth.GetStateCode();
@@ -22,7 +22,7 @@ export async function GetAnimeDetails(animeid: number): Promise<Anime> {
     let res = await req.request();
     let json: any = await res.json();
     handleError(json);
-    let ret = json as Anime;
+    let ret = json as Media;
     if (ret.id) {
         return ret;
     } else {

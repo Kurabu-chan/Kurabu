@@ -1,6 +1,6 @@
 import Suggestions from "#routes/MainScreens/SuggestionsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import AnimeDetails from "#routes/MainScreens/AnimeDetails";
+import Details from "#routes/MainScreens/Details";
 import React from "react";
 import DetailsStackParams from "./DetailsStackParams";
 
@@ -18,7 +18,7 @@ export default function SearchStack() {
             }}
             initialRouteName="SuggestionsScreen">
             <Stack.Screen name="SuggestionsScreen" component={Suggestions} />
-            <Stack.Screen name="DetailsScreen" component={AnimeDetails} />
+            <Stack.Screen name="DetailsScreen" component={Details} />
         </Stack.Navigator>
     );
 }

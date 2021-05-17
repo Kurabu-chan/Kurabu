@@ -1,8 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import Main from "#routes/MainScreens/Home/HomeScreen";
-import AnimeDetails from "#routes/MainScreens/AnimeDetails";
-import { AnimeNode } from "#api/ApiBasicTypes";
+import Details from "#routes/MainScreens/Details";
+import { MediaNode } from "#api/ApiBasicTypes";
 import HomeTabs from "#routes/MainScreens/Home/HomeTabs";
 import DetailsStackParams from "./DetailsStackParams";
 
@@ -20,7 +20,7 @@ export default function HomeStack(params: any) {
             }}
             initialRouteName="HomeScreen">
             <Stack.Screen name="HomeScreen" component={HomeTabs} />
-            <Stack.Screen name="DetailsScreen" component={AnimeDetails} />
+            <Stack.Screen name="DetailsScreen" component={Details} />
         </Stack.Navigator>
     );
 }

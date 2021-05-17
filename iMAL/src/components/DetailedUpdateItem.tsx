@@ -3,17 +3,17 @@ import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import { Colors } from "../Configuration/Colors";
 import { Dimensions } from "react-native";
 import { Divider } from "./Divider";
-import { AnimeNode, Fields } from "../APIManager/ApiBasicTypes";
+import { MediaNode, Fields } from "../APIManager/ApiBasicTypes";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 type DetailedUpdateItemProps = {
-    item: AnimeNode;
+    item: MediaNode;
     navigator: StackNavigationProp<any, any>;
 };
 
 type DetailedUpdateItemState = {
-    item: AnimeNode;
+    item: MediaNode;
     navigator: StackNavigationProp<any, any>;
 };
 
@@ -72,7 +72,7 @@ export class DetailedUpdateItem extends React.PureComponent<
     render() {
         return (
             <TouchableOpacity
-                style={styles.animeContainer}
+                style={styles.mediaContainer}
                 onPress={this.openDetails.bind(this)}>
                 {this.state.item.node.main_picture !== undefined ? (
                     <Image
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     page: {
         margin: 10,
     },
-    animeContainer: {
+    mediaContainer: {
         borderRadius: 10,
         backgroundColor: Colors.KURABUPURPLE,
         width: Dimensions.get("window").width - 5,

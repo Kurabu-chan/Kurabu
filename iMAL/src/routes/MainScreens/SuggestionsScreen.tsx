@@ -1,8 +1,8 @@
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import AnimeList from "../../components/AnimeList";
-import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
+import MediaList from "../../components/MediaList";
+import MediaNodeSource from "../../APIManager/MediaNodeSource";
 import AnimeSuggestionsSource from "../../APIManager/Anime/AnimeSuggestions";
 import { changeActivePage } from "#routes/MainDrawer";
 import { LinearGradient } from "expo-linear-gradient";
@@ -11,7 +11,7 @@ import { Colors } from "../../Configuration/Colors";
 type StateType = {
     node: {
         key: string;
-        nodeSource: AnimeNodeSource;
+        nodeSource: MediaNodeSource;
     };
     listenerToUnMount: any;
 };
@@ -54,20 +54,19 @@ export default class Suggestions extends React.Component<any, StateType> {
                         Colors.KURABUPINK,
                         Colors.KURABUPURPLE,
                         Colors.BACKGROUNDGRADIENT_COLOR1,
-                        Colors.BACKGROUNDGRADIENT_COLOR2
+                        Colors.BACKGROUNDGRADIENT_COLOR2,
                     ]}
                     style={{
                         width: Dimensions.get("window").width,
-                        height: Dimensions.get("window").height
-                    }}
-                >
+                        height: Dimensions.get("window").height,
+                    }}>
                     <View
                         style={{
                             flexDirection: "row",
                         }}>
-                        <AnimeList
+                        <MediaList
                             title={this.state.node.key}
-                            animeNodeSource={this.state.node.nodeSource}
+                            mediaNodeSource={this.state.node.nodeSource}
                             navigator={this.props.navigation}
                         />
                     </View>
