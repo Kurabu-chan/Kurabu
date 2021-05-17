@@ -64,8 +64,6 @@ export default class Details extends React.Component<Props, State> {
             mediaType: mediaType,
         };
 
-        console.log(mediaType);
-
         const mangaMediatTypes = [
             "manga",
             "light_novel",
