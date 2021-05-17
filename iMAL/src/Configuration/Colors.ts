@@ -27,4 +27,5 @@ export class Colors {
 
     public static BACKGROUNDGRADIENT_COLOR1 = "#191919";
     public static BACKGROUNDGRADIENT_COLOR2 = "#060606";
+    public static BACKGROUNDGRADIENT_COLOR2_DETAILS = "#101010";
 }
