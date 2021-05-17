@@ -1,15 +1,12 @@
+import Details from "#routes/MainScreens/Details";
+import Ranking from "#routes/MainScreens/Ranking/RankingTabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import Search from "#routes/MainScreens/SearchScreen";
-import AnimeDetails from "#routes/MainScreens/AnimeDetails";
-import { AnimeNode } from "#api/ApiBasicTypes";
 import React from "react";
-import Ranking from "#routes/MainScreens/RankingScreen";
+import DetailsStackParams from "./DetailsStackParams";
 
 export type RankingStackParamList = {
     Ranking: undefined;
-    Details: {
-        item: number;
-    };
+    Details: DetailsStackParams;
 };
 
 const Stack = createStackNavigator();
@@ -21,7 +18,7 @@ export default function RankingStack() {
             }}
             initialRouteName="RankingScreen">
             <Stack.Screen name="RankingScreen" component={Ranking} />
-            <Stack.Screen name="DetailsScreen" component={AnimeDetails} />
+            <Stack.Screen name="DetailsScreen" component={Details} />
         </Stack.Navigator>
     );
 }

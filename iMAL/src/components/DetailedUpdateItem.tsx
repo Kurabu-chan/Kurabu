@@ -1,19 +1,25 @@
-import React from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
-import { Colors } from "../Configuration/Colors";
-import { Dimensions } from "react-native";
-import { Divider } from "./Divider";
-import { AnimeNode, Fields } from "../APIManager/ApiBasicTypes";
-import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
+import {
+    Dimensions,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import NoImageKurabu from "../../assets/NoImageKurabu.svg";
+import { Fields, MediaNode } from "../APIManager/ApiBasicTypes";
+import { Colors } from "../Configuration/Colors";
+import { Divider } from "./Divider";
 
 type DetailedUpdateItemProps = {
-    item: AnimeNode;
+    item: MediaNode;
     navigator: StackNavigationProp<any, any>;
 };
 
 type DetailedUpdateItemState = {
-    item: AnimeNode;
+    item: MediaNode;
     navigator: StackNavigationProp<any, any>;
 };
 
@@ -43,10 +49,8 @@ export class DetailedUpdateItem extends React.PureComponent<
                     id: 1,
                     title: "failure",
                     main_picture: {
-                        medium:
-                            "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
-                        large:
-                            "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
+                        medium: "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
+                        large: "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
                     },
                 },
             };
@@ -60,7 +64,8 @@ export class DetailedUpdateItem extends React.PureComponent<
 
     public openDetails() {
         this.state.navigator.push("DetailsScreen", {
-            item: this.state.item.node.id,
+            id: this.state.item.node.id,
+            media_type: this.state.item.node.media_type,
         });
     }
 
@@ -73,7 +78,7 @@ export class DetailedUpdateItem extends React.PureComponent<
     render() {
         return (
             <TouchableOpacity
-                style={styles.animeContainer}
+                style={styles.mediaContainer}
                 onPress={this.openDetails.bind(this)}>
                 {this.state.item.node.main_picture !== undefined ? (
                     <Image
@@ -205,7 +210,7 @@ const styles = StyleSheet.create({
     page: {
         margin: 10,
     },
-    animeContainer: {
+    mediaContainer: {
         borderRadius: 10,
         backgroundColor: Colors.KURABUPURPLE,
         width: Dimensions.get("window").width - 5,

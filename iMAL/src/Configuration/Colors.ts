@@ -7,7 +7,7 @@ export class Colors {
     public static SUBTEXT = "#999999";
     public static PLACEHOLDERTEXT = "#121212";
     public static ORANGE = "#eb6100";
-    public static ORANGE_SELECTED = '#9b5100'
+    public static ORANGE_SELECTED = "#9b5100";
     public static INPUT_UNDERLINE = "#ffffff";
     public static DIVIDER = "#999999";
     public static PASSWORD_STRENGTH = {
@@ -17,7 +17,7 @@ export class Colors {
         OK: "#FF0",
         GOOD: "#0F0",
         EXCELLENT: "#00F",
-        BACKGROUND: "#bbb"
+        BACKGROUND: "#bbb",
     };
     public static BACKGROUND = "";
     public static ALTERNATE_BACKGROUND = "#1a1a1a";
@@ -25,7 +25,6 @@ export class Colors {
     public static INVISIBLE_BACKGROUND = "rgba(0,0,0, 1)";
     public static ERROR: "#FF0000";
 
-    
     public static BACKGROUNDGRADIENT_COLOR1 = "#191919";
     public static BACKGROUNDGRADIENT_COLOR2 = "#060606";
 }

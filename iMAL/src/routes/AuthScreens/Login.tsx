@@ -1,14 +1,13 @@
+import { RouteProp } from "@react-navigation/core";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { StyleSheet, Text, View, TextInput } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Dimensions } from "react-native";
+import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Kurabu from "../../../assets/pinklogin.svg";
 import Auth from "../../APIManager/Authenticate";
 import { Colors } from "../../Configuration/Colors";
-import Kurabu from "../../../assets/pinklogin.svg";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { AuthStackParamList } from "../AuthStack";
-import { RouteProp } from "@react-navigation/core";
 import { DoSwitch } from "../RootNavigator";
 
 type LoginProps = {

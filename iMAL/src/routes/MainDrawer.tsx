@@ -1,13 +1,13 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import MainStack from "./MainStacks/HomeStack";
-import SearchStack from "./MainStacks/SearchStack";
-import { Colors } from "../Configuration/Colors";
-import SuggestionsStack from "./MainStacks/SuggestionsStack";
-import RankingStack from "./MainStacks/RankingStack";
-import SeasonalStack from "./MainStacks/SeasonalStack";
 import React from "react";
-import { Button, Dimensions, TouchableOpacity } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
+import { Colors } from "../Configuration/Colors";
+import MainStack from "./MainStacks/HomeStack";
+import RankingStack from "./MainStacks/RankingStack";
+import SearchStack from "./MainStacks/SearchStack";
+import SeasonalStack from "./MainStacks/SeasonalStack";
+import SuggestionsStack from "./MainStacks/SuggestionsStack";
 
 export const Drawer = createDrawerNavigator();
 
@@ -31,6 +31,7 @@ var page: keyof TopRightFuncsType = "Main";
 
 export function changeActivePage(_page: keyof TopRightFuncsType) {
     page = _page;
+    console.log(`Changed active page: ${page}`);
     rerender();
 }
 

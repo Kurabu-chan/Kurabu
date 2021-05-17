@@ -1,10 +1,9 @@
 import React from "react";
-import { Text, View } from "react-native";
-import { Dimensions } from "react-native";
-import { DoSwitch } from "../RootNavigator";
+import { Dimensions, View } from "react-native";
+import Kurabu from "../../../assets/pinklogin.svg";
 import Auth from "../../APIManager/Authenticate";
 import * as RootNavigator from "../RootNavigator";
-import Kurabu from "../../../assets/pinklogin.svg";
+import { DoSwitch } from "../RootNavigator";
 
 //uncomment to reset saved uuid and go into developer mode for the Auth system
 //Auth.devMode = true;

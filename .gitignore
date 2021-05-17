@@ -128,3 +128,4 @@ docs/pages/versions/*/react-native/*.diff
 
 # Home
 /home/dist
+iMAL/config.json

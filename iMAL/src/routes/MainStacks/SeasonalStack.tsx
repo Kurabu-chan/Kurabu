@@ -1,15 +1,12 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import Search from "#routes/MainScreens/SearchScreen";
-import AnimeDetails from "#routes/MainScreens/AnimeDetails";
-import { AnimeNode } from "#api/ApiBasicTypes";
-import React from "react";
+import Details from "#routes/MainScreens/Details";
 import Seasonal from "#routes/MainScreens/SeasonalScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
+import DetailsStackParams from "./DetailsStackParams";
 
 export type SeasonalStackParamList = {
     Seasonal: undefined;
-    Details: {
-        item: number;
-    };
+    Details: DetailsStackParams;
 };
 
 const Stack = createStackNavigator();
@@ -21,7 +18,7 @@ export default function SeasonalStack() {
             }}
             initialRouteName="SeasonalScreen">
             <Stack.Screen name="SeasonalScreen" component={Seasonal} />
-            <Stack.Screen name="DetailsScreen" component={AnimeDetails} />
+            <Stack.Screen name="DetailsScreen" component={Details} />
         </Stack.Navigator>
     );
 }

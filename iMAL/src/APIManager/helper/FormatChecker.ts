@@ -1,5 +1,6 @@
 export function isUUID(uuid: string): boolean {
-    const stateRe = /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/;
+    const stateRe =
+        /^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$/;
     return uuid.match(stateRe) != null;
 }
 

@@ -1,33 +1,33 @@
-import React from "react";
-import { StyleSheet, FlatList, View, Text } from "react-native";
-import AnimeItem from "./AnimeItem";
-import AnimeNodeSource from "../APIManager/AnimeNodeSource";
-import { Colors } from "../Configuration/Colors";
-import { AnimeNode } from "../APIManager/ApiBasicTypes";
 import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { MediaNode } from "../APIManager/ApiBasicTypes";
+import MediaNodeSource from "../APIManager/MediaNodeSource";
+import { Colors } from "../Configuration/Colors";
+import MediaItem from "./MediaItem";
 
-type AnimeListState = {
+type MediaListState = {
     title: string;
-    data: AnimeNode[];
-    animeNodeSource: AnimeNodeSource;
+    data: MediaNode[];
+    mediaNodeSource: MediaNodeSource;
     navigator: StackNavigationProp<any, any>;
     offset: number;
 };
 
-type AnimeListProps = {
+type MediaListProps = {
     title: string;
-    animeNodeSource: AnimeNodeSource;
+    mediaNodeSource: MediaNodeSource;
     navigator: StackNavigationProp<any, any>;
-    onCreate?: (anime: AnimeList) => void;
+    onCreate?: (media: MediaList) => void;
 };
 
-class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
-    constructor(props: AnimeListProps) {
+class MediaList extends React.Component<MediaListProps, MediaListState> {
+    constructor(props: MediaListProps) {
         super(props);
         this.state = {
             title: props.title,
             data: [],
-            animeNodeSource: props.animeNodeSource,
+            mediaNodeSource: props.mediaNodeSource,
             navigator: props.navigator,
             offset: 0,
         };
@@ -36,17 +36,17 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
             this.props.onCreate(this);
         }
 
-        this.refresh(this.state.animeNodeSource);
+        this.refresh(this.state.mediaNodeSource);
     }
 
-    public refresh(nodeSource: AnimeNodeSource) {
+    public refresh(nodeSource: MediaNodeSource) {
         nodeSource.MakeRequest(20).then((data) => {
             this.setState((prevState) => ({ ...prevState, data: data.data }));
         });
     }
 
     public loadExtra() {
-        this.state.animeNodeSource
+        this.state.mediaNodeSource
             .MakeRequest(20, this.state.offset + 20)
             .then((data) => {
                 this.setState((old) => {
@@ -55,7 +55,7 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
                     return {
                         title: old.title,
                         data: old.data,
-                        animeNodeSource: old.animeNodeSource,
+                        mediaNodeSource: old.mediaNodeSource,
                         navigator: old.navigator,
                         offset: old.data.length,
                     };
@@ -65,7 +65,7 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
 
     render() {
         return (
-            <View style={styles.animeContainer}>
+            <View style={styles.mediaContainer}>
                 <FlatList
                     data={this.state.data}
                     onEndReachedThreshold={0.5}
@@ -73,7 +73,7 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
                     numColumns={2}
                     renderItem={(item) =>
                         item.index > 1 ? (
-                            <AnimeItem
+                            <MediaItem
                                 item={item.item}
                                 navigator={this.state.navigator}
                             />
@@ -91,7 +91,7 @@ class AnimeList extends React.Component<AnimeListProps, AnimeListState> {
 }
 
 const styles = StyleSheet.create({
-    animeContainer: {
+    mediaContainer: {
         // height: 240,
         marginTop: 5,
     },
@@ -100,9 +100,9 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         color: Colors.TEXT,
     },
-    animeList: {
+    mediaList: {
         justifyContent: "flex-start",
     },
 });
 
-export default AnimeList;
+export default MediaList;

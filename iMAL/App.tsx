@@ -15,6 +15,7 @@ import {
     navigationRefReady,
 } from "./src/routes/RootNavigator";
 import { registerSwitchListener } from "./src/routes/RootNavigator";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 type StateType = {
     fonts: boolean;
@@ -104,11 +105,17 @@ export default class Application extends React.Component<any, StateType> {
         };
         if (this.state.fonts == true) {
             return (
-                <NavigationContainer
-                    ref={navigationRef}
-                    onReady={navigationRefReady}>
-                    {this.state.RootSwitch == "Auth" ? <Auth /> : <Drawer />}
-                </NavigationContainer>
+                <SafeAreaProvider>
+                    <NavigationContainer
+                        ref={navigationRef}
+                        onReady={navigationRefReady}>
+                        {this.state.RootSwitch == "Auth" ? (
+                            <Auth />
+                        ) : (
+                            <Drawer />
+                        )}
+                    </NavigationContainer>
+                </SafeAreaProvider>
             );
         } else {
             return (

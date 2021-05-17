@@ -1,12 +1,20 @@
 import { changeActivePage } from "#routes/MainDrawer";
+import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import AnimeSuggestionsSource from "../../APIManager/Anime/AnimeSuggestions";
-import MediaNodeSource from "../../APIManager/MediaNodeSource";
-import MediaList from "../../components/MediaList";
-import { Colors } from "../../Configuration/Colors";
+import AnimeSeasonalSource from "../../../APIManager/Anime/AnimeSeasonal";
+import MediaNodeSource from "../../../APIManager/MediaNodeSource";
+import MediaList from "../../../components/MediaList";
+import { Colors } from "../../../Configuration/Colors";
+
+type PropsType = {
+    navigation: StackNavigationProp<HomeStackParamList, "Home">;
+    route: RouteProp<HomeStackParamList, "Home">;
+};
 
 type StateType = {
     node: {
@@ -16,13 +24,13 @@ type StateType = {
     listenerToUnMount: any;
 };
 
-export default class Suggestions extends React.Component<any, StateType> {
+export default class Home extends React.Component<any, StateType> {
     constructor(props: any) {
         super(props);
         this.state = {
             node: {
-                key: "Suggestions for you",
-                nodeSource: new AnimeSuggestionsSource(),
+                key: "Currently Airing",
+                nodeSource: new AnimeSeasonalSource(2021, "spring"),
             },
             listenerToUnMount: undefined,
         };
@@ -30,7 +38,7 @@ export default class Suggestions extends React.Component<any, StateType> {
 
     componentDidMount() {
         const unsubscribe = this.props.navigation.addListener("focus", () => {
-            changeActivePage("Suggestions");
+            changeActivePage("Main");
             // The screen is focused
             // Call any action
         });

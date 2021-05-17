@@ -1,17 +1,15 @@
-import React from "react";
-import SearchBar from "react-native-dynamic-search-bar";
-import { Dimensions } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import SearchList from "../../components/DetailedUpdateList";
-import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
-import { Colors } from "../../Configuration/Colors";
-import { SearchSource } from "../../APIManager/AnimeSearch";
-import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
+import { AnimeRankingSource } from "#api/Anime/AnimeRanking";
+import { changeActivePage } from "#routes/MainDrawer";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
-import { RankingSource } from "#api/Ranking";
-import { changeActivePage } from "#routes/MainDrawer";
 import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
+import { Dimensions } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import MediaNodeSource from "../../../APIManager/MediaNodeSource";
+import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
+import SearchList from "../../../components/DetailedUpdateList";
+import { Colors } from "../../../Configuration/Colors";
 
 type StateType = {
     ranking: {
@@ -22,7 +20,7 @@ type StateType = {
         searched: boolean;
         found: boolean;
     };
-    rankingSource?: AnimeNodeSource;
+    rankingSource?: MediaNodeSource;
     animeList?: SearchList;
     listenerToUnMount: any;
 };
@@ -70,7 +68,7 @@ export default class Ranking extends React.Component<any, StateType> {
 
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new RankingSource(
+        var nodeSource = new AnimeRankingSource(
             this.state.ranking.rankingValue,
             fields
         );
@@ -94,7 +92,8 @@ export default class Ranking extends React.Component<any, StateType> {
 
             console.log(this.state.ranking.rankingValue);
             this.state.animeList.changeSource(
-                `Top ${goodNamingMapping[this.state.ranking.rankingValue]
+                `Top ${
+                    goodNamingMapping[this.state.ranking.rankingValue]
                 } Rankings`,
                 nodeSource
             );
@@ -128,19 +127,15 @@ export default class Ranking extends React.Component<any, StateType> {
                     width: Dimensions.get("window").width - 10,
                     color: Colors.TEXT,
                 }}>
-                <Picker.Item key="all" label="All" value="all" />
-                <Picker.Item key="airing" label="Airing" value="airing" />
-                <Picker.Item key="upcoming" label="Upcoming" value="upcoming" />
-                <Picker.Item key="tv" label="Tv" value="tv" />
-                <Picker.Item key="ova" label="Ova" value="ova" />
-                <Picker.Item key="movie" label="Movie" value="movie" />
-                <Picker.Item key="special" label="Special" value="special" />
-                <Picker.Item
-                    key="bypopularity"
-                    label="Popularity"
-                    value="bypopularity"
-                />
-                <Picker.Item key="favorite" label="Favorite" value="favorite" />
+                <Picker.Item label="All" value="all" />
+                <Picker.Item label="Airing" value="airing" />
+                <Picker.Item label="Upcoming" value="upcoming" />
+                <Picker.Item label="Tv" value="tv" />
+                <Picker.Item label="Ova" value="ova" />
+                <Picker.Item label="Movie" value="movie" />
+                <Picker.Item label="Special" value="special" />
+                <Picker.Item label="Popularity" value="bypopularity" />
+                <Picker.Item label="Favorite" value="favorite" />
             </Picker>
         );
     }
@@ -165,21 +160,22 @@ export default class Ranking extends React.Component<any, StateType> {
                         Colors.KURABUPINK,
                         Colors.KURABUPURPLE,
                         Colors.BACKGROUNDGRADIENT_COLOR1,
-                        Colors.BACKGROUNDGRADIENT_COLOR2
+                        Colors.BACKGROUNDGRADIENT_COLOR2,
                     ]}
                     style={{
                         width: Dimensions.get("window").width,
-                        height: Dimensions.get("window").height
-                    }}
-                >
+                        height: Dimensions.get("window").height,
+                    }}>
                     {this.createSearchBar()}
                     {this.state.rankingSource !== undefined ? (
                         <SearchList
                             title={`Top Overall Rankings`}
-                            animeNodeSource={this.state.rankingSource}
+                            mediaNodeSource={this.state.rankingSource}
                             navigator={this.props.navigation}
                             onCreate={this.onSearchListCreate.bind(this)}
-                            onDataGather={this.onSearchListDataGather.bind(this)}
+                            onDataGather={this.onSearchListDataGather.bind(
+                                this
+                            )}
                         />
                     ) : undefined}
                 </LinearGradient>

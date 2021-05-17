@@ -1,14 +1,14 @@
-import React from "react";
-import SearchBar from "react-native-dynamic-search-bar";
-import { Dimensions } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import SearchList from "../../components/DetailedUpdateList";
-import AnimeNodeSource from "../../APIManager/AnimeNodeSource";
-import { Colors } from "../../Configuration/Colors";
-import { SearchSource } from "../../APIManager/AnimeSearch";
-import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
 import { changeActivePage } from "#routes/MainDrawer";
 import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
+import { Dimensions } from "react-native";
+import SearchBar from "react-native-dynamic-search-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AnimeSearchSource } from "../../../APIManager/Anime/AnimeSearch";
+import MediaNodeSource from "../../../APIManager/MediaNodeSource";
+import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
+import SearchList from "../../../components/DetailedUpdateList";
+import { Colors } from "../../../Configuration/Colors";
 
 type StateType = {
     search: {
@@ -19,7 +19,7 @@ type StateType = {
         searched: boolean;
         found: boolean;
     };
-    searchSource?: AnimeNodeSource;
+    searchSource?: MediaNodeSource;
     animeList?: SearchList;
     listenerToUnMount: any;
 };
@@ -40,23 +40,6 @@ export default class Search extends React.Component<any, StateType> {
         };
     }
 
-    componentDidMount() {
-        const unsubscribe = this.props.navigation.addListener("focus", () => {
-            changeActivePage("Search");
-            // The screen is focused
-            // Call any action
-        });
-
-        this.setState((prevState) => ({
-            ...prevState,
-            listenerToUnMount: unsubscribe,
-        }));
-    }
-
-    componentWillUnmount() {
-        if (this.state.listenerToUnMount) this.state.listenerToUnMount();
-    }
-
     async DoSearch() {
         if (this.state.search.searchText == "") {
             return;
@@ -64,7 +47,10 @@ export default class Search extends React.Component<any, StateType> {
 
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new SearchSource(this.state.search.searchText, fields);
+        var nodeSource = new AnimeSearchSource(
+            this.state.search.searchText,
+            fields
+        );
         this.setState((prevState) => ({
             ...prevState,
             searchSource: nodeSource,
@@ -124,6 +110,23 @@ export default class Search extends React.Component<any, StateType> {
         );
     }
 
+    componentDidMount() {
+        const unsubscribe = this.props.navigation.addListener("focus", () => {
+            changeActivePage("Search");
+            // The screen is focused
+            // Call any action
+        });
+
+        this.setState((prevState) => ({
+            ...prevState,
+            listenerToUnMount: unsubscribe,
+        }));
+    }
+
+    componentWillUnmount() {
+        if (this.state.listenerToUnMount) this.state.listenerToUnMount();
+    }
+
     onSearchListCreate(list: SearchList) {
         this.setState((prevState) => ({ ...prevState, animeList: list }));
     }
@@ -144,23 +147,24 @@ export default class Search extends React.Component<any, StateType> {
                         Colors.KURABUPINK,
                         Colors.KURABUPURPLE,
                         Colors.BACKGROUNDGRADIENT_COLOR1,
-                        Colors.BACKGROUNDGRADIENT_COLOR2
+                        Colors.BACKGROUNDGRADIENT_COLOR2,
                     ]}
                     style={{
                         width: Dimensions.get("window").width,
-                        height: Dimensions.get("window").height
-                    }}
-                >
-                {this.createSearchBar()}
-                {this.state.searchSource !== undefined ? (
-                    <SearchList
-                        title={`Search results for: ${this.state.search.searchText}`}
-                        animeNodeSource={this.state.searchSource}
-                        navigator={this.props.navigation}
-                        onCreate={this.onSearchListCreate.bind(this)}
-                        onDataGather={this.onSearchListDataGather.bind(this)}
-                    />
-                ) : undefined}
+                        height: Dimensions.get("window").height,
+                    }}>
+                    {this.createSearchBar()}
+                    {this.state.searchSource !== undefined ? (
+                        <SearchList
+                            title={`Search results for: ${this.state.search.searchText}`}
+                            mediaNodeSource={this.state.searchSource}
+                            navigator={this.props.navigation}
+                            onCreate={this.onSearchListCreate.bind(this)}
+                            onDataGather={this.onSearchListDataGather.bind(
+                                this
+                            )}
+                        />
+                    ) : undefined}
                 </LinearGradient>
             </SafeAreaProvider>
         );
