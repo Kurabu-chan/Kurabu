@@ -2,6 +2,7 @@ import { AnimeRankingSource } from "#api/Anime/AnimeRanking";
 import { changeActivePage } from "#routes/MainDrawer";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -153,16 +154,31 @@ export default class Ranking extends React.Component<any, StateType> {
     render() {
         return (
             <SafeAreaProvider style={{ backgroundColor: "#1a1a1a" }}>
-                {this.createSearchBar()}
-                {this.state.rankingSource !== undefined ? (
-                    <SearchList
-                        title={`Top Overall Rankings`}
-                        mediaNodeSource={this.state.rankingSource}
-                        navigator={this.props.navigation}
-                        onCreate={this.onSearchListCreate.bind(this)}
-                        onDataGather={this.onSearchListDataGather.bind(this)}
-                    />
-                ) : undefined}
+                <LinearGradient
+                    // Background Linear Gradient
+                    colors={[
+                        Colors.KURABUPINK,
+                        Colors.KURABUPURPLE,
+                        Colors.BACKGROUNDGRADIENT_COLOR1,
+                        Colors.BACKGROUNDGRADIENT_COLOR2,
+                    ]}
+                    style={{
+                        width: Dimensions.get("window").width,
+                        height: Dimensions.get("window").height,
+                    }}>
+                    {this.createSearchBar()}
+                    {this.state.rankingSource !== undefined ? (
+                        <SearchList
+                            title={`Top Overall Rankings`}
+                            mediaNodeSource={this.state.rankingSource}
+                            navigator={this.props.navigation}
+                            onCreate={this.onSearchListCreate.bind(this)}
+                            onDataGather={this.onSearchListDataGather.bind(
+                                this
+                            )}
+                        />
+                    ) : undefined}
+                </LinearGradient>
             </SafeAreaProvider>
         );
     }

@@ -2,12 +2,14 @@ import { changeActivePage } from "#routes/MainDrawer";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AnimeSeasonalSource from "../../../APIManager/Anime/AnimeSeasonal";
 import MediaNodeSource from "../../../APIManager/MediaNodeSource";
 import MediaList from "../../../components/MediaList";
+import { Colors } from "../../../Configuration/Colors";
 
 type PropsType = {
     navigation: StackNavigationProp<HomeStackParamList, "Home">;
@@ -54,16 +56,29 @@ export default class Home extends React.Component<any, StateType> {
     render() {
         return (
             <SafeAreaProvider style={{ backgroundColor: "#1a1a1a" }}>
-                <View
+                <LinearGradient
+                    // Background Linear Gradient
+                    colors={[
+                        Colors.KURABUPINK,
+                        Colors.KURABUPURPLE,
+                        Colors.BACKGROUNDGRADIENT_COLOR1,
+                        Colors.BACKGROUNDGRADIENT_COLOR2,
+                    ]}
                     style={{
-                        flexDirection: "row",
+                        width: Dimensions.get("window").width,
+                        height: Dimensions.get("window").height,
                     }}>
-                    <MediaList
-                        title={this.state.node.key}
-                        mediaNodeSource={this.state.node.nodeSource}
-                        navigator={this.props.navigation}
-                    />
-                </View>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                        }}>
+                        <MediaList
+                            title={this.state.node.key}
+                            mediaNodeSource={this.state.node.nodeSource}
+                            navigator={this.props.navigation}
+                        />
+                    </View>
+                </LinearGradient>
             </SafeAreaProvider>
         );
     }

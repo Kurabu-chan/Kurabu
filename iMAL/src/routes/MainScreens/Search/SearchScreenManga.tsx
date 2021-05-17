@@ -1,5 +1,6 @@
 import { MangaSearchSource } from "#api/Manga/MangaSearch";
 import { changeActivePage } from "#routes/MainDrawer";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions } from "react-native";
 import SearchBar from "react-native-dynamic-search-bar";
@@ -140,16 +141,31 @@ export default class Search extends React.Component<any, StateType> {
     render() {
         return (
             <SafeAreaProvider style={{ backgroundColor: "#1a1a1a" }}>
-                {this.createSearchBar()}
-                {this.state.searchSource !== undefined ? (
-                    <SearchList
-                        title={`Manga search results for: ${this.state.search.searchText}`}
-                        mediaNodeSource={this.state.searchSource}
-                        navigator={this.props.navigation}
-                        onCreate={this.onSearchListCreate.bind(this)}
-                        onDataGather={this.onSearchListDataGather.bind(this)}
-                    />
-                ) : undefined}
+                <LinearGradient
+                    // Background Linear Gradient
+                    colors={[
+                        Colors.KURABUPINK,
+                        Colors.KURABUPURPLE,
+                        Colors.BACKGROUNDGRADIENT_COLOR1,
+                        Colors.BACKGROUNDGRADIENT_COLOR2,
+                    ]}
+                    style={{
+                        width: Dimensions.get("window").width,
+                        height: Dimensions.get("window").height,
+                    }}>
+                    {this.createSearchBar()}
+                    {this.state.searchSource !== undefined ? (
+                        <SearchList
+                            title={`Manga search results for: ${this.state.search.searchText}`}
+                            mediaNodeSource={this.state.searchSource}
+                            navigator={this.props.navigation}
+                            onCreate={this.onSearchListCreate.bind(this)}
+                            onDataGather={this.onSearchListDataGather.bind(
+                                this
+                            )}
+                        />
+                    ) : undefined}
+                </LinearGradient>
             </SafeAreaProvider>
         );
     }
