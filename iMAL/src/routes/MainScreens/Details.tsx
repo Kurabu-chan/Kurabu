@@ -13,12 +13,16 @@ import {
     Dimensions,
     FlatList,
     Image,
+    SafeAreaView,
     StyleSheet,
     Text,
     View,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import {
+    SafeAreaInsetsContext,
+    SafeAreaProvider,
+} from "react-native-safe-area-context";
 import { GetAnimeDetails } from "../../APIManager/Anime/AnimeDetails";
 import { Media } from "../../APIManager/ApiBasicTypes";
 import { Divider } from "../../components/Divider";
@@ -56,7 +60,7 @@ export default class Details extends React.Component<Props, State> {
         if (mediaId == undefined) {
             mediaId = 1;
         }
-
+        console.log(`${mediaType} ${mediaId}`);
         this.state = {
             mediaId: mediaId,
             listenerToUnMount: undefined,
@@ -131,39 +135,26 @@ export default class Details extends React.Component<Props, State> {
 
     render() {
         return (
-            <SafeAreaProvider style={this.styles.appContainer}>
-                {this.state.anime == undefined ? (
-                    <LinearGradient
-                        // Background Linear Gradient
-                        colors={[
-                            Colors.KURABUPINK,
-                            Colors.KURABUPURPLE,
-                            Colors.BACKGROUNDGRADIENT_COLOR1,
-                            Colors.BACKGROUNDGRADIENT_COLOR2,
-                        ]}
-                        style={{
-                            width: Dimensions.get("window").width,
-                            height: Dimensions.get("window").height,
-                        }}>
+            <SafeAreaView style={this.styles.appContainer}>
+                <LinearGradient
+                    // Background Linear Gradient
+                    colors={[
+                        Colors.KURABUPINK,
+                        Colors.KURABUPURPLE,
+                        Colors.BACKGROUNDGRADIENT_COLOR1,
+                        Colors.BACKGROUNDGRADIENT_COLOR2_DETAILS,
+                    ]}
+                    style={{
+                        width: Dimensions.get("window").width,
+                        height: Dimensions.get("window").height,
+                    }}>
+                    {this.state.anime == undefined ? (
                         <ActivityIndicator
                             style={styles.loading}
                             size="large"
                             color={Colors.BLUE}
                         />
-                    </LinearGradient>
-                ) : (
-                    <LinearGradient
-                        // Background Linear Gradient
-                        colors={[
-                            Colors.KURABUPINK,
-                            Colors.KURABUPURPLE,
-                            Colors.BACKGROUNDGRADIENT_COLOR1,
-                            Colors.BACKGROUNDGRADIENT_COLOR2,
-                        ]}
-                        style={{
-                            width: Dimensions.get("window").width,
-                            height: Dimensions.get("window").height,
-                        }}>
+                    ) : (
                         <ScrollView style={styles.page}>
                             <View style={styles.TopArea}>
                                 <Image
@@ -264,7 +255,6 @@ export default class Details extends React.Component<Props, State> {
                                     </View>
                                 </View>
                             </View>
-
                             <Text style={styles.head2}>Synopsis</Text>
                             <Divider
                                 color={Colors.DIVIDER}
@@ -295,7 +285,15 @@ export default class Details extends React.Component<Props, State> {
                             />
                             <FlatList
                                 horizontal={true}
-                                data={this.state.anime.recommendations}
+                                data={this.state.anime.recommendations?.map(
+                                    (x) => ({
+                                        ...x,
+                                        node: {
+                                            ...x.node,
+                                            media_type: this.state.mediaType,
+                                        },
+                                    })
+                                )}
                                 renderItem={(item) => (
                                     <MediaItem
                                         item={item.item}
@@ -309,10 +307,16 @@ export default class Details extends React.Component<Props, State> {
                                 color={Colors.DIVIDER}
                                 widthPercentage={0}
                             />
+                            <View
+                                style={{
+                                    height: 80,
+                                    width: 5,
+                                }}
+                            />
                         </ScrollView>
-                    </LinearGradient>
-                )}
-            </SafeAreaProvider>
+                    )}
+                </LinearGradient>
+            </SafeAreaView>
         );
     }
 }

@@ -31,7 +31,7 @@ var page: keyof TopRightFuncsType = "Main";
 
 export function changeActivePage(_page: keyof TopRightFuncsType) {
     page = _page;
-    console.log(page);
+    console.log(`Changed active page: ${page}`);
     rerender();
 }
 
