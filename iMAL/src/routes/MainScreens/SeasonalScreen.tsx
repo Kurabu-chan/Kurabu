@@ -131,70 +131,57 @@ export default class Seasonal extends React.Component<any, StateType> {
             maxSeason(this.state.seasonal.yearValue)
         );
         return (
-            <LinearGradient
-                // Background Linear Gradient
-                colors={[
-                    Colors.KURABUPINK,
-                    Colors.KURABUPURPLE,
-                    Colors.BACKGROUNDGRADIENT_COLOR1,
-                    Colors.BACKGROUNDGRADIENT_COLOR2,
-                ]}
+            <View
                 style={{
-                    width: Dimensions.get("window").width,
-                    height: Dimensions.get("window").height,
+                    flexDirection: "row",
                 }}>
-                <View
+                <Picker
+                    selectedValue={this.state.seasonal.seasonValue}
+                    onValueChange={this.changeSeason.bind(this)}
                     style={{
-                        flexDirection: "row",
+                        backgroundColor: Colors.KURABUPURPLE,
+                        marginTop: 5,
+                        marginLeft: 5,
+                        marginRight: 5,
+                        width: (Dimensions.get("window").width - 20) / 2,
+                        color: Colors.TEXT,
                     }}>
-                    <Picker
-                        selectedValue={this.state.seasonal.seasonValue}
-                        onValueChange={this.changeSeason.bind(this)}
-                        style={{
-                            backgroundColor: Colors.KURABUPURPLE,
-                            marginTop: 5,
-                            marginLeft: 5,
-                            marginRight: 5,
-                            width: (Dimensions.get("window").width - 20) / 2,
-                            color: Colors.TEXT,
-                        }}>
-                        <Picker.Item label="Winter" value="winter" />
-                        {allowedSeasons.includes("spring") ? (
-                            <Picker.Item label="Spring" value="spring" />
-                        ) : undefined}
-                        {allowedSeasons.includes("summer") ? (
-                            <Picker.Item label="Summer" value="summer" />
-                        ) : undefined}
-                        {allowedSeasons.includes("fall") ? (
-                            <Picker.Item label="Fall" value="fall" />
-                        ) : undefined}
-                    </Picker>
-                    <Picker
-                        selectedValue={this.state.seasonal.yearValue.toString()}
-                        onValueChange={this.changeYear.bind(this)}
-                        style={{
-                            backgroundColor: Colors.KURABUPURPLE,
-                            marginTop: 5,
-                            marginLeft: 5,
-                            marginRight: 5,
-                            width: (Dimensions.get("window").width - 20) / 2,
-                            color: Colors.TEXT,
-                        }}>
-                        {arrayFromXToY(
-                            1917,
-                            maxYear(this.state.seasonal.seasonValue) + 1
-                        )
-                            .reverse()
-                            .map((x) => (
-                                <Picker.Item
-                                    key={x.toString()}
-                                    label={x.toString()}
-                                    value={x.toString()}
-                                />
-                            ))}
-                    </Picker>
-                </View>
-            </LinearGradient>
+                    <Picker.Item label="Winter" value="winter" />
+                    {allowedSeasons.includes("spring") ? (
+                        <Picker.Item label="Spring" value="spring" />
+                    ) : undefined}
+                    {allowedSeasons.includes("summer") ? (
+                        <Picker.Item label="Summer" value="summer" />
+                    ) : undefined}
+                    {allowedSeasons.includes("fall") ? (
+                        <Picker.Item label="Fall" value="fall" />
+                    ) : undefined}
+                </Picker>
+                <Picker
+                    selectedValue={this.state.seasonal.yearValue.toString()}
+                    onValueChange={this.changeYear.bind(this)}
+                    style={{
+                        backgroundColor: Colors.KURABUPURPLE,
+                        marginTop: 5,
+                        marginLeft: 5,
+                        marginRight: 5,
+                        width: (Dimensions.get("window").width - 20) / 2,
+                        color: Colors.TEXT,
+                    }}>
+                    {arrayFromXToY(
+                        1917,
+                        maxYear(this.state.seasonal.seasonValue) + 1
+                    )
+                        .reverse()
+                        .map((x) => (
+                            <Picker.Item
+                                key={x.toString()}
+                                label={x.toString()}
+                                value={x.toString()}
+                            />
+                        ))}
+                </Picker>
+            </View>
         );
     }
 
@@ -212,18 +199,33 @@ export default class Seasonal extends React.Component<any, StateType> {
     render() {
         return (
             <SafeAreaProvider style={{ backgroundColor: "#1a1a1a" }}>
-                {this.createSearchBar()}
-                {this.state.rankingSource !== undefined ? (
-                    <DetailedUpdateList
-                        title={`${capitalizeFirstLetter(
-                            this.state.seasonal.seasonValue
-                        )} ${this.state.seasonal.yearValue}`}
-                        mediaNodeSource={this.state.rankingSource}
-                        navigator={this.props.navigation}
-                        onCreate={this.onSearchListCreate.bind(this)}
-                        onDataGather={this.onSearchListDataGather.bind(this)}
-                    />
-                ) : undefined}
+                <LinearGradient
+                    // Background Linear Gradient
+                    colors={[
+                        Colors.KURABUPINK,
+                        Colors.KURABUPURPLE,
+                        Colors.BACKGROUNDGRADIENT_COLOR1,
+                        Colors.BACKGROUNDGRADIENT_COLOR2,
+                    ]}
+                    style={{
+                        width: Dimensions.get("window").width,
+                        height: Dimensions.get("window").height,
+                    }}>
+                    {this.createSearchBar()}
+                    {this.state.rankingSource !== undefined ? (
+                        <DetailedUpdateList
+                            title={`${capitalizeFirstLetter(
+                                this.state.seasonal.seasonValue
+                            )} ${this.state.seasonal.yearValue}`}
+                            mediaNodeSource={this.state.rankingSource}
+                            navigator={this.props.navigation}
+                            onCreate={this.onSearchListCreate.bind(this)}
+                            onDataGather={this.onSearchListDataGather.bind(
+                                this
+                            )}
+                        />
+                    ) : undefined}
+                </LinearGradient>
             </SafeAreaProvider>
         );
     }
