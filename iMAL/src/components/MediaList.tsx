@@ -1,10 +1,10 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { StyleSheet, FlatList, View, Text } from "react-native";
-import MediaItem from "./MediaItem";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { MediaNode } from "../APIManager/ApiBasicTypes";
 import MediaNodeSource from "../APIManager/MediaNodeSource";
 import { Colors } from "../Configuration/Colors";
-import { MediaNode } from "../APIManager/ApiBasicTypes";
-import { StackNavigationProp } from "@react-navigation/stack";
+import MediaItem from "./MediaItem";
 
 type MediaListState = {
     title: string;

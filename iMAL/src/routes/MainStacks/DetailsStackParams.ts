@@ -1,5 +1,3 @@
-import { MediaNode } from "#api/ApiBasicTypes";
-
 type params = {
     id: number;
     media_type: string;

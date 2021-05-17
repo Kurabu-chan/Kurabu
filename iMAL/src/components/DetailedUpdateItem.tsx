@@ -1,11 +1,17 @@
-import React from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
-import { Colors } from "../Configuration/Colors";
-import { Dimensions } from "react-native";
-import { Divider } from "./Divider";
-import { MediaNode, Fields } from "../APIManager/ApiBasicTypes";
-import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
+import {
+    Dimensions,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import NoImageKurabu from "../../assets/NoImageKurabu.svg";
+import { Fields, MediaNode } from "../APIManager/ApiBasicTypes";
+import { Colors } from "../Configuration/Colors";
+import { Divider } from "./Divider";
 
 type DetailedUpdateItemProps = {
     item: MediaNode;

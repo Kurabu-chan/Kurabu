@@ -3,9 +3,9 @@ All authentication screen stuff goes here
 */
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import Register from "./AuthScreens/Register";
 import Login from "./AuthScreens/Login";
 import PreLogin from "./AuthScreens/PreLogin";
+import Register from "./AuthScreens/Register";
 import Verify from "./AuthScreens/Verification";
 
 const Stack = createStackNavigator();

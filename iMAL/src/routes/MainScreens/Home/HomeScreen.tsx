@@ -1,13 +1,12 @@
+import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import MediaList from "../../../components/MediaList";
 import AnimeSeasonalSource from "../../../APIManager/Anime/AnimeSeasonal";
 import MediaNodeSource from "../../../APIManager/MediaNodeSource";
-import { RouteProp, useIsFocused } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
-import { changeActivePage } from "#routes/MainDrawer";
+import MediaList from "../../../components/MediaList";
 
 type PropsType = {
     navigation: StackNavigationProp<HomeStackParamList, "Home">;

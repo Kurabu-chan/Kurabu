@@ -1,6 +1,6 @@
+import Details from "#routes/MainScreens/Details";
 import Suggestions from "#routes/MainScreens/SuggestionsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import Details from "#routes/MainScreens/Details";
 import React from "react";
 import DetailsStackParams from "./DetailsStackParams";
 

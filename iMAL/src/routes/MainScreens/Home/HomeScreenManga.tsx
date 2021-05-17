@@ -1,15 +1,14 @@
+import { MangaRankingSource } from "#api/Manga/MangaRanking";
+import { changeActivePage } from "#routes/MainDrawer";
+import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import MediaList from "../../../components/MediaList";
-import AnimeSeasonalSource from "../../../APIManager/Anime/AnimeSeasonal";
 import MediaNodeSource from "../../../APIManager/MediaNodeSource";
-import { RouteProp, useIsFocused } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
-import { changeActivePage } from "#routes/MainDrawer";
-import { MangaRankingSource } from "#api/Manga/MangaRanking";
-import { LinearGradient } from "expo-linear-gradient";
+import MediaList from "../../../components/MediaList";
 import { Colors } from "../../../Configuration/Colors";
 
 type PropsType = {

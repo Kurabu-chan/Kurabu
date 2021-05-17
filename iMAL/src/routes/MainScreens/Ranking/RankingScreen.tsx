@@ -1,15 +1,13 @@
-import React from "react";
-import SearchBar from "react-native-dynamic-search-bar";
-import { Dimensions } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import SearchList from "../../../components/DetailedUpdateList";
-import MediaNodeSource from "../../../APIManager/MediaNodeSource";
-import { Colors } from "../../../Configuration/Colors";
-import { AnimeSearchSource } from "../../../APIManager/Anime/AnimeSearch";
-import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
+import { AnimeRankingSource } from "#api/Anime/AnimeRanking";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
-import { AnimeRankingSource } from "#api/Anime/AnimeRanking";
+import React from "react";
+import { Dimensions } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import MediaNodeSource from "../../../APIManager/MediaNodeSource";
+import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
+import SearchList from "../../../components/DetailedUpdateList";
+import { Colors } from "../../../Configuration/Colors";
 
 type StateType = {
     ranking: {

@@ -1,13 +1,19 @@
-import React from "react";
-import { Text, View, Linking, Dimensions, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { CodeField, Cursor } from "react-native-confirmation-code-field";
-import Authentication from "../../APIManager/Authenticate";
-import { Alert } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Colors } from "../../Configuration/Colors";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
+import {
+    Alert,
+    Dimensions,
+    Linking,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
+import { CodeField, Cursor } from "react-native-confirmation-code-field";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Authentication from "../../APIManager/Authenticate";
+import { Colors } from "../../Configuration/Colors";
 import { AuthStackParamList } from "../AuthStack";
 import * as RootNavigator from "../RootNavigator";
 

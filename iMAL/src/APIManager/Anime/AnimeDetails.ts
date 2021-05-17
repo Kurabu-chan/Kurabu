@@ -1,4 +1,3 @@
-import { Config } from "../../Configuration/Config";
 import { Media } from "../ApiBasicTypes";
 import Authentication from "../Authenticate";
 import { handleError } from "../ErrorHandler";

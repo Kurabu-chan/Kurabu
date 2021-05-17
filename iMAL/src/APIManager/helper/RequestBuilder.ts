@@ -1,4 +1,4 @@
-import fetch, { Response, HeadersInit, BodyInit } from "node-fetch";
+import fetch, { BodyInit, HeadersInit, Response } from "node-fetch";
 import { Config } from "../../Configuration/Config";
 
 export type RequestBuilderBuildType = {

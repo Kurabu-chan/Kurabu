@@ -1,17 +1,17 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import {
-    StyleSheet,
-    FlatList,
-    View,
-    Text,
     ActivityIndicator,
+    Dimensions,
+    FlatList,
+    StyleSheet,
+    Text,
+    View,
 } from "react-native";
-import DetailedUpdateItem from "./DetailedUpdateItem";
+import { MediaNode } from "../APIManager/ApiBasicTypes";
 import MediaNodeSource from "../APIManager/MediaNodeSource";
 import { Colors } from "../Configuration/Colors";
-import { Dimensions } from "react-native";
-import { MediaNode } from "../APIManager/ApiBasicTypes";
-import { StackNavigationProp } from "@react-navigation/stack";
+import DetailedUpdateItem from "./DetailedUpdateItem";
 
 const BatchSize = 20;
 

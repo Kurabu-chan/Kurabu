@@ -1,5 +1,5 @@
-import Auth from "./Authenticate";
 import * as Updates from "expo-updates";
+import Auth from "./Authenticate";
 
 export function handleError(jsonRes: any) {
     if (jsonRes.status !== "error") return;

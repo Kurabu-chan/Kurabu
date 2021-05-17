@@ -1,9 +1,7 @@
+import Details from "#routes/MainScreens/Details";
+import HomeTabs from "#routes/MainScreens/Home/HomeTabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import Main from "#routes/MainScreens/Home/HomeScreen";
-import Details from "#routes/MainScreens/Details";
-import { MediaNode } from "#api/ApiBasicTypes";
-import HomeTabs from "#routes/MainScreens/Home/HomeTabs";
 import DetailsStackParams from "./DetailsStackParams";
 
 const Stack = createStackNavigator();

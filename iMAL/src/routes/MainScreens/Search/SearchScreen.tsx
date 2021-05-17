@@ -1,14 +1,13 @@
-import React from "react";
-import SearchBar from "react-native-dynamic-search-bar";
-import { Dimensions } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import SearchList from "../../../components/DetailedUpdateList";
-import MediaNodeSource from "../../../APIManager/MediaNodeSource";
-import { Colors } from "../../../Configuration/Colors";
-import { AnimeSearchSource } from "../../../APIManager/Anime/AnimeSearch";
-import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
-import { changeActivePage } from "#routes/MainDrawer";
 import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
+import { Dimensions } from "react-native";
+import SearchBar from "react-native-dynamic-search-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AnimeSearchSource } from "../../../APIManager/Anime/AnimeSearch";
+import MediaNodeSource from "../../../APIManager/MediaNodeSource";
+import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
+import SearchList from "../../../components/DetailedUpdateList";
+import { Colors } from "../../../Configuration/Colors";
 
 type StateType = {
     search: {

@@ -1,10 +1,9 @@
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React from "react";
+import { Icon } from "react-native-elements";
+import { Colors } from "../../../Configuration/Colors";
 import Anime from "./RankingScreen";
 import Manga from "./RankingScreenManga";
-import { Colors } from "../../../Configuration/Colors";
-import { View, Text } from "react-native";
-import { Icon } from "react-native-elements";
 
 const Tab = createBottomTabNavigator();
 

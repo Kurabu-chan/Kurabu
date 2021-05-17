@@ -1,18 +1,16 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import {
-    StyleSheet,
-    View,
-    Text,
-    Image,
-    TouchableOpacity,
     Dimensions,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
-import { Colors } from "../Configuration/Colors";
-import { MediaNode } from "../APIManager/ApiBasicTypes";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { Console } from "node:console";
-import { changeTopRightButton } from "#routes/MainDrawer";
+import { MediaNode } from "../APIManager/ApiBasicTypes";
+import { Colors } from "../Configuration/Colors";
 
 type MediaItemProps = {
     item: MediaNode;

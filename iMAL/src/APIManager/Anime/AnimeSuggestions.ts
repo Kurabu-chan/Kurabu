@@ -1,9 +1,8 @@
-import MediaNodeSource from "../MediaNodeSource";
+import { Fields, MediaNode } from "../ApiBasicTypes";
 import Authentication from "../Authenticate";
-import { Config } from "../../Configuration/Config";
-import { MediaNode, Fields } from "../ApiBasicTypes";
 import { handleError } from "../ErrorHandler";
 import { baseRequest } from "../helper/RequestBuilder";
+import MediaNodeSource from "../MediaNodeSource";
 
 type JSONType = {
     data: MediaNode[];

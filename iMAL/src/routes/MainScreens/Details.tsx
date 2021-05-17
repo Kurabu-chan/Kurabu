@@ -1,31 +1,31 @@
-import React from "react";
-import {
-    ActivityIndicator,
-    Dimensions,
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    FlatList,
-} from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { GetAnimeDetails } from "../../APIManager/Anime/AnimeDetails";
-import { Media, MediaNode } from "../../APIManager/ApiBasicTypes";
-import MediaItem from "../../components/MediaItem";
-import { Divider } from "../../components/Divider";
-import { LargeText } from "../../components/LargeText";
-import { Colors } from "../../Configuration/Colors";
-import { HomeStackParamList } from "../MainStacks/HomeStack";
-import { RouteProp } from "@react-navigation/native";
+import { GetMangaDetails } from "#api/Manga/MangaDetails";
 import {
     changeActivePage,
     changeTopRightButton,
     getActiveScreen,
 } from "#routes/MainDrawer";
-import { GetMangaDetails } from "#api/Manga/MangaDetails";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
+import {
+    ActivityIndicator,
+    Dimensions,
+    FlatList,
+    Image,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GetAnimeDetails } from "../../APIManager/Anime/AnimeDetails";
+import { Media } from "../../APIManager/ApiBasicTypes";
+import { Divider } from "../../components/Divider";
+import { LargeText } from "../../components/LargeText";
+import MediaItem from "../../components/MediaItem";
+import { Colors } from "../../Configuration/Colors";
+import { HomeStackParamList } from "../MainStacks/HomeStack";
 
 type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "Details">;

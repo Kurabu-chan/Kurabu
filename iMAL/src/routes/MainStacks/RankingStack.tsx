@@ -1,9 +1,7 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import Search from "#routes/MainScreens/Search/SearchScreen";
 import Details from "#routes/MainScreens/Details";
-import { MediaNode } from "#api/ApiBasicTypes";
-import React from "react";
 import Ranking from "#routes/MainScreens/Ranking/RankingTabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
 import DetailsStackParams from "./DetailsStackParams";
 
 export type RankingStackParamList = {

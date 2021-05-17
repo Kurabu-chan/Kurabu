@@ -1,9 +1,8 @@
-import { Config } from "../../Configuration/Config";
-import MediaNodeSource from "../MediaNodeSource";
-import { MediaNode, Fields, ListPagination } from "../ApiBasicTypes";
+import { Fields, ListPagination, MediaNode } from "../ApiBasicTypes";
 import Authentication from "../Authenticate";
 import { handleError } from "../ErrorHandler";
 import { baseRequest } from "../helper/RequestBuilder";
+import MediaNodeSource from "../MediaNodeSource";
 
 export class AnimeRankingSource implements MediaNodeSource {
     constructor(private rankingtype: string, private fields?: Fields[]) {
