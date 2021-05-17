@@ -1,3 +1,4 @@
+import { changeActivePage } from "#routes/MainDrawer";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions } from "react-native";
@@ -20,6 +21,7 @@ type StateType = {
     };
     searchSource?: MediaNodeSource;
     animeList?: SearchList;
+    listenerToUnMount: any;
 };
 
 export default class Search extends React.Component<any, StateType> {
@@ -34,6 +36,7 @@ export default class Search extends React.Component<any, StateType> {
                 searched: false,
                 found: false,
             },
+            listenerToUnMount: undefined,
         };
     }
 
@@ -105,6 +108,23 @@ export default class Search extends React.Component<any, StateType> {
                 onEndEditing={this.DoSearch.bind(this)}
             />
         );
+    }
+
+    componentDidMount() {
+        const unsubscribe = this.props.navigation.addListener("focus", () => {
+            changeActivePage("Search");
+            // The screen is focused
+            // Call any action
+        });
+
+        this.setState((prevState) => ({
+            ...prevState,
+            listenerToUnMount: unsubscribe,
+        }));
+    }
+
+    componentWillUnmount() {
+        if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
     onSearchListCreate(list: SearchList) {

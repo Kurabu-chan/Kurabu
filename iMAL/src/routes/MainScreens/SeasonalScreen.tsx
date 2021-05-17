@@ -8,7 +8,7 @@ import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import MediaNodeSource from "../../APIManager/MediaNodeSource";
 import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
-import SearchList from "../../components/DetailedUpdateList";
+import DetailedUpdateList from "../../components/DetailedUpdateList";
 import { Colors } from "../../Configuration/Colors";
 
 type StateType = {
@@ -21,7 +21,7 @@ type StateType = {
         found: boolean;
     };
     rankingSource?: MediaNodeSource;
-    animeList?: SearchList;
+    animeList?: DetailedUpdateList;
     listenerToUnMount: any;
 };
 
@@ -198,7 +198,7 @@ export default class Seasonal extends React.Component<any, StateType> {
         );
     }
 
-    onSearchListCreate(list: SearchList) {
+    onSearchListCreate(list: DetailedUpdateList) {
         this.setState((prevState) => ({ ...prevState, animeList: list }));
     }
 
@@ -214,7 +214,7 @@ export default class Seasonal extends React.Component<any, StateType> {
             <SafeAreaProvider style={{ backgroundColor: "#1a1a1a" }}>
                 {this.createSearchBar()}
                 {this.state.rankingSource !== undefined ? (
-                    <SearchList
+                    <DetailedUpdateList
                         title={`${capitalizeFirstLetter(
                             this.state.seasonal.seasonValue
                         )} ${this.state.seasonal.yearValue}`}

@@ -1,4 +1,5 @@
 import { AnimeRankingSource } from "#api/Anime/AnimeRanking";
+import { changeActivePage } from "#routes/MainDrawer";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import React from "react";
@@ -20,6 +21,7 @@ type StateType = {
     };
     rankingSource?: MediaNodeSource;
     animeList?: SearchList;
+    listenerToUnMount: any;
 };
 
 export default class Ranking extends React.Component<any, StateType> {
@@ -34,12 +36,28 @@ export default class Ranking extends React.Component<any, StateType> {
                 searched: false,
                 found: false,
             },
+            listenerToUnMount: undefined,
         };
     }
 
     componentDidMount() {
         console.log("mount");
         this.DoRanking();
+
+        const unsubscribe = this.props.navigation.addListener("focus", () => {
+            changeActivePage("Ranking");
+            // The screen is focused
+            // Call any action
+        });
+
+        this.setState((prevState) => ({
+            ...prevState,
+            listenerToUnMount: unsubscribe,
+        }));
+    }
+
+    componentWillUnmount() {
+        if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
     async DoRanking() {

@@ -1,3 +1,4 @@
+import { changeActivePage } from "#routes/MainDrawer";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -18,6 +19,7 @@ type StateType = {
         key: string;
         nodeSource: MediaNodeSource;
     };
+    listenerToUnMount: any;
 };
 
 export default class Home extends React.Component<any, StateType> {
@@ -28,7 +30,25 @@ export default class Home extends React.Component<any, StateType> {
                 key: "Currently Airing",
                 nodeSource: new AnimeSeasonalSource(2021, "spring"),
             },
+            listenerToUnMount: undefined,
         };
+    }
+
+    componentDidMount() {
+        const unsubscribe = this.props.navigation.addListener("focus", () => {
+            changeActivePage("Main");
+            // The screen is focused
+            // Call any action
+        });
+
+        this.setState((prevState) => ({
+            ...prevState,
+            listenerToUnMount: unsubscribe,
+        }));
+    }
+
+    componentWillUnmount() {
+        if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
     render() {
