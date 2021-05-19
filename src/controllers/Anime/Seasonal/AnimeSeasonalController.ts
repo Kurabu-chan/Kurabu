@@ -60,9 +60,9 @@ export class AnimeSeasonalController {
 			arg.limit = 100;
 		}
 
-		var fields: Fields[] | undefined;
+		var fields: Fields | undefined;
 		if (arg.fields) {
-			fields = extractFields(arg.fields);
+			fields = extractFields(arg.fields).fields;
 		}
 
 		var result = await this._seasonalWebRequest.handle({

@@ -30,7 +30,10 @@ export class AnimeRankingWebRequestHandler
 			.setQueryParam("offset", (query.offset ? query.offset : 0).toString())
 			.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
-		if (query.fields !== undefined && query.fields.length !== 0) {
+		if (
+			query.fields !== undefined &&
+			Object.entries(query.fields).length !== 0
+		) {
 			request.setQueryParam("fields", fieldsToString(query.fields as Fields[]));
 		}
 

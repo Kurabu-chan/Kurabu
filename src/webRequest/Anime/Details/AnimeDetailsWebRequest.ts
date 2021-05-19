@@ -5,5 +5,5 @@ import { IWebRequest } from "../../IWebRequest";
 export class AnimeDetailsWebRequest extends IWebRequest {
 	user!: User;
 	animeid!: number;
-	fields?: Fields[] | undefined;
+	fields?: Fields | undefined;
 }

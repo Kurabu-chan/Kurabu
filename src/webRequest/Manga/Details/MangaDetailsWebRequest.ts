@@ -5,5 +5,5 @@ import { IWebRequest } from "../../IWebRequest";
 export class MangaDetailsWebRequest extends IWebRequest {
 	user!: User;
 	mangaid!: number;
-	fields?: Fields[] | undefined;
+	fields?: Fields | undefined;
 }

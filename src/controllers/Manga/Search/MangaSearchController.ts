@@ -27,10 +27,10 @@ export class MangaSearchController {
 			arg.limit = 100;
 		}
 
-		var fields: Fields[] | undefined = undefined;
+		var fields: Fields | undefined = undefined;
 		if (arg.fields !== undefined) {
 			// console.log(fields);
-			fields = extractFields(arg.fields);
+			fields = extractFields(arg.fields).fields;
 			// console.log(fields);
 		}
 

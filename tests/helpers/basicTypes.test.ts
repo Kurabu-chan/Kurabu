@@ -16,7 +16,7 @@ export function basicTypes() {
 
 					let actual = extractFields(input);
 
-					expect(actual).to.be.an("array").that.is.empty;
+					expect(actual.fields).to.be.an("object").that.is.empty;
 				});
 
 				it("extractFields should return fields array for fields list comma-space seperated", () => {
@@ -24,13 +24,12 @@ export function basicTypes() {
 
 					let actual = extractFields(input);
 
-					expect(actual)
-						.to.contain(Fields.id)
-						.contain(Fields.title)
-						.contain(Fields.synopsis)
-						.contain(Fields.popularity)
-						.contain(Fields.updated_at)
-						.contain(Fields.status);
+					expect(actual.fields.id).to.be.true;
+					expect(actual.fields.title).to.be.true;
+					expect(actual.fields.synopsis).to.be.true;
+					expect(actual.fields.popularity).to.be.true;
+					expect(actual.fields.updated_at).to.be.true;
+					expect(actual.fields.status).to.be.true;
 				});
 
 				it("extractFields should return fields array for fields list comma seperated", () => {
@@ -38,13 +37,12 @@ export function basicTypes() {
 
 					let actual = extractFields(input);
 
-					expect(actual)
-						.to.contain(Fields.id)
-						.contain(Fields.title)
-						.contain(Fields.synopsis)
-						.contain(Fields.popularity)
-						.contain(Fields.updated_at)
-						.contain(Fields.status);
+					expect(actual.fields.id).to.be.true;
+					expect(actual.fields.title).to.be.true;
+					expect(actual.fields.synopsis).to.be.true;
+					expect(actual.fields.popularity).to.be.true;
+					expect(actual.fields.updated_at).to.be.true;
+					expect(actual.fields.status).to.be.true;
 				});
 			});
 
@@ -58,11 +56,11 @@ export function basicTypes() {
 				});
 
 				it("fieldsToString should return array of fields for comma-space seperated list of some fields", () => {
-					let input = [Fields.id, Fields.nsfw, Fields.popularity];
+					let input = { id: true, nsfw: true, popularity: true };
 
 					let actual = fieldsToString(input);
 
-					expect(actual).to.equal("id, nsfw, popularity");
+					expect(actual).to.equal("id,nsfw,popularity");
 				});
 			});
 		});
