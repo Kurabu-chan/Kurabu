@@ -8,75 +8,164 @@ export type ErrorResponse = {
 	message?: string;
 };
 
-export enum Fields {
-	id,
-	title,
-	main_picture,
-	alternative_titles,
-	start_date,
-	end_date,
-	synopsis,
-	mean,
-	rank,
-	popularity,
-	num_list_users,
-	num_scoring_users,
-	nsfw,
-	created_at,
-	updated_at,
-	media_type,
-	status,
-	genres,
-	my_list_status,
-	num_episodes,
-	start_season,
-	broadcast,
-	source,
-	average_episode_duration,
-	rating,
-	pictures,
-	background,
-	related_anime,
-	related_manga,
-	recommendations,
-	studios,
-	statistics,
+export type Fields = {
+	id?: boolean;
+	title?: boolean;
+	main_picture?: boolean;
+	alternative_titles?: boolean;
+	start_date?: boolean;
+	end_date?: boolean;
+	synopsis?: boolean;
+	mean?: boolean;
+	rank?: boolean;
+	popularity?: boolean;
+	num_list_users?: boolean;
+	num_scoring_users?: boolean;
+	nsfw?: boolean;
+	created_at?: boolean;
+	updated_at?: boolean;
+	media_type?: boolean;
+	status?: boolean;
+	genres?: boolean;
+	my_list_status?: boolean | Fields; //different possible fields
+	num_episodes?: boolean;
+	start_season?: boolean;
+	broadcast?: boolean;
+	source?: boolean;
+	average_episode_duration?: boolean;
+	rating?: boolean;
+	pictures?: boolean;
+	background?: boolean;
+	related_anime?: boolean | Fields;
+	related_manga?: boolean | Fields;
+	recommendations?: boolean | Fields;
+	studios?: boolean;
+	statistics?: boolean;
+	videos?: boolean;
+};
+
+export function fieldsToString(fields: any) {
+	var entries = Object.entries(fields);
+	var str = "";
+
+	for (const key in entries) {
+		var entry = entries[key];
+		if (str.length > 0) {
+			str += ",";
+		}
+		str += entry[0];
+		if (entry[1] != true && entry[1] != false) {
+			str += `{${fieldsToString(entry[1] as any)}}`;
+		}
+	}
+	return str;
 }
 
-const fieldNames: string[] = [];
-for (var field in Fields) {
-	fieldNames.push(field);
-}
+export function extractFields(
+	str: string
+): { fields: Fields; remaining: string } {
+	var subject = str;
 
-export function extractFields(fields: string): Fields[] {
-	var fieldStrList = fields.split(",");
-	var fieldsList: Fields[] = [];
+	if (subject[0] == "{") {
+		subject = subject.substr(1, subject.length);
+	}
 
-	for (var fieldInd in fieldStrList) {
-		var field: string = fieldStrList[fieldInd].trim();
-		if (fieldNames.includes(field)) {
-			var fieldss: keyof typeof Fields = <keyof typeof Fields>field;
-			fieldsList.push(Fields[fieldss]);
+	var currentObject = "";
+	var createdObj: any = {};
+
+	function addObject(str: string, val: any) {
+		if (str == "") return;
+		createdObj[currentObject] = val;
+		currentObject = "";
+	}
+
+	function skipSubject() {
+		subject = subject.substr(1, subject.length);
+	}
+
+	while (subject.length > 0) {
+		var subjZero = subject[0];
+
+		if (subjZero == " ") {
+			skipSubject();
+			if (subject.length == 0) {
+				addObject(currentObject, true);
+			}
+			continue;
+		}
+
+		if (subjZero == "{") {
+			var res = extractFields(subject);
+			addObject(currentObject, res.fields);
+			subject = res.remaining;
+			continue;
+		}
+		if (subjZero == "}") {
+			addObject(currentObject, true);
+
+			skipSubject();
+			if (subject[0] == ",") skipSubject();
+
+			return {
+				fields: createdObj,
+				remaining: subject,
+			};
+		}
+		if (subjZero == ",") {
+			addObject(currentObject, true);
+			skipSubject();
+			continue;
+		}
+
+		currentObject += subjZero;
+		skipSubject();
+
+		if (subject.length == 0) {
+			addObject(currentObject, true);
 		}
 	}
 
-	return fieldsList;
+	return {
+		fields: createdObj,
+		remaining: "",
+	};
 }
 
 export function allFields() {
-	let x = [];
-	for (let index = 0; index < 32; index++) {
-		x[index] = index;
-	}
-	return x;
-}
-
-export function fieldsToString(fields: Fields[]): string {
-	return fields
-		.map<string>((field, index, array) => {
-			return Fields[field];
-		})
-		.join(", ");
+	return {
+		id: true,
+		title: true,
+		main_picture: true,
+		alternative_titles: true,
+		start_date: true,
+		end_date: true,
+		synopsis: true,
+		mean: true,
+		rank: true,
+		popularity: true,
+		num_list_users: true,
+		num_scoring_users: true,
+		nsfw: true,
+		created_at: true,
+		updated_at: true,
+		media_type: true,
+		status: true,
+		genres: true,
+		my_list_status: true,
+		num_episodes: true,
+		start_season: true,
+		broadcast: true,
+		source: true,
+		average_episode_duration: true,
+		rating: true,
+		pictures: true,
+		background: true,
+		related_anime: true,
+		related_manga: true,
+		recommendations: true,
+		studios: true,
+		statistics: true,
+	};
 }
 
 type Relation = AnimeNode & {

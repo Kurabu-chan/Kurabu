@@ -7,5 +7,5 @@ export class AnimeSearchWebRequest extends IWebRequest {
 	query!: string;
 	limit?: number | undefined;
 	offset?: number | undefined;
-	fields?: Fields[];
+	fields?: Fields;
 }

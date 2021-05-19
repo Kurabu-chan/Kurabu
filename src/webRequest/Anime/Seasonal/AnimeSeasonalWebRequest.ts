@@ -9,5 +9,5 @@ export class AnimeSeasonalWebRequest extends IWebRequest {
 	season!: "summer" | "winter" | "fall" | "spring";
 	limit?: number | undefined;
 	offset?: number | undefined;
-	fields?: Fields[];
+	fields?: Fields;
 }

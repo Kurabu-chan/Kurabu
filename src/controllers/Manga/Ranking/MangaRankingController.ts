@@ -55,9 +55,9 @@ export class MangaRankingController {
 				| "favorite"
 			>req.query.rankingtype;
 		}
-		var fields: Fields[] | undefined;
+		var fields: Fields | undefined;
 		if (arg.fields) {
-			fields = extractFields(arg.fields);
+			fields = extractFields(arg.fields).fields;
 		}
 
 		var result = await this._rankingWebRequest.handle({

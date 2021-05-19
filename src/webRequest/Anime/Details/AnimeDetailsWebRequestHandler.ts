@@ -17,7 +17,7 @@ export class AnimeDetailsWebRequestHandler
 	async handle(
 		query: AnimeDetailsWebRequest
 	): Promise<AnimeDetailsWebRequestResult> {
-		if (!query.fields || query.fields.length === 0) {
+		if (!query.fields || Object.entries(query.fields).length == 0) {
 			query.fields = allFields();
 		}
 

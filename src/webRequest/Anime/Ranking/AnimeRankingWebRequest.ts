@@ -17,5 +17,5 @@ export class AnimeRankingWebRequest extends IWebRequest {
 		| "favorite";
 	limit?: undefined | number;
 	offset?: undefined | number;
-	fields?: Fields[];
+	fields?: Fields;
 }
