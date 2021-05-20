@@ -173,6 +173,16 @@ type Relation = AnimeNode & {
 	relation_type_formatted: string;
 };
 
+export type StatusNode = AnimeNode & {
+	list_status: {
+		status: string;
+		score: number;
+		num_watched_episodes: number;
+		is_rewatching: boolean;
+		updated_at: Date;
+	};
+};
+
 export type Anime = {
 	id?: number;
 	title?: string;
