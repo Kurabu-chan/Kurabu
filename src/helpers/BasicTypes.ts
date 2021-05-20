@@ -168,25 +168,19 @@ export function allFields() {
 	};
 }
 
-type Relation = AnimeNode & {
+type Relation = MediaNode & {
 	relation_type: string;
 	relation_type_formatted: string;
 };
 
-export type StatusNode = AnimeNode & {
-	list_status: {
-		status: string;
-		score: number;
-		num_watched_episodes: number;
-		is_rewatching: boolean;
-		updated_at: Date;
-	};
+export type StatusNode = MediaNode & {
+	list_status: ListStatus;
 };
 
-export type Anime = {
-	id?: number;
-	title?: string;
-	main_picture?: Picture;
+export type Media = {
+	id: number;
+	title: string;
+	main_picture: Picture;
 	alternative_titles?: {
 		synonyms?: string[];
 		en?: string;
@@ -220,58 +214,7 @@ export type Anime = {
 	background?: string;
 	related_anime?: Relation[];
 	related_manga?: Relation[];
-	recommendations?: (AnimeNode & { num_recommendations?: number })[];
-	studios?: Studio[];
-	statistics?: {
-		status?: {
-			watching?: string;
-			completed?: string;
-			on_hold?: string;
-			dropped?: string;
-			plan_to_watch?: string;
-		};
-		num_list_users?: number;
-	};
-};
-
-export type Manga = {
-	id?: number;
-	title?: string;
-	main_picture?: Picture;
-	alternative_titles?: {
-		synonyms?: string[];
-		en?: string;
-		ja?: string;
-	};
-	start_date?: string;
-	end_date?: string;
-	synopsis?: string;
-	mean?: number;
-	rank?: number;
-	popularity?: number;
-	num_list_users?: number;
-	num_scoring_users?: number;
-	nsfw?: string;
-	created_at?: string;
-	updated_at?: string;
-	media_type?: string;
-	status?: string;
-	genres?: Genre[];
-	my_list_status?: ListStatus;
-	num_episodes?: number;
-	start_season?: Season;
-	broadcast?: {
-		day_of_the_week?: string;
-		start_time?: string;
-	};
-	source?: string;
-	average_episode_duration?: number;
-	rating?: string;
-	pictures?: Picture[];
-	background?: string;
-	related_anime?: Relation[];
-	related_manga?: Relation[];
-	recommendations?: (MangaNode & { num_recommendations?: number })[];
+	recommendations?: (MediaNode & { num_recommendations?: number })[];
 	studios?: Studio[];
 	statistics?: {
 		status?: {
@@ -327,20 +270,8 @@ export type RequestResponse<T> = {
 		| ErrorResponse;
 };
 
-export type AnimeNode = {
-	node: {
-		id: number;
-		title: string;
-		main_picture: Picture;
-	};
-};
-
-export type MangaNode = {
-	node: {
-		id: number;
-		title: string;
-		main_picture: Picture;
-	};
+export type MediaNode = {
+	node: Media;
 };
 
 export type Season = {

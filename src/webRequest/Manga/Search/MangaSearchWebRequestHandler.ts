@@ -3,7 +3,7 @@ import { MangaSearchWebRequest } from "./MangaSearchWebRequest";
 import { MangaSearchWebRequestResult } from "./MangaSearchWebRequestResult";
 import { autoInjectable } from "tsyringe";
 import {
-	Manga,
+	Media,
 	ErrorResponse,
 	Fields,
 	fieldsToString,
@@ -34,14 +34,14 @@ export class MangaSearchWebRequestHandler
 
 		let data = await request.refreshRequest(query.user);
 
-		let json: ListPagination<Manga> | ErrorResponse = data;
+		let json: ListPagination<Media> | ErrorResponse = data;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
 		}
 
 		return {
 			success: IWebRequestResultStatus.SUCCESS,
-			search: json as ListPagination<Manga>,
+			search: json as ListPagination<Media>,
 		};
 	}
 }

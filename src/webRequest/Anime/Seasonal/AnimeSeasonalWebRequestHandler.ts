@@ -4,7 +4,7 @@ import { AnimeSeasonalWebRequestResult } from "./AnimeSeasonalWebRequestResult";
 import { autoInjectable } from "tsyringe";
 import {
 	ListPagination,
-	AnimeNode,
+	MediaNode,
 	Season,
 	ErrorResponse,
 	fieldsToString,
@@ -38,7 +38,7 @@ export class SeasonalWebRequestHandler
 		let data = await request.refreshRequest(query.user);
 
 		let json:
-			| (ListPagination<AnimeNode> & { season: Season })
+			| (ListPagination<MediaNode> & { season: Season })
 			| ErrorResponse = data;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
@@ -46,7 +46,7 @@ export class SeasonalWebRequestHandler
 
 		return {
 			success: IWebRequestResultStatus.SUCCESS,
-			seasonal: json as ListPagination<AnimeNode> & { season: Season },
+			seasonal: json as ListPagination<MediaNode> & { season: Season },
 		};
 	}
 }

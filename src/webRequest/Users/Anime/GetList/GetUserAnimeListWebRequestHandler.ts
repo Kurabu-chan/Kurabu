@@ -9,7 +9,7 @@ import { autoInjectable } from "tsyringe";
 import fetch from "node-fetch";
 import {
 	allFields,
-	AnimeNode,
+	MediaNode,
 	ErrorResponse,
 	fieldsToString,
 	ListPagination,

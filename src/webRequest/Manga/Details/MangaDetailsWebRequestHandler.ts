@@ -4,7 +4,7 @@ import { MangaDetailsWebRequestResult } from "./MangaDetailsWebRequestResult";
 import { autoInjectable } from "tsyringe";
 import {
 	allFields,
-	Manga,
+	Media,
 	ErrorResponse,
 	fieldsToString,
 } from "../../../helpers/BasicTypes";
@@ -29,14 +29,14 @@ export class MangaDetailsWebRequestHandler
 
 		let data = await request.refreshRequest(query.user);
 
-		let json: Manga | ErrorResponse = data;
+		let json: Media | ErrorResponse = data;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
 		}
 
 		return {
 			success: IWebRequestResultStatus.SUCCESS,
-			manga: json as Manga,
+			manga: json as Media,
 		};
 	}
 }

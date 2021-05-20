@@ -1,7 +1,7 @@
-import { MangaNode, ListPagination } from "../../../helpers/BasicTypes";
+import { MediaNode, ListPagination } from "../../../helpers/BasicTypes";
 import { IWebRequestResult } from "../../IWebRequest";
 
-export type MangaRankingWebRequestResultType = MangaNode & {
+export type MangaRankingWebRequestResultType = MediaNode & {
 	ranking: { rank: number };
 };
 

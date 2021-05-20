@@ -4,7 +4,7 @@ import { AnimeDetailsWebRequestResult } from "./AnimeDetailsWebRequestResult";
 import { autoInjectable } from "tsyringe";
 import {
 	allFields,
-	Anime,
+	Media,
 	ErrorResponse,
 	fieldsToString,
 } from "../../../helpers/BasicTypes";
@@ -29,14 +29,14 @@ export class AnimeDetailsWebRequestHandler
 
 		let data = await request.refreshRequest(query.user);
 
-		let json: Anime | ErrorResponse = data;
+		let json: Media | ErrorResponse = data;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
 		}
 
 		return {
 			success: IWebRequestResultStatus.SUCCESS,
-			anime: json as Anime,
+			anime: json as Media,
 		};
 	}
 }

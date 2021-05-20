@@ -4,7 +4,7 @@ import { AnimeSuggestionsWebRequestResult } from "./AnimeSuggestionsWebRequestRe
 import { autoInjectable } from "tsyringe";
 import {
 	ListPagination,
-	AnimeNode,
+	MediaNode,
 	ErrorResponse,
 	fieldsToString,
 	Fields,
@@ -38,14 +38,14 @@ export class SuggestionsWebRequestHandler
 
 		let data = await request.refreshRequest(query.user);
 
-		let json: ListPagination<AnimeNode> | ErrorResponse = data;
+		let json: ListPagination<MediaNode> | ErrorResponse = data;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
 		}
 
 		return {
 			success: IWebRequestResultStatus.SUCCESS,
-			suggestions: json as ListPagination<AnimeNode>,
+			suggestions: json as ListPagination<MediaNode>,
 		};
 	}
 }
