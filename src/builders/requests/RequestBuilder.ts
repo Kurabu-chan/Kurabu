@@ -1,4 +1,9 @@
-import fetch, { Response, HeadersInit, BodyInit } from "node-fetch";
+import fetch, {
+	BodyInit,
+	HeadersInit,
+	Response,
+} from "node-fetch";
+
 import { RefreshFetch } from "../../helpers/refresher";
 import { User } from "../../models/User";
 
@@ -37,8 +42,8 @@ export class RequestBuilder {
 
 	public setHeader(key: string, value: string) {
 		this.headers.push({
-			key: key,
-			value: value,
+			key,
+			value,
 		});
 
 		return this;
@@ -46,69 +51,60 @@ export class RequestBuilder {
 
 	public setQueryParam(key: string, value: string) {
 		this.queryParams.push({
-			key: key,
-			value: value,
+			key,
+			value,
 		});
 
 		return this;
 	}
 
-	public build(): RequestBuilderBuildType;
-	public build(method?: string): RequestBuilderBuildType;
 	public build(method?: string): RequestBuilderBuildType {
 		let headers: HeadersInit | undefined;
-		if (this.headers.length == 0) {
+		if (this.headers.length === 0) {
 			headers = undefined;
 		} else {
 			headers = {};
-			for (var i = 0; i < this.headers.length; i++) {
-				var header = this.headers[i];
+			for (const header of this.headers) {
 				headers[header.key] = header.value;
 			}
 		}
 
 		let url: string = `${this.scheme}://${this.domain}/${this.path}`;
-		url = url.substr(0, url.length - 1); //remove last /
+		url = url.substr(0, url.length - 1); // remove last /
 
 		if (this.queryParams.length !== 0) {
 			url += "?";
-			for (var i = 0; i < this.queryParams.length; i++) {
-				var queryParam = this.queryParams[i];
-
+			for (const queryParam of this.queryParams) {
 				if (url.endsWith("?") !== true) url += "&";
 				url += `${queryParam.key}=${queryParam.value}`;
 			}
 		}
 
 		return {
-			url: url,
-			method: method,
 			body: this.body,
-			headers: headers,
+			headers,
+			method,
+			url,
 		};
 	}
 
-	public request(): Promise<Response>;
-	public request(method?: string): Promise<Response>;
 	public request(method?: string): Promise<Response> {
-		var buildResult = this.build(method);
+		const buildResult = this.build(method);
 
 		return fetch(buildResult.url, {
-			method: buildResult.method,
 			body: buildResult.body,
 			headers: buildResult.headers,
+			method: buildResult.method,
 		});
 	}
 
-	public refreshRequest(user: User): Promise<any>;
-	public refreshRequest(user: User, method?: string): Promise<any>;
 	public refreshRequest(user: User, method?: string): Promise<any> {
-		var buildResult = this.build(method);
+		const buildResult = this.build(method);
 
 		return RefreshFetch(user, buildResult.url, {
-			method: buildResult.method,
 			body: buildResult.body,
 			headers: buildResult.headers,
+			method: buildResult.method,
 		});
 	}
 }
