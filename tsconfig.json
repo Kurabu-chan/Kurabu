@@ -12,6 +12,7 @@
 		"sourceMap": true,
 		"types": ["node", "mocha"],
 		"typeRoots": ["node_modules/@types"],
+		"baseUrl": "./",
 		"paths": {
 			"#builders/*": ["src/builders/*"],
 			"#commands/*": ["src/commands/*"],
