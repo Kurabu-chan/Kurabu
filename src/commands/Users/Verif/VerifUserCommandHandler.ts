@@ -1,7 +1,10 @@
 import { autoInjectable } from "tsyringe";
+
 import AttemptError from "../../../errors/Authentication/AttemptError";
-import IncorrectCodeError from "../../../errors/Authentication/IncorrectCodeError";
-import MissingStateError from "../../../errors/Authentication/MissingStateError";
+import IncorrectCodeError
+	from "../../../errors/Authentication/IncorrectCodeError";
+import MissingStateError
+	from "../../../errors/Authentication/MissingStateError";
 import StateStatusError from "../../../errors/Authentication/StateStatusError";
 import { Database } from "../../../helpers/Database";
 import { ICommandHandler } from "../../ICommand";
@@ -31,10 +34,10 @@ export class VerifUserCommandHandler
 
 		if (command.code != user.verifCode) {
 			await user.update({
-				VerifAttemptCount: (user.VerifAttemptCount ?? 0) + 1,
+				verifAttemptCount: (user.verifAttemptCount ?? 0) + 1,
 			});
 
-			if (user.VerifAttemptCount ?? 1 > 4) {
+			if (user.verifAttemptCount ?? 1 > 4) {
 				user.destroy();
 				throw new AttemptError("Too many attempts");
 			}
@@ -49,7 +52,7 @@ export class VerifUserCommandHandler
 		});
 
 		await user.update({
-			VerifAttemptCount: null,
+			verifAttemptCount: null,
 			verifCode: null,
 		});
 
