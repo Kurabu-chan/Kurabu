@@ -1,11 +1,10 @@
+import { RefreshFetch } from "#helpers/refresher";
+import { User } from "#models/User";
 import fetch, {
 	BodyInit,
 	HeadersInit,
 	Response,
 } from "node-fetch";
-
-import { RefreshFetch } from "../../helpers/refresher";
-import { User } from "../../models/User";
 
 export type RequestBuilderBuildType = {
 	url: string;

@@ -1,21 +1,21 @@
+import {
+	UpdateDatabaseUserTokensCommandHandler,
+} from "#commands/Users/UpdateDatabaseTokens/UpdateDatabaseUserTokensCommandHandler";
+import RefreshError from "#errors/Authentication/RefreshError";
+import TokensNotPresentError
+	from "#errors/Authentication/TokensNotPresentError";
+import ContainerManager from "#helpers/ContainerManager";
+import { User } from "#models/User";
+import {
+	RefreshWebRequestHandler,
+} from "#webreq/Auth/Refresh/RefreshWebRequestHandler";
+import {
+	RefreshWebRequestResult,
+} from "#webreq/Auth/Refresh/RefreshWebRequestResult";
 import * as fetch from "node-fetch";
 
 import { Logger } from "@overnightjs/logger";
 
-import {
-	UpdateDatabaseUserTokensCommandHandler,
-} from "../commands/Users/UpdateDatabaseTokens/UpdateDatabaseUserTokensCommandHandler";
-import RefreshError from "../errors/Authentication/RefreshError";
-import TokensNotPresentError
-	from "../errors/Authentication/TokensNotPresentError";
-import ContainerManager from "../helpers/ContainerManager";
-import { User } from "../models/User";
-import {
-	RefreshWebRequestHandler,
-} from "../webRequest/Auth/Refresh/RefreshWebRequestHandler";
-import {
-	RefreshWebRequestResult,
-} from "../webRequest/Auth/Refresh/RefreshWebRequestResult";
 import { isErrResp } from "./BasicTypes";
 
 export async function RefreshFetch(

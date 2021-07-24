@@ -1,15 +1,19 @@
-import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
-import { AnimeSearchWebRequest } from "./AnimeSearchWebRequest";
-import { AnimeSearchWebRequestResult } from "./AnimeSearchWebRequestResult";
-import { autoInjectable } from "tsyringe";
+import { baseRequest } from "#builders/requests/RequestBuilder";
 import {
-	Media,
 	ErrorResponse,
 	Fields,
 	fieldsToString,
 	ListPagination,
-} from "../../../helpers/BasicTypes";
-import { baseRequest } from "../../../builders/requests/RequestBuilder";
+	Media,
+} from "#helpers/BasicTypes";
+import { autoInjectable } from "tsyringe";
+
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "../../IWebRequest";
+import { AnimeSearchWebRequest } from "./AnimeSearchWebRequest";
+import { AnimeSearchWebRequestResult } from "./AnimeSearchWebRequestResult";
 
 @autoInjectable()
 export class AnimeSearchWebRequestHandler

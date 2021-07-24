@@ -1,14 +1,18 @@
-import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
-import { AnimeDetailsWebRequest } from "./AnimeDetailsWebRequest";
-import { AnimeDetailsWebRequestResult } from "./AnimeDetailsWebRequestResult";
-import { autoInjectable } from "tsyringe";
+import { baseRequest } from "#builders/requests/RequestBuilder";
 import {
 	allFields,
-	Media,
 	ErrorResponse,
 	fieldsToString,
-} from "../../../helpers/BasicTypes";
-import { baseRequest } from "../../../builders/requests/RequestBuilder";
+	Media,
+} from "#helpers/BasicTypes";
+import { autoInjectable } from "tsyringe";
+
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "../../IWebRequest";
+import { AnimeDetailsWebRequest } from "./AnimeDetailsWebRequest";
+import { AnimeDetailsWebRequestResult } from "./AnimeDetailsWebRequestResult";
 
 @autoInjectable()
 export class AnimeDetailsWebRequestHandler

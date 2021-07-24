@@ -43,8 +43,8 @@ export class AnimeDetailsController {
 
 		const result = await this._detailsWebRequest.handle({
 			animeid: arg.animeid,
-			fields,
 			user: arg.user,
+			fields,
 		});
 
 		return result.anime;

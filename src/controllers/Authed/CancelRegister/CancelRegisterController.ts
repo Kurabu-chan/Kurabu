@@ -1,4 +1,14 @@
 import {
+	CancelUserRegisterCommandHandler,
+} from "#commands/Users/CancelRegister/CancelUserRegisterCommandHandler";
+import LogArg from "#decorators/LogArgDecorator";
+import {
+	Param,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+import {
 	Request,
 	Response,
 } from "express";
@@ -9,17 +19,6 @@ import {
 	Post,
 } from "@overnightjs/core";
 
-import {
-	CancelUserRegisterCommandHandler,
-} from "../../../commands/Users/CancelRegister/CancelUserRegisterCommandHandler";
-import LogArg from "../../../decorators/LogArgDecorator";
-import {
-	Param,
-	ParamType,
-} from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator
-	from "../../../decorators/RequestHandlerDecorator";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
 import * as Options from "./CancelRegisterControllerOptions";
 
 @Controller(Options.controllerPath)

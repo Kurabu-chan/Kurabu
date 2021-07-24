@@ -1,13 +1,18 @@
-import BadLoginError from "../../../errors/Authentication/BadLoginError";
-import { Database } from "../../../helpers/Database";
-import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
+import BadLoginError from "#errors/Authentication/BadLoginError";
+import TokensNotPresentError
+	from "#errors/Authentication/TokensNotPresentError";
+import { Database } from "#helpers/Database";
+import * as hasher from "#helpers/Hasher";
+import { Tokens } from "#models/Tokens";
+import { autoInjectable } from "tsyringe";
+
+import {
+	IQueryHandler,
+	IQueryResultStatus,
+} from "../../IQuery";
+import { UserStatusQueryHandler } from "../Status/UserStatusQueryHandler";
 import { UserLoginQuery } from "./UserLoginQuery";
 import { UserLoginQueryResult } from "./UserLoginQueryResult";
-import * as hasher from "../../../helpers/Hasher";
-import { autoInjectable } from "tsyringe";
-import { Tokens } from "../../../models/Tokens";
-import TokensNotPresentError from "../../../errors/Authentication/TokensNotPresentError";
-import { UserStatusQueryHandler } from "../Status/UserStatusQueryHandler";
 
 @autoInjectable()
 export class UserLoginQueryHandler

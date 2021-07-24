@@ -1,3 +1,14 @@
+import LogArg from "#decorators/LogArgDecorator";
+import * as Param from "#decorators/ParamDecorator";
+import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import State from "#decorators/StateDecorator";
+import {
+	extractFields,
+	Fields,
+} from "#helpers/BasicTypes";
+import {
+	MangaDetailsWebRequestHandler,
+} from "#webreq/Manga/Details/MangaDetailsWebRequestHandler";
 import {
 	Request,
 	Response,
@@ -9,18 +20,6 @@ import {
 	Get,
 } from "@overnightjs/core";
 
-import LogArg from "../../../decorators/LogArgDecorator";
-import * as Param from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator
-	from "../../../decorators/RequestHandlerDecorator";
-import State from "../../../decorators/StateDecorator";
-import {
-	extractFields,
-	Fields,
-} from "../../../helpers/BasicTypes";
-import {
-	MangaDetailsWebRequestHandler,
-} from "../../../webRequest/Manga/Details/MangaDetailsWebRequestHandler";
 import * as Options from "./MangaDetailsControllerOptions";
 
 @Controller(Options.controllerPath)

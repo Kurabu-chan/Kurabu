@@ -1,4 +1,4 @@
-import { User } from "../../../models/User";
+import { User } from "#models/User";
 
 export const controllerPath = "authed";
 export const controllerName = "reauth";

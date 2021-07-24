@@ -1,9 +1,15 @@
+import MalformedParameterError from "#errors/Parameter/MalformedParameterError";
+import MissingParameterError from "#errors/Parameter/MissingParameterError";
+import { isUUID } from "#helpers/randomCodes";
 import { autoInjectable } from "tsyringe";
-import MalformedParameterError from "../../../errors/Parameter/MalformedParameterError";
-import MissingParameterError from "../../../errors/Parameter/MissingParameterError";
-import { isUUID } from "../../../helpers/randomCodes";
-import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
-import { CheckUserUUIDQueryHandler } from "../../Users/CheckUUID/CheckUserUUIDQueryHandler";
+
+import {
+	IQueryHandler,
+	IQueryResultStatus,
+} from "../../IQuery";
+import {
+	CheckUserUUIDQueryHandler,
+} from "../../Users/CheckUUID/CheckUserUUIDQueryHandler";
 import { CheckRequestStateQuery } from "./CheckRequestStateQuery";
 import { CheckRequestStateQueryResult } from "./CheckRequestStateQueryResult";
 

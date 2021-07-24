@@ -1,17 +1,21 @@
-import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
-import { MangaRankingWebRequest } from "./MangaRankingWebRequest";
-import {
-	MangaRankingWebRequestResult,
-	MangaRankingWebRequestResultType,
-} from "./MangaRankingWebRequestResult";
-import { autoInjectable } from "tsyringe";
+import { baseRequest } from "#builders/requests/RequestBuilder";
 import {
 	ErrorResponse,
 	Fields,
 	fieldsToString,
 	ListPagination,
-} from "../../../helpers/BasicTypes";
-import { baseRequest } from "../../../builders/requests/RequestBuilder";
+} from "#helpers/BasicTypes";
+import { autoInjectable } from "tsyringe";
+
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "../../IWebRequest";
+import { MangaRankingWebRequest } from "./MangaRankingWebRequest";
+import {
+	MangaRankingWebRequestResult,
+	MangaRankingWebRequestResultType,
+} from "./MangaRankingWebRequestResult";
 
 @autoInjectable()
 export class MangaRankingWebRequestHandler

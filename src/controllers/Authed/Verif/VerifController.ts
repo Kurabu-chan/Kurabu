@@ -1,4 +1,14 @@
 import {
+	VerifUserCommandHandler,
+} from "#commands/Users/Verif/VerifUserCommandHandler";
+import LogArg from "#decorators/LogArgDecorator";
+import {
+	Param,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+import {
 	Request,
 	Response,
 } from "express";
@@ -9,17 +19,6 @@ import {
 	Post,
 } from "@overnightjs/core";
 
-import {
-	VerifUserCommandHandler,
-} from "../../../commands/Users/Verif/VerifUserCommandHandler";
-import LogArg from "../../../decorators/LogArgDecorator";
-import {
-	Param,
-	ParamType,
-} from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator
-	from "../../../decorators/RequestHandlerDecorator";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
 import * as Options from "./VerifControllerOptions";
 
 @Controller(Options.controllerPath)

@@ -1,6 +1,10 @@
+import { Database } from "#helpers/Database";
 import { autoInjectable } from "tsyringe";
-import { Database } from "../../../helpers/Database";
-import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
+
+import {
+	IQueryHandler,
+	IQueryResultStatus,
+} from "../../IQuery";
 import { UserEmailUsedQuery } from "./UserEmailUsedQuery";
 import { UserEmailUsedQueryResult } from "./UserEmailUsedQueryResult";
 

@@ -1,6 +1,8 @@
-import * as sgMail from "@sendgrid/mail";
+import MailServiceNoSendGridKeyError
+	from "#errors/ServiceProviders/MailServiceNoSendGridKeyError";
 import { singleton } from "tsyringe";
-import MailServiceNoSendGridKeyError from "../errors/ServiceProviders/MailServiceNoSendGridKeyError";
+
+import * as sgMail from "@sendgrid/mail";
 
 @singleton()
 export class MailServiceProvider {

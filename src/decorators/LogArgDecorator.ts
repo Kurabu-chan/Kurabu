@@ -1,6 +1,10 @@
-import { Request, Response } from "express";
+import { getUUID } from "#helpers/randomCodes";
+import {
+	Request,
+	Response,
+} from "express";
+
 import { Logger } from "@overnightjs/logger";
-import { getUUID } from "../helpers/randomCodes";
 
 export default function LogArg() {
 	return function (

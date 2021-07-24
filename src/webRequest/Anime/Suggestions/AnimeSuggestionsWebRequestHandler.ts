@@ -1,15 +1,21 @@
-import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
-import { AnimeSuggestionsWebRequest } from "./AnimeSuggestionsWebRequest";
-import { AnimeSuggestionsWebRequestResult } from "./AnimeSuggestionsWebRequestResult";
-import { autoInjectable } from "tsyringe";
+import { baseRequest } from "#builders/requests/RequestBuilder";
 import {
+	ErrorResponse,
+	Fields,
+	fieldsToString,
 	ListPagination,
 	MediaNode,
-	ErrorResponse,
-	fieldsToString,
-	Fields,
-} from "../../../helpers/BasicTypes";
-import { baseRequest } from "../../../builders/requests/RequestBuilder";
+} from "#helpers/BasicTypes";
+import { autoInjectable } from "tsyringe";
+
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "../../IWebRequest";
+import { AnimeSuggestionsWebRequest } from "./AnimeSuggestionsWebRequest";
+import {
+	AnimeSuggestionsWebRequestResult,
+} from "./AnimeSuggestionsWebRequestResult";
 
 @autoInjectable()
 export class SuggestionsWebRequestHandler

@@ -1,13 +1,14 @@
-import { autoInjectable } from "tsyringe";
 import {
 	ICommandHandler,
 	ICommandResultStatus,
-} from "../../../commands/ICommand";
+} from "#commands/ICommand";
+import MissingStateError from "#errors/Authentication/MissingStateError";
+import { Database } from "#helpers/Database";
+import { Tokens } from "#models/Tokens";
+import { autoInjectable } from "tsyringe";
+
 import { CheckUserUUIDQuery } from "./CheckUserUUIDQuery";
 import { CheckUserUUIDQueryResult } from "./CheckUserUUIDQueryResult";
-import { Database } from "../../../helpers/Database";
-import { Tokens } from "../../../models/Tokens";
-import MissingStateError from "../../../errors/Authentication/MissingStateError";
 
 @autoInjectable()
 export class CheckUserUUIDQueryHandler

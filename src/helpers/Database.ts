@@ -1,6 +1,12 @@
+import ModelsArray, {
+	Models,
+	ModelsType,
+} from "#models/index";
+import {
+	Sequelize,
+	SequelizeOptions,
+} from "sequelize-typescript";
 import { singleton } from "tsyringe";
-import { Sequelize, SequelizeOptions } from "sequelize-typescript";
-import ModelsArray, { ModelsType, Models } from "../models";
 
 export type UserDatabaseEntry = {
 	id: string;

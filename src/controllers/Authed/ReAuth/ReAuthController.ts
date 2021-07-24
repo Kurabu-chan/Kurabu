@@ -1,4 +1,15 @@
 import {
+	ReAuthUserCommandHandler,
+} from "#commands/Users/ReAuth/ReAuthUserCommandHandler";
+import LogArg from "#decorators/LogArgDecorator";
+import {
+	Param,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import State from "#decorators/StateDecorator";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+import {
 	Request,
 	Response,
 } from "express";
@@ -9,18 +20,6 @@ import {
 	Post,
 } from "@overnightjs/core";
 
-import {
-	ReAuthUserCommandHandler,
-} from "../../../commands/Users/ReAuth/ReAuthUserCommandHandler";
-import LogArg from "../../../decorators/LogArgDecorator";
-import {
-	Param,
-	ParamType,
-} from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator
-	from "../../../decorators/RequestHandlerDecorator";
-import State from "../../../decorators/StateDecorator";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
 import * as Options from "./ReAuthControllerOptions";
 
 @Controller(Options.controllerPath)

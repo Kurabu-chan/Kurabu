@@ -1,3 +1,14 @@
+import LogArg from "#decorators/LogArgDecorator";
+import * as Param from "#decorators/ParamDecorator";
+import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import State from "#decorators/StateDecorator";
+import {
+	extractFields,
+	Fields,
+} from "#helpers/BasicTypes";
+import {
+	SeasonalWebRequestHandler,
+} from "#webreq/Anime/Seasonal/AnimeSeasonalWebRequestHandler";
 import {
 	Request,
 	Response,
@@ -9,18 +20,6 @@ import {
 	Get,
 } from "@overnightjs/core";
 
-import LogArg from "../../../decorators/LogArgDecorator";
-import * as Param from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator
-	from "../../../decorators/RequestHandlerDecorator";
-import State from "../../../decorators/StateDecorator";
-import {
-	extractFields,
-	Fields,
-} from "../../../helpers/BasicTypes";
-import {
-	SeasonalWebRequestHandler,
-} from "../../../webRequest/Anime/Seasonal/AnimeSeasonalWebRequestHandler";
 import * as Options from "./AnimeSeasonalControllerOptions";
 
 const seasons = ["winter", "spring", "summer", "fall"];

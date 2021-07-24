@@ -1,4 +1,14 @@
 import {
+	Param,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+import {
+	UserLoginQueryHandler,
+} from "#queries/Users/Login/UserLoginQueryHandler";
+import { UserStatus } from "#queries/Users/Status/UserStatusQueryHandler";
+import {
 	Request,
 	Response,
 } from "express";
@@ -9,19 +19,6 @@ import {
 	Post,
 } from "@overnightjs/core";
 
-import {
-	Param,
-	ParamType,
-} from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator
-	from "../../../decorators/RequestHandlerDecorator";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import {
-	UserLoginQueryHandler,
-} from "../../../queries/Users/Login/UserLoginQueryHandler";
-import {
-	UserStatus,
-} from "../../../queries/Users/Status/UserStatusQueryHandler";
 import * as Options from "./LoginControllerOptions";
 
 @Controller(Options.controllerPath)

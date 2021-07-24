@@ -1,16 +1,20 @@
-import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
-import { AnimeSeasonalWebRequest } from "./AnimeSeasonalWebRequest";
-import { AnimeSeasonalWebRequestResult } from "./AnimeSeasonalWebRequestResult";
-import { autoInjectable } from "tsyringe";
+import { baseRequest } from "#builders/requests/RequestBuilder";
 import {
+	ErrorResponse,
+	Fields,
+	fieldsToString,
 	ListPagination,
 	MediaNode,
 	Season,
-	ErrorResponse,
-	fieldsToString,
-	Fields,
-} from "../../../helpers/BasicTypes";
-import { baseRequest } from "../../../builders/requests/RequestBuilder";
+} from "#helpers/BasicTypes";
+import { autoInjectable } from "tsyringe";
+
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "../../IWebRequest";
+import { AnimeSeasonalWebRequest } from "./AnimeSeasonalWebRequest";
+import { AnimeSeasonalWebRequestResult } from "./AnimeSeasonalWebRequestResult";
 
 @autoInjectable()
 export class SeasonalWebRequestHandler

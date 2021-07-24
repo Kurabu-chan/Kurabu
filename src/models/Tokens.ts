@@ -1,13 +1,14 @@
+import AuthenticationError from "#errors/Authentication/AuthenticationError";
 import {
-	Table,
-	Column,
-	Model,
-	DataType,
-	AutoIncrement,
 	AllowNull,
+	AutoIncrement,
+	Column,
+	DataType,
+	Model,
 	PrimaryKey,
+	Table,
 } from "sequelize-typescript";
-import AuthenticationError from "../errors/Authentication/AuthenticationError";
+
 import { User } from "./User";
 
 @Table

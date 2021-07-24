@@ -1,5 +1,8 @@
-import { Request, Response } from "express";
-import GeneralError from "../errors/GeneralError";
+import GeneralError from "#errors/GeneralError";
+import {
+	Request,
+	Response,
+} from "express";
 
 export default function RequestHandlerDecorator(log: boolean = true) {
 	return function (

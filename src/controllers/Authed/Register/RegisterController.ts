@@ -1,4 +1,13 @@
 import {
+	StartUserRegisterCommandHandler,
+} from "#commands/Users/StartRegister/StartUserRegisterCommandHandler";
+import {
+	Param,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+import {
 	Request,
 	Response,
 } from "express";
@@ -10,16 +19,6 @@ import {
 } from "@overnightjs/core";
 import { Logger } from "@overnightjs/logger";
 
-import {
-	StartUserRegisterCommandHandler,
-} from "../../../commands/Users/StartRegister/StartUserRegisterCommandHandler";
-import {
-	Param,
-	ParamType,
-} from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator
-	from "../../../decorators/RequestHandlerDecorator";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
 import * as Options from "./RegisterControllerOptions";
 
 @Controller(Options.controllerPath)

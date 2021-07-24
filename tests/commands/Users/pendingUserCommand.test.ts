@@ -1,24 +1,32 @@
-import { expect, use } from "chai";
-import { mock, instance, verify, when, anything } from "ts-mockito";
-import { Database } from "../../../src/helpers/Database";
-import { User } from "../../../src/models/User";
-import { PendingUserCommandHandler } from "../../../src/commands/Users/Pending/PendingUserCommandHandler";
-import { ModelsType } from "../../../src/models";
-import MissingStateError from "../../../src/errors/Authentication/MissingStateError";
-import MissingParameterError from "../../../src/errors/Parameter/MissingParameterError";
+import { expect } from "chai";
 import {
-	expectThrowsAsync,
-	resolvableInstance,
-} from "../../testhelpers/helper";
+	anything,
+	instance,
+	mock,
+	when,
+} from "ts-mockito";
+
+import { ICommandResultStatus } from "../../../src/commands/ICommand";
+import {
+	PendingUserCommandHandler,
+} from "../../../src/commands/Users/Pending/PendingUserCommandHandler";
+import { Database } from "../../../src/helpers/Database";
+import { ModelsType } from "../../../src/models";
+import { Tokens } from "../../../src/models/Tokens";
+import { User } from "../../../src/models/User";
+import { IQueryResultStatus } from "../../../src/queries/IQuery";
 import {
 	UserStatus,
 	UserStatusQueryHandler,
 } from "../../../src/queries/Users/Status/UserStatusQueryHandler";
-import { IQueryResultStatus } from "../../../src/queries/IQuery";
-import { Tokens } from "../../../src/models/Tokens";
-import { GetTokenWebRequestHandler } from "../../../src/webRequest/Auth/GetToken/GetTokenWebRequestHandler";
+import {
+	GetTokenWebRequestHandler,
+} from "../../../src/webRequest/Auth/GetToken/GetTokenWebRequestHandler";
 import { IWebRequestResultStatus } from "../../../src/webRequest/IWebRequest";
-import { ICommandResultStatus } from "../../../src/commands/ICommand";
+import {
+	expectThrowsAsync,
+	resolvableInstance,
+} from "../../testhelpers/helper";
 
 export function PendingUserCommand() {
 	describe("PendingUserCommand", () => {
@@ -188,8 +196,8 @@ export function PendingUserCommand() {
 			var result = await sut.handle(input);
 
 			var expected = {
-				url: `imal://auth/${input.uuid}`,
 				success: ICommandResultStatus.SUCCESS,
+				url: `imal://auth/${input.uuid}`,
 			};
 
 			expect(JSON.stringify(result)).to.equal(JSON.stringify(expected));
@@ -258,8 +266,8 @@ export function PendingUserCommand() {
 			var result = await sut.handle(input);
 
 			var expected = {
-				url: `cool://${input.uuid}`,
 				success: ICommandResultStatus.SUCCESS,
+				url: `cool://${input.uuid}`,
 			};
 
 			expect(JSON.stringify(result)).to.equal(JSON.stringify(expected));

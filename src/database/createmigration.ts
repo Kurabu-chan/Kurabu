@@ -1,3 +1,4 @@
+import ModelsArray from "#models";
 import { config } from "dotenv";
 import * as path from "path";
 import {
@@ -8,8 +9,6 @@ import {
 	SequelizeTypescriptMigration,
 } from "sequelize-typescript-migration-rafaeltab";
 import * as Umzug from "umzug";
-
-import ModelsArray from "../models";
 
 config();
 

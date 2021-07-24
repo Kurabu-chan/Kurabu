@@ -1,12 +1,22 @@
-import { CLIENT_ID, CLIENT_SECRET } from "../../../helpers/GLOBALVARS";
-import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
+import { RequestBuilder } from "#builders/requests/RequestBuilder";
+import GeneralError from "#errors/GeneralError";
+import MALConnectionError from "#errors/MAL/MALConnectionError";
+import {
+	isErrResp,
+	tokenResponse,
+} from "#helpers/BasicTypes";
+import {
+	CLIENT_ID,
+	CLIENT_SECRET,
+} from "#helpers/GLOBALVARS";
+import { autoInjectable } from "tsyringe";
+
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "../../IWebRequest";
 import { GetTokenWebRequest } from "./GetTokenWebRequest";
 import { GetTokenWebRequestResult } from "./GetTokenWebRequestResult";
-import { isErrResp, tokenResponse } from "../../../helpers/BasicTypes";
-import GeneralError from "../../../errors/GeneralError";
-import MALConnectionError from "../../../errors/MAL/MALConnectionError";
-import { autoInjectable } from "tsyringe";
-import { RequestBuilder } from "../../../builders/requests/RequestBuilder";
 
 type ErrorResponse = {
 	error: string;

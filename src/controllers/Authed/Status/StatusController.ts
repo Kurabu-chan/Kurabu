@@ -1,3 +1,11 @@
+import LogArg from "#decorators/LogArgDecorator";
+import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import State from "#decorators/StateDecorator";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+import {
+	UserStatus,
+	UserStatusQueryHandler,
+} from "#queries/Users/Status/UserStatusQueryHandler";
 import {
 	Request,
 	Response,
@@ -9,15 +17,6 @@ import {
 	Get,
 } from "@overnightjs/core";
 
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator
-	from "../../../decorators/RequestHandlerDecorator";
-import State from "../../../decorators/StateDecorator";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import {
-	UserStatus,
-	UserStatusQueryHandler,
-} from "../../../queries/Users/Status/UserStatusQueryHandler";
 import * as Options from "./StatusControllerOptions";
 
 @Controller(Options.controllerPath)

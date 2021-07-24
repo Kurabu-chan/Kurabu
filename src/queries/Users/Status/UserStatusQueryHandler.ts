@@ -1,8 +1,12 @@
-import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
+import { ensureTokensOnUser } from "#models/Tokens";
+import { autoInjectable } from "tsyringe";
+
+import {
+	IQueryHandler,
+	IQueryResultStatus,
+} from "../../IQuery";
 import { UserStatusQuery } from "./UserStatusQuery";
 import { UserStatusQueryResult } from "./UserStatusQueryResult";
-import { autoInjectable } from "tsyringe";
-import { ensureTokensOnUser } from "../../../models/Tokens";
 
 export enum UserStatus {
 	done,

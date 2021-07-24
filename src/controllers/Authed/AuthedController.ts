@@ -1,4 +1,15 @@
 import {
+	PendingUserCommandHandler,
+} from "#commands/Users/Pending/PendingUserCommandHandler";
+import {
+	Param,
+	ParamPos,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import State from "#decorators/StateDecorator";
+import ParameterError from "#errors/Parameter/ParameterError";
+import {
 	Request,
 	Response,
 } from "express";
@@ -10,17 +21,6 @@ import {
 } from "@overnightjs/core";
 import { Logger } from "@overnightjs/logger";
 
-import {
-	PendingUserCommandHandler,
-} from "../../commands/Users/Pending/PendingUserCommandHandler";
-import {
-	Param,
-	ParamPos,
-	ParamType,
-} from "../../decorators/ParamDecorator";
-import RequestHandlerDecorator from "../../decorators/RequestHandlerDecorator";
-import State from "../../decorators/StateDecorator";
-import ParameterError from "../../errors/Parameter/ParameterError";
 import * as Options from "./AuthedControllerOptions";
 
 @Controller(Options.controllerPath)
