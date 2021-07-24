@@ -34,7 +34,7 @@ export class User extends Model {
 	@AllowNull(true)
 	@Default(0)
 	@Column
-	VerifAttemptCount?: number;
+	verifAttemptCount?: number;
 
 	@ForeignKey(() => Tokens)
 	@AllowNull(true)
