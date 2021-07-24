@@ -1,7 +1,7 @@
 import { User } from "../../../models/User";
 
-export const ControllerPath = "anime";
-export const ControllerName = "search";
+export const controllerPath = "anime";
+export const controllerName = "search";
 export type params = {
 	state: string;
 	user: User;

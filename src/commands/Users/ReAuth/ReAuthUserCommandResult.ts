@@ -1,4 +1,4 @@
-import { ICommandResult } from "../../ICommand";
+import { ICommandResult } from "#commands/ICommand";
 
 export class ReAuthUserCommandResult extends ICommandResult {
 	url!: string;

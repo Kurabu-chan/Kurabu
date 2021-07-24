@@ -1,20 +1,34 @@
-import { Request, Response } from "express";
-import { Controller, Post } from "@overnightjs/core";
-import * as Options from "./ReAuthControllerOptions";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import State from "../../../decorators/StateDecorator";
-import { ReAuthUserCommandHandler } from "../../../commands/Users/ReAuth/ReAuthUserCommandHandler";
-import { Param, ParamType } from "../../../decorators/ParamDecorator";
 
-@Controller(Options.ControllerPath)
+import {
+	Controller,
+	Post,
+} from "@overnightjs/core";
+
+import {
+	ReAuthUserCommandHandler,
+} from "../../../commands/Users/ReAuth/ReAuthUserCommandHandler";
+import LogArg from "../../../decorators/LogArgDecorator";
+import {
+	Param,
+	ParamType,
+} from "../../../decorators/ParamDecorator";
+import RequestHandlerDecorator
+	from "../../../decorators/RequestHandlerDecorator";
+import State from "../../../decorators/StateDecorator";
+import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
+import * as Options from "./ReAuthControllerOptions";
+
+@Controller(Options.controllerPath)
 @injectable()
 export class ReAuthController {
 	constructor(private _reAuthCommand: ReAuthUserCommandHandler) {}
 
-	@Post(Options.ControllerName)
+	@Post(Options.controllerName)
 	@RequestHandlerDecorator()
 	@State()
 	@Param("redirect", ParamType.string, true)

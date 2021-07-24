@@ -1,19 +1,35 @@
-import { Request, Response } from "express";
-import { Controller, Post } from "@overnightjs/core";
-import * as Options from "./LoginControllerOptions";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import { Param, ParamType } from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { UserLoginQueryHandler } from "../../../queries/Users/Login/UserLoginQueryHandler";
-import { UserStatus } from "../../../queries/Users/Status/UserStatusQueryHandler";
 
-@Controller(Options.ControllerPath)
+import {
+	Controller,
+	Post,
+} from "@overnightjs/core";
+
+import {
+	Param,
+	ParamType,
+} from "../../../decorators/ParamDecorator";
+import RequestHandlerDecorator
+	from "../../../decorators/RequestHandlerDecorator";
+import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
+import {
+	UserLoginQueryHandler,
+} from "../../../queries/Users/Login/UserLoginQueryHandler";
+import {
+	UserStatus,
+} from "../../../queries/Users/Status/UserStatusQueryHandler";
+import * as Options from "./LoginControllerOptions";
+
+@Controller(Options.controllerPath)
 @injectable()
 export class LoginController {
 	constructor(private _userLoginQuery: UserLoginQueryHandler) {}
 
-	@Post(Options.ControllerName)
+	@Post(Options.controllerName)
 	@RequestHandlerDecorator()
 	@Param("email", ParamType.string, false)
 	@Param("pass", ParamType.string, false)

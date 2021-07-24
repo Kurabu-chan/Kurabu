@@ -1,20 +1,34 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./AuthedControllerOptions";
-import { Param, ParamPos, ParamType } from "../../decorators/ParamDecorator";
-import State from "../../decorators/StateDecorator";
-import { Logger } from "@overnightjs/logger";
-import RequestHandlerDecorator from "../../decorators/RequestHandlerDecorator";
-import ParameterError from "../../errors/Parameter/ParameterError";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { PendingUserCommandHandler } from "../../commands/Users/Pending/PendingUserCommandHandler";
 
-@Controller(Options.ControllerPath)
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+import { Logger } from "@overnightjs/logger";
+
+import {
+	PendingUserCommandHandler,
+} from "../../commands/Users/Pending/PendingUserCommandHandler";
+import {
+	Param,
+	ParamPos,
+	ParamType,
+} from "../../decorators/ParamDecorator";
+import RequestHandlerDecorator from "../../decorators/RequestHandlerDecorator";
+import State from "../../decorators/StateDecorator";
+import ParameterError from "../../errors/Parameter/ParameterError";
+import * as Options from "./AuthedControllerOptions";
+
+@Controller(Options.controllerPath)
 @injectable()
 export class AuthedController {
 	constructor(private _pendingUserCommand: PendingUserCommandHandler) {}
 
-	@Get(Options.ControllerName)
+	@Get(Options.controllerName)
 	@RequestHandlerDecorator()
 	@State()
 	@Param(

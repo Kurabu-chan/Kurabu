@@ -1,13 +1,11 @@
+import { ICommandHandler } from "#commands/ICommand";
+import AttemptError from "#errors/Authentication/AttemptError";
+import IncorrectCodeError from "#errors/Authentication/IncorrectCodeError";
+import MissingStateError from "#errors/Authentication/MissingStateError";
+import StateStatusError from "#errors/Authentication/StateStatusError";
+import { Database } from "#helpers/Database";
 import { autoInjectable } from "tsyringe";
 
-import AttemptError from "../../../errors/Authentication/AttemptError";
-import IncorrectCodeError
-	from "../../../errors/Authentication/IncorrectCodeError";
-import MissingStateError
-	from "../../../errors/Authentication/MissingStateError";
-import StateStatusError from "../../../errors/Authentication/StateStatusError";
-import { Database } from "../../../helpers/Database";
-import { ICommandHandler } from "../../ICommand";
 import { ReAuthUserCommandHandler } from "../ReAuth/ReAuthUserCommandHandler";
 import { VerifUserCommand } from "./VerifUserCommand";
 import { VerifUserCommandResult } from "./VerifUserCommandResult";
@@ -21,7 +19,7 @@ export class VerifUserCommandHandler
 	) {}
 
 	async handle(command: VerifUserCommand): Promise<VerifUserCommandResult> {
-		var user = await this._database.Models.user.findOne({
+		const user = await this._database.Models.user.findOne({
 			where: {
 				id: command.uuid,
 			},
@@ -29,10 +27,10 @@ export class VerifUserCommandHandler
 
 		if (user === null) throw new MissingStateError("verif uuid doesn't exist");
 
-		if (user.verifCode == undefined)
+		if (user.verifCode === undefined)
 			throw new StateStatusError("uuid is not a verif uuid");
 
-		if (command.code != user.verifCode) {
+		if (command.code !== user.verifCode) {
 			await user.update({
 				verifAttemptCount: (user.verifAttemptCount ?? 0) + 1,
 			});
@@ -44,11 +42,11 @@ export class VerifUserCommandHandler
 			throw new IncorrectCodeError("Incorrect code");
 		}
 
-		var reauth = await this._reAuthUserCommandHandler.handle({
+		const reauth = await this._reAuthUserCommandHandler.handle({
 			ourdomain: command.ourdomain,
-			user: user,
-			uuid: command.uuid,
 			redirect: command.redirect,
+			user,
+			uuid: command.uuid,
 		});
 
 		await user.update({

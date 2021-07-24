@@ -1,14 +1,28 @@
-import { Request, Response } from "express";
-import { Controller, Post } from "@overnightjs/core";
-import * as Options from "./RegisterControllerOptions";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import { Param, ParamType } from "../../../decorators/ParamDecorator";
-import { Logger } from "@overnightjs/logger";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { StartUserRegisterCommandHandler } from "../../../commands/Users/StartRegister/StartUserRegisterCommandHandler";
 
-@Controller(Options.ControllerPath)
+import {
+	Controller,
+	Post,
+} from "@overnightjs/core";
+import { Logger } from "@overnightjs/logger";
+
+import {
+	StartUserRegisterCommandHandler,
+} from "../../../commands/Users/StartRegister/StartUserRegisterCommandHandler";
+import {
+	Param,
+	ParamType,
+} from "../../../decorators/ParamDecorator";
+import RequestHandlerDecorator
+	from "../../../decorators/RequestHandlerDecorator";
+import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
+import * as Options from "./RegisterControllerOptions";
+
+@Controller(Options.controllerPath)
 @injectable()
 export class RegisterController {
 	private _startUserRegisterCommand: StartUserRegisterCommandHandler;
@@ -16,7 +30,7 @@ export class RegisterController {
 		this._startUserRegisterCommand = startUserRegisterCommand;
 	}
 
-	@Post(Options.ControllerName)
+	@Post(Options.controllerName)
 	@RequestHandlerDecorator()
 	@Param("email", ParamType.string, false)
 	@Param("pass", ParamType.string, false)

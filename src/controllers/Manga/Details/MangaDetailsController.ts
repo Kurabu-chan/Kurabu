@@ -1,20 +1,34 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./MangaDetailsControllerOptions";
-import State from "../../../decorators/StateDecorator";
-import * as Param from "../../../decorators/ParamDecorator";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { MangaDetailsWebRequestHandler } from "../../../webRequest/Manga/Details/MangaDetailsWebRequestHandler";
-import { extractFields, Fields } from "../../../helpers/BasicTypes";
 
-@Controller(Options.ControllerPath)
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+
+import LogArg from "../../../decorators/LogArgDecorator";
+import * as Param from "../../../decorators/ParamDecorator";
+import RequestHandlerDecorator
+	from "../../../decorators/RequestHandlerDecorator";
+import State from "../../../decorators/StateDecorator";
+import {
+	extractFields,
+	Fields,
+} from "../../../helpers/BasicTypes";
+import {
+	MangaDetailsWebRequestHandler,
+} from "../../../webRequest/Manga/Details/MangaDetailsWebRequestHandler";
+import * as Options from "./MangaDetailsControllerOptions";
+
+@Controller(Options.controllerPath)
 @injectable()
 export class MangaDetailsController {
 	constructor(private _detailsWebRequest: MangaDetailsWebRequestHandler) {}
 
-	@Get(Options.ControllerName)
+	@Get(Options.controllerName)
 	@RequestHandlerDecorator()
 	@State()
 	@Param.Param("mangaid", Param.ParamType.int, false)

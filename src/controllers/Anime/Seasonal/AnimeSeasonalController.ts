@@ -1,13 +1,27 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./AnimeSeasonalControllerOptions";
-import State from "../../../decorators/StateDecorator";
-import * as Param from "../../../decorators/ParamDecorator";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { SeasonalWebRequestHandler } from "../../../webRequest/Anime/Seasonal/AnimeSeasonalWebRequestHandler";
-import { extractFields, Fields } from "../../../helpers/BasicTypes";
+
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+
+import LogArg from "../../../decorators/LogArgDecorator";
+import * as Param from "../../../decorators/ParamDecorator";
+import RequestHandlerDecorator
+	from "../../../decorators/RequestHandlerDecorator";
+import State from "../../../decorators/StateDecorator";
+import {
+	extractFields,
+	Fields,
+} from "../../../helpers/BasicTypes";
+import {
+	SeasonalWebRequestHandler,
+} from "../../../webRequest/Anime/Seasonal/AnimeSeasonalWebRequestHandler";
+import * as Options from "./AnimeSeasonalControllerOptions";
 
 const seasons = ["winter", "spring", "summer", "fall"];
 const sortScore = ["score", "animescore", "anime_score"];
@@ -21,12 +35,12 @@ const sortUsers = [
 	"num_listusers",
 ];
 
-@Controller(Options.ControllerPath)
+@Controller(Options.controllerPath)
 @injectable()
 export class AnimeSeasonalController {
 	constructor(private _seasonalWebRequest: SeasonalWebRequestHandler) {}
 
-	@Get(Options.ControllerName)
+	@Get(Options.controllerName)
 	@RequestHandlerDecorator()
 	@State()
 	@Param.Param("year", Param.ParamType.int, true)

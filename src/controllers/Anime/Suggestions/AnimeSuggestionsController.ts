@@ -1,20 +1,34 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./AnimeSuggestionsControllerOptions";
-import State from "../../../decorators/StateDecorator";
-import * as Param from "../../../decorators/ParamDecorator";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { SuggestionsWebRequestHandler } from "../../../webRequest/Anime/Suggestions/AnimeSuggestionsWebRequestHandler";
-import { extractFields, Fields } from "../../../helpers/BasicTypes";
 
-@Controller(Options.ControllerPath)
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+
+import LogArg from "../../../decorators/LogArgDecorator";
+import * as Param from "../../../decorators/ParamDecorator";
+import RequestHandlerDecorator
+	from "../../../decorators/RequestHandlerDecorator";
+import State from "../../../decorators/StateDecorator";
+import {
+	extractFields,
+	Fields,
+} from "../../../helpers/BasicTypes";
+import {
+	SuggestionsWebRequestHandler,
+} from "../../../webRequest/Anime/Suggestions/AnimeSuggestionsWebRequestHandler";
+import * as Options from "./AnimeSuggestionsControllerOptions";
+
+@Controller(Options.controllerPath)
 @injectable()
 export class AnimeSuggestionsController {
 	constructor(private _suggestionsWebRequest: SuggestionsWebRequestHandler) {}
 
-	@Get(Options.ControllerName)
+	@Get(Options.controllerName)
 	@RequestHandlerDecorator()
 	@State()
 	@Param.Param("limit", Param.ParamType.int, true)

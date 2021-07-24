@@ -1,4 +1,4 @@
-import { ICommand } from "../../ICommand";
+import { ICommand } from "#commands/ICommand";
 
 export class PendingUserCommand extends ICommand {
 	uuid!: string;

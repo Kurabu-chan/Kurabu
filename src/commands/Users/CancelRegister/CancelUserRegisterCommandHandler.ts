@@ -1,13 +1,19 @@
-import { autoInjectable } from "tsyringe";
-import MissingStateError from "../../../errors/Authentication/MissingStateError";
-import StateStatusError from "../../../errors/Authentication/StateStatusError";
+import {
+	ICommandHandler,
+	ICommandResultStatus,
+} from "#commands/ICommand";
+import MissingStateError from "#errors/Authentication/MissingStateError";
+import StateStatusError from "#errors/Authentication/StateStatusError";
 import {
 	UserStatus,
 	UserStatusQueryHandler,
-} from "../../../queries/Users/Status/UserStatusQueryHandler";
-import { ICommandHandler, ICommandResultStatus } from "../../ICommand";
+} from "#queries/Users/Status/UserStatusQueryHandler";
+import { autoInjectable } from "tsyringe";
+
 import { CancelUserRegisterCommand } from "./CancelUserRegisterCommand";
-import { CancelUserRegisterCommandResult } from "./CancelUserRegisterCommandResult";
+import {
+	CancelUserRegisterCommandResult,
+} from "./CancelUserRegisterCommandResult";
 
 @autoInjectable()
 export class CancelUserRegisterCommandHandler
@@ -23,8 +29,8 @@ export class CancelUserRegisterCommandHandler
 	}: CancelUserRegisterCommand): Promise<CancelUserRegisterCommandResult> {
 		if (!user) throw new MissingStateError("State missing during cancel");
 
-		var status = await this._getUserStatus.handle({ user: user });
-		if (status.status != UserStatus.verif)
+		const status = await this._getUserStatus.handle({ user });
+		if (status.status !== UserStatus.verif)
 			throw new StateStatusError("State had wrong status during cancel");
 
 		user.destroy();

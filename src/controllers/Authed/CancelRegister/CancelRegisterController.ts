@@ -1,14 +1,28 @@
-import { Request, Response } from "express";
-import { Controller, Post } from "@overnightjs/core";
-import * as Options from "./CancelRegisterControllerOptions";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import LogArg from "../../../decorators/LogArgDecorator";
-import { Param, ParamType } from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { CancelUserRegisterCommandHandler } from "../../../commands/Users/CancelRegister/CancelUserRegisterCommandHandler";
 
-@Controller(Options.ControllerPath)
+import {
+	Controller,
+	Post,
+} from "@overnightjs/core";
+
+import {
+	CancelUserRegisterCommandHandler,
+} from "../../../commands/Users/CancelRegister/CancelUserRegisterCommandHandler";
+import LogArg from "../../../decorators/LogArgDecorator";
+import {
+	Param,
+	ParamType,
+} from "../../../decorators/ParamDecorator";
+import RequestHandlerDecorator
+	from "../../../decorators/RequestHandlerDecorator";
+import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
+import * as Options from "./CancelRegisterControllerOptions";
+
+@Controller(Options.controllerPath)
 @injectable()
 export class CancelRegisterController {
 	private _cancelUserRegisterCommand: CancelUserRegisterCommandHandler;
@@ -17,7 +31,7 @@ export class CancelRegisterController {
 		this._cancelUserRegisterCommand = cancelUserRegisterCommand;
 	}
 
-	@Post(Options.ControllerName)
+	@Post(Options.controllerName)
 	@RequestHandlerDecorator()
 	@Param("uuid", ParamType.string, false)
 	@LogArg()

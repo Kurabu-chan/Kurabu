@@ -1,13 +1,27 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./MangaRankingControllerOptions";
-import State from "../../../decorators/StateDecorator";
-import * as Param from "../../../decorators/ParamDecorator";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { MangaRankingWebRequestHandler } from "../../../webRequest/Manga/Ranking/MangaRankingWebRequestHandler";
-import { extractFields, Fields } from "../../../helpers/BasicTypes";
+
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+
+import LogArg from "../../../decorators/LogArgDecorator";
+import * as Param from "../../../decorators/ParamDecorator";
+import RequestHandlerDecorator
+	from "../../../decorators/RequestHandlerDecorator";
+import State from "../../../decorators/StateDecorator";
+import {
+	extractFields,
+	Fields,
+} from "../../../helpers/BasicTypes";
+import {
+	MangaRankingWebRequestHandler,
+} from "../../../webRequest/Manga/Ranking/MangaRankingWebRequestHandler";
+import * as Options from "./MangaRankingControllerOptions";
 
 const possible = [
 	"all",
@@ -21,7 +35,7 @@ const possible = [
 	"favorite",
 ];
 
-@Controller(Options.ControllerPath)
+@Controller(Options.controllerPath)
 @injectable()
 export class MangaRankingController {
 	/**
@@ -29,7 +43,7 @@ export class MangaRankingController {
 	 */
 	constructor(private _rankingWebRequest: MangaRankingWebRequestHandler) {}
 
-	@Get(Options.ControllerName)
+	@Get(Options.controllerName)
 	@RequestHandlerDecorator()
 	@State()
 	@Param.Param("rankingtype", Param.ParamType.string, true)

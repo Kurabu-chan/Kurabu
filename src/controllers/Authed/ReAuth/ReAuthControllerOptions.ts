@@ -1,7 +1,7 @@
 import { User } from "../../../models/User";
 
-export const ControllerPath = "authed";
-export const ControllerName = "reauth";
+export const controllerPath = "authed";
+export const controllerName = "reauth";
 export type params = {
 	state: string;
 	user: User;

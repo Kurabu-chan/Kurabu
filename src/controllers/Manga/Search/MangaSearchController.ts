@@ -1,20 +1,34 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./MangaSearchControllerOptions";
-import State from "../../../decorators/StateDecorator";
-import * as Param from "../../../decorators/ParamDecorator";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { MangaSearchWebRequestHandler } from "../../../webRequest/Manga/Search/MangaSearchWebRequestHandler";
-import { extractFields, Fields } from "../../../helpers/BasicTypes";
 
-@Controller(Options.ControllerPath)
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+
+import LogArg from "../../../decorators/LogArgDecorator";
+import * as Param from "../../../decorators/ParamDecorator";
+import RequestHandlerDecorator
+	from "../../../decorators/RequestHandlerDecorator";
+import State from "../../../decorators/StateDecorator";
+import {
+	extractFields,
+	Fields,
+} from "../../../helpers/BasicTypes";
+import {
+	MangaSearchWebRequestHandler,
+} from "../../../webRequest/Manga/Search/MangaSearchWebRequestHandler";
+import * as Options from "./MangaSearchControllerOptions";
+
+@Controller(Options.controllerPath)
 @injectable()
 export class MangaSearchController {
 	constructor(private _searchWebRequest: MangaSearchWebRequestHandler) {}
 
-	@Get(Options.ControllerName)
+	@Get(Options.controllerName)
 	@RequestHandlerDecorator()
 	@State()
 	@Param.Param("query", Param.ParamType.string, false)

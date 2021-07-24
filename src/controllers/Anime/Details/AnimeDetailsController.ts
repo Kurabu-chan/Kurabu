@@ -1,20 +1,33 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./AnimeDetailsControllerOptions";
-import State from "../../../decorators/StateDecorator";
-import * as Param from "../../../decorators/ParamDecorator";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import LogArg from "#decorators/LogArgDecorator";
+import * as Param from "#decorators/ParamDecorator";
+import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import State from "#decorators/StateDecorator";
+import {
+	extractFields,
+	Fields,
+} from "#helpers/BasicTypes";
+import {
+	AnimeDetailsWebRequestHandler,
+} from "#webreq/Anime/Details/AnimeDetailsWebRequestHandler";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { AnimeDetailsWebRequestHandler } from "../../../webRequest/Anime/Details/AnimeDetailsWebRequestHandler";
-import { extractFields, Fields } from "../../../helpers/BasicTypes";
 
-@Controller(Options.ControllerPath)
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+
+import * as Options from "./AnimeDetailsControllerOptions";
+
+@Controller(Options.controllerPath)
 @injectable()
 export class AnimeDetailsController {
 	constructor(private _detailsWebRequest: AnimeDetailsWebRequestHandler) {}
 
-	@Get(Options.ControllerName)
+	@Get(Options.controllerName)
 	@RequestHandlerDecorator()
 	@State()
 	@Param.Param("animeid", Param.ParamType.int, false)
@@ -23,15 +36,15 @@ export class AnimeDetailsController {
 	private async get(req: Request, res: Response, arg: Options.params) {
 		arg.animeid = arg.animeid ? arg.animeid : 1;
 
-		var fields: Fields | undefined;
+		let fields: Fields | undefined;
 		if (arg.fields) {
 			fields = extractFields(arg.fields).fields;
 		}
 
-		var result = await this._detailsWebRequest.handle({
+		const result = await this._detailsWebRequest.handle({
 			animeid: arg.animeid,
+			fields,
 			user: arg.user,
-			fields: fields,
 		});
 
 		return result.anime;

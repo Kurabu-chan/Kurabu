@@ -1,13 +1,26 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./AnimeRankingControllerOptions";
-import State from "../../../decorators/StateDecorator";
-import * as Param from "../../../decorators/ParamDecorator";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import LogArg from "#decorators/LogArgDecorator";
+import * as Param from "#decorators/ParamDecorator";
+import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import State from "#decorators/StateDecorator";
+import {
+	extractFields,
+	Fields,
+} from "#helpers/BasicTypes";
+import {
+	AnimeRankingWebRequestHandler,
+} from "#webreq/Anime/Ranking/AnimeRankingWebRequestHandler";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { AnimeRankingWebRequestHandler } from "../../../webRequest/Anime/Ranking/AnimeRankingWebRequestHandler";
-import { extractFields, Fields } from "../../../helpers/BasicTypes";
+
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+
+import * as Options from "./AnimeRankingControllerOptions";
 
 const possible = [
 	"all",
@@ -21,7 +34,7 @@ const possible = [
 	"favorite",
 ];
 
-@Controller(Options.ControllerPath)
+@Controller(Options.controllerPath)
 @injectable()
 export class AnimeRankingController {
 	/**
@@ -29,7 +42,7 @@ export class AnimeRankingController {
 	 */
 	constructor(private _rankingWebRequest: AnimeRankingWebRequestHandler) {}
 
-	@Get(Options.ControllerName)
+	@Get(Options.controllerName)
 	@RequestHandlerDecorator()
 	@State()
 	@Param.Param("rankingtype", Param.ParamType.string, true)
@@ -42,8 +55,8 @@ export class AnimeRankingController {
 			arg.limit = 100;
 		}
 
-		if (arg.rankingtype && possible.includes(<string>req.query.rankingtype)) {
-			arg.rankingtype = <
+		if (arg.rankingtype && possible.includes(req.query.rankingtype as string)) {
+			arg.rankingtype = req.query.rankingtype as
 				| "all"
 				| "airing"
 				| "upcoming"
@@ -52,20 +65,19 @@ export class AnimeRankingController {
 				| "movie"
 				| "special"
 				| "bypopularity"
-				| "favorite"
-			>req.query.rankingtype;
+				| "favorite";
 		}
-		var fields: Fields | undefined;
+		let fields: Fields | undefined;
 		if (arg.fields) {
 			fields = extractFields(arg.fields).fields;
 		}
 
-		var result = await this._rankingWebRequest.handle({
-			user: arg.user,
-			rankingtype: arg.rankingtype,
+		const result = await this._rankingWebRequest.handle({
+			fields,
 			limit: arg.limit,
 			offset: arg.offset,
-			fields: fields,
+			rankingtype: arg.rankingtype,
+			user: arg.user,
 		});
 
 		return result.ranked;

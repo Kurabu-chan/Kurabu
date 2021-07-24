@@ -1,22 +1,31 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./StatusControllerOptions";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
+
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+
+import LogArg from "../../../decorators/LogArgDecorator";
+import RequestHandlerDecorator
+	from "../../../decorators/RequestHandlerDecorator";
 import State from "../../../decorators/StateDecorator";
+import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
 import {
 	UserStatus,
 	UserStatusQueryHandler,
 } from "../../../queries/Users/Status/UserStatusQueryHandler";
+import * as Options from "./StatusControllerOptions";
 
-@Controller(Options.ControllerPath)
+@Controller(Options.controllerPath)
 @injectable()
 export class StatusController {
 	constructor(private _userStatusQuery: UserStatusQueryHandler) {}
 
-	@Get(Options.ControllerName)
+	@Get(Options.controllerName)
 	@RequestHandlerDecorator()
 	@State()
 	@LogArg()

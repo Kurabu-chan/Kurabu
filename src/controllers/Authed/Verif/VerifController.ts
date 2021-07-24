@@ -1,14 +1,28 @@
-import { Request, Response } from "express";
-import { Controller, Post } from "@overnightjs/core";
-import * as Options from "./VerifControllerOptions";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import LogArg from "../../../decorators/LogArgDecorator";
-import { Param, ParamType } from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { VerifUserCommandHandler } from "../../../commands/Users/Verif/VerifUserCommandHandler";
 
-@Controller(Options.ControllerPath)
+import {
+	Controller,
+	Post,
+} from "@overnightjs/core";
+
+import {
+	VerifUserCommandHandler,
+} from "../../../commands/Users/Verif/VerifUserCommandHandler";
+import LogArg from "../../../decorators/LogArgDecorator";
+import {
+	Param,
+	ParamType,
+} from "../../../decorators/ParamDecorator";
+import RequestHandlerDecorator
+	from "../../../decorators/RequestHandlerDecorator";
+import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
+import * as Options from "./VerifControllerOptions";
+
+@Controller(Options.controllerPath)
 @injectable()
 export class VerifController {
 	private _verifUserCommand: VerifUserCommandHandler;
@@ -17,7 +31,7 @@ export class VerifController {
 		this._verifUserCommand = verifUserCommand;
 	}
 
-	@Post(Options.ControllerName)
+	@Post(Options.controllerName)
 	@RequestHandlerDecorator()
 	@Param("uuid", ParamType.string, false)
 	@Param("code", ParamType.string, false)
