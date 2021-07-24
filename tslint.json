@@ -2,13 +2,21 @@
 	"extends": "tslint:recommended",
 	"rules": {
 		"max-line-length": {
-			"options": [100]
+			"options": [
+				100
+			]
 		},
-		"member-ordering": false,
+		"member-ordering": true,
 		"no-consecutive-blank-lines": false,
-		"object-literal-sort-keys": false,
-		"ordered-imports": false,
-		"quotemark": [true, "single"],
-		"variable-name": [true, "allow-leading-underscore"]
+		"object-literal-sort-keys": true,
+		"ordered-imports": true,
+		"quotemark": [
+			true,
+			"double"
+		],
+		"variable-name": [
+			true,
+			"allow-leading-underscore"
+		]
 	}
 }
