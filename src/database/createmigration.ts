@@ -4,7 +4,10 @@ import {
 	DataType,
 	Sequelize,
 } from "sequelize-typescript";
-import { SequelizeTypescriptMigration } from "sequelize-typescript-migration";
+import {
+	SequelizeTypescriptMigration,
+} from "sequelize-typescript-migration-rafaeltab";
+import * as Umzug from "umzug";
 
 import ModelsArray from "../models";
 
@@ -40,17 +43,28 @@ async function createMigrationTable(sequelize: Sequelize) {
 
 (async () => {
 	const sequelize = new Sequelize({
-		database: "imaltest",
-		dialect: "postgres",
-		host: "127.0.0.1",
+		dialect: "sqlite",
 		models: ModelsArray,
-		password: "unsafe",
-		username: "unsafe",
+		quoteIdentifiers: false,
+		storage: "migrations.db",
 	});
-	createMigrationTable(sequelize);
+	//await createMigrationTable(sequelize);
 	await SequelizeTypescriptMigration.makeMigration(sequelize as any, {
 		migrationName: process.argv[2],
 		outDir: path.join(__dirname, "./migrations"),
 		preview: false,
 	});
+
+	const umzug = new Umzug({
+		migrations: {
+			params: [sequelize.getQueryInterface(), sequelize],
+			path: path.join(__dirname, "./migrations"),
+		},
+		storage: "sequelize",
+		storageOptions: {
+			sequelize,
+		},
+	});
+
+	await umzug.up();
 })();
