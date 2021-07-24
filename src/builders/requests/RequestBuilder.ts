@@ -1,10 +1,10 @@
+import fetch, {
+  BodyInit,
+  HeadersInit,
+  Response,
+} from "node-fetch";
 import { RefreshFetch } from "#helpers/refresher";
 import { User } from "#models/User";
-import fetch, {
-	BodyInit,
-	HeadersInit,
-	Response,
-} from "node-fetch";
 
 export type RequestBuilderBuildType = {
 	url: string;
@@ -25,13 +25,13 @@ export class RequestBuilder {
 		this.queryParams = [];
 	}
 
-	public setBody(body: BodyInit) {
+	public setBody(body: BodyInit): RequestBuilder {
 		this.body = body;
 
 		return this;
 	}
 
-	public addPath(path: string) {
+	public addPath(path: string): RequestBuilder {
 		if (!path.endsWith("/")) path += "/";
 		if (path.startsWith("/")) path = path.substr(1, path.length - 1);
 		this.path += path;
@@ -39,7 +39,7 @@ export class RequestBuilder {
 		return this;
 	}
 
-	public setHeader(key: string, value: string) {
+	public setHeader(key: string, value: string): RequestBuilder {
 		this.headers.push({
 			key,
 			value,
@@ -48,7 +48,7 @@ export class RequestBuilder {
 		return this;
 	}
 
-	public setQueryParam(key: string, value: string) {
+	public setQueryParam(key: string, value: string): RequestBuilder {
 		this.queryParams.push({
 			key,
 			value,
@@ -68,7 +68,7 @@ export class RequestBuilder {
 			}
 		}
 
-		let url: string = `${this.scheme}://${this.domain}/${this.path}`;
+		let url = `${this.scheme}://${this.domain}/${this.path}`;
 		url = url.substr(0, url.length - 1); // remove last /
 
 		if (this.queryParams.length !== 0) {
@@ -108,6 +108,6 @@ export class RequestBuilder {
 	}
 }
 
-export function baseRequest() {
+export function baseRequest(): RequestBuilder {
 	return new RequestBuilder("https", "api.myanimelist.net");
 }

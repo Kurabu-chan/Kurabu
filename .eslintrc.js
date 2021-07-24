@@ -142,7 +142,6 @@ module.exports = {
 		"no-var": "error",
 		"object-shorthand": "error",
 		"one-var": ["error", "never"],
-		"prefer-arrow/prefer-arrow-functions": "error",
 		"prefer-const": "error",
 		"sort-keys": "error",
 		quotes: "error",
