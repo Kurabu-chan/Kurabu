@@ -6,7 +6,7 @@
 	"scripts": {
 		"format": "prettier --write .",
 		"test-setup": "npm install chai mocha ts-node @types/chai @types/mocha",
-		"test": "mocha \"tests/**/*.ts\" --config ./tests/.mocharc.json --timeout 15000",
+		"test": "mocha \"tests/**/*.ts\" --config .mocharc.json --timeout 15000",
 		"start-dev": "nodemon --config \"./util/nodemon.json\"/",
 		"build": "rm -rf ./build/ && tsc && npm test",
 		"start": "node build/start.js",
