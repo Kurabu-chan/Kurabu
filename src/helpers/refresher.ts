@@ -16,13 +16,9 @@ import {
 	RefreshWebRequestResult,
 } from "#webreq/Auth/Refresh/RefreshWebRequestResult";
 
-
-export async function refreshFetch(
-	user: User,
+export async function refreshFetchResponse(user: User,
 	url: fetch.RequestInfo,
-	init?: fetch.RequestInit | undefined
-): Promise<any> {
-	// get current tokens
+	init?: fetch.RequestInit | undefined): Promise<fetch.Response> {
 	const container = ContainerManager.getInstance().container;
 	const updateTokensCommand = container.resolve(
 		UpdateDatabaseUserTokensCommandHandler
@@ -72,13 +68,22 @@ export async function refreshFetch(
 				user,
 			});
 			// return new result
-			return res2.json();
+			return res2;
 		}
 	}
 
 	// return response in case of any errors
+	return res;
+}
+
+export async function refreshFetch(
+	user: User,
+	url: fetch.RequestInfo,
+	init?: fetch.RequestInit | undefined
+): Promise<any> {
+	const res = await refreshFetchResponse(user, url, init);
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-	return jsonRes;
+	return await res.json();
 }
 
 const bearerHeaderName = "Authorization";

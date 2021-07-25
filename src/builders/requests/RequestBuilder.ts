@@ -3,7 +3,7 @@ import fetch, {
 	HeadersInit,
 	Response,
 } from "node-fetch";
-import { refreshFetch } from "#helpers/refresher";
+import { refreshFetch, refreshFetchResponse } from "#helpers/refresher";
 import { User } from "#models/User";
 
 export type RequestBuilderBuildType = {
@@ -101,6 +101,16 @@ export class RequestBuilder {
 		const buildResult = this.build(method);
 
 		return refreshFetch(user, buildResult.url, {
+			body: buildResult.body,
+			headers: buildResult.headers,
+			method: buildResult.method,
+		});
+	}
+
+	public refreshRequestResponse(user: User, method?: string): Promise<Response> {
+		const buildResult = this.build(method);
+
+		return refreshFetchResponse(user, buildResult.url, {
 			body: buildResult.body,
 			headers: buildResult.headers,
 			method: buildResult.method,
