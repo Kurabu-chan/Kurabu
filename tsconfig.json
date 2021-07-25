@@ -22,11 +22,11 @@
 			"#errors/*": ["src/errors/*"],
 			"#helpers/*": ["src/helpers/*"],
 			"#models/*": ["src/models/*"],
-			"#queries/*": ["src/queries/*"],
+			"#queries/*": ["./src/queries/*"],
 			"#serviceprovs/*": ["src/ServiceProviders/*"],
 			"#webreq/*": ["src/webRequest/*"]
 		}
 	},
-	"include": ["./src/**/*.ts"],
-	"exclude": ["./src/public/", "./tests/"]
+	"include": ["./src/**/*.ts", "./tests/**/*.ts"],
+	"exclude": ["./src/public/"]
 }

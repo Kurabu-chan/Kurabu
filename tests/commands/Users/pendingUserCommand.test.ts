@@ -6,48 +6,48 @@ import {
 	when,
 } from "ts-mockito";
 
-import { ICommandResultStatus } from "../../../src/commands/ICommand";
-import {
-	PendingUserCommandHandler,
-} from "../../../src/commands/Users/Pending/PendingUserCommandHandler";
-import { Database } from "../../../src/helpers/Database";
-import { ModelsType } from "../../../src/models";
-import { Tokens } from "../../../src/models/Tokens";
-import { User } from "../../../src/models/User";
-import { IQueryResultStatus } from "../../../src/queries/IQuery";
-import {
-	UserStatus,
-	UserStatusQueryHandler,
-} from "../../../src/queries/Users/Status/UserStatusQueryHandler";
-import {
-	GetTokenWebRequestHandler,
-} from "../../../src/webRequest/Auth/GetToken/GetTokenWebRequestHandler";
-import { IWebRequestResultStatus } from "../../../src/webRequest/IWebRequest";
 import {
 	expectThrowsAsync,
 	resolvableInstance,
 } from "../../testhelpers/helper";
+import { ICommandResultStatus } from "#commands/ICommand";
+import {
+	PendingUserCommandHandler,
+} from "#commands/Users/Pending/PendingUserCommandHandler";
+import { Database } from "#helpers/Database";
+import { ModelsType } from "#models/index";
+import { Tokens } from "#models/Tokens";
+import { User } from "#models/User";
+import { IQueryResultStatus } from "#queries/IQuery";
+import {
+	UserStatus,
+	UserStatusQueryHandler,
+} from "#queries/Users/Status/UserStatusQueryHandler";
+import {
+	GetTokenWebRequestHandler,
+} from "#webreq/Auth/GetToken/GetTokenWebRequestHandler";
+import { IWebRequestResultStatus } from "#webreq/IWebRequest";
 
-export function PendingUserCommand() {
+export function pendingUserCommand(): void {
 	describe("PendingUserCommand", () => {
 		it("Should throw if user was not found", async () => {
-			var userMock = mock<typeof User>();
+			const userMock = mock<typeof User>();
 			when(userMock.findOne(anything())).thenResolve(undefined as any);
 
-			var modelsMock = mock<ModelsType>();
+			const modelsMock = mock<ModelsType>();
 			when(modelsMock.user).thenReturn(instance(userMock));
 
-			var dbMock = mock<Database>();
-			when(dbMock.Models).thenReturn(instance(modelsMock));
-			var dbMockInstance = instance(dbMock);
+			const dbMock = mock<Database>();
+			when(dbMock.models).thenReturn(instance(modelsMock));
+			const dbMockInstance = instance(dbMock);
 
-			var sut = new PendingUserCommandHandler(
+			const sut = new PendingUserCommandHandler(
 				undefined as any,
 				dbMockInstance,
 				undefined as any
 			);
 
-			var input = {
+			const input = {
 				code: "blabla",
 				ourdomain: "domain",
 				uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
@@ -60,30 +60,30 @@ export function PendingUserCommand() {
 		});
 
 		it("Should throw if user status was not pending", async () => {
-			var userTypeMock = mock<typeof User>();
+			const userTypeMock = mock<typeof User>();
 			when(userTypeMock.findOne(anything())).thenResolve({} as any);
 
-			var modelsMock = mock<ModelsType>();
+			const modelsMock = mock<ModelsType>();
 			when(modelsMock.user).thenReturn(instance(userTypeMock));
 
-			var dbMock = mock<Database>();
-			when(dbMock.Models).thenReturn(instance(modelsMock));
-			var dbMockInstance = instance(dbMock);
+			const dbMock = mock<Database>();
+			when(dbMock.models).thenReturn(instance(modelsMock));
+			const dbMockInstance = instance(dbMock);
 
-			var userStatusQueryMock = mock<UserStatusQueryHandler>();
+			const userStatusQueryMock = mock<UserStatusQueryHandler>();
 			when(userStatusQueryMock.handle(anything())).thenResolve({
 				status: UserStatus.done,
-				success: IQueryResultStatus.SUCCESS,
+				success: IQueryResultStatus.success,
 			});
-			var userStatusQueryMockInstance = instance(userStatusQueryMock);
+			const userStatusQueryMockInstance = instance(userStatusQueryMock);
 
-			var sut = new PendingUserCommandHandler(
+			const sut = new PendingUserCommandHandler(
 				undefined as any,
 				dbMockInstance,
 				userStatusQueryMockInstance
 			);
 
-			var input = {
+			const input = {
 				code: "blabla",
 				ourdomain: "domain",
 				uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
@@ -93,37 +93,37 @@ export function PendingUserCommand() {
 		});
 
 		it("Should throw if there are no tokens for user", async () => {
-			var userTypeMock = mock<typeof User>();
+			const userTypeMock = mock<typeof User>();
 			when(userTypeMock.findOne(anything())).thenResolve({} as any);
 
-			var tokenTypeMock = mock<typeof Tokens>();
+			const tokenTypeMock = mock<typeof Tokens>();
 			when(tokenTypeMock.findOne(anything())).thenResolve(undefined as any);
 
-			var modelsMock = mock<ModelsType>();
+			const modelsMock = mock<ModelsType>();
 			when(modelsMock.user).thenReturn(instance(userTypeMock));
 			when(modelsMock.tokens).thenReturn(instance(tokenTypeMock));
 
-			var dbMock = mock<Database>();
-			when(dbMock.Models).thenReturn(instance(modelsMock));
-			var dbMockInstance = instance(dbMock);
+			const dbMock = mock<Database>();
+			when(dbMock.models).thenReturn(instance(modelsMock));
+			const dbMockInstance = instance(dbMock);
 
-			var userStatusQueryMock = mock<UserStatusQueryHandler>();
+			const userStatusQueryMock = mock<UserStatusQueryHandler>();
 			when(userStatusQueryMock.handle(anything())).thenResolve({
 				status: UserStatus.authing,
-				success: IQueryResultStatus.SUCCESS,
+				success: IQueryResultStatus.success,
 			});
-			var userStatusQueryMockInstance = instance(userStatusQueryMock);
+			const userStatusQueryMockInstance = instance(userStatusQueryMock);
 
 			// var getTokensMock = mock<GetTokenWebRequestHandler>();
 			// when(getTokensMock.handle(anything()))
 
-			var sut = new PendingUserCommandHandler(
+			const sut = new PendingUserCommandHandler(
 				undefined as any,
 				dbMockInstance,
 				userStatusQueryMockInstance
 			);
 
-			var input = {
+			const input = {
 				code: "blabla",
 				ourdomain: "domain",
 				uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
@@ -136,67 +136,67 @@ export function PendingUserCommand() {
 		});
 
 		it("Should return default redirect if data is good", async () => {
-			var userMock = mock<User>();
+			const userMock = mock<User>();
 			when(userMock.tokensId).thenReturn(2);
-			var userMockInstance = resolvableInstance(userMock);
+			const userMockInstance = resolvableInstance(userMock);
 
-			var tokensMock = mock<Tokens>();
+			const tokensMock = mock<Tokens>();
 			when(tokensMock.update(anything())).thenResolve(undefined as any);
 			when(tokensMock.verifier).thenReturn("cool");
-			var tokensMockInstance = resolvableInstance(tokensMock);
+			const tokensMockInstance = resolvableInstance(tokensMock);
 
-			var userTypeMock = mock<typeof User>();
+			const userTypeMock = mock<typeof User>();
 			when(userTypeMock.findOne(anything())).thenResolve(userMockInstance);
-			var userTypeMockInstance = instance(userTypeMock);
+			const userTypeMockInstance = instance(userTypeMock);
 
-			var tokenTypeMock = mock<typeof Tokens>();
+			const tokenTypeMock = mock<typeof Tokens>();
 			when(tokenTypeMock.findOne(anything())).thenResolve(tokensMockInstance);
-			var tokenTypeMockInstance = instance(tokenTypeMock);
+			const tokenTypeMockInstance = instance(tokenTypeMock);
 
-			var modelsMock = mock<ModelsType>();
+			const modelsMock = mock<ModelsType>();
 			when(modelsMock.user).thenReturn(userTypeMockInstance);
 			when(modelsMock.tokens).thenReturn(tokenTypeMockInstance);
-			var modelsMockInstance = instance(modelsMock);
+			const modelsMockInstance = instance(modelsMock);
 
-			var dbMock = mock<Database>();
-			when(dbMock.Models).thenReturn(modelsMockInstance);
-			var dbMockInstance = instance(dbMock);
+			const dbMock = mock<Database>();
+			when(dbMock.models).thenReturn(modelsMockInstance);
+			const dbMockInstance = instance(dbMock);
 
-			var userStatusQueryMock = mock<UserStatusQueryHandler>();
+			const userStatusQueryMock = mock<UserStatusQueryHandler>();
 			when(userStatusQueryMock.handle(anything())).thenResolve({
 				status: UserStatus.authing,
-				success: IQueryResultStatus.SUCCESS,
+				success: IQueryResultStatus.success,
 			});
-			var userStatusQueryMockInstance = instance(userStatusQueryMock);
+			const userStatusQueryMockInstance = instance(userStatusQueryMock);
 
-			var getTokensMock = mock<GetTokenWebRequestHandler>();
+			const getTokensMock = mock<GetTokenWebRequestHandler>();
 			when(getTokensMock.handle(anything())).thenResolve({
-				access_token: "",
-				expires_in: 0,
-				refresh_token: "",
-				success: IWebRequestResultStatus.SUCCESS,
-				token_type: "Bearer",
+				accessToken: "",
+				expiresIn: 0,
+				refreshToken: "",
+				success: IWebRequestResultStatus.success,
+				tokenType: "Bearer",
 			});
-			var getTokensMockInstance = instance(getTokensMock);
+			const getTokensMockInstance = instance(getTokensMock);
 
-			var sut = new PendingUserCommandHandler(
+			const sut = new PendingUserCommandHandler(
 				getTokensMockInstance,
-				//undefined as any,
+				// undefined as any,
 				dbMockInstance,
 				userStatusQueryMockInstance
-				//undefined as any
+				// undefined as any
 			);
 
-			var input = {
+			const input = {
 				code: "blabla",
 				ourdomain: "domain",
 				uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 			};
 
-			var result = await sut.handle(input);
+			const result = await sut.handle(input);
 
-			var expected = {
-				success: ICommandResultStatus.SUCCESS,
+			const expected = {
+				success: ICommandResultStatus.success,
 				url: `imal://auth/${input.uuid}`,
 			};
 
@@ -204,69 +204,69 @@ export function PendingUserCommand() {
 		});
 
 		it("Should return custom redirect if data is good and redirect is provided", async () => {
-			var tokensMock = mock<Tokens>();
+			const tokensMock = mock<Tokens>();
 			when(tokensMock.update(anything())).thenResolve(undefined as any);
 			when(tokensMock.verifier).thenReturn("cool");
 			when(tokensMock.redirect).thenReturn("cool://");
-			var tokensMockInstance = resolvableInstance(tokensMock);
+			const tokensMockInstance = resolvableInstance(tokensMock);
 
-			var userMock = mock<User>();
+			const userMock = mock<User>();
 			when(userMock.tokensId).thenReturn(2);
 			when(userMock.tokens).thenReturn(tokensMockInstance);
-			var userMockInstance = resolvableInstance(userMock);
+			const userMockInstance = resolvableInstance(userMock);
 
-			var userTypeMock = mock<typeof User>();
+			const userTypeMock = mock<typeof User>();
 			when(userTypeMock.findOne(anything())).thenResolve(userMockInstance);
-			var userTypeMockInstance = instance(userTypeMock);
+			const userTypeMockInstance = instance(userTypeMock);
 
-			var tokenTypeMock = mock<typeof Tokens>();
+			const tokenTypeMock = mock<typeof Tokens>();
 			when(tokenTypeMock.findOne(anything())).thenResolve(tokensMockInstance);
-			var tokenTypeMockInstance = instance(tokenTypeMock);
+			const tokenTypeMockInstance = instance(tokenTypeMock);
 
-			var modelsMock = mock<ModelsType>();
+			const modelsMock = mock<ModelsType>();
 			when(modelsMock.user).thenReturn(userTypeMockInstance);
 			when(modelsMock.tokens).thenReturn(tokenTypeMockInstance);
-			var modelsMockInstance = instance(modelsMock);
+			const modelsMockInstance = instance(modelsMock);
 
-			var dbMock = mock<Database>();
-			when(dbMock.Models).thenReturn(modelsMockInstance);
-			var dbMockInstance = instance(dbMock);
+			const dbMock = mock<Database>();
+			when(dbMock.models).thenReturn(modelsMockInstance);
+			const dbMockInstance = instance(dbMock);
 
-			var userStatusQueryMock = mock<UserStatusQueryHandler>();
+			const userStatusQueryMock = mock<UserStatusQueryHandler>();
 			when(userStatusQueryMock.handle(anything())).thenResolve({
 				status: UserStatus.authing,
-				success: IQueryResultStatus.SUCCESS,
+				success: IQueryResultStatus.success,
 			});
-			var userStatusQueryMockInstance = instance(userStatusQueryMock);
+			const userStatusQueryMockInstance = instance(userStatusQueryMock);
 
-			var getTokensMock = mock<GetTokenWebRequestHandler>();
+			const getTokensMock = mock<GetTokenWebRequestHandler>();
 			when(getTokensMock.handle(anything())).thenResolve({
-				access_token: "",
-				expires_in: 0,
-				refresh_token: "",
-				success: IWebRequestResultStatus.SUCCESS,
-				token_type: "Bearer",
+				accessToken: "",
+				expiresIn: 0,
+				refreshToken: "",
+				success: IWebRequestResultStatus.success,
+				tokenType: "Bearer",
 			});
-			var getTokensMockInstance = instance(getTokensMock);
+			const getTokensMockInstance = instance(getTokensMock);
 
-			var sut = new PendingUserCommandHandler(
+			const sut = new PendingUserCommandHandler(
 				getTokensMockInstance,
-				//undefined as any,
+				// undefined as any,
 				dbMockInstance,
 				userStatusQueryMockInstance
-				//undefined as any
+				// undefined as any
 			);
 
-			var input = {
+			const input = {
 				code: "blabla",
 				ourdomain: "domain",
 				uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 			};
 
-			var result = await sut.handle(input);
+			const result = await sut.handle(input);
 
-			var expected = {
-				success: ICommandResultStatus.SUCCESS,
+			const expected = {
+				success: ICommandResultStatus.success,
 				url: `cool://${input.uuid}`,
 			};
 

@@ -290,7 +290,7 @@ export type Studio = {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function isTokenResponse(obj: any): obj is tokenResponse {
-	return "token_type" in obj;
+	return "tokenType" in obj;
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

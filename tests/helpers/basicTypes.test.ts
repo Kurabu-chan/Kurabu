@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { expect } from "chai";
 import {
 	extractFields,
@@ -5,24 +7,25 @@ import {
 	fieldsToString,
 	isErrResp,
 	isTokenResponse,
-} from "../../src/helpers/BasicTypes";
+} from "#helpers/BasicTypes";
 
-export function basicTypes() {
+export function basicTypes():void {
 	describe("Basic Types", () => {
 		describe("Fields", () => {
 			describe("extractFields", () => {
 				it("extractFields should return empty array for empty string", () => {
-					let input = "";
+					const input = "";
 
-					let actual = extractFields(input);
+					const actual = extractFields(input);
 
 					expect(actual.fields).to.be.an("object").that.is.empty;
 				});
 
+				// eslint-disable-next-line max-len
 				it("extractFields should return fields array for fields list comma-space seperated", () => {
-					let input = "id, title, synopsis, popularity, updated_at, status";
+					const input = "id, title, synopsis, popularity, updated_at, status";
 
-					let actual = extractFields(input);
+					const actual = extractFields(input);
 
 					expect(actual.fields.id).to.be.true;
 					expect(actual.fields.title).to.be.true;
@@ -32,10 +35,11 @@ export function basicTypes() {
 					expect(actual.fields.status).to.be.true;
 				});
 
+				// eslint-disable-next-line max-len
 				it("extractFields should return fields array for fields list comma seperated", () => {
-					let input = "id,title,synopsis,popularity,updated_at,status";
+					const input = "id,title,synopsis,popularity,updated_at,status";
 
-					let actual = extractFields(input);
+					const actual = extractFields(input);
 
 					expect(actual.fields.id).to.be.true;
 					expect(actual.fields.title).to.be.true;
@@ -48,17 +52,18 @@ export function basicTypes() {
 
 			describe("fieldsToString", () => {
 				it("fieldsToString should return empty string for empty array", () => {
-					let input: Fields[] = [];
+					const input: Fields[] = [];
 
-					let actual = fieldsToString(input);
+					const actual = fieldsToString(input);
 
 					expect(actual).to.equal("");
 				});
 
+				// eslint-disable-next-line max-len
 				it("fieldsToString should return array of fields for comma-space seperated list of some fields", () => {
-					let input = { id: true, nsfw: true, popularity: true };
+					const input = { id: true, nsfw: true, popularity: true };
 
-					let actual = fieldsToString(input);
+					const actual = fieldsToString(input);
 
 					expect(actual).to.equal("id,nsfw,popularity");
 				});
@@ -68,7 +73,7 @@ export function basicTypes() {
 		describe("Responses", () => {
 			describe("isTokenResponse", () => {
 				it("isTokenResponse should return false for non token response", () => {
-					var input = {
+					const input = {
 						error: "invalid_token",
 						message: "incorrect token or something",
 					};
@@ -77,10 +82,10 @@ export function basicTypes() {
 				});
 
 				it("isTokenResponse should return true for token response", () => {
-					var input = {
-						token_type: "bearer",
-						token: "blabla123",
+					const input = {
 						refreshtoken: "blabla123...4",
+						token: "blabla123",
+						tokenType: "bearer",
 					};
 
 					expect(isTokenResponse(input)).to.be.true;
@@ -89,7 +94,7 @@ export function basicTypes() {
 
 			describe("isErrResp", () => {
 				it("isErrResp should return true for error response", () => {
-					var input = {
+					const input = {
 						error: "invalid_token",
 						message: "incorrect token or something",
 					};
@@ -98,10 +103,10 @@ export function basicTypes() {
 				});
 
 				it("isErrResp should return false for non error response", () => {
-					var input = {
-						token_type: "bearer",
-						token: "blabla123",
+					const input = {
 						refreshtoken: "blabla123...4",
+						token: "blabla123",
+						tokenType: "bearer",
 					};
 
 					expect(isErrResp(input)).to.be.false;

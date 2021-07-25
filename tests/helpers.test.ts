@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import { basicTypes } from "./helpers/basicTypes.test";
 import { hasher } from "./helpers/hasher.test";
 import { randomCodes } from "./helpers/randomCodes.test";

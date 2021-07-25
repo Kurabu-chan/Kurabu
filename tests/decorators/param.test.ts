@@ -1,9 +1,8 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { expect } from "chai";
-import {
-	Param,
-	ParamPos,
-	ParamType,
-} from "../../src/decorators/ParamDecorator";
 import { Request, Response } from "express";
 import {
 	mock,
@@ -14,11 +13,16 @@ import {
 	anything,
 	capture,
 } from "ts-mockito";
+import {
+	param,
+	ParamPos,
+	ParamType,
+} from "../../src/decorators/ParamDecorator";
 
-var callbackListener: (success: any) => void = () => {};
+let callbackListener: (success: any) => void = () => {};
 
 class ParamMockClass {
-	@Param(
+	@param(
 		"cool",
 		ParamType.int,
 		false,
@@ -27,11 +31,11 @@ class ParamMockClass {
 			callbackListener(success);
 		}
 	)
-	public async cool_int_false(req: Request, res: Response, arg: any) {
+	public coolIntFalse(req: Request, res: Response, arg: any): any {
 		return arg;
 	}
 
-	@Param(
+	@param(
 		"cool",
 		ParamType.number,
 		false,
@@ -40,11 +44,11 @@ class ParamMockClass {
 			callbackListener(success);
 		}
 	)
-	public async cool_float_false(req: Request, res: Response, arg: any) {
+	public coolFloatFalse(req: Request, res: Response, arg: any): any {
 		return arg;
 	}
 
-	@Param(
+	@param(
 		"cool",
 		ParamType.int,
 		true,
@@ -53,11 +57,11 @@ class ParamMockClass {
 			callbackListener(success);
 		}
 	)
-	public async cool_int_true(req: Request, res: Response, arg: any) {
+	public coolIntTrue(req: Request, res: Response, arg: any): any {
 		return arg;
 	}
 
-	@Param(
+	@param(
 		"cool",
 		ParamType.number,
 		true,
@@ -66,11 +70,11 @@ class ParamMockClass {
 			callbackListener(success);
 		}
 	)
-	public async cool_float_true(req: Request, res: Response, arg: any) {
+	public coolFloatTrue(req: Request, res: Response, arg: any): any {
 		return arg;
 	}
 
-	@Param(
+	@param(
 		"cool",
 		ParamType.object,
 		true,
@@ -79,11 +83,11 @@ class ParamMockClass {
 			callbackListener(success);
 		}
 	)
-	public async cool_object_true(req: Request, res: Response, arg: any) {
+	public coolObjectTrue(req: Request, res: Response, arg: any): any {
 		return arg;
 	}
 
-	@Param(
+	@param(
 		"cool",
 		ParamType.string,
 		true,
@@ -92,11 +96,11 @@ class ParamMockClass {
 			callbackListener(success);
 		}
 	)
-	public async cool_string_true(req: Request, res: Response, arg: any) {
+	public coolStringTrue(req: Request, res: Response, arg: any): any {
 		return arg;
 	}
 
-	@Param(
+	@param(
 		"cool",
 		ParamType.int,
 		true,
@@ -105,30 +109,31 @@ class ParamMockClass {
 			callbackListener(success);
 		}
 	)
-	public async cool_int_true_body_only(req: Request, res: Response, arg: any) {
+	public coolIntTrueBodyOnly(req: Request, res: Response, arg: any): any {
 		return arg;
 	}
 }
 
-export function ParamDecorator() {
+export function paramDecorator():void {
 	describe("ParamDecorator", () => {
-		var mockClass = new ParamMockClass();
+		const mockClass = new ParamMockClass();
 
 		describe("Valid", () => {
+			// eslint-disable-next-line max-len
 			it("ParamDecorator should get integer argument if present and valid from both body and query and callback success", async () => {
-				var succeeded: any | undefined = undefined;
+				let succeeded: any | undefined;
 				callbackListener = (success) => {
 					succeeded = success;
 				};
 
-				var reqMock = mock<Request>();
+				const reqMock = mock<Request>();
 				when(reqMock.query).thenReturn({
 					cool: "21",
 				});
 				when(reqMock.body).thenReturn({});
-				var reqMockInstance = instance(reqMock);
+				const reqMockInstance = instance(reqMock);
 
-				var argResultQuery = await mockClass.cool_int_false(
+				const argResultQuery = await mockClass.coolIntFalse(
 					reqMockInstance,
 					undefined as any,
 					undefined as any
@@ -137,7 +142,7 @@ export function ParamDecorator() {
 				expect(argResultQuery.cool).to.equal(21);
 				expect(succeeded).to.equal(true);
 
-				var argResultBody = await mockClass.cool_int_false(
+				const argResultBody = await mockClass.coolIntFalse(
 					reqMockInstance,
 					undefined as any,
 					undefined as any
@@ -147,18 +152,19 @@ export function ParamDecorator() {
 				expect(succeeded).to.equal(true);
 			});
 
+			// eslint-disable-next-line max-len
 			it("ParamDecorator should set param to undefined if not present on optional", async () => {
-				var succeeded: any | undefined = undefined;
+				let succeeded: any | undefined;
 				callbackListener = (success) => {
 					succeeded = success;
 				};
 
-				var reqMock = mock<Request>();
+				const reqMock = mock<Request>();
 				when(reqMock.query).thenReturn({});
 				when(reqMock.body).thenReturn({});
-				var reqMockInstance = instance(reqMock);
+				const reqMockInstance = instance(reqMock);
 
-				var argResult = await mockClass.cool_int_true(
+				const argResult = await mockClass.coolIntTrue(
 					reqMockInstance,
 					undefined as any,
 					undefined as any
@@ -169,17 +175,17 @@ export function ParamDecorator() {
 			});
 
 			it("ParamDecorator should only check body when that is set", async () => {
-				var succeeded: any | undefined = undefined;
+				let succeeded: any | undefined;
 				callbackListener = (success) => {
 					succeeded = success;
 				};
 
-				var reqMock = mock<Request>();
+				let reqMock = mock<Request>();
 				when(reqMock.query).thenReturn({ cool: "21" });
 				when(reqMock.body).thenReturn({});
-				var reqMockInstance = instance(reqMock);
+				let reqMockInstance = instance(reqMock);
 
-				var argResultQuery = await mockClass.cool_int_true_body_only(
+				const argResultQuery = await mockClass.coolIntTrueBodyOnly(
 					reqMockInstance,
 					undefined as any,
 					undefined as any
@@ -193,7 +199,7 @@ export function ParamDecorator() {
 				when(reqMock.body).thenReturn({ cool: "21" });
 				reqMockInstance = instance(reqMock);
 
-				var argResultBody = await mockClass.cool_int_true_body_only(
+				const argResultBody = await mockClass.coolIntTrueBodyOnly(
 					reqMockInstance,
 					undefined as any,
 					undefined as any
@@ -204,17 +210,17 @@ export function ParamDecorator() {
 			});
 
 			it("ParamDecorator should parseFloat correctly", async () => {
-				var succeeded: any | undefined = undefined;
+				let succeeded: any | undefined;
 				callbackListener = (success) => {
 					succeeded = success;
 				};
 
-				var reqMock = mock<Request>();
+				const reqMock = mock<Request>();
 				when(reqMock.query).thenReturn({ cool: "21.01" });
 				when(reqMock.body).thenReturn({});
-				var reqMockInstance = instance(reqMock);
+				const reqMockInstance = instance(reqMock);
 
-				var argResultQuery = await mockClass.cool_float_true(
+				const argResultQuery = await mockClass.coolFloatTrue(
 					reqMockInstance,
 					undefined as any,
 					undefined as any
@@ -225,23 +231,23 @@ export function ParamDecorator() {
 			});
 
 			it("ParamDecorator should do object correctly", async () => {
-				var succeeded: any | undefined = undefined;
+				let succeeded: any | undefined;
 				callbackListener = (success) => {
 					succeeded = success;
 				};
 
-				var expected = {
+				const expected = {
 					alright: "yeah",
 				};
 
-				var reqMock = mock<Request>();
+				const reqMock = mock<Request>();
 				when(reqMock.query).thenReturn({
 					cool: expected,
 				});
 				when(reqMock.body).thenReturn({});
-				var reqMockInstance = instance(reqMock);
+				const reqMockInstance = instance(reqMock);
 
-				var argResultQuery = await mockClass.cool_object_true(
+				const argResultQuery = await mockClass.coolObjectTrue(
 					reqMockInstance,
 					undefined as any,
 					undefined as any
@@ -255,19 +261,19 @@ export function ParamDecorator() {
 			});
 
 			it("ParamDecorator should do string correctly", async () => {
-				var succeeded: any | undefined = undefined;
+				let succeeded: any | undefined;
 				callbackListener = (success) => {
 					succeeded = success;
 				};
 
-				var reqMock = mock<Request>();
+				const reqMock = mock<Request>();
 				when(reqMock.query).thenReturn({
 					cool: "yeah",
 				});
 				when(reqMock.body).thenReturn({});
-				var reqMockInstance = instance(reqMock);
+				const reqMockInstance = instance(reqMock);
 
-				var argResultQuery = await mockClass.cool_string_true(
+				const argResultQuery = await mockClass.coolStringTrue(
 					reqMockInstance,
 					undefined as any,
 					undefined as any
@@ -279,31 +285,32 @@ export function ParamDecorator() {
 		});
 
 		describe("Invalid", () => {
+			// eslint-disable-next-line max-len
 			it("ParamDecorator should return nothing and send 403 with status 'error' if argument not present on query or body on non optional endpoint", async () => {
-				var succeeded: any | undefined = undefined;
+				let succeeded: any | undefined;
 				callbackListener = (success) => {
 					succeeded = success;
 				};
 
-				var reqMock = mock<Request>();
+				const reqMock = mock<Request>();
 				when(reqMock.query).thenReturn({});
 				when(reqMock.body).thenReturn({});
-				var reqMockInstance = instance(reqMock);
+				const reqMockInstance = instance(reqMock);
 
-				var resMock = mock<Response>();
+				const resMock = mock<Response>();
 				when(resMock.json(anything())).thenReturn();
-				var resMockInstance = instance(resMock);
+				let resMockInstance = instance(resMock);
 				when(resMock.status(anyNumber())).thenReturn(resMockInstance);
 				resMockInstance = instance(resMock);
 
-				var argResult = await mockClass.cool_int_false(
+				const argResult = await mockClass.coolIntFalse(
 					reqMockInstance,
 					resMockInstance,
 					undefined as any
 				);
 
-				var [json] = capture(resMock.json).last();
-				var [errorCode] = capture(resMock.status).last();
+				const [json] = capture(resMock.json).last();
+				const [errorCode] = capture(resMock.status.bind(resMock)).last();
 
 				expect(succeeded).to.be.false;
 				expect(argResult).to.equal(undefined);
@@ -311,50 +318,51 @@ export function ParamDecorator() {
 				expect(json.status).to.equal("error");
 			});
 
+			// eslint-disable-next-line max-len
 			it("ParamDecorator should return nothing and send 403 with status 'error' if argument wrong format on query on non optional endpoint", async () => {
-				var succeeded: any | undefined = undefined;
+				let succeeded: any | undefined;
 				callbackListener = (success) => {
 					succeeded = success;
 				};
 
-				var reqMock = mock<Request>();
+				const reqMock = mock<Request>();
 				when(reqMock.query).thenReturn({});
 				when(reqMock.body).thenReturn({});
-				var reqMockInstance = instance(reqMock);
+				const reqMockInstance = instance(reqMock);
 
-				var resMock = mock<Response>();
+				const resMock = mock<Response>();
 				when(resMock.json(anything())).thenReturn();
-				var resMockInstance = instance(resMock);
+				let resMockInstance = instance(resMock);
 				when(resMock.status(anyNumber())).thenReturn(resMockInstance);
 				resMockInstance = instance(resMock);
 
-				var argResult = await mockClass.cool_int_false(
+				const argResult1 = await mockClass.coolIntFalse(
 					reqMockInstance,
 					resMockInstance,
 					undefined as any
 				);
 
-				var [json] = capture(resMock.json).last();
-				var [errorCode] = capture(resMock.status).last();
+				const [json1] = capture(resMock.json).last();
+				const [errorCode1] = capture(resMock.status.bind(resMock)).last();
 
 				expect(succeeded).to.be.false;
-				expect(argResult).to.equal(undefined);
-				expect(errorCode).to.equal(403);
-				expect(json.status).to.equal("error");
+				expect(argResult1).to.equal(undefined);
+				expect(errorCode1).to.equal(403);
+				expect(json1.status).to.equal("error");
 
-				var argResult = await mockClass.cool_float_false(
+				const argResult2 = await mockClass.coolFloatFalse(
 					reqMockInstance,
 					resMockInstance,
 					undefined as any
 				);
 
-				var [json] = capture(resMock.json).last();
-				var [errorCode] = capture(resMock.status).last();
+				const [json2] = capture(resMock.json).last();
+				const [errorCode2] = capture(resMock.status.bind(resMock)).last();
 
 				expect(succeeded).to.be.false;
-				expect(argResult).to.equal(undefined);
-				expect(errorCode).to.equal(403);
-				expect(json.status).to.equal("error");
+				expect(argResult2).to.equal(undefined);
+				expect(errorCode2).to.equal(403);
+				expect(json2.status).to.equal("error");
 			});
 		});
 	});

@@ -1,9 +1,9 @@
-import { CancelRegisterCommand } from "./Users/cancelRegisterCommand.test";
-import { PendingUserCommand } from "./Users/pendingUserCommand.test";
+import { cancelRegisterCommand } from "./Users/cancelRegisterCommand.test";
+import { pendingUserCommand } from "./Users/pendingUserCommand.test";
 
-export function Users() {
-	describe("Users", async () => {
-		CancelRegisterCommand();
-		PendingUserCommand();
+export function users(): void {
+	describe("Users", () => {
+		cancelRegisterCommand();
+		pendingUserCommand();
 	});
 }
