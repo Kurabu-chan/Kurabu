@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/naming-convention */
 export type ResponseMessage = {
 	status: string;
@@ -78,6 +76,7 @@ export function extractFields(
 
 	function addObject(stri: string, val: any) {
 		if (stri === "") return;
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
 		createdObj[currentObject] = val;
 		currentObject = "";
 	}
@@ -110,6 +109,7 @@ export function extractFields(
 			if (subject[0] === ",") skipSubject();
 
 			return {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				fields: createdObj,
 				remaining: subject,
 			};
@@ -129,6 +129,7 @@ export function extractFields(
 	}
 
 	return {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		fields: createdObj,
 		remaining: "",
 	};

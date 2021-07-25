@@ -115,6 +115,7 @@ module.exports = {
 			"error",
 			{
 				code: 100,
+				ignoreComments: true
 			},
 		],
 		"new-parens": "error",
