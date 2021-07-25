@@ -1,7 +1,17 @@
-import LogArg from "#decorators/LogArgDecorator";
+import {
+	Request,
+	Response,
+} from "express";
+import { injectable } from "tsyringe";
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+import * as Options from "./AnimeDetailsControllerOptions";
+import logArg from "#decorators/LogArgDecorator";
 import * as Param from "#decorators/ParamDecorator";
-import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
-import State from "#decorators/StateDecorator";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import state from "#decorators/StateDecorator";
 import {
 	extractFields,
 	Fields,
@@ -9,18 +19,7 @@ import {
 import {
 	AnimeDetailsWebRequestHandler,
 } from "#webreq/Anime/Details/AnimeDetailsWebRequestHandler";
-import {
-	Request,
-	Response,
-} from "express";
-import { injectable } from "tsyringe";
 
-import {
-	Controller,
-	Get,
-} from "@overnightjs/core";
-
-import * as Options from "./AnimeDetailsControllerOptions";
 
 @Controller(Options.controllerPath)
 @injectable()
@@ -28,12 +27,12 @@ export class AnimeDetailsController {
 	constructor(private _detailsWebRequest: AnimeDetailsWebRequestHandler) {}
 
 	@Get(Options.controllerName)
-	@RequestHandlerDecorator()
-	@State()
-	@Param.Param("animeid", Param.ParamType.int, false)
-	@Param.Param("fields", Param.ParamType.string, true)
-	@LogArg()
-	private async get(req: Request, res: Response, arg: Options.params) {
+	@requestHandlerDecorator()
+	@state()
+	@Param.param("animeid", Param.ParamType.int, false)
+	@Param.param("fields", Param.ParamType.string, true)
+	@logArg()
+	private async get(req: Request, res: Response, arg: Options.Params) {
 		arg.animeid = arg.animeid ? arg.animeid : 1;
 
 		let fields: Fields | undefined;
@@ -43,8 +42,8 @@ export class AnimeDetailsController {
 
 		const result = await this._detailsWebRequest.handle({
 			animeid: arg.animeid,
-			user: arg.user,
 			fields,
+			user: arg.user,
 		});
 
 		return result.anime;

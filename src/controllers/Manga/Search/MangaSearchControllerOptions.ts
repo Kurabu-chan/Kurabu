@@ -2,7 +2,7 @@ import { User } from "#models/User";
 
 export const controllerPath = "manga";
 export const controllerName = "search";
-export type params = {
+export type Params = {
 	state: string;
 	user: User;
 	query: string;

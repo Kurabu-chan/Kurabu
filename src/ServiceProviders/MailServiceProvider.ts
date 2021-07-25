@@ -1,8 +1,8 @@
-import MailServiceNoSendGridKeyError
-	from "#errors/ServiceProviders/MailServiceNoSendGridKeyError";
 import { singleton } from "tsyringe";
 
 import * as sgMail from "@sendgrid/mail";
+import MailServiceNoSendGridKeyError
+	from "#errors/ServiceProviders/MailServiceNoSendGridKeyError";
 
 @singleton()
 export class MailServiceProvider {
@@ -12,31 +12,31 @@ export class MailServiceProvider {
 		sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 	}
 
-	public SendText(
+	public async sendText(
 		recipient: string,
 		subject: string,
 		text: string,
 		sender: string
-	) {
-		sgMail.send({
+	):Promise<void> {
+		await sgMail.send({
 			from: sender,
+			subject,
+			text,
 			to: recipient,
-			subject: subject,
-			text: text,
 		});
 	}
 
-	public SendHtml(
+	public async sendHtml(
 		recipient: string,
 		subject: string,
 		html: string,
 		sender: string
-	) {
-		sgMail.send({
+	):Promise<void> {
+		await sgMail.send({
 			from: sender,
+			html,
+			subject,
 			to: recipient,
-			subject: subject,
-			html: html,
 		});
 	}
 }

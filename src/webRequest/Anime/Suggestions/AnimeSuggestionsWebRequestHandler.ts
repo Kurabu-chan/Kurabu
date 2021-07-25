@@ -1,21 +1,20 @@
-import { baseRequest } from "#builders/requests/RequestBuilder";
-import {
-	ErrorResponse,
-	Fields,
-	fieldsToString,
-	ListPagination,
-	MediaNode,
-} from "#helpers/BasicTypes";
 import { autoInjectable } from "tsyringe";
 
-import {
-	IWebRequestHandler,
-	IWebRequestResultStatus,
-} from "../../IWebRequest";
 import { AnimeSuggestionsWebRequest } from "./AnimeSuggestionsWebRequest";
 import {
 	AnimeSuggestionsWebRequestResult,
 } from "./AnimeSuggestionsWebRequestResult";
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "#webreq/IWebRequest";
+import {
+	ErrorResponse,
+	fieldsToString,
+	ListPagination,
+	MediaNode,
+} from "#helpers/BasicTypes";
+import { baseRequest } from "#builders/requests/RequestBuilder";
 
 @autoInjectable()
 export class SuggestionsWebRequestHandler
@@ -27,7 +26,7 @@ export class SuggestionsWebRequestHandler
 	async handle(
 		query: AnimeSuggestionsWebRequest
 	): Promise<AnimeSuggestionsWebRequestResult> {
-		var request = baseRequest()
+		const request = baseRequest()
 			.addPath("v2/anime/suggestions")
 			.setQueryParam("limit", (query.limit ? query.limit : 10).toString())
 			.setQueryParam("offset", (query.offset ? query.offset : 0).toString())
@@ -37,20 +36,20 @@ export class SuggestionsWebRequestHandler
 			query.fields !== undefined &&
 			Object.entries(query.fields).length !== 0
 		) {
-			request.setQueryParam("fields", fieldsToString(query.fields as Fields));
+			request.setQueryParam("fields", fieldsToString(query.fields ));
 		}
 
-		console.log(JSON.stringify(request.build()));
+		const data = await request.refreshRequest(query.user);
 
-		let data = await request.refreshRequest(query.user);
+		type JSONType = ListPagination<MediaNode> | ErrorResponse;
 
-		let json: ListPagination<MediaNode> | ErrorResponse = data;
+		const json:JSONType = data as JSONType;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
 		}
 
 		return {
-			success: IWebRequestResultStatus.SUCCESS,
+			success: IWebRequestResultStatus.success,
 			suggestions: json as ListPagination<MediaNode>,
 		};
 	}

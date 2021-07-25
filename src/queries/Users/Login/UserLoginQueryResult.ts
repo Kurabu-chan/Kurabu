@@ -1,5 +1,5 @@
-import { IQueryResult } from "../../IQuery";
 import { UserStatus } from "../Status/UserStatusQueryHandler";
+import { IQueryResult } from "#queries/IQuery";
 
 export class UserLoginQueryResult extends IQueryResult {
 	id!: string;

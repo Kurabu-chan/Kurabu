@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/naming-convention */
 export type ResponseMessage = {
 	status: string;
 	message: any;
@@ -27,7 +30,7 @@ export type Fields = {
 	media_type?: boolean;
 	status?: boolean;
 	genres?: boolean;
-	my_list_status?: boolean | Fields; //different possible fields
+	my_list_status?: boolean | Fields; // different possible fields
 	num_episodes?: boolean;
 	start_season?: boolean;
 	broadcast?: boolean;
@@ -44,17 +47,17 @@ export type Fields = {
 	videos?: boolean;
 };
 
-export function fieldsToString(fields: any) {
-	var entries = Object.entries(fields);
-	var str = "";
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function fieldsToString(fields: any): string {
+	const entries = Object.entries(fields);
+	let str = "";
 
-	for (const key in entries) {
-		var entry = entries[key];
+	for (const entry of entries) {
 		if (str.length > 0) {
 			str += ",";
 		}
 		str += entry[0];
-		if (entry[1] != true && entry[1] != false) {
+		if (entry[1] !== true && entry[1] !== false) {
 			str += `{${fieldsToString(entry[1] as any)}}`;
 		}
 	}
@@ -64,17 +67,17 @@ export function fieldsToString(fields: any) {
 export function extractFields(
 	str: string
 ): { fields: Fields; remaining: string } {
-	var subject = str;
+	let subject = str;
 
-	if (subject[0] == "{") {
+	if (subject[0] === "{") {
 		subject = subject.substr(1, subject.length);
 	}
 
-	var currentObject = "";
-	var createdObj: any = {};
+	let currentObject = "";
+	const createdObj: any = {};
 
-	function addObject(str: string, val: any) {
-		if (str == "") return;
+	function addObject(stri: string, val: any) {
+		if (stri === "") return;
 		createdObj[currentObject] = val;
 		currentObject = "";
 	}
@@ -84,34 +87,34 @@ export function extractFields(
 	}
 
 	while (subject.length > 0) {
-		var subjZero = subject[0];
+		const subjZero = subject[0];
 
-		if (subjZero == " ") {
+		if (subjZero === " ") {
 			skipSubject();
-			if (subject.length == 0) {
+			if (subject.length === 0) {
 				addObject(currentObject, true);
 			}
 			continue;
 		}
 
-		if (subjZero == "{") {
-			var res = extractFields(subject);
+		if (subjZero === "{") {
+			const res = extractFields(subject);
 			addObject(currentObject, res.fields);
 			subject = res.remaining;
 			continue;
 		}
-		if (subjZero == "}") {
+		if (subjZero === "}") {
 			addObject(currentObject, true);
 
 			skipSubject();
-			if (subject[0] == ",") skipSubject();
+			if (subject[0] === ",") skipSubject();
 
 			return {
 				fields: createdObj,
 				remaining: subject,
 			};
 		}
-		if (subjZero == ",") {
+		if (subjZero === ",") {
 			addObject(currentObject, true);
 			skipSubject();
 			continue;
@@ -120,7 +123,7 @@ export function extractFields(
 		currentObject += subjZero;
 		skipSubject();
 
-		if (subject.length == 0) {
+		if (subject.length === 0) {
 			addObject(currentObject, true);
 		}
 	}
@@ -131,40 +134,40 @@ export function extractFields(
 	};
 }
 
-export function allFields() {
+export function allFields():Fields {
 	return {
-		id: true,
-		title: true,
-		main_picture: true,
 		alternative_titles: true,
-		start_date: true,
+		average_episode_duration: true,
+		background: true,
+		broadcast: true,
+		created_at: true,
 		end_date: true,
-		synopsis: true,
+		genres: true,
+		id: true,
+		main_picture: true,
 		mean: true,
-		rank: true,
-		popularity: true,
+		media_type: true,
+		my_list_status: true,
+		nsfw: true,
+		num_episodes: true,
 		num_list_users: true,
 		num_scoring_users: true,
-		nsfw: true,
-		created_at: true,
-		updated_at: true,
-		media_type: true,
-		status: true,
-		genres: true,
-		my_list_status: true,
-		num_episodes: true,
-		start_season: true,
-		broadcast: true,
-		source: true,
-		average_episode_duration: true,
-		rating: true,
 		pictures: true,
-		background: true,
+		popularity: true,
+		rank: true,
+		rating: true,
+		recommendations: true,
 		related_anime: true,
 		related_manga: true,
-		recommendations: true,
-		studios: true,
+		source: true,
+		start_date: true,
+		start_season: true,
 		statistics: true,
+		status: true,
+		studios: true,
+		synopsis: true,
+		title: true,
+		updated_at: true,
 	};
 }
 
@@ -284,10 +287,12 @@ export type Studio = {
 	name: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function isTokenResponse(obj: any): obj is tokenResponse {
 	return "token_type" in obj;
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function isErrResp(obj: any): obj is ErrorResponse {
 	return "error" in obj;
 }

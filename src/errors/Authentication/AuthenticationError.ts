@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import GeneralError from "../GeneralError";
 
 export default class AuthenticationError extends GeneralError {

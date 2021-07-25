@@ -1,3 +1,8 @@
+import { autoInjectable } from "tsyringe";
+import { GetMyUserAnimeListWebRequest } from "./GetMyUserAnimeListWebRequest";
+import {
+	GetMyUserAnimeListWebRequestResult,
+} from "./GetMyUserAnimeListWebRequestResult";
 import { baseRequest } from "#builders/requests/RequestBuilder";
 import {
 	allFields,
@@ -10,12 +15,7 @@ import {
 	IWebRequestHandler,
 	IWebRequestResultStatus,
 } from "#webreq/IWebRequest";
-import { autoInjectable } from "tsyringe";
 
-import { GetMyUserAnimeListWebRequest } from "./GetMyUserAnimeListWebRequest";
-import {
-	GetMyUserAnimeListWebRequestResult,
-} from "./GetMyUserAnimeListWebRequestResult";
 
 @autoInjectable()
 export class GetMyUserAnimeListWebRequestHandler
@@ -38,14 +38,16 @@ export class GetMyUserAnimeListWebRequestHandler
 
 		const data = await request.refreshRequest(query.user);
 
-		const json: ListPagination<StatusNode> | ErrorResponse = data;
+		type JSONType = ListPagination<StatusNode> | ErrorResponse;
+
+		const json:JSONType = data as JSONType;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
 		}
 
 		return {
 			status: json as ListPagination<StatusNode>,
-			success: IWebRequestResultStatus.SUCCESS,
+			success: IWebRequestResultStatus.success,
 		};
 	}
 }

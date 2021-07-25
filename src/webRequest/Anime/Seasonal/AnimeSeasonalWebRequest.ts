@@ -1,7 +1,7 @@
 import { Fields } from "#helpers/BasicTypes";
 import { User } from "#models/User";
 
-import { IWebRequest } from "../../IWebRequest";
+import { IWebRequest } from "#webreq/IWebRequest";
 
 export class AnimeSeasonalWebRequest extends IWebRequest {
 	user!: User;

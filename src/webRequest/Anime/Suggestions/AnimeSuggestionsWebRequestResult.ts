@@ -3,7 +3,7 @@ import {
 	MediaNode,
 } from "#helpers/BasicTypes";
 
-import { IWebRequestResult } from "../../IWebRequest";
+import { IWebRequestResult } from "#webreq/IWebRequest";
 
 export class AnimeSuggestionsWebRequestResult extends IWebRequestResult {
 	suggestions!: ListPagination<MediaNode>;

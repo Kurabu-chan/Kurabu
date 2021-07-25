@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import AuthenticationError from "./AuthenticationError";
 
 export default class StateStatusError extends AuthenticationError {

@@ -1,4 +1,11 @@
-import { baseRequest } from "#builders/requests/RequestBuilder";
+import { autoInjectable } from "tsyringe";
+
+import { AnimeSeasonalWebRequest } from "./AnimeSeasonalWebRequest";
+import { AnimeSeasonalWebRequestResult } from "./AnimeSeasonalWebRequestResult";
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "#webreq/IWebRequest";
 import {
 	ErrorResponse,
 	Fields,
@@ -7,14 +14,7 @@ import {
 	MediaNode,
 	Season,
 } from "#helpers/BasicTypes";
-import { autoInjectable } from "tsyringe";
-
-import {
-	IWebRequestHandler,
-	IWebRequestResultStatus,
-} from "../../IWebRequest";
-import { AnimeSeasonalWebRequest } from "./AnimeSeasonalWebRequest";
-import { AnimeSeasonalWebRequestResult } from "./AnimeSeasonalWebRequestResult";
+import { baseRequest } from "#builders/requests/RequestBuilder";
 
 @autoInjectable()
 export class SeasonalWebRequestHandler
@@ -23,7 +23,7 @@ export class SeasonalWebRequestHandler
 	async handle(
 		query: AnimeSeasonalWebRequest
 	): Promise<AnimeSeasonalWebRequestResult> {
-		var request = baseRequest()
+		const request = baseRequest()
 			.addPath("v2/anime/season")
 			.addPath(query.year.toString())
 			.addPath(query.season.toString())
@@ -39,18 +39,19 @@ export class SeasonalWebRequestHandler
 			request.setQueryParam("fields", fieldsToString(query.fields as Fields[]));
 		}
 
-		let data = await request.refreshRequest(query.user);
+		const data = await request.refreshRequest(query.user);
 
-		let json:
-			| (ListPagination<MediaNode> & { season: Season })
-			| ErrorResponse = data;
+		type JSONType = (ListPagination<MediaNode> & { season: Season })
+			| ErrorResponse;
+
+		const json:JSONType = data as JSONType;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
 		}
 
 		return {
-			success: IWebRequestResultStatus.SUCCESS,
 			seasonal: json as ListPagination<MediaNode> & { season: Season },
+			success: IWebRequestResultStatus.success,
 		};
 	}
 }

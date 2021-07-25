@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export default class GeneralError extends Error {
 	protected errorCode = "000";
-	protected httpCode: number = 500;
+	protected httpCode = 500;
 
 	constructor(message: any) {
 		super(message);

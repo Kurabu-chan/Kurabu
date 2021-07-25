@@ -1,25 +1,24 @@
 import {
-	CancelUserRegisterCommandHandler,
-} from "#commands/Users/CancelRegister/CancelUserRegisterCommandHandler";
-import LogArg from "#decorators/LogArgDecorator";
-import {
-	Param,
-	ParamType,
-} from "#decorators/ParamDecorator";
-import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
-import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
-import {
 	Request,
 	Response,
 } from "express";
 import { injectable } from "tsyringe";
-
 import {
 	Controller,
 	Post,
 } from "@overnightjs/core";
-
 import * as Options from "./CancelRegisterControllerOptions";
+import {
+	CancelUserRegisterCommandHandler,
+} from "#commands/Users/CancelRegister/CancelUserRegisterCommandHandler";
+import logArg from "#decorators/LogArgDecorator";
+import {
+	param,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+
 
 @Controller(Options.controllerPath)
 @injectable()
@@ -31,17 +30,17 @@ export class CancelRegisterController {
 	}
 
 	@Post(Options.controllerName)
-	@RequestHandlerDecorator()
-	@Param("uuid", ParamType.string, false)
-	@LogArg()
-	private async post(req: Request, res: Response, arg: Options.params) {
+	@requestHandlerDecorator()
+	@param("uuid", ParamType.string, false)
+	@logArg()
+	private async post(req: Request, res: Response, arg: Options.Params) {
 		await this._cancelUserRegisterCommand.handle({
 			user: arg.user,
 		});
 
 		return {
-			status: SUCCESS_STATUS,
 			message: "Register canceled successfully",
+			status: SUCCESS_STATUS,
 		};
 	}
 }

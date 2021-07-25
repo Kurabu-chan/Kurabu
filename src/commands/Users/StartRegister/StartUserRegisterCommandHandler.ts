@@ -1,3 +1,8 @@
+import { autoInjectable } from "tsyringe";
+import { StartUserRegisterCommand } from "./StartUserRegisterCommand";
+import {
+	StartUserRegisterCommandResult,
+} from "./StartUserRegisterCommandResult";
 import {
 	ICommandHandler,
 	ICommandResultStatus,
@@ -15,12 +20,7 @@ import {
 	UserEmailUsedQueryHandler,
 } from "#queries/Users/EmailUsed/UserEmailUsedQueryHandler";
 import { MailServiceProvider } from "#serviceprovs/MailServiceProvider";
-import { autoInjectable } from "tsyringe";
 
-import { StartUserRegisterCommand } from "./StartUserRegisterCommand";
-import {
-	StartUserRegisterCommandResult,
-} from "./StartUserRegisterCommandResult";
 
 @autoInjectable()
 export class StartUserRegisterCommandHandler
@@ -36,13 +36,14 @@ export class StartUserRegisterCommandHandler
 		command: StartUserRegisterCommand
 	): Promise<StartUserRegisterCommandResult> {
 		// Check format for email and password
+		// eslint-disable-next-line max-len
 		const emailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		if (!command.email.match(emailReg)) {
+		if (!(emailReg.exec(command.email))) {
 			throw new MalformedParameterError("Email incorrect format");
 		}
 
 		const passReg = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)^[a-zA-Z\d\W]{8,30}$/;
-		if (!command.password.match(passReg)) {
+		if (!(passReg.exec(command.password))) {
 			throw new PasswordStrengthError("Password incorrect format");
 		}
 
@@ -58,14 +59,14 @@ export class StartUserRegisterCommandHandler
 		const code = makeVerifCode();
 
 		const hash = await hasher.hash(command.password);
-		this._database.Models.user.create({
+		await this._database.models.user.create({
 			email: command.email,
 			id: uuid,
 			pass: hash,
 			verifCode: code,
 		});
 
-		this._mailServiceProvider.SendHtml(
+		await this._mailServiceProvider.sendHtml(
 			command.email,
 			"Verification imal",
 			`<b>Your verification code is ${code}</b>`,
@@ -73,7 +74,7 @@ export class StartUserRegisterCommandHandler
 		);
 
 		return {
-			success: ICommandResultStatus.SUCCESS,
+			success: ICommandResultStatus.success,
 			uuid,
 		};
 	}

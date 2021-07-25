@@ -3,7 +3,7 @@ import {
 	MediaNode,
 } from "#helpers/BasicTypes";
 
-import { IWebRequestResult } from "../../IWebRequest";
+import { IWebRequestResult } from "#webreq/IWebRequest";
 
 export type AnimeRankingWebRequestResultType = MediaNode & {
 	ranking: { rank: number };

@@ -1,3 +1,11 @@
+import { autoInjectable } from "tsyringe";
+import { Logger } from "@overnightjs/logger";
+import { RefreshWebRequest } from "./RefreshWebRequest";
+import { RefreshWebRequestResult } from "./RefreshWebRequestResult";
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "#webreq/IWebRequest";
 import { RequestBuilder } from "#builders/requests/RequestBuilder";
 import RefreshError from "#errors/Authentication/RefreshError";
 import GeneralError from "#errors/GeneralError";
@@ -7,14 +15,6 @@ import {
 	CLIENT_ID,
 	CLIENT_SECRET,
 } from "#helpers/GLOBALVARS";
-import { autoInjectable } from "tsyringe";
-
-import {
-	IWebRequestHandler,
-	IWebRequestResultStatus,
-} from "../../IWebRequest";
-import { RefreshWebRequest } from "./RefreshWebRequest";
-import { RefreshWebRequestResult } from "./RefreshWebRequestResult";
 
 type ErrorResponse = {
 	error: string;
@@ -26,28 +26,31 @@ export class RefreshWebRequestHandler
 	implements IWebRequestHandler<RefreshWebRequest, RefreshWebRequestResult> {
 	async handle(query: RefreshWebRequest): Promise<RefreshWebRequestResult> {
 		try {
-			var request = new RequestBuilder("https", "myanimelist.net")
+			const request = new RequestBuilder("https", "myanimelist.net")
 				.addPath("v1/oauth2/token")
 				.setHeader("Content-Type", "application/x-www-form-urlencoded")
 				.setBody(
+					// eslint-disable-next-line max-len
 					`client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${query.refreshToken}`
 				);
 
-			let data = await request.request("POST");
+			const data = await request.request("POST");
 
-			let jsData: tokenResponse | ErrorResponse = await data.json();
+			type JSONType = tokenResponse | ErrorResponse
+
+			const jsData:JSONType  = await data.json() as JSONType;
 			if ((jsData as ErrorResponse).error) {
-				console.log(jsData);
+				Logger.Info(jsData);
 				throw new RefreshError("Refresh token has expired");
 			}
-			var tres = <tokenResponse>jsData;
+			const tres = jsData as tokenResponse;
 
 			return {
-				success: IWebRequestResultStatus.SUCCESS,
-				access_token: tres.access_token,
-				expires_in: tres.expires_in,
-				refresh_token: tres.refresh_token,
-				token_type: tres.token_type,
+				accessToken: tres.access_token,
+				expiresIn: tres.expires_in,
+				refreshToken: tres.refresh_token,
+				success: IWebRequestResultStatus.success,
+				tokenType: tres.token_type,
 			};
 		} catch (e) {
 			if (e instanceof GeneralError) {

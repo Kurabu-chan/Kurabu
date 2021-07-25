@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 export abstract class IQuery {}
 
 export abstract class IQueryResult {
@@ -5,8 +6,8 @@ export abstract class IQueryResult {
 }
 
 export enum IQueryResultStatus {
-	SUCCESS,
-	FAILURE,
+	success,
+	failure,
 }
 
 export interface IQueryHandler<

@@ -1,3 +1,8 @@
+import { autoInjectable } from "tsyringe";
+import { CancelUserRegisterCommand } from "./CancelUserRegisterCommand";
+import {
+	CancelUserRegisterCommandResult,
+} from "./CancelUserRegisterCommandResult";
 import {
 	ICommandHandler,
 	ICommandResultStatus,
@@ -8,12 +13,7 @@ import {
 	UserStatus,
 	UserStatusQueryHandler,
 } from "#queries/Users/Status/UserStatusQueryHandler";
-import { autoInjectable } from "tsyringe";
 
-import { CancelUserRegisterCommand } from "./CancelUserRegisterCommand";
-import {
-	CancelUserRegisterCommandResult,
-} from "./CancelUserRegisterCommandResult";
 
 @autoInjectable()
 export class CancelUserRegisterCommandHandler
@@ -33,9 +33,9 @@ export class CancelUserRegisterCommandHandler
 		if (status.status !== UserStatus.verif)
 			throw new StateStatusError("State had wrong status during cancel");
 
-		user.destroy();
+		await user.destroy();
 		return {
-			success: ICommandResultStatus.SUCCESS,
+			success: ICommandResultStatus.success,
 		};
 	}
 }

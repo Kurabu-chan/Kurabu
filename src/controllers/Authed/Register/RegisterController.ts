@@ -1,13 +1,4 @@
 import {
-	StartUserRegisterCommandHandler,
-} from "#commands/Users/StartRegister/StartUserRegisterCommandHandler";
-import {
-	Param,
-	ParamType,
-} from "#decorators/ParamDecorator";
-import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
-import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
-import {
 	Request,
 	Response,
 } from "express";
@@ -20,6 +11,15 @@ import {
 import { Logger } from "@overnightjs/logger";
 
 import * as Options from "./RegisterControllerOptions";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import {
+	param,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import {
+	StartUserRegisterCommandHandler,
+} from "#commands/Users/StartRegister/StartUserRegisterCommandHandler";
 
 @Controller(Options.controllerPath)
 @injectable()
@@ -30,20 +30,20 @@ export class RegisterController {
 	}
 
 	@Post(Options.controllerName)
-	@RequestHandlerDecorator()
-	@Param("email", ParamType.string, false)
-	@Param("pass", ParamType.string, false)
-	private async post(req: Request, res: Response, arg: Options.params) {
+	@requestHandlerDecorator()
+	@param("email", ParamType.string, false)
+	@param("pass", ParamType.string, false)
+	private async post(req: Request, res: Response, arg: Options.Params) {
 		Logger.Info(`Starting auth for ${req.ip}`);
 
-		var result = await this._startUserRegisterCommand.handle({
+		const result = await this._startUserRegisterCommand.handle({
 			email: arg.email,
 			password: arg.pass,
 		});
 
 		return {
-			status: SUCCESS_STATUS,
 			message: result.uuid,
+			status: SUCCESS_STATUS,
 		};
 	}
 }

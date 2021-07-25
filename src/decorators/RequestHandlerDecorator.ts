@@ -1,15 +1,21 @@
-import GeneralError from "#errors/GeneralError";
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {
 	Request,
 	Response,
 } from "express";
+import { Logger } from "@overnightjs/logger";
+import GeneralError from "#errors/GeneralError";
 
-export default function RequestHandlerDecorator(log: boolean = true) {
+export default function requestHandlerDecorator(log = true) {
 	return function (
-		target: Object,
+		target: any,
 		key: string | symbol,
 		descriptor: PropertyDescriptor
-	) {
+	):void {
 		const original = descriptor.value;
 
 		descriptor.value = async function (
@@ -32,16 +38,16 @@ export default function RequestHandlerDecorator(log: boolean = true) {
 			} catch (err) {
 				if (err instanceof GeneralError) {
 					res.status(err.getHttpCode()).json({
-						status: "error",
 						code: err.getErrorCode(),
 						message: err.message,
+						status: "error",
 					});
 				} else {
 					res.status(500).json({
-						status: "error",
 						message: "unknown error",
+						status: "error",
 					});
-					if (log) console.log(err);
+					if (log) Logger.Err(err);
 				}
 			}
 		};

@@ -1,6 +1,6 @@
 import { User } from "#models/User";
 
-import { IQuery } from "../../IQuery";
+import { IQuery } from "#queries/IQuery";
 
 export class UserStatusQuery extends IQuery {
 	user!: User;

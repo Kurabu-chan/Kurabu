@@ -1,12 +1,12 @@
-import { Database } from "#helpers/Database";
 import { autoInjectable } from "tsyringe";
 
+import { UserEmailUsedQuery } from "./UserEmailUsedQuery";
+import { UserEmailUsedQueryResult } from "./UserEmailUsedQueryResult";
 import {
 	IQueryHandler,
 	IQueryResultStatus,
-} from "../../IQuery";
-import { UserEmailUsedQuery } from "./UserEmailUsedQuery";
-import { UserEmailUsedQueryResult } from "./UserEmailUsedQueryResult";
+} from "#queries/IQuery";
+import { Database } from "#helpers/Database";
 
 @autoInjectable()
 export class UserEmailUsedQueryHandler
@@ -14,13 +14,13 @@ export class UserEmailUsedQueryHandler
 	constructor(private database: Database) {}
 
 	async handle(query: UserEmailUsedQuery): Promise<UserEmailUsedQueryResult> {
-		var count = await this.database.Models.user.count({
+		const count = await this.database.models.user.count({
 			where: { email: query.email },
 		});
 
 		return {
-			emailIsUsed: count != 0,
-			success: IQueryResultStatus.SUCCESS,
+			emailIsUsed: count !== 0,
+			success: IQueryResultStatus.success,
 		};
 	}
 }

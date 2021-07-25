@@ -1,5 +1,3 @@
-import ContainerManager from "#helpers/ContainerManager";
-
 import { AnimeDetailsController } from "./Anime/Details/AnimeDetailsController";
 import { AnimeRankingController } from "./Anime/Ranking/AnimeRankingController";
 import { AnimeSearchController } from "./Anime/Search/AnimeSearchController";
@@ -22,8 +20,9 @@ import { DocsController } from "./DocsController";
 import { MangaDetailsController } from "./Manga/Details/MangaDetailsController";
 import { MangaRankingController } from "./Manga/Ranking/MangaRankingController";
 import { MangaSearchController } from "./Manga/Search/MangaSearchController";
+import ContainerManager from "#helpers/ContainerManager";
 
-var container = ContainerManager.getInstance().Container;
+const container = ContainerManager.getInstance().container;
 
 export default [
 	container.resolve(AnimeDetailsController),

@@ -1,3 +1,6 @@
+import * as fetch from "node-fetch";
+import { Logger } from "@overnightjs/logger";
+import { isErrResp } from "./BasicTypes";
 import {
 	UpdateDatabaseUserTokensCommandHandler,
 } from "#commands/Users/UpdateDatabaseTokens/UpdateDatabaseUserTokensCommandHandler";
@@ -12,19 +15,15 @@ import {
 import {
 	RefreshWebRequestResult,
 } from "#webreq/Auth/Refresh/RefreshWebRequestResult";
-import * as fetch from "node-fetch";
 
-import { Logger } from "@overnightjs/logger";
 
-import { isErrResp } from "./BasicTypes";
-
-export async function RefreshFetch(
+export async function refreshFetch(
 	user: User,
 	url: fetch.RequestInfo,
 	init?: fetch.RequestInit | undefined
 ): Promise<any> {
 	// get current tokens
-	const container = ContainerManager.getInstance().Container;
+	const container = ContainerManager.getInstance().container;
 	const updateTokensCommand = container.resolve(
 		UpdateDatabaseUserTokensCommandHandler
 	);
@@ -38,6 +37,7 @@ export async function RefreshFetch(
 	const ini = addTokenHeader(tokens.token as string, init);
 	const res = await fetch.default(url, ini);
 	// get json from the request
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 	const jsonRes = await res.json();
 	// check if the response is an error
 	if (isErrResp(jsonRes)) {
@@ -61,14 +61,14 @@ export async function RefreshFetch(
 			}
 
 			// put the token in the headers
-			const newInit = addTokenHeader(refresh.access_token, init);
+			const newInit = addTokenHeader(refresh.accessToken, init);
 			// make the request again with new token
 			const res2 = await fetch.default(url, newInit);
 
 			// update the tokens
 			await updateTokensCommand.handle({
-				refreshtoken: refresh.refresh_token,
-				token: refresh.access_token,
+				refreshtoken: refresh.refreshToken,
+				token: refresh.accessToken,
 				user,
 			});
 			// return new result
@@ -77,6 +77,7 @@ export async function RefreshFetch(
 	}
 
 	// return response in case of any errors
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 	return jsonRes;
 }
 
@@ -90,6 +91,7 @@ export function addTokenHeader(
 		// init is empty so create one
 		return {
 			headers: {
+				// eslint-disable-next-line @typescript-eslint/naming-convention
 				Authorization: "Bearer " + token,
 			},
 		};
@@ -97,6 +99,7 @@ export function addTokenHeader(
 		if (!init.headers) {
 			// headers is empty so create it
 			init.headers = {
+				// eslint-disable-next-line @typescript-eslint/naming-convention
 				Authorization: "Bearer " + token,
 			};
 		}

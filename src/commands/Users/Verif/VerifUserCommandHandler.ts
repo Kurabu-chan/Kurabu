@@ -1,14 +1,14 @@
+import { autoInjectable } from "tsyringe";
+import { ReAuthUserCommandHandler } from "../ReAuth/ReAuthUserCommandHandler";
+import { VerifUserCommand } from "./VerifUserCommand";
+import { VerifUserCommandResult } from "./VerifUserCommandResult";
 import { ICommandHandler } from "#commands/ICommand";
 import AttemptError from "#errors/Authentication/AttemptError";
 import IncorrectCodeError from "#errors/Authentication/IncorrectCodeError";
 import MissingStateError from "#errors/Authentication/MissingStateError";
 import StateStatusError from "#errors/Authentication/StateStatusError";
 import { Database } from "#helpers/Database";
-import { autoInjectable } from "tsyringe";
 
-import { ReAuthUserCommandHandler } from "../ReAuth/ReAuthUserCommandHandler";
-import { VerifUserCommand } from "./VerifUserCommand";
-import { VerifUserCommandResult } from "./VerifUserCommandResult";
 
 @autoInjectable()
 export class VerifUserCommandHandler
@@ -19,7 +19,7 @@ export class VerifUserCommandHandler
 	) {}
 
 	async handle(command: VerifUserCommand): Promise<VerifUserCommandResult> {
-		const user = await this._database.Models.user.findOne({
+		const user = await this._database.models.user.findOne({
 			where: {
 				id: command.uuid,
 			},
@@ -36,7 +36,7 @@ export class VerifUserCommandHandler
 			});
 
 			if (user.verifAttemptCount ?? 1 > 4) {
-				user.destroy();
+				await user.destroy();
 				throw new AttemptError("Too many attempts");
 			}
 			throw new IncorrectCodeError("Incorrect code");

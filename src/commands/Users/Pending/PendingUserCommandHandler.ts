@@ -1,3 +1,6 @@
+import { autoInjectable } from "tsyringe";
+import { PendingUserCommand } from "./PendingUserCommand";
+import { PendingUserCommandResult } from "./PendingUserCommandResult";
 import {
 	ICommandHandler,
 	ICommandResultStatus,
@@ -15,10 +18,7 @@ import {
 import {
 	GetTokenWebRequestHandler,
 } from "#webreq/Auth/GetToken/GetTokenWebRequestHandler";
-import { autoInjectable } from "tsyringe";
 
-import { PendingUserCommand } from "./PendingUserCommand";
-import { PendingUserCommandResult } from "./PendingUserCommandResult";
 
 @autoInjectable()
 export class PendingUserCommandHandler
@@ -33,8 +33,8 @@ export class PendingUserCommandHandler
 		// check if the uuid exists in the dict
 
 		const db = this._database;
-		const Models = db.Models;
-		const usr = Models.user;
+		const models = db.models;
+		const usr = models.user;
 
 		const user = await usr.findOne({
 			include: Tokens,
@@ -51,7 +51,7 @@ export class PendingUserCommandHandler
 
 		const userTokens: Tokens = user.tokens as Tokens;
 
-		const tokenModel = await this._database.Models.tokens.findOne({
+		const tokenModel = await this._database.models.tokens.findOne({
 			where: {
 				id: user.tokensId,
 			},
@@ -68,19 +68,19 @@ export class PendingUserCommandHandler
 
 		await tokenModel.update({
 			redirect: null,
-			refreshtoken: tokens.refresh_token,
-			token: tokens.access_token,
+			refreshtoken: tokens.refreshToken,
+			token: tokens.accessToken,
 			verifier: null,
 		});
 
 		if (userTokens.redirect) {
 			return {
-				success: ICommandResultStatus.SUCCESS,
+				success: ICommandResultStatus.success,
 				url: `${userTokens.redirect}${command.uuid}`,
 			};
 		}
 		return {
-			success: ICommandResultStatus.SUCCESS,
+			success: ICommandResultStatus.success,
 			url: `imal://auth/${command.uuid}`,
 		};
 	}

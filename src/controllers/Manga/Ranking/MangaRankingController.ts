@@ -1,7 +1,17 @@
-import LogArg from "#decorators/LogArgDecorator";
+import {
+	Request,
+	Response,
+} from "express";
+import { injectable } from "tsyringe";
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+import * as Options from "./MangaRankingControllerOptions";
+import logArg from "#decorators/LogArgDecorator";
 import * as Param from "#decorators/ParamDecorator";
-import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
-import State from "#decorators/StateDecorator";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import state from "#decorators/StateDecorator";
 import {
 	extractFields,
 	Fields,
@@ -9,18 +19,7 @@ import {
 import {
 	MangaRankingWebRequestHandler,
 } from "#webreq/Manga/Ranking/MangaRankingWebRequestHandler";
-import {
-	Request,
-	Response,
-} from "express";
-import { injectable } from "tsyringe";
 
-import {
-	Controller,
-	Get,
-} from "@overnightjs/core";
-
-import * as Options from "./MangaRankingControllerOptions";
 
 const possible = [
 	"all",
@@ -43,21 +42,20 @@ export class MangaRankingController {
 	constructor(private _rankingWebRequest: MangaRankingWebRequestHandler) {}
 
 	@Get(Options.controllerName)
-	@RequestHandlerDecorator()
-	@State()
-	@Param.Param("rankingtype", Param.ParamType.string, true)
-	@Param.Param("limit", Param.ParamType.int, true)
-	@Param.Param("offset", Param.ParamType.int, true)
-	@Param.Param("fields", Param.ParamType.string, true)
-	@LogArg()
-	private async get(req: Request, res: Response, arg: Options.params) {
+	@requestHandlerDecorator()
+	@state()
+	@Param.param("rankingtype", Param.ParamType.string, true)
+	@Param.param("limit", Param.ParamType.int, true)
+	@Param.param("offset", Param.ParamType.int, true)
+	@Param.param("fields", Param.ParamType.string, true)
+	@logArg()
+	private async get(req: Request, res: Response, arg: Options.Params) {
 		if (arg.limit && arg.limit > 100) {
 			arg.limit = 100;
 		}
 
-		if (arg.rankingtype && possible.includes(<string>req.query.rankingtype)) {
-			arg.rankingtype = <
-				| "all"
+		if (arg.rankingtype && possible.includes(req.query.rankingtype as string)) {
+			type RankingType = "all"
 				| "airing"
 				| "upcoming"
 				| "tv"
@@ -66,19 +64,20 @@ export class MangaRankingController {
 				| "special"
 				| "bypopularity"
 				| "favorite"
-			>req.query.rankingtype;
+
+			arg.rankingtype = req.query.rankingtype as RankingType;
 		}
-		var fields: Fields | undefined;
+		let fields: Fields | undefined;
 		if (arg.fields) {
 			fields = extractFields(arg.fields).fields;
 		}
 
-		var result = await this._rankingWebRequest.handle({
-			user: arg.user,
-			rankingtype: arg.rankingtype,
+		const result = await this._rankingWebRequest.handle({
+			fields,
 			limit: arg.limit,
 			offset: arg.offset,
-			fields: fields,
+			rankingtype: arg.rankingtype,
+			user: arg.user,
 		});
 
 		return result.ranked;

@@ -1,21 +1,21 @@
-import { baseRequest } from "#builders/requests/RequestBuilder";
+import { autoInjectable } from "tsyringe";
+
+import { AnimeRankingWebRequest } from "./AnimeRankingWebRequest";
+import {
+	AnimeRankingWebRequestResult,
+	AnimeRankingWebRequestResultType,
+} from "./AnimeRankingWebRequestResult";
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "#webreq/IWebRequest";
 import {
 	ErrorResponse,
 	Fields,
 	fieldsToString,
 	ListPagination,
 } from "#helpers/BasicTypes";
-import { autoInjectable } from "tsyringe";
-
-import {
-	IWebRequestHandler,
-	IWebRequestResultStatus,
-} from "../../IWebRequest";
-import { AnimeRankingWebRequest } from "./AnimeRankingWebRequest";
-import {
-	AnimeRankingWebRequestResult,
-	AnimeRankingWebRequestResultType,
-} from "./AnimeRankingWebRequestResult";
+import { baseRequest } from "#builders/requests/RequestBuilder";
 
 @autoInjectable()
 export class AnimeRankingWebRequestHandler
@@ -24,11 +24,11 @@ export class AnimeRankingWebRequestHandler
 	async handle(
 		query: AnimeRankingWebRequest
 	): Promise<AnimeRankingWebRequestResult> {
-		var request = baseRequest()
+		const request = baseRequest()
 			.addPath("v2/anime/ranking")
 			.setQueryParam(
 				"ranking_type",
-				query.rankingtype != undefined ? query.rankingtype : "all"
+				query.rankingtype !== undefined ? query.rankingtype : "all"
 			)
 			.setQueryParam("limit", (query.limit ? query.limit : 10).toString())
 			.setQueryParam("offset", (query.offset ? query.offset : 0).toString())
@@ -41,18 +41,19 @@ export class AnimeRankingWebRequestHandler
 			request.setQueryParam("fields", fieldsToString(query.fields as Fields[]));
 		}
 
-		let data = await request.refreshRequest(query.user);
+		const data = await request.refreshRequest(query.user);
 
-		let json:
-			| ListPagination<AnimeRankingWebRequestResultType>
-			| ErrorResponse = data;
+		type JSONType = ListPagination<AnimeRankingWebRequestResultType>
+			| ErrorResponse;
+
+		const json:JSONType = data as JSONType;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
 		}
 
 		return {
-			success: IWebRequestResultStatus.SUCCESS,
 			ranked: json as ListPagination<AnimeRankingWebRequestResultType>,
+			success: IWebRequestResultStatus.success,
 		};
 	}
 }

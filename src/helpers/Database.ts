@@ -1,12 +1,13 @@
-import ModelsArray, {
-	Models,
-	ModelsType,
-} from "#models/index";
 import {
 	Sequelize,
 	SequelizeOptions,
 } from "sequelize-typescript";
 import { singleton } from "tsyringe";
+import { Logger } from "@overnightjs/logger";
+import ModelsArray, {
+	models,
+	ModelsType,
+} from "#models/index";
 
 export type UserDatabaseEntry = {
 	id: string;
@@ -17,23 +18,23 @@ export type UserDatabaseEntry = {
 
 @singleton()
 export class Database {
-	private sequelize!: Sequelize;
-	private models!: ModelsType;
+	private _sequelize!: Sequelize;
+	private _models!: ModelsType;
 
-	get Sequelize() {
-		return this.sequelize;
+	get sequelize(): Sequelize {
+		return this._sequelize;
 	}
 
-	get Models() {
-		return this.models;
+	get models(): ModelsType {
+		return this._models;
 	}
 
 	constructor() {
-		this.models = Models;
-		var sequelizeOptions: SequelizeOptions = {
-			models: ModelsArray,
+		this._models = models;
+		const sequelizeOptions: SequelizeOptions = {
 			dialect: "postgres",
 			dialectOptions: {
+			models: ModelsArray,
 				ssl: {
 					rejectUnauthorized: false, // very important
 				},
@@ -41,12 +42,15 @@ export class Database {
 			logging: false,
 		};
 
-		this.sequelize = new Sequelize(
+		this._sequelize = new Sequelize(
 			process.env.DATABASE_URL as string,
 			sequelizeOptions
 		);
-		this.sequelize.databaseVersion().then((version) => {
-			console.log(`Database initialized with db version ${version}`);
+		this._sequelize.databaseVersion().then((version) => {
+			Logger.Info(`Database initialized with db version ${version}`);
+		})
+		.catch((err) => {
+			Logger.Err(err)
 		});
 	}
 }

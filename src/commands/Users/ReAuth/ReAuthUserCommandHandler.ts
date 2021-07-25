@@ -1,3 +1,6 @@
+import { autoInjectable } from "tsyringe";
+import { ReAuthUserCommand } from "./ReAuthUserCommand";
+import { ReAuthUserCommandResult } from "./ReAuthUserCommandResult";
 import {
 	ICommandHandler,
 	ICommandResultStatus,
@@ -7,10 +10,8 @@ import TokensNotPresentError
 import { CLIENT_ID } from "#helpers/GLOBALVARS";
 import { getPKCE } from "#helpers/randomCodes";
 import { ensureTokensOnUser } from "#models/Tokens";
-import { autoInjectable } from "tsyringe";
+import { RequestBuilder } from "#builders/requests/RequestBuilder";
 
-import { ReAuthUserCommand } from "./ReAuthUserCommand";
-import { ReAuthUserCommandResult } from "./ReAuthUserCommandResult";
 
 @autoInjectable()
 export class ReAuthUserCommandHandler
@@ -27,15 +28,24 @@ export class ReAuthUserCommandHandler
 			verifier: codeVerifier,
 		});
 
+		const request = new RequestBuilder("https", "myanimelist.net")
+			.addPath("v1/oauth2/authorize")
+			.setQueryParam("response_type", "code")
+			.setQueryParam("client_id", CLIENT_ID)
+			.setQueryParam("code_challenge", codeVerifier)
+			.setQueryParam("state", command.uuid);
+
+		if (process.env.LOCALMODE) {
+			request.setQueryParam("redirect_uri", "http://localhost:15000/authed");
+		} else {
+			request.setQueryParam("redirect_uri", command.ourdomain + "/authed");
+		}
+
+		const url = request.build().url;
+
 		return {
-			success: ICommandResultStatus.SUCCESS,
-			url: `https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&code_challenge=${codeVerifier}&state=${
-				command.uuid
-			}&redirect_uri=${
-				process.env.LOCALMODE
-					? "http://localhost:15000/authed"
-					: command.ourdomain + "/authed"
-			}`,
+			success: ICommandResultStatus.success,
+			url,
 		};
 	}
 }

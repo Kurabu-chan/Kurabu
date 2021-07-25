@@ -1,9 +1,9 @@
 import fetch, {
-  BodyInit,
-  HeadersInit,
-  Response,
+	BodyInit,
+	HeadersInit,
+	Response,
 } from "node-fetch";
-import { RefreshFetch } from "#helpers/refresher";
+import { refreshFetch } from "#helpers/refresher";
 import { User } from "#models/User";
 
 export type RequestBuilderBuildType = {
@@ -97,10 +97,10 @@ export class RequestBuilder {
 		});
 	}
 
-	public refreshRequest(user: User, method?: string): Promise<any> {
+	public refreshRequest(user: User, method?: string): Promise<unknown> {
 		const buildResult = this.build(method);
 
-		return RefreshFetch(user, buildResult.url, {
+		return refreshFetch(user, buildResult.url, {
 			body: buildResult.body,
 			headers: buildResult.headers,
 			method: buildResult.method,

@@ -10,33 +10,35 @@ function base64URLEncode(buff: Buffer) {
 
 export function isUUID(uuid: string): boolean {
 	const stateRe = /^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/;
-	return uuid.match(stateRe) != null;
+	return (stateRe.exec(uuid)) != null;
 }
 
-export function getUUID() {
-	var dt = new Date().getTime();
-	var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+export function getUUID():string {
+	let dt = new Date().getTime();
+	const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
 		/[xy]/g,
 		function (c) {
-			var r = (dt + Math.random() * 16) % 16 | 0;
+			// eslint-disable-next-line no-bitwise
+			const r = (dt + Math.random() * 16) % 16 | 0;
 			dt = Math.floor(dt / 16);
-			return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
+			// eslint-disable-next-line no-bitwise
+			return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
 		}
 	);
 	return uuid;
 }
 
 export function getPKCE(length: number): string {
-	var l = Math.ceil(length / (4 / 3));
+	const l = Math.ceil(length / (4 / 3));
 	return base64URLEncode(crypto.randomBytes(l));
 }
 
-export function makeVerifCode() {
-	let length = 6;
-	var result = "";
-	var characters = "0123456789";
-	var charactersLength = characters.length;
-	for (var i = 0; i < length; i++) {
+export function makeVerifCode():string {
+	const length = 6;
+	let result = "";
+	const characters = "0123456789";
+	const charactersLength = characters.length;
+	for (let i = 0; i < length; i++) {
 		result += characters.charAt(Math.floor(Math.random() * charactersLength));
 	}
 	return result;

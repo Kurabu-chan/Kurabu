@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import ParameterError from "./ParameterError";
 
 export default class MissingParameterError extends ParameterError {

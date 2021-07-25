@@ -1,7 +1,17 @@
-import LogArg from "#decorators/LogArgDecorator";
+import {
+	Request,
+	Response,
+} from "express";
+import { injectable } from "tsyringe";
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+import * as Options from "./AnimeRankingControllerOptions";
+import logArg from "#decorators/LogArgDecorator";
 import * as Param from "#decorators/ParamDecorator";
-import RequestHandlerDecorator from "#decorators/RequestHandlerDecorator";
-import State from "#decorators/StateDecorator";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import state from "#decorators/StateDecorator";
 import {
 	extractFields,
 	Fields,
@@ -9,18 +19,7 @@ import {
 import {
 	AnimeRankingWebRequestHandler,
 } from "#webreq/Anime/Ranking/AnimeRankingWebRequestHandler";
-import {
-	Request,
-	Response,
-} from "express";
-import { injectable } from "tsyringe";
 
-import {
-	Controller,
-	Get,
-} from "@overnightjs/core";
-
-import * as Options from "./AnimeRankingControllerOptions";
 
 const possible = [
 	"all",
@@ -43,14 +42,14 @@ export class AnimeRankingController {
 	constructor(private _rankingWebRequest: AnimeRankingWebRequestHandler) {}
 
 	@Get(Options.controllerName)
-	@RequestHandlerDecorator()
-	@State()
-	@Param.Param("rankingtype", Param.ParamType.string, true)
-	@Param.Param("limit", Param.ParamType.int, true)
-	@Param.Param("offset", Param.ParamType.int, true)
-	@Param.Param("fields", Param.ParamType.string, true)
-	@LogArg()
-	private async get(req: Request, res: Response, arg: Options.params) {
+	@requestHandlerDecorator()
+	@state()
+	@Param.param("rankingtype", Param.ParamType.string, true)
+	@Param.param("limit", Param.ParamType.int, true)
+	@Param.param("offset", Param.ParamType.int, true)
+	@Param.param("fields", Param.ParamType.string, true)
+	@logArg()
+	private async get(req: Request, res: Response, arg: Options.Params) {
 		if (arg.limit && arg.limit > 100) {
 			arg.limit = 100;
 		}

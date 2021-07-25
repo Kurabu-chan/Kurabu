@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 export abstract class ICommand {}
 
 export abstract class ICommandResult {
@@ -5,8 +6,8 @@ export abstract class ICommandResult {
 }
 
 export enum ICommandResultStatus {
-	SUCCESS,
-	FAILURE,
+	success,
+	failure,
 }
 
 export interface ICommandHandler<
