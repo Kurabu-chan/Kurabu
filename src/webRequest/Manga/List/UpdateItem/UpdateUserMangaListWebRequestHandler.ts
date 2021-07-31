@@ -6,8 +6,6 @@ import { IWebRequestHandler, IWebRequestResultStatus } from "#webreq/IWebRequest
 import { baseRequest } from "#builders/requests/RequestBuilder";
 import { CamelToSnakeCase } from "#helpers/objectTransormation/deepRename/camelToSnakeCase";
 import serialize from "#helpers/objectTransormation/objectToUrlEncoded";
-import MALMediaNotFound from "#errors/MAL/MALMediaNotFound";
-import MALError from "#errors/MAL/MALError";
 
 @autoInjectable()
 export class UpdateUserMangaListWebRequestHandler

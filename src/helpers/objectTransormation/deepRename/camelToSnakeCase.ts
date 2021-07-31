@@ -38,9 +38,9 @@ export class CamelToSnakeCase {
     }
 }
 
-function isLowerCase(char: string): boolean {
+/* function isLowerCase(char: string): boolean {
     return char.toUpperCase() !== char;
-}
+} */
 
 function isUpperCase(char: string): boolean {
     return char.toLowerCase() !== char;
