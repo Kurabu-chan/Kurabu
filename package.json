@@ -10,7 +10,7 @@
 		"start-dev": "nodemon --config \"./util/nodemon.json\"/",
 		"build": "rm -rf ./build/ && tsc && npm test",
 		"buildwindows": "rmdir /s /q \"./build/\" && tsc && npm test",
-		"start": "npm run startwindows",
+		"start": "npm run startlinux",
 		"startlinux": "TS_NODE_PROJECT=tsconfig.json&& node -r tsconfig-paths/register -r ts-node/register build/src/start.js",
 		"startwindows": "set TS_NODE_PROJECT=tsconfig.json&& node -r tsconfig-paths/register -r ts-node/register build/src/start.js",
 		"db:addmigration": "ts-node ./src/database/createmigration.ts"
