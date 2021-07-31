@@ -65,6 +65,28 @@ export function randomCodes():void {
 				}
 				expect(hasDuplicates(codes)).to.equal(false);
 			})
+			it("makeVerifCode should make every digit just as likely as all others", () => {
+				let str = "";
+				const runs = 100000;
+				for (let i = 0; i < runs; i++) {
+					str += makeVerifCode();
+				}
+				const counts: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+				for (let i = 0; i < str.length; i++) {
+					counts[parseInt(str.charAt(i),10)]++;
+				}
+
+				let avr = 0;
+				counts.forEach(x => avr += x);
+				avr /= counts.length;
+				const range = runs / 70;
+
+				counts.forEach((x, i) => {
+					// eslint-disable-next-line max-len
+					const msg = `nr ${i} was overrepresented, the average count for a digit was ${avr} but this number occured ${x} times`;
+					expect(x + range > avr && x - range < avr).to.equal(true, msg);
+				})
+			})
 		});
 	});
 }
