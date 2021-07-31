@@ -49,11 +49,26 @@ export function randomCodes():void {
 			});
 
 			it("makeVerifCode should return a 6 character string", () => {
-				expect(makeVerifCode().length).to.equal(6);
+				for (let i = 0; i < 100; i++) {
+					expect(makeVerifCode().length).to.equal(6);
+				}
 			});
 			it("makeVerifCode should return only digits", () => {
-				expect((/\D/.exec(makeVerifCode())) == null).to.equal(true);
+				for (let i = 0; i < 100; i++) {
+					expect((/^\D{6}$/.exec(makeVerifCode())) == null).to.equal(true);
+				}
 			});
+			it("makeVerifCode should return different code everytime", () => {
+				const codes: string[] = [];
+				for (let i = 0; i < 100; i++) {
+					codes.push(makeVerifCode());
+				}
+				expect(hasDuplicates(codes)).to.equal(false);
+			})
 		});
 	});
+}
+
+function hasDuplicates(array: any[]) {
+    return (new Set(array)).size !== array.length;
 }
