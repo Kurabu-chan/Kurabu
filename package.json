@@ -9,8 +9,10 @@
 		"test": "mocha \"tests/**/*.ts\" --config .mocharc.json --timeout 15000",
 		"start-dev": "nodemon --config \"./util/nodemon.json\"/",
 		"build": "rm -rf ./build/ && tsc && npm test",
-		"buildnoremove": "rmdir /s /q \"./build/\" && tsc && npm test",
-		"start": "set TS_NODE_PROJECT=tsconfig.json&& node -r tsconfig-paths/register -r ts-node/register build/src/start.js",
+		"buildwindows": "rmdir /s /q \"./build/\" && tsc && npm test",
+		"start": "npm run startwindows",
+		"startlinux": "TS_NODE_PROJECT=tsconfig.json&& node -r tsconfig-paths/register -r ts-node/register build/src/start.js",
+		"startwindows": "set TS_NODE_PROJECT=tsconfig.json&& node -r tsconfig-paths/register -r ts-node/register build/src/start.js",
 		"db:addmigration": "ts-node ./src/database/createmigration.ts"
 	},
 	"keywords": [],
