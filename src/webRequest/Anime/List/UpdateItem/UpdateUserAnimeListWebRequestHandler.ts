@@ -5,6 +5,7 @@ import { UpdateUserAnimeListWebRequestResult } from "./UpdateUserAnimeListWebReq
 import { IWebRequestHandler, IWebRequestResultStatus } from "#webreq/IWebRequest";
 import { baseRequest } from "#builders/requests/RequestBuilder";
 import { CamelToSnakeCase } from "#helpers/objectTransormation/deepRename/camelToSnakeCase";
+import serialize from "#helpers/objectTransormation/objectToUrlEncoded";
 
 @autoInjectable()
 export class UpdateUserAnimeListWebRequestHandler
@@ -18,20 +19,31 @@ export class UpdateUserAnimeListWebRequestHandler
 
         const camelToSnakeCase = new CamelToSnakeCase();
 
-        const bodyInit: BodyInit = JSON.stringify(camelToSnakeCase.fullObject(body));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const correctNames = camelToSnakeCase.fullObject(body);
+
+        const bodyInit: BodyInit = serialize(correctNames, undefined);
 
         const request = baseRequest()
             .addPath(`v2/anime/${animeId}/my_list_status`)
             .setBody(bodyInit)
-            .setHeader("Content-Type", "application/json");
+            .setHeader("Content-Type", "application/x-www-form-urlencoded");
 
-        const response = await request.refreshRequest(user);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const respJson = await (response as {json: () => Promise<any>}).json();
+        const response =( await request.refreshRequest(user, "PUT")) as any;
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        if (response.error !== undefined) {
+            return {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+                status: undefined,
+                success: IWebRequestResultStatus.failure,
+            }
+        }
 
         return {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-            status: respJson.status,
+            status: response,
             success: IWebRequestResultStatus.success,
         }
     }

@@ -35,6 +35,10 @@ export async function refreshFetchResponse(user: User,
 	// get json from the request
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 	const jsonRes = await res.json();
+	res.json = () => {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+		return new Promise((resolve) => resolve(jsonRes));
+	}
 	// check if the response is an error
 	if (isErrResp(jsonRes)) {
 		// check if the response is invalid_token error

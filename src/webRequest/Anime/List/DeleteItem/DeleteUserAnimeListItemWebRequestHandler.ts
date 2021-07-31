@@ -25,8 +25,9 @@ export class DeleteUserAnimeListItemWebRequestHandler
 		query: DeleteUserAnimeListItemWebRequest
 	): Promise<DeleteUserAnimeListItemWebRequestResult> {
 		const request = baseRequest()
-			.addPath("v2/users/@me/animelist")
-			.setHeader("Content-Type", "application/x-www-form-urlencoded")
+			.addPath("v2/anime")
+			.addPath(query.animeId.toString())
+			.addPath("my_list_status")
 			.setHeader("Authorization", `Bearer ${query.user.tokens?.token ?? ""}`);
 
 		const response = await request.request("DELETE");

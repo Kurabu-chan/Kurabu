@@ -50,6 +50,19 @@ class ParamMockClass {
 
 	@param(
 		"cool",
+		ParamType.boolean,
+		true,
+		ParamPos.either,
+		(req, res, result, success) => {
+			callbackListener(success);
+		}
+	)
+	public coolBooleanTrue(req: Request, res: Response, arg: any): any {
+		return arg;
+	}
+
+	@param(
+		"cool",
 		ParamType.number,
 		false,
 		ParamPos.either,
@@ -202,6 +215,28 @@ export function paramDecorator():void {
 				);
 
 				expect(argResultBody.cool).to.equal(true);
+				expect(succeeded).to.equal(true);
+			});
+
+			// eslint-disable-next-line max-len
+			it("ParamDecorator should ignore empty boolean for non required", async () => {
+				let succeeded: any | undefined;
+				callbackListener = (success) => {
+					succeeded = success;
+				};
+
+				const reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({});
+				when(reqMock.body).thenReturn({});
+				const reqMockInstance = instance(reqMock);
+
+				const argResultQuery = await mockClass.coolBooleanTrue(
+					reqMockInstance,
+					undefined as any,
+					undefined as any
+				);
+
+				expect(argResultQuery.cool).to.equal(undefined);
 				expect(succeeded).to.equal(true);
 			});
 

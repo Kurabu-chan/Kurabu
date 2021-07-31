@@ -115,7 +115,10 @@ module.exports = {
 			"error",
 			{
 				code: 100,
-				ignoreComments: true
+				ignoreComments: true,
+				ignoreTemplateLiterals: true,
+				ignoreRegExpLiterals: true,
+				ignoreUrls: true
 			},
 		],
 		"new-parens": "error",

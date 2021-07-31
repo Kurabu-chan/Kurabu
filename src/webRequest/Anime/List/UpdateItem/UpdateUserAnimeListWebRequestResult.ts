@@ -15,5 +15,5 @@ export type UpdateListStatus = {
 }
 
 export class UpdateUserAnimeListWebRequestResult extends IWebRequestResult {
-    status!: UpdateListStatus
+    status?: UpdateListStatus
 }

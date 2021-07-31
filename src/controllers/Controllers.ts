@@ -20,11 +20,16 @@ import { DocsController } from "./DocsController";
 import { MangaDetailsController } from "./Manga/Details/MangaDetailsController";
 import { MangaRankingController } from "./Manga/Ranking/MangaRankingController";
 import { MangaSearchController } from "./Manga/Search/MangaSearchController";
+import { AnimeListController } from "./Anime/List/GetMy/AnimeListController";
+import { AnimeListItemController } from "./Anime/List/Item/AnimeListItemController";
 import ContainerManager from "#helpers/ContainerManager";
 
 const container = ContainerManager.getInstance().container;
 
 export default [
+	container.resolve(AnimeListController),
+	container.resolve(AnimeListItemController),
+
 	container.resolve(AnimeDetailsController),
 	container.resolve(AnimeRankingController),
 	container.resolve(AnimeSearchController),

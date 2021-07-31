@@ -48,7 +48,7 @@ export function param(
 			if (paramPos === ParamPos.body) val = body;
 			if (paramPos === ParamPos.query) val = query;
 
-			if (paramType === ParamType.boolean && (optional === true || val !== undefined)) {
+			if (paramType === ParamType.boolean && (optional === false || val !== undefined)) {
 				if (
 					val === true
 					|| val === 1
