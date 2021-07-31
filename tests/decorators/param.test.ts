@@ -37,6 +37,19 @@ class ParamMockClass {
 
 	@param(
 		"cool",
+		ParamType.boolean,
+		false,
+		ParamPos.either,
+		(req, res, result, success) => {
+			callbackListener(success);
+		}
+	)
+	public coolBooleanFalse(req: Request, res: Response, arg: any): any {
+		return arg;
+	}
+
+	@param(
+		"cool",
 		ParamType.number,
 		false,
 		ParamPos.either,
@@ -149,6 +162,46 @@ export function paramDecorator():void {
 				);
 
 				expect(argResultBody.cool).to.equal(21);
+				expect(succeeded).to.equal(true);
+			});
+
+			// eslint-disable-next-line max-len
+			it("ParamDecorator should get boolean argument if present and valid from both body and query and callback success", async () => {
+				let succeeded: any | undefined;
+				callbackListener = (success) => {
+					succeeded = success;
+				};
+
+				let reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({
+					cool: "true",
+				});
+				when(reqMock.body).thenReturn({});
+				let reqMockInstance = instance(reqMock);
+
+				const argResultQuery = await mockClass.coolBooleanFalse(
+					reqMockInstance,
+					undefined as any,
+					undefined as any
+				);
+
+				expect(argResultQuery.cool).to.equal(true);
+				expect(succeeded).to.equal(true);
+
+				reqMock = mock<Request>();
+				when(reqMock.query).thenReturn({});
+				when(reqMock.body).thenReturn({
+					cool: true,
+				});
+				reqMockInstance = instance(reqMock);
+
+				const argResultBody = await mockClass.coolBooleanFalse(
+					reqMockInstance,
+					undefined as any,
+					undefined as any
+				);
+
+				expect(argResultBody.cool).to.equal(true);
 				expect(succeeded).to.equal(true);
 			});
 

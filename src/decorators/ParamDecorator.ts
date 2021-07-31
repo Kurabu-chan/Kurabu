@@ -15,6 +15,7 @@ export enum ParamType {
 	string,
 	number,
 	object,
+	boolean
 }
 
 
@@ -46,6 +47,29 @@ export function param(
 			if (paramPos === ParamPos.either) val = query ?? body;
 			if (paramPos === ParamPos.body) val = body;
 			if (paramPos === ParamPos.query) val = query;
+
+			if (paramType === ParamType.boolean && (optional === true || val !== undefined)) {
+				if (
+					val === true
+					|| val === 1
+					|| (typeof val === "string" && val.toUpperCase() === "TRUE")) {
+					arg[paramName] = true;
+				} else if (
+					val === false
+					|| val === 0
+					|| (typeof val === "string" && val.toUpperCase() === "FALSE")) {
+					arg[paramName] = false;
+				} else {
+					void callback(req, res, arg, false);
+					res.status(403).json({
+						message: `Boolean parameter ${paramName} was not a boolean`,
+						status: "error",
+					});
+					return;
+				}
+				void callback(req, res, arg, true);
+				return original.apply(this, [req, res, arg]);
+			}
 
 			if (
 				paramType === ParamType.object &&
@@ -102,6 +126,7 @@ export function param(
 				void callback(req, res, arg, true);
 				return original.apply(this, [req, res, arg]);
 			}
+
 
 			arg[paramName] = val as string;
 			void callback(req, res, arg, true);
