@@ -34,12 +34,12 @@ export class Database {
 		const sequelizeOptions: SequelizeOptions = {
 			dialect: "postgres",
 			dialectOptions: {
-			models: ModelsArray,
 				ssl: {
 					rejectUnauthorized: false, // very important
 				},
 			},
 			logging: false,
+			models: ModelsArray,
 		};
 
 		this._sequelize = new Sequelize(
