@@ -1,6 +1,6 @@
 {
     "api": {
-        "domain": "api.imal.ml",
+        "domain": "api.kurabu.moe",
         "scheme": "http",
         "root": "/"
     }

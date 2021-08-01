@@ -1,35 +1,34 @@
-import { GetMangaDetails } from "#api/Manga/MangaDetails";
+import React from 'react';
+
+import { GetMangaDetails } from '#api/Manga/MangaDetails';
 import {
-    changeActivePage,
-    changeTopRightButton,
-    getActiveScreen,
-} from "#routes/MainDrawer";
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+  changeActivePage,
+  changeTopRightButton,
+  getActiveScreen,
+} from '#routes/MainDrawer';
+import { LinearGradient } from 'expo-linear-gradient';
 import {
-    ActivityIndicator,
-    Dimensions,
-    FlatList,
-    Image,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    View,
-} from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import {
-    SafeAreaInsetsContext,
-    SafeAreaProvider,
-} from "react-native-safe-area-context";
-import { GetAnimeDetails } from "../../APIManager/Anime/AnimeDetails";
-import { Media } from "../../APIManager/ApiBasicTypes";
-import { Divider } from "../../components/Divider";
-import { LargeText } from "../../components/LargeText";
-import MediaItem from "../../components/MediaItem";
-import { Colors } from "../../Configuration/Colors";
-import { HomeStackParamList } from "../MainStacks/HomeStack";
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+import { GetAnimeDetails } from '../../APIManager/Anime/AnimeDetails';
+import { Media } from '../../APIManager/ApiBasicTypes';
+import { Divider } from '../../components/Divider';
+import { LargeText } from '../../components/LargeText';
+import MediaItem from '../../components/MediaItem';
+import { Colors } from '../../Configuration/Colors';
+import { HomeStackParamList } from '../MainStacks/HomeStack';
 
 type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "Details">;
