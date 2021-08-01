@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 export abstract class IWebRequest {}
 
 export abstract class IWebRequestResult {
@@ -5,8 +6,8 @@ export abstract class IWebRequestResult {
 }
 
 export enum IWebRequestResultStatus {
-	SUCCESS,
-	FAILURE,
+	success,
+	failure,
 }
 
 export interface IWebRequestHandler<

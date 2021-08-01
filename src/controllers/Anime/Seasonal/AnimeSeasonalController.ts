@@ -1,13 +1,25 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./AnimeSeasonalControllerOptions";
-import State from "../../../decorators/StateDecorator";
-import * as Param from "../../../decorators/ParamDecorator";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { SeasonalWebRequestHandler } from "../../../webRequest/Anime/Seasonal/AnimeSeasonalWebRequestHandler";
-import { extractFields, Fields } from "../../../helpers/BasicTypes";
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+import * as Options from "./AnimeSeasonalControllerOptions";
+import logArg from "#decorators/LogArgDecorator";
+import * as Param from "#decorators/ParamDecorator";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import state from "#decorators/StateDecorator";
+import {
+	extractFields,
+	Fields,
+} from "#helpers/BasicTypes";
+import {
+	SeasonalWebRequestHandler,
+} from "#webreq/Anime/Seasonal/AnimeSeasonalWebRequestHandler";
+
 
 const seasons = ["winter", "spring", "summer", "fall"];
 const sortScore = ["score", "animescore", "anime_score"];
@@ -21,22 +33,22 @@ const sortUsers = [
 	"num_listusers",
 ];
 
-@Controller(Options.ControllerPath)
+@Controller(Options.controllerPath)
 @injectable()
 export class AnimeSeasonalController {
 	constructor(private _seasonalWebRequest: SeasonalWebRequestHandler) {}
 
-	@Get(Options.ControllerName)
-	@RequestHandlerDecorator()
-	@State()
-	@Param.Param("year", Param.ParamType.int, true)
-	@Param.Param("season", Param.ParamType.string, true)
-	@Param.Param("sort", Param.ParamType.string, true)
-	@Param.Param("limit", Param.ParamType.int, true)
-	@Param.Param("offset", Param.ParamType.int, true)
-	@Param.Param("fields", Param.ParamType.string, true)
-	@LogArg()
-	private async get(req: Request, res: Response, arg: Options.params) {
+	@Get(Options.controllerName)
+	@requestHandlerDecorator()
+	@state()
+	@Param.param("year", Param.ParamType.int, true)
+	@Param.param("season", Param.ParamType.string, true)
+	@Param.param("sort", Param.ParamType.string, true)
+	@Param.param("limit", Param.ParamType.int, true)
+	@Param.param("offset", Param.ParamType.int, true)
+	@Param.param("fields", Param.ParamType.string, true)
+	@logArg()
+	private async get(req: Request, res: Response, arg: Options.Params) {
 		arg.year = arg.year ?? 2020;
 		if (arg.year < 1917) {
 			arg.year = 2020;
@@ -60,19 +72,19 @@ export class AnimeSeasonalController {
 			arg.limit = 100;
 		}
 
-		var fields: Fields | undefined;
+		let fields: Fields | undefined;
 		if (arg.fields) {
 			fields = extractFields(arg.fields).fields;
 		}
 
-		var result = await this._seasonalWebRequest.handle({
-			user: arg.user,
-			sort: arg.sort,
-			year: arg.year,
-			season: arg.season,
+		const result = await this._seasonalWebRequest.handle({
+			fields,
 			limit: arg.limit,
 			offset: arg.offset,
-			fields: fields,
+			season: arg.season,
+			sort: arg.sort,
+			user: arg.user,
+			year: arg.year,
 		});
 
 		return result.seasonal;

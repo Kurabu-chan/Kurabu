@@ -1,28 +1,38 @@
-import { Request, Response } from "express";
-import { Logger } from "@overnightjs/logger";
-import { getUUID } from "../helpers/randomCodes";
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import {
+	Request,
+	Response,
+} from "express";
 
-export default function LogArg() {
+import { Logger } from "@overnightjs/logger";
+import { getUUID } from "#helpers/randomCodes";
+
+export default function logArg() {
 	return function (
-		target: Object,
+		target: any,
 		key: string | symbol,
 		descriptor: PropertyDescriptor
-	) {
+	):void {
 		const original = descriptor.value;
 
 		descriptor.value = function (req: Request, res: Response, arg: any = {}) {
 			const requestCode = getUUID();
 
-			const { user, ...logArg } = arg;
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const { user, ...logArguments } = arg;
 
 			Logger.Info(
-				`${requestCode} ${target.constructor.name}: ${JSON.stringify(
-					logArg,
+				`${requestCode} ${target.constructor.name as string}: ${JSON.stringify(
+					logArguments,
 					null,
 					2
 				)}`
 			);
-			let val = original.apply(this, [req, res, arg]);
+			const val = original.apply(this, [req, res, arg]);
 
 			return val;
 		};

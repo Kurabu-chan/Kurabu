@@ -11,8 +11,22 @@
 		"importHelpers": true,
 		"sourceMap": true,
 		"types": ["node", "mocha"],
-		"typeRoots": ["node_modules/@types"]
+		"typeRoots": ["node_modules/@types"],
+		"baseUrl": "./",
+		"paths": {
+			"#builders/*": ["src/builders/*"],
+			"#commands/*": ["src/commands/*"],
+			"#controllers/*": ["src/controllers/*"],
+			"#database/*": ["src/database/*"],
+			"#decorators/*": ["src/decorators/*"],
+			"#errors/*": ["src/errors/*"],
+			"#helpers/*": ["src/helpers/*"],
+			"#models/*": ["src/models/*"],
+			"#queries/*": ["./src/queries/*"],
+			"#serviceprovs/*": ["src/ServiceProviders/*"],
+			"#webreq/*": ["src/webRequest/*"]
+		}
 	},
-	"include": ["./src/**/*.ts"],
-	"exclude": ["./src/public/", "./tests/"]
+	"include": ["./src/**/*.ts", "./tests/**/*.ts"],
+	"exclude": ["./src/public/"]
 }

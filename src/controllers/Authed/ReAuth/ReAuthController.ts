@@ -1,37 +1,49 @@
-import { Request, Response } from "express";
-import { Controller, Post } from "@overnightjs/core";
-import * as Options from "./ReAuthControllerOptions";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import State from "../../../decorators/StateDecorator";
-import { ReAuthUserCommandHandler } from "../../../commands/Users/ReAuth/ReAuthUserCommandHandler";
-import { Param, ParamType } from "../../../decorators/ParamDecorator";
+import {
+	Controller,
+	Post,
+} from "@overnightjs/core";
+import * as Options from "./ReAuthControllerOptions";
+import {
+	ReAuthUserCommandHandler,
+} from "#commands/Users/ReAuth/ReAuthUserCommandHandler";
+import logArg from "#decorators/LogArgDecorator";
+import {
+	param,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import state from "#decorators/StateDecorator";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
 
-@Controller(Options.ControllerPath)
+
+@Controller(Options.controllerPath)
 @injectable()
 export class ReAuthController {
 	constructor(private _reAuthCommand: ReAuthUserCommandHandler) {}
 
-	@Post(Options.ControllerName)
-	@RequestHandlerDecorator()
-	@State()
-	@Param("redirect", ParamType.string, true)
-	@LogArg()
-	private async post(req: Request, res: Response, arg: Options.params) {
-		let ourdomain = `${req.protocol}://${req.hostname}`;
+	@Post(Options.controllerName)
+	@requestHandlerDecorator()
+	@state()
+	@param("redirect", ParamType.string, true)
+	@logArg()
+	private async post(req: Request, res: Response, arg: Options.Params) {
+		const ourdomain = `${req.protocol}://${req.hostname}`;
 
-		var result = await this._reAuthCommand.handle({
-			ourdomain: ourdomain,
+		const result = await this._reAuthCommand.handle({
+			ourdomain,
+			redirect: arg.redirect,
 			user: arg.user,
 			uuid: arg.state,
-			redirect: arg.redirect,
 		});
 
 		return {
-			status: SUCCESS_STATUS,
 			message: result.url,
+			status: SUCCESS_STATUS,
 		};
 	}
 }

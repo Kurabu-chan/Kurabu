@@ -1,75 +1,82 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { expect } from "chai";
 import { Request, Response } from "express";
-import RequestHandlerDecorator from "../../src/decorators/RequestHandlerDecorator";
-import AuthenticationError from "../../src/errors/Authentication/AuthenticationError";
 import { mock, when, anything, instance, anyNumber, capture } from "ts-mockito";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import AuthenticationError from "#errors/Authentication/AuthenticationError";
 
 class RequestHandlerMock {
-	@RequestHandlerDecorator()
+	@requestHandlerDecorator()
 	public async handle(req: Request, res: Response, arg: any) {
 		return {
 			cool: "yeah",
 		};
 	}
 
-	@RequestHandlerDecorator(false)
-	public async handle_auth_err(req: Request, res: Response, arg: any) {
+	@requestHandlerDecorator(false)
+	public async handleAuthErr(req: Request, res: Response, arg: any) {
 		throw new AuthenticationError("yeah");
 	}
 
-	@RequestHandlerDecorator(false)
-	public async handle_random_err(req: Request, res: Response, arg: any) {
+	@requestHandlerDecorator(false)
+	public async handleRandomErr(req: Request, res: Response, arg: any) {
 		throw new TypeError("yeah");
 	}
 }
 
-export function requestHandler() {
+export function requestHandler(): void {
 	describe("RequestHandlerDecorator", () => {
 		it("Should send a result when endpoint returns", async () => {
-			var sut = new RequestHandlerMock();
+			const sut = new RequestHandlerMock();
 
-			var reqMock = mock<Request>();
+			const reqMock = mock<Request>();
 			when(reqMock.query).thenReturn({});
 			when(reqMock.body).thenReturn({});
-			var reqMockInstance = instance(reqMock);
+			const reqMockInstance = instance(reqMock);
 
-			var resMock = mock<Response>();
+			const resMock = mock<Response>();
 			when(resMock.json(anything())).thenReturn();
-			var resMockInstance = instance(resMock);
+			let resMockInstance = instance(resMock);
 			when(resMock.status(anyNumber())).thenReturn(resMockInstance);
 			resMockInstance = instance(resMock);
 
-			var result = await sut.handle(reqMockInstance, resMockInstance, {});
+			const result = await sut.handle(reqMockInstance, resMockInstance, {});
 
-			var [json] = capture(resMock.json).last();
-			var [errorCode] = capture(resMock.status).last();
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			const [json] = capture(resMock.json).last();
+			const [errorCode] = capture(resMock.status.bind(resMock)).last();
 
 			expect(errorCode).to.equal(200);
 			expect(JSON.stringify(json)).to.equal(JSON.stringify({ cool: "yeah" }));
 		});
 
 		it("Should send an error result when endpoint throws one of our errors", async () => {
-			var sut = new RequestHandlerMock();
+			const sut = new RequestHandlerMock();
 
-			var reqMock = mock<Request>();
+			const reqMock = mock<Request>();
 			when(reqMock.query).thenReturn({});
 			when(reqMock.body).thenReturn({});
-			var reqMockInstance = instance(reqMock);
+			const reqMockInstance = instance(reqMock);
 
-			var resMock = mock<Response>();
+			const resMock = mock<Response>();
 			when(resMock.json(anything())).thenReturn();
-			var resMockInstance = instance(resMock);
+			let resMockInstance = instance(resMock);
 			when(resMock.status(anyNumber())).thenReturn(resMockInstance);
 			resMockInstance = instance(resMock);
 
-			var result = await sut.handle_auth_err(
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			const result = await sut.handleAuthErr(
 				reqMockInstance,
 				resMockInstance,
 				{}
 			);
 
-			var [json] = capture(resMock.json).last();
-			var [errorCode] = capture(resMock.status).last();
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			const [json] = capture(resMock.json).last();
+			const [errorCode] = capture(resMock.status.bind(resMock)).last();
 
 			expect(errorCode).to.equal(403);
 			expect(json.status).to.equal("error");
@@ -78,27 +85,27 @@ export function requestHandler() {
 		});
 
 		it("Should send an error result when endpoint throws one a random error", async () => {
-			var sut = new RequestHandlerMock();
+			const sut = new RequestHandlerMock();
 
-			var reqMock = mock<Request>();
+			const reqMock = mock<Request>();
 			when(reqMock.query).thenReturn({});
 			when(reqMock.body).thenReturn({});
-			var reqMockInstance = instance(reqMock);
+			const reqMockInstance = instance(reqMock);
 
-			var resMock = mock<Response>();
+			const resMock = mock<Response>();
 			when(resMock.json(anything())).thenReturn();
-			var resMockInstance = instance(resMock);
+			let resMockInstance = instance(resMock);
 			when(resMock.status(anyNumber())).thenReturn(resMockInstance);
 			resMockInstance = instance(resMock);
 
-			var result = await sut.handle_random_err(
+			const result = await sut.handleRandomErr(
 				reqMockInstance,
 				resMockInstance,
 				{}
 			);
 
-			var [json] = capture(resMock.json).last();
-			var [errorCode] = capture(resMock.status).last();
+			const [json] = capture(resMock.json).last();
+			const [errorCode] = capture(resMock.status.bind(resMock)).last();
 
 			expect(errorCode).to.equal(500);
 			expect(json.status).to.equal("error");

@@ -1,6 +1,6 @@
-export const ControllerPath = "authed";
-export const ControllerName = "login";
-export type params = {
+export const controllerPath = "authed";
+export const controllerName = "login";
+export type Params = {
 	email: string;
 	pass: string;
 };

@@ -1,51 +1,40 @@
-import { SequelizeTypescriptMigration } from "sequelize-typescript-migration";
-import { Sequelize, DataType } from "sequelize-typescript";
 import * as path from "path";
-import ModelsArray from "../models";
 import { config } from "dotenv";
+import {
+	Sequelize,
+} from "sequelize-typescript";
+import {
+	SequelizeTypescriptMigration,
+} from "sequelize-typescript-migration-rafaeltab";
+import * as Umzug from "umzug";
+import ModelsArray from "#models/index";
+
 config();
 
-async function createMigrationTable(sequelize: Sequelize) {
-	const queryInterface = sequelize.getQueryInterface();
-	await queryInterface.createTable("sequelizemeta", {
-		name: {
-			type: DataType.STRING,
-			allowNull: false,
-			unique: true,
-			primaryKey: true,
-		},
-	});
-	await queryInterface.createTable("sequelizemetamigrations", {
-		revision: {
-			type: DataType.INTEGER,
-			allowNull: false,
-			unique: true,
-			primaryKey: true,
-		},
-		name: {
-			type: DataType.STRING,
-			allowNull: false,
-		},
-		state: {
-			type: DataType.JSON,
-			allowNull: false,
-		},
-	});
-}
-
-(async () => {
+void (async () => {
 	const sequelize = new Sequelize({
-		username: "unsafe",
-		password: "unsafe",
-		database: "imaltest",
-		host: "127.0.0.1",
+		dialect: "sqlite",
 		models: ModelsArray,
-		dialect: "postgres",
+		quoteIdentifiers: false,
+		storage: "migrations.db",
 	});
-	createMigrationTable(sequelize);
+	// await createMigrationTable(sequelize);
 	await SequelizeTypescriptMigration.makeMigration(sequelize as any, {
-		outDir: path.join(__dirname, "./migrations"),
 		migrationName: process.argv[2],
+		outDir: path.join(__dirname, "./migrations"),
 		preview: false,
 	});
+
+	const umzug = new Umzug({
+		migrations: {
+			params: [sequelize.getQueryInterface(), sequelize],
+			path: path.join(__dirname, "./migrations"),
+		},
+		storage: "sequelize",
+		storageOptions: {
+			sequelize,
+		},
+	});
+
+	await umzug.up();
 })();

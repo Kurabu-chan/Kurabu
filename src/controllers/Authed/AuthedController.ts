@@ -1,78 +1,90 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./AuthedControllerOptions";
-import { Param, ParamPos, ParamType } from "../../decorators/ParamDecorator";
-import State from "../../decorators/StateDecorator";
-import { Logger } from "@overnightjs/logger";
-import RequestHandlerDecorator from "../../decorators/RequestHandlerDecorator";
-import ParameterError from "../../errors/Parameter/ParameterError";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { PendingUserCommandHandler } from "../../commands/Users/Pending/PendingUserCommandHandler";
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+import { Logger } from "@overnightjs/logger";
+import * as Options from "./AuthedControllerOptions";
+import {
+	PendingUserCommandHandler,
+} from "#commands/Users/Pending/PendingUserCommandHandler";
+import {
+	param,
+	ParamPos,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import state from "#decorators/StateDecorator";
+import ParameterError from "#errors/Parameter/ParameterError";
 
-@Controller(Options.ControllerPath)
+@Controller(Options.controllerPath)
 @injectable()
 export class AuthedController {
 	constructor(private _pendingUserCommand: PendingUserCommandHandler) {}
 
-	@Get(Options.ControllerName)
-	@RequestHandlerDecorator()
-	@State()
-	@Param(
+	private static async errorCallback(
+		req: Request,
+		res: Response,
+		arg: Options.Params,
+		success: boolean
+	) {
+		if (!success) {
+			await arg.user.destroy();
+		}
+	}
+
+	private static async codeCallback(
+		req: Request,
+		res: Response,
+		arg: Options.Params,
+		success: boolean
+	) {
+		if (!success) {
+			await arg.user.destroy();
+		}
+	}
+
+	@Get(Options.controllerName)
+	@requestHandlerDecorator()
+	@state()
+	@param(
 		"error",
 		ParamType.string,
 		true,
 		ParamPos.either,
-		AuthedController.ErrorCallback
+		AuthedController.errorCallback.bind(this)
 	)
-	@Param(
+	@param(
 		"code",
 		ParamType.string,
 		false,
 		ParamPos.either,
-		AuthedController.CodeCallback
+		AuthedController.codeCallback.bind(this)
 	)
-	private async get(req: Request, res: Response, arg: Options.params) {
+	private async get(req: Request, res: Response, arg: Options.Params) {
 		const codeRe = /[0-9a-z]{700,1300}/;
-		if (!arg.code.match(codeRe)) {
+		if (!(codeRe.exec(arg.code))) {
 			Logger.Warn(
 				"Code parameter was of incorrect format in request to /authed"
 			);
 
-			arg.user.destroy();
+			await arg.user.destroy();
 			throw new ParameterError(
 				"There is a problem with one of your parameters"
 			);
 		}
 
-		let ourdomain = `${req.protocol}://${req.hostname}`;
-		var result = await this._pendingUserCommand.handle({
+		const ourdomain = `${req.protocol}://${req.hostname}`;
+		const result = await this._pendingUserCommand.handle({
 			code: arg.code,
-			ourdomain: ourdomain,
+			ourdomain,
 			uuid: arg.state,
 		});
 
 		res.redirect(result.url);
-	}
-
-	private static ErrorCallback(
-		req: Request,
-		res: Response,
-		arg: Options.params,
-		success: boolean
-	) {
-		if (!success) {
-			arg.user.destroy();
-		}
-	}
-
-	private static CodeCallback(
-		req: Request,
-		res: Response,
-		arg: Options.params,
-		success: boolean
-	) {
-		if (!success) {
-			arg.user.destroy();
-		}
 	}
 }

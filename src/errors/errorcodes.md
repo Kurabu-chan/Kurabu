@@ -27,6 +27,7 @@
 
 0 4 0: any MyAnimeListErrors e.g. no connection
 0 4 1: Connecting to MAL failed
+0 4 2: Media not found error
 
 first number is status so success/error
 

@@ -1,5 +1,5 @@
-import { User } from "../../../models/User";
-import { ICommand } from "../../ICommand";
+import { ICommand } from "#commands/ICommand";
+import { User } from "#models/User";
 
 export class ReAuthUserCommand extends ICommand {
 	uuid!: string;

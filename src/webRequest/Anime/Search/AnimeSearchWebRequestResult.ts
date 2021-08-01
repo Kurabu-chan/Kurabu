@@ -1,6 +1,10 @@
-import { Anime, ListPagination } from "../../../helpers/BasicTypes";
-import { IWebRequestResult } from "../../IWebRequest";
+import {
+	ListPagination,
+	Media,
+} from "#helpers/BasicTypes";
+
+import { IWebRequestResult } from "#webreq/IWebRequest";
 
 export class AnimeSearchWebRequestResult extends IWebRequestResult {
-	search!: ListPagination<Anime>;
+	search!: ListPagination<Media>;
 }

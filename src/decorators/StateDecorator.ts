@@ -1,13 +1,23 @@
-import { Request, Response } from "express";
-import ContainerManager from "../helpers/ContainerManager";
-import { CheckRequestStateQueryHandler } from "../queries/Request/CheckState/CheckRequestStateQueryHandler";
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import {
+	Request,
+	Response,
+} from "express";
+import ContainerManager from "#helpers/ContainerManager";
+import {
+	CheckRequestStateQueryHandler,
+} from "#queries/Request/CheckState/CheckRequestStateQueryHandler";
 
-export default function State() {
+export default function state() {
 	return function (
-		target: Object,
+		target: any,
 		key: string | symbol,
 		descriptor: PropertyDescriptor
-	) {
+	):void {
 		const original = descriptor.value;
 
 		descriptor.value = async function (
@@ -15,17 +25,17 @@ export default function State() {
 			res: Response,
 			arg: any = {}
 		) {
-			const container = ContainerManager.getInstance().Container;
+			const container = ContainerManager.getInstance().container;
 			const checkRequestStateQuery = container.resolve(
 				CheckRequestStateQueryHandler
 			);
 
-			let state = await checkRequestStateQuery.handle({ req: req, res: res });
+			const userState = await checkRequestStateQuery.handle({ req, res });
 
 			return original.apply(this, [
 				req,
 				res,
-				{ ...arg, state: state.state, user: state.user },
+				{ ...arg, state: userState.state, user: userState.user },
 			]);
 		};
 	};

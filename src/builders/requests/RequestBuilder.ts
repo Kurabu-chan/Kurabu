@@ -1,6 +1,10 @@
-import fetch, { Response, HeadersInit, BodyInit } from "node-fetch";
-import { RefreshFetch } from "../../helpers/refresher";
-import { User } from "../../models/User";
+import fetch, {
+	BodyInit,
+	HeadersInit,
+	Response,
+} from "node-fetch";
+import { refreshFetch, refreshFetchResponse } from "#helpers/refresher";
+import { User } from "#models/User";
 
 export type RequestBuilderBuildType = {
 	url: string;
@@ -21,13 +25,13 @@ export class RequestBuilder {
 		this.queryParams = [];
 	}
 
-	public setBody(body: BodyInit) {
+	public setBody(body: BodyInit): RequestBuilder {
 		this.body = body;
 
 		return this;
 	}
 
-	public addPath(path: string) {
+	public addPath(path: string): RequestBuilder {
 		if (!path.endsWith("/")) path += "/";
 		if (path.startsWith("/")) path = path.substr(1, path.length - 1);
 		this.path += path;
@@ -35,84 +39,85 @@ export class RequestBuilder {
 		return this;
 	}
 
-	public setHeader(key: string, value: string) {
+	public setHeader(key: string, value: string): RequestBuilder {
 		this.headers.push({
-			key: key,
-			value: value,
+			key,
+			value,
 		});
 
 		return this;
 	}
 
-	public setQueryParam(key: string, value: string) {
+	public setQueryParam(key: string, value: string): RequestBuilder {
 		this.queryParams.push({
-			key: key,
-			value: value,
+			key,
+			value,
 		});
 
 		return this;
 	}
 
-	public build(): RequestBuilderBuildType;
-	public build(method?: string): RequestBuilderBuildType;
 	public build(method?: string): RequestBuilderBuildType {
 		let headers: HeadersInit | undefined;
-		if (this.headers.length == 0) {
+		if (this.headers.length === 0) {
 			headers = undefined;
 		} else {
 			headers = {};
-			for (var i = 0; i < this.headers.length; i++) {
-				var header = this.headers[i];
+			for (const header of this.headers) {
 				headers[header.key] = header.value;
 			}
 		}
 
-		let url: string = `${this.scheme}://${this.domain}/${this.path}`;
-		url = url.substr(0, url.length - 1); //remove last /
+		let url = `${this.scheme}://${this.domain}/${this.path}`;
+		url = url.substr(0, url.length - 1); // remove last /
 
 		if (this.queryParams.length !== 0) {
 			url += "?";
-			for (var i = 0; i < this.queryParams.length; i++) {
-				var queryParam = this.queryParams[i];
-
+			for (const queryParam of this.queryParams) {
 				if (url.endsWith("?") !== true) url += "&";
 				url += `${queryParam.key}=${queryParam.value}`;
 			}
 		}
 
 		return {
-			url: url,
-			method: method,
 			body: this.body,
-			headers: headers,
+			headers,
+			method,
+			url,
 		};
 	}
 
-	public request(): Promise<Response>;
-	public request(method?: string): Promise<Response>;
 	public request(method?: string): Promise<Response> {
-		var buildResult = this.build(method);
+		const buildResult = this.build(method);
 
 		return fetch(buildResult.url, {
-			method: buildResult.method,
 			body: buildResult.body,
 			headers: buildResult.headers,
+			method: buildResult.method,
 		});
 	}
 
-	public refreshRequest(user: User): Promise<any>;
-	public refreshRequest(user: User, method?: string): Promise<any>;
-	public refreshRequest(user: User, method?: string): Promise<any> {
-		var buildResult = this.build(method);
+	public refreshRequest(user: User, method?: string): Promise<unknown> {
+		const buildResult = this.build(method);
 
-		return RefreshFetch(user, buildResult.url, {
-			method: buildResult.method,
+		return refreshFetch(user, buildResult.url, {
 			body: buildResult.body,
 			headers: buildResult.headers,
+			method: buildResult.method,
+		});
+	}
+
+	public refreshRequestResponse(user: User, method?: string): Promise<Response> {
+		const buildResult = this.build(method);
+
+		return refreshFetchResponse(user, buildResult.url, {
+			body: buildResult.body,
+			headers: buildResult.headers,
+			method: buildResult.method,
 		});
 	}
 }
 
-export function baseRequest() {
+export function baseRequest(): RequestBuilder {
 	return new RequestBuilder("https", "api.myanimelist.net");
 }

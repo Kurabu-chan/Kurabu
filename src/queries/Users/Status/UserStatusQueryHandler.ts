@@ -1,8 +1,12 @@
-import { IQueryHandler, IQueryResultStatus } from "../../IQuery";
+import { autoInjectable } from "tsyringe";
+
 import { UserStatusQuery } from "./UserStatusQuery";
 import { UserStatusQueryResult } from "./UserStatusQueryResult";
-import { autoInjectable } from "tsyringe";
-import { ensureTokensOnUser } from "../../../models/Tokens";
+import {
+	IQueryHandler,
+	IQueryResultStatus,
+} from "#queries/IQuery";
+import { ensureTokensOnUser } from "#models/Tokens";
 
 export enum UserStatus {
 	done,
@@ -20,22 +24,22 @@ export class UserStatusQueryHandler
 		if (user.verifCode)
 			return {
 				status: UserStatus.verif,
-				success: IQueryResultStatus.SUCCESS,
+				success: IQueryResultStatus.success,
 			};
 		if (user.tokens && user.tokens.verifier)
 			return {
 				status: UserStatus.authing,
-				success: IQueryResultStatus.SUCCESS,
+				success: IQueryResultStatus.success,
 			};
 		if (!user.tokens || !user.tokens.token)
 			return {
 				status: UserStatus.tokens,
-				success: IQueryResultStatus.SUCCESS,
+				success: IQueryResultStatus.success,
 			};
 
 		return {
 			status: UserStatus.done,
-			success: IQueryResultStatus.SUCCESS,
+			success: IQueryResultStatus.success,
 		};
 	}
 }

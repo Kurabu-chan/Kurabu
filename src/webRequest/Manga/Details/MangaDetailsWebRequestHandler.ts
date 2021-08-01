@@ -1,14 +1,18 @@
-import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
+import { autoInjectable } from "tsyringe";
+
 import { MangaDetailsWebRequest } from "./MangaDetailsWebRequest";
 import { MangaDetailsWebRequestResult } from "./MangaDetailsWebRequestResult";
-import { autoInjectable } from "tsyringe";
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "#webreq/IWebRequest";
 import {
 	allFields,
-	Manga,
 	ErrorResponse,
 	fieldsToString,
-} from "../../../helpers/BasicTypes";
-import { baseRequest } from "../../../builders/requests/RequestBuilder";
+	Media,
+} from "#helpers/BasicTypes";
+import { baseRequest } from "#builders/requests/RequestBuilder";
 
 @autoInjectable()
 export class MangaDetailsWebRequestHandler
@@ -21,22 +25,24 @@ export class MangaDetailsWebRequestHandler
 			query.fields = allFields();
 		}
 
-		var request = baseRequest()
+		const request = baseRequest()
 			.addPath("v2/manga")
 			.addPath(query.mangaid.toString())
 			.setQueryParam("fields", fieldsToString(query.fields))
 			.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
-		let data = await request.refreshRequest(query.user);
+		const data = await request.refreshRequest(query.user);
 
-		let json: Manga | ErrorResponse = data;
+		type JSONType = Media | ErrorResponse;
+
+		const json:JSONType  = data as JSONType;
 		if ((json as ErrorResponse).error) {
 			throw new Error((json as ErrorResponse).error);
 		}
 
 		return {
-			success: IWebRequestResultStatus.SUCCESS,
-			manga: json as Manga,
+			manga: json as Media,
+			success: IWebRequestResultStatus.success,
 		};
 	}
 }

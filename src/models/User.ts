@@ -1,14 +1,15 @@
 import {
-	Table,
-	Column,
-	Model,
-	DataType,
-	ForeignKey,
-	BelongsTo,
-	PrimaryKey,
 	AllowNull,
+	BelongsTo,
+	Column,
+	DataType,
 	Default,
+	ForeignKey,
+	Model,
+	PrimaryKey,
+	Table,
 } from "sequelize-typescript";
+
 import { Tokens } from "./Tokens";
 
 @Table
@@ -33,7 +34,7 @@ export class User extends Model {
 	@AllowNull(true)
 	@Default(0)
 	@Column
-	VerifAttemptCount?: number;
+	verifAttemptCount?: number;
 
 	@ForeignKey(() => Tokens)
 	@AllowNull(true)

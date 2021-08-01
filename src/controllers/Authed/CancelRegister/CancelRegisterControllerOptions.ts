@@ -1,8 +1,8 @@
-import { User } from "../../../models/User";
+import { User } from "#models/User";
 
-export const ControllerPath = "authed";
-export const ControllerName = "cancelRegister";
-export type params = {
+export const controllerPath = "authed";
+export const controllerName = "cancelRegister";
+export type Params = {
 	uuid: string;
 	user: User;
 };

@@ -1,8 +1,8 @@
-import { IWebRequestResult } from "../../IWebRequest";
+import { IWebRequestResult } from "#webreq/IWebRequest";
 
 export class RefreshWebRequestResult extends IWebRequestResult {
-	token_type!: "Bearer";
-	expires_in!: number;
-	access_token!: string;
-	refresh_token!: string;
+	tokenType!: "Bearer";
+	expiresIn!: number;
+	accessToken!: string;
+	refreshToken!: string;
 }

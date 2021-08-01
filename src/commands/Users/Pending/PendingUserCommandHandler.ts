@@ -1,17 +1,24 @@
 import { autoInjectable } from "tsyringe";
-import MissingStateError from "../../../errors/Authentication/MissingStateError";
-import StateStatusError from "../../../errors/Authentication/StateStatusError";
-import TokensNotPresentError from "../../../errors/Authentication/TokensNotPresentError";
-import { Database } from "../../../helpers/Database";
-import { Tokens } from "../../../models/Tokens";
+import { PendingUserCommand } from "./PendingUserCommand";
+import { PendingUserCommandResult } from "./PendingUserCommandResult";
+import {
+	ICommandHandler,
+	ICommandResultStatus,
+} from "#commands/ICommand";
+import MissingStateError from "#errors/Authentication/MissingStateError";
+import StateStatusError from "#errors/Authentication/StateStatusError";
+import TokensNotPresentError
+	from "#errors/Authentication/TokensNotPresentError";
+import { Database } from "#helpers/Database";
+import { Tokens } from "#models/Tokens";
 import {
 	UserStatus,
 	UserStatusQueryHandler,
-} from "../../../queries/Users/Status/UserStatusQueryHandler";
-import { GetTokenWebRequestHandler } from "../../../webRequest/Auth/GetToken/GetTokenWebRequestHandler";
-import { ICommandHandler, ICommandResultStatus } from "../../ICommand";
-import { PendingUserCommand } from "./PendingUserCommand";
-import { PendingUserCommandResult } from "./PendingUserCommandResult";
+} from "#queries/Users/Status/UserStatusQueryHandler";
+import {
+	GetTokenWebRequestHandler,
+} from "#webreq/Auth/GetToken/GetTokenWebRequestHandler";
+
 
 @autoInjectable()
 export class PendingUserCommandHandler
@@ -23,28 +30,28 @@ export class PendingUserCommandHandler
 	) {}
 
 	async handle(command: PendingUserCommand): Promise<PendingUserCommandResult> {
-		//check if the uuid exists in the dict
+		// check if the uuid exists in the dict
 
-		var db = this._database;
-		var Models = db.Models;
-		var usr = Models.user;
+		const db = this._database;
+		const models = db.models;
+		const usr = models.user;
 
-		var user = await usr.findOne({
-			where: { id: command.uuid },
+		const user = await usr.findOne({
 			include: Tokens,
+			where: { id: command.uuid },
 		});
 
 		if (!user) throw new MissingStateError("uuid does not exist yet");
 
-		var status = (await this._getUserStatus.handle({ user: user })).status;
+		const status = (await this._getUserStatus.handle({ user })).status;
 
-		//get the dict entry and check if the state is pending
-		if (status != UserStatus.authing)
+		// get the dict entry and check if the state is pending
+		if (status !== UserStatus.authing)
 			throw new StateStatusError("uuid is not pending");
 
-		var userTokens: Tokens = user.tokens as Tokens;
+		const userTokens: Tokens = user.tokens as Tokens;
 
-		var tokenModel = await this._database.Models.tokens.findOne({
+		const tokenModel = await this._database.models.tokens.findOne({
 			where: {
 				id: user.tokensId,
 			},
@@ -52,29 +59,29 @@ export class PendingUserCommandHandler
 		if (!tokenModel)
 			throw new TokensNotPresentError("No tokens for pending user");
 
-		//get the tokens from MAL
-		let tokens = await this._getTokenWebRequest.handle({
+		// get the tokens from MAL
+		const tokens = await this._getTokenWebRequest.handle({
 			code: command.code,
 			ourdomain: command.ourdomain,
 			verifier: userTokens.verifier as string,
 		});
 
 		await tokenModel.update({
-			token: tokens.access_token,
-			refreshtoken: tokens.refresh_token,
-			verifier: null,
 			redirect: null,
+			refreshtoken: tokens.refreshToken,
+			token: tokens.accessToken,
+			verifier: null,
 		});
 
 		if (userTokens.redirect) {
 			return {
+				success: ICommandResultStatus.success,
 				url: `${userTokens.redirect}${command.uuid}`,
-				success: ICommandResultStatus.SUCCESS,
 			};
 		}
 		return {
+			success: ICommandResultStatus.success,
 			url: `imal://auth/${command.uuid}`,
-			success: ICommandResultStatus.SUCCESS,
 		};
 	}
 }

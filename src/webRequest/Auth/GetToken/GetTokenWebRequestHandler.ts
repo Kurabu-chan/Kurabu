@@ -1,12 +1,22 @@
-import { CLIENT_ID, CLIENT_SECRET } from "../../../helpers/GLOBALVARS";
-import { IWebRequestHandler, IWebRequestResultStatus } from "../../IWebRequest";
+import { autoInjectable } from "tsyringe";
 import { GetTokenWebRequest } from "./GetTokenWebRequest";
 import { GetTokenWebRequestResult } from "./GetTokenWebRequestResult";
-import { isErrResp, tokenResponse } from "../../../helpers/BasicTypes";
-import GeneralError from "../../../errors/GeneralError";
-import MALConnectionError from "../../../errors/MAL/MALConnectionError";
-import { autoInjectable } from "tsyringe";
-import { RequestBuilder } from "../../../builders/requests/RequestBuilder";
+import {
+	IWebRequestHandler,
+	IWebRequestResultStatus,
+} from "#webreq/IWebRequest";
+import { RequestBuilder } from "#builders/requests/RequestBuilder";
+import GeneralError from "#errors/GeneralError";
+import MALConnectionError from "#errors/MAL/MALConnectionError";
+import {
+	isErrResp,
+	tokenResponse,
+} from "#helpers/BasicTypes";
+import {
+	CLIENT_ID,
+	CLIENT_SECRET,
+} from "#helpers/GLOBALVARS";
+
 
 type ErrorResponse = {
 	error: string;
@@ -18,10 +28,11 @@ export class GetTokenWebRequestHandler
 	implements IWebRequestHandler<GetTokenWebRequest, GetTokenWebRequestResult> {
 	async handle(query: GetTokenWebRequest): Promise<GetTokenWebRequestResult> {
 		try {
-			var request = new RequestBuilder("https", "myanimelist.net")
+			const request = new RequestBuilder("https", "myanimelist.net")
 				.addPath("v1/oauth2/token")
 				.setHeader("Content-Type", "application/x-www-form-urlencoded")
 				.setBody(
+					// eslint-disable-next-line max-len
 					`client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=authorization_code&code=${
 						query.code
 					}&code_verifier=${query.verifier}&redirect_uri=${
@@ -31,22 +42,24 @@ export class GetTokenWebRequestHandler
 					}`
 				);
 
-			let data = await request.request("POST");
+			const data = await request.request("POST");
 
-			let jsData: tokenResponse | ErrorResponse = await data.json();
+			type JSONType = tokenResponse | ErrorResponse;
+
+			const jsData:JSONType  = await data.json() as JSONType;
 			if (isErrResp(jsData)) {
 				throw new GeneralError(
 					`error: ${jsData.error} message: ${jsData.message}`
 				);
 			} else {
-				var tres = <tokenResponse>jsData;
+				const tres = jsData;
 
 				return {
-					success: IWebRequestResultStatus.SUCCESS,
-					access_token: tres.access_token,
-					expires_in: tres.expires_in,
-					refresh_token: tres.refresh_token,
-					token_type: tres.token_type,
+					accessToken: tres.access_token,
+					expiresIn: tres.expires_in,
+					refreshToken: tres.refresh_token,
+					success: IWebRequestResultStatus.success,
+					tokenType: tres.token_type,
 				};
 			}
 		} catch (e) {

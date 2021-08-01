@@ -1,14 +1,26 @@
-import { Request, Response } from "express";
-import { Controller, Post } from "@overnightjs/core";
-import * as Options from "./VerifControllerOptions";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import LogArg from "../../../decorators/LogArgDecorator";
-import { Param, ParamType } from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { VerifUserCommandHandler } from "../../../commands/Users/Verif/VerifUserCommandHandler";
+import {
+	Controller,
+	Post,
+} from "@overnightjs/core";
+import * as Options from "./VerifControllerOptions";
+import {
+	VerifUserCommandHandler,
+} from "#commands/Users/Verif/VerifUserCommandHandler";
+import logArg from "#decorators/LogArgDecorator";
+import {
+	param,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
 
-@Controller(Options.ControllerPath)
+
+@Controller(Options.controllerPath)
 @injectable()
 export class VerifController {
 	private _verifUserCommand: VerifUserCommandHandler;
@@ -17,25 +29,25 @@ export class VerifController {
 		this._verifUserCommand = verifUserCommand;
 	}
 
-	@Post(Options.ControllerName)
-	@RequestHandlerDecorator()
-	@Param("uuid", ParamType.string, false)
-	@Param("code", ParamType.string, false)
-	@Param("redirect", ParamType.string, true)
-	@LogArg()
-	private async post(req: Request, res: Response, arg: Options.params) {
-		let ourdomain = `${req.protocol}://${req.hostname}`;
+	@Post(Options.controllerName)
+	@requestHandlerDecorator()
+	@param("uuid", ParamType.string, false)
+	@param("code", ParamType.string, false)
+	@param("redirect", ParamType.string, true)
+	@logArg()
+	private async post(req: Request, res: Response, arg: Options.Params) {
+		const ourdomain = `${req.protocol}://${req.hostname}`;
 
-		var result = await this._verifUserCommand.handle({
+		const result = await this._verifUserCommand.handle({
 			code: arg.code,
-			ourdomain: ourdomain,
-			uuid: arg.uuid,
+			ourdomain,
 			redirect: arg.redirect,
+			uuid: arg.uuid,
 		});
 
 		return {
-			status: SUCCESS_STATUS,
 			message: result.url,
+			status: SUCCESS_STATUS,
 		};
 	}
 }

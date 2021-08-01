@@ -1,13 +1,14 @@
 import { autoInjectable } from "tsyringe";
+import { CheckUserUUIDQuery } from "./CheckUserUUIDQuery";
+import { CheckUserUUIDQueryResult } from "./CheckUserUUIDQueryResult";
 import {
 	ICommandHandler,
 	ICommandResultStatus,
-} from "../../../commands/ICommand";
-import { CheckUserUUIDQuery } from "./CheckUserUUIDQuery";
-import { CheckUserUUIDQueryResult } from "./CheckUserUUIDQueryResult";
-import { Database } from "../../../helpers/Database";
-import { Tokens } from "../../../models/Tokens";
-import MissingStateError from "../../../errors/Authentication/MissingStateError";
+} from "#commands/ICommand";
+import MissingStateError from "#errors/Authentication/MissingStateError";
+import { Database } from "#helpers/Database";
+import { Tokens } from "#models/Tokens";
+
 
 @autoInjectable()
 export class CheckUserUUIDQueryHandler
@@ -15,17 +16,17 @@ export class CheckUserUUIDQueryHandler
 	constructor(private _database: Database) {}
 
 	async handle(command: CheckUserUUIDQuery): Promise<CheckUserUUIDQueryResult> {
-		var user = await this._database.Models.user.findOne({
-			where: { id: command.uuid },
+		const user = await this._database.models.user.findOne({
 			include: Tokens,
+			where: { id: command.uuid },
 		});
 		if (user) {
 			return {
-				success: ICommandResultStatus.SUCCESS,
-				user: user,
+				success: ICommandResultStatus.success,
+				user,
 			};
 		} else {
-			//TODO better error
+			// TODO better error
 			throw new MissingStateError("user doesn't exist");
 		}
 	}

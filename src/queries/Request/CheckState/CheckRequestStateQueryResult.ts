@@ -1,5 +1,6 @@
-import { User } from "../../../models/User";
-import { IQueryResult } from "../../IQuery";
+import { User } from "#models/User";
+
+import { IQueryResult } from "#queries/IQuery";
 
 export class CheckRequestStateQueryResult extends IQueryResult {
 	state!: string;

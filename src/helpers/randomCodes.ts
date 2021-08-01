@@ -1,4 +1,5 @@
-import * as crypto from "crypto";
+import { randomBytes } from "crypto";
+import { v4, validate} from "uuid";
 
 function base64URLEncode(buff: Buffer) {
 	return buff
@@ -9,35 +10,34 @@ function base64URLEncode(buff: Buffer) {
 }
 
 export function isUUID(uuid: string): boolean {
-	const stateRe = /^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$/;
-	return uuid.match(stateRe) != null;
+	return validate(uuid);
 }
 
-export function getUUID() {
-	var dt = new Date().getTime();
-	var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-		/[xy]/g,
-		function (c) {
-			var r = (dt + Math.random() * 16) % 16 | 0;
-			dt = Math.floor(dt / 16);
-			return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
-		}
-	);
-	return uuid;
+export function getUUID(): string {
+	return v4();
 }
 
 export function getPKCE(length: number): string {
-	var l = Math.ceil(length / (4 / 3));
-	return base64URLEncode(crypto.randomBytes(l));
+	const l = Math.ceil(length / (4 / 3));
+	return base64URLEncode(randomBytes(l));
 }
 
-export function makeVerifCode() {
-	let length = 6;
-	var result = "";
-	var characters = "0123456789";
-	var charactersLength = characters.length;
-	for (var i = 0; i < length; i++) {
-		result += characters.charAt(Math.floor(Math.random() * charactersLength));
+export function makeVerifCode(): string {
+	const length = 6;
+	let str = "";
+	for (let i = 0; i < length; i++) {
+		str += getRandomInt(3, 12)-3;
 	}
-	return result;
+	return str;
+}
+
+function getRandomInt(min: number, max: number): number {
+    // Create byte array and fill with 1 random number
+    const byteArray = randomBytes(1);
+
+    const range = max - min + 1;
+    const maxRange = 256;
+    if (byteArray[0] >= Math.floor(maxRange / range) * range)
+        return getRandomInt(min, max);
+    return min + (byteArray[0] % range);
 }

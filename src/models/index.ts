@@ -2,9 +2,9 @@ import { User } from "./User";
 import { Tokens } from "./Tokens";
 
 export default [User, Tokens];
-export var Models = {
-	user: User,
+export const models = {
 	tokens: Tokens,
+	user: User,
 };
 
 export type ModelsType = {

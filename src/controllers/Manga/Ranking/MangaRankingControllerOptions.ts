@@ -1,8 +1,8 @@
-import { User } from "../../../models/User";
+import { User } from "#models/User";
 
-export const ControllerPath = "manga";
-export const ControllerName = "ranking";
-export type params = {
+export const controllerPath = "manga";
+export const controllerName = "ranking";
+export type Params = {
 	state: string;
 	user: User;
 	rankingtype?:

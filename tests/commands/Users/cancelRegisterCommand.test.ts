@@ -1,16 +1,19 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { expect } from "chai";
-import { CancelUserRegisterCommandHandler } from "../../../src/commands/Users/CancelRegister/CancelUserRegisterCommandHandler";
-import { User } from "../../../src/models/User";
-import {
-	UserStatus,
-	UserStatusQueryHandler,
-} from "../../../src/queries/Users/Status/UserStatusQueryHandler";
 import { mock, instance, verify, when, anything } from "ts-mockito";
-import { IQueryResultStatus } from "../../../src/queries/IQuery";
-import { ICommandResultStatus } from "../../../src/commands/ICommand";
+import {
+	CancelUserRegisterCommandHandler
+} from "#commands/Users/CancelRegister/CancelUserRegisterCommandHandler";
+import { User } from "#models/User";
+import {
+	UserStatus, UserStatusQueryHandler,
+} from "#queries/Users/Status/UserStatusQueryHandler";
+import { ICommandResultStatus } from "#commands/ICommand";
+import { IQueryResultStatus } from "#queries/IQuery";
 
-export function CancelRegisterCommand() {
-	describe("CancelRegisterCommand", async () => {
+export function cancelRegisterCommand(): void {
+	describe("CancelRegisterCommand", () => {
 		let userMock: User;
 		let userMockInstance: User;
 		beforeEach(() => {
@@ -19,15 +22,15 @@ export function CancelRegisterCommand() {
 		});
 
 		it("Should check the users status", async () => {
-			var userStatusMock = mock(UserStatusQueryHandler);
+			const userStatusMock = mock(UserStatusQueryHandler);
 			when(userStatusMock.handle(anything())).thenResolve({
 				status: UserStatus.done,
-				success: IQueryResultStatus.SUCCESS,
+				success: IQueryResultStatus.success,
 			});
-			var userStatusMockInstance = instance(userStatusMock);
+			const userStatusMockInstance = instance(userStatusMock);
 
-			var sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
-			var result = undefined;
+			const sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
+			let result;
 			try {
 				result = await sut.handle({
 					user: userMockInstance,
@@ -40,42 +43,43 @@ export function CancelRegisterCommand() {
 		});
 
 		it("Should destroy with verif status", async () => {
-			var userStatusMock = mock(UserStatusQueryHandler);
+			const userStatusMock = mock(UserStatusQueryHandler);
 			when(userStatusMock.handle(anything())).thenResolve({
 				status: UserStatus.verif,
-				success: IQueryResultStatus.SUCCESS,
+				success: IQueryResultStatus.success,
 			});
-			var userStatusMockInstance = instance(userStatusMock);
+			const userStatusMockInstance = instance(userStatusMock);
 
-			var sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
+			const sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
 
-			var result = await sut.handle({
+			const result = await sut.handle({
 				user: userMockInstance,
 			} as any);
 
 			verify(userMock.destroy()).once();
 			verify(userStatusMock.handle(anything())).once();
-			expect(result?.success).to.be.equal(ICommandResultStatus.SUCCESS);
+			expect(result?.success).to.be.equal(ICommandResultStatus.success);
 		});
 
 		it("Should throw with non verif status", async () => {
-			var userStatusMock = mock(UserStatusQueryHandler);
+			const userStatusMock = mock(UserStatusQueryHandler);
 			when(userStatusMock.handle(anything())).thenResolve({
 				status: UserStatus.done,
-				success: IQueryResultStatus.SUCCESS,
+				success: IQueryResultStatus.success,
 			});
-			var userStatusMockInstance = instance(userStatusMock);
+			const userStatusMockInstance = instance(userStatusMock);
 
-			var sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
+			const sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
 
-			var thrown = "";
-			var result = undefined;
+			let thrown = "";
+			let result;
 			try {
 				result = await sut.handle({
 					user: userMockInstance,
 				} as any);
 			} catch (err) {
-				thrown = err.message;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+				thrown = (err as { message: string }).message;
 			}
 
 			verify(userMock.destroy()).never();
@@ -85,23 +89,24 @@ export function CancelRegisterCommand() {
 		});
 
 		it("Should throw with no user", async () => {
-			var userStatusMock = mock(UserStatusQueryHandler);
+			const userStatusMock = mock(UserStatusQueryHandler);
 			when(userStatusMock.handle(anything())).thenResolve({
 				status: UserStatus.done,
-				success: IQueryResultStatus.SUCCESS,
+				success: IQueryResultStatus.success,
 			});
-			var userStatusMockInstance = instance(userStatusMock);
+			const userStatusMockInstance = instance(userStatusMock);
 
-			var sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
+			const sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
 
-			var thrown = "";
-			var result = undefined;
+			let thrown = "";
+			let result;
 			try {
 				result = await sut.handle({
 					user: undefined,
 				} as any);
 			} catch (err) {
-				thrown = err.message;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+				thrown = (err as { message: string }).message;
 			}
 
 			verify(userMock.destroy()).never();

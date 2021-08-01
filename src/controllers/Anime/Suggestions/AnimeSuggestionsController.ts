@@ -1,41 +1,53 @@
-import { Request, Response } from "express";
-import { Controller, Get } from "@overnightjs/core";
-import * as Options from "./AnimeSuggestionsControllerOptions";
-import State from "../../../decorators/StateDecorator";
-import * as Param from "../../../decorators/ParamDecorator";
-import LogArg from "../../../decorators/LogArgDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { SuggestionsWebRequestHandler } from "../../../webRequest/Anime/Suggestions/AnimeSuggestionsWebRequestHandler";
-import { extractFields, Fields } from "../../../helpers/BasicTypes";
+import {
+	Controller,
+	Get,
+} from "@overnightjs/core";
+import * as Options from "./AnimeSuggestionsControllerOptions";
+import logArg from "#decorators/LogArgDecorator";
+import * as Param from "#decorators/ParamDecorator";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import state from "#decorators/StateDecorator";
+import {
+	extractFields,
+	Fields,
+} from "#helpers/BasicTypes";
+import {
+	SuggestionsWebRequestHandler,
+} from "#webreq/Anime/Suggestions/AnimeSuggestionsWebRequestHandler";
 
-@Controller(Options.ControllerPath)
+
+@Controller(Options.controllerPath)
 @injectable()
 export class AnimeSuggestionsController {
 	constructor(private _suggestionsWebRequest: SuggestionsWebRequestHandler) {}
 
-	@Get(Options.ControllerName)
-	@RequestHandlerDecorator()
-	@State()
-	@Param.Param("limit", Param.ParamType.int, true)
-	@Param.Param("offset", Param.ParamType.int, true)
-	@Param.Param("fields", Param.ParamType.string, true)
-	@LogArg()
-	private async get(req: Request, res: Response, arg: Options.params) {
+	@Get(Options.controllerName)
+	@requestHandlerDecorator()
+	@state()
+	@Param.param("limit", Param.ParamType.int, true)
+	@Param.param("offset", Param.ParamType.int, true)
+	@Param.param("fields", Param.ParamType.string, true)
+	@logArg()
+	private async get(req: Request, res: Response, arg: Options.Params) {
 		if (arg.limit && arg.limit > 100) {
 			arg.limit = 100;
 		}
 
-		var fields: Fields | undefined;
+		let fields: Fields | undefined;
 		if (arg.fields) {
 			fields = extractFields(arg.fields).fields;
 		}
 
-		var result = await this._suggestionsWebRequest.handle({
-			user: arg.user,
+		const result = await this._suggestionsWebRequest.handle({
+			fields,
 			limit: arg.limit,
 			offset: arg.offset,
-			fields: fields,
+			user: arg.user,
 		});
 
 		return result.suggestions;

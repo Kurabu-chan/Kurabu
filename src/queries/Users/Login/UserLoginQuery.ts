@@ -1,4 +1,4 @@
-import { IQuery } from "../../IQuery";
+import { IQuery } from "#queries/IQuery";
 
 export class UserLoginQuery extends IQuery {
 	email!: string;

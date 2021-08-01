@@ -1,31 +1,43 @@
-import { Request, Response } from "express";
-import { Controller, Post } from "@overnightjs/core";
-import * as Options from "./LoginControllerOptions";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import { Param, ParamType } from "../../../decorators/ParamDecorator";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { UserLoginQueryHandler } from "../../../queries/Users/Login/UserLoginQueryHandler";
-import { UserStatus } from "../../../queries/Users/Status/UserStatusQueryHandler";
+import {
+	Controller,
+	Post,
+} from "@overnightjs/core";
+import * as Options from "./LoginControllerOptions";
+import {
+	param,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+import {
+	UserLoginQueryHandler,
+} from "#queries/Users/Login/UserLoginQueryHandler";
+import { UserStatus } from "#queries/Users/Status/UserStatusQueryHandler";
 
-@Controller(Options.ControllerPath)
+
+@Controller(Options.controllerPath)
 @injectable()
 export class LoginController {
 	constructor(private _userLoginQuery: UserLoginQueryHandler) {}
 
-	@Post(Options.ControllerName)
-	@RequestHandlerDecorator()
-	@Param("email", ParamType.string, false)
-	@Param("pass", ParamType.string, false)
-	private async post(req: Request, res: Response, arg: Options.params) {
-		var result = await this._userLoginQuery.handle({
+	@Post(Options.controllerName)
+	@requestHandlerDecorator()
+	@param("email", ParamType.string, false)
+	@param("pass", ParamType.string, false)
+	private async post(req: Request, res: Response, arg: Options.Params) {
+		const result = await this._userLoginQuery.handle({
 			email: arg.email,
 			password: arg.pass,
 		});
 
 		return {
-			status: SUCCESS_STATUS,
 			message: result.id,
+			status: SUCCESS_STATUS,
 			userStatus: UserStatus[result.status],
 		};
 	}

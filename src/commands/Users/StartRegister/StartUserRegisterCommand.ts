@@ -1,4 +1,4 @@
-import { ICommand } from "../../ICommand";
+import { ICommand } from "#commands/ICommand";
 
 export class StartUserRegisterCommand extends ICommand {
 	email!: string;

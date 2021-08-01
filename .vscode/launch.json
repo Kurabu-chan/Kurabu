@@ -2,12 +2,12 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "Launch via npm",
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
-			"program": "${workspaceFolder}/src/start.ts",
-			"preLaunchTask": "tsc: build - tsconfig.json",
-			"outFiles": ["${workspaceFolder}/build/**/*.js"]
+			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run-script", "start-dev"]
 		}
 	]
 }

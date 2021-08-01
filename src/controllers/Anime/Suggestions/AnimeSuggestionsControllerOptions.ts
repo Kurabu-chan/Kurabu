@@ -1,8 +1,8 @@
-import { User } from "../../../models/User";
+import { User } from "#models/User";
 
-export const ControllerPath = "anime";
-export const ControllerName = "suggestions";
-export type params = {
+export const controllerPath = "anime";
+export const controllerName = "suggestions";
+export type Params = {
 	state: string;
 	user: User;
 	limit?: number;

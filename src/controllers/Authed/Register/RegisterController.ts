@@ -1,14 +1,27 @@
-import { Request, Response } from "express";
-import { Controller, Post } from "@overnightjs/core";
-import * as Options from "./RegisterControllerOptions";
-import { SUCCESS_STATUS } from "../../../helpers/GLOBALVARS";
-import { Param, ParamType } from "../../../decorators/ParamDecorator";
-import { Logger } from "@overnightjs/logger";
-import RequestHandlerDecorator from "../../../decorators/RequestHandlerDecorator";
+import {
+	Request,
+	Response,
+} from "express";
 import { injectable } from "tsyringe";
-import { StartUserRegisterCommandHandler } from "../../../commands/Users/StartRegister/StartUserRegisterCommandHandler";
 
-@Controller(Options.ControllerPath)
+import {
+	Controller,
+	Post,
+} from "@overnightjs/core";
+import { Logger } from "@overnightjs/logger";
+
+import * as Options from "./RegisterControllerOptions";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
+import {
+	param,
+	ParamType,
+} from "#decorators/ParamDecorator";
+import {
+	StartUserRegisterCommandHandler,
+} from "#commands/Users/StartRegister/StartUserRegisterCommandHandler";
+
+@Controller(Options.controllerPath)
 @injectable()
 export class RegisterController {
 	private _startUserRegisterCommand: StartUserRegisterCommandHandler;
@@ -16,21 +29,21 @@ export class RegisterController {
 		this._startUserRegisterCommand = startUserRegisterCommand;
 	}
 
-	@Post(Options.ControllerName)
-	@RequestHandlerDecorator()
-	@Param("email", ParamType.string, false)
-	@Param("pass", ParamType.string, false)
-	private async post(req: Request, res: Response, arg: Options.params) {
+	@Post(Options.controllerName)
+	@requestHandlerDecorator()
+	@param("email", ParamType.string, false)
+	@param("pass", ParamType.string, false)
+	private async post(req: Request, res: Response, arg: Options.Params) {
 		Logger.Info(`Starting auth for ${req.ip}`);
 
-		var result = await this._startUserRegisterCommand.handle({
+		const result = await this._startUserRegisterCommand.handle({
 			email: arg.email,
 			password: arg.pass,
 		});
 
 		return {
-			status: SUCCESS_STATUS,
 			message: result.uuid,
+			status: SUCCESS_STATUS,
 		};
 	}
 }
