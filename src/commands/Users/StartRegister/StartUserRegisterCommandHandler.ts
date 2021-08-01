@@ -68,9 +68,9 @@ export class StartUserRegisterCommandHandler
 
 		await this._mailServiceProvider.sendHtml(
 			command.email,
-			"Verification imal",
+			"Verification kurabu",
 			`<b>Your verification code is ${code}</b>`,
-			"verification@imal.ml"
+			"verification@kurabu.moe"
 		);
 
 		return {
