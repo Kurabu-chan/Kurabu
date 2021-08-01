@@ -64,7 +64,7 @@ export class Database {
 		let consoleMessages = "";
 		await (async () => {
 			consoleMessages += "Checking migrations\n";
-			const [results, meta] = await this._sequelize.query("SELECT * FROM \"SequelizeMeta\"", {
+			const [results] = await this._sequelize.query("SELECT * FROM \"SequelizeMeta\"", {
 				raw: true,
 			});
 
