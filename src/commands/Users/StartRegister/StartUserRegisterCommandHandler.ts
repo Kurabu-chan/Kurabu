@@ -20,6 +20,7 @@ import {
 	UserEmailUsedQueryHandler,
 } from "#queries/Users/EmailUsed/UserEmailUsedQueryHandler";
 import { MailServiceProvider } from "#serviceprovs/MailServiceProvider";
+import { EmailType, getEmailAddress } from "#helpers/EmailAdressHelper";
 
 
 @autoInjectable()
@@ -70,7 +71,7 @@ export class StartUserRegisterCommandHandler
 			command.email,
 			"Verification kurabu",
 			`<b>Your verification code is ${code}</b>`,
-			"verification@kurabu.moe"
+			getEmailAddress(EmailType.verification)
 		);
 
 		return {
