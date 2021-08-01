@@ -1,5 +1,5 @@
 import path = require("path");
-import { readdir } from "fs/promises";
+import { readdir } from "fs";
 import {
 	Sequelize,
 	SequelizeOptions,
@@ -72,7 +72,7 @@ export class Database {
 			const presentMigrations: string[] = (results as any[]).map(x => x.name);
 
 			const migrationsPath = path.join(process.cwd(), "./src/database/migrations");
-			const availableMigrations = await readdir(migrationsPath);
+			const availableMigrations = await aReaddir(migrationsPath);
 
 			const diff = DeepDiff.diff(presentMigrations, availableMigrations);
 
@@ -115,4 +115,13 @@ export class Database {
 
 		Logger.Info(consoleMessages);
 	}
+}
+
+function aReaddir(p: string):Promise<string[]> {
+	return new Promise((resolve) => {
+		readdir(p, (err, files) => {
+			if (err) throw err;
+			resolve(files);
+		})
+	});
 }
