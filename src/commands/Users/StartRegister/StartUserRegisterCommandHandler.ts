@@ -70,7 +70,7 @@ export class StartUserRegisterCommandHandler
 			command.email,
 			"Verification kurabu",
 			`<b>Your verification code is ${code}</b>`,
-			"verification@kurabu.ml"
+			"verification@kurabu.moe"
 		);
 
 		return {
