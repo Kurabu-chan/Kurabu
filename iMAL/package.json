@@ -26,6 +26,7 @@
     "expo-updates": "~0.5.4",
     "http": "0.0.1-security",
     "https": "^1.0.0",
+    "moment": "^2.29.1",
     "node": "^14.5.0",
     "react": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
@@ -40,6 +41,7 @@
     "react-native-screens": "~3.0.0",
     "react-native-svg": "12.1.0",
     "react-native-svg-transformer": "^0.14.3",
+    "react-native-timeago": "^0.5.0",
     "react-native-web": "~0.13.12",
     "tslib": "^2.1.0",
     "url": "^0.11.0"
