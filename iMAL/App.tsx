@@ -5,7 +5,7 @@ import AppLoading from "expo-app-loading";
 import * as Linking from "expo-linking";
 import { AppState, AppStateStatus } from "react-native";
 import Authentication from "./src/APIManager/Authenticate";
-import { Config } from "./src/Configuration/Config";
+import { Config } from "./src/config/Config";
 import { NavigationContainer } from "@react-navigation/native";
 import Drawer from "./src/routes/MainDrawer";
 import Auth from "./src/routes/AuthStack";
@@ -94,7 +94,7 @@ export default class Application extends React.Component<any, StateType> {
                             console.log(e);
                         }
                     })
-                    .catch((e) => {});
+                    .catch((e) => { });
             }
         }
     };

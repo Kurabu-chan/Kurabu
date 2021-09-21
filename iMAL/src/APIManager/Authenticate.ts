@@ -1,6 +1,6 @@
 import * as Linking from "expo-linking";
 import { Alert, AsyncStorage } from "react-native";
-import { Config } from "../Configuration/Config";
+import { Config } from "../config/Config";
 import { handleError } from "./ErrorHandler";
 import { isUUID } from "./helper/FormatChecker";
 
