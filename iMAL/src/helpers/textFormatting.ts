@@ -12,7 +12,10 @@ export function niceTextFormat(str: string | undefined): string {
     var upper = true;
     const toUpperCaseChars = ["-", "_"];
     for (const char of str) {
-        if (toUpperCaseChars.includes(char)) upper = true;
+        if (toUpperCaseChars.includes(char)) {
+            upper = true;
+            retStr += " ";
+        }
         else if (upper) {
             retStr += char.toUpperCase();
             upper = false;
