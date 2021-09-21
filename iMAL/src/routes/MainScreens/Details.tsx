@@ -1,5 +1,5 @@
 import React from 'react';
-
+import TimeAgo from "react-native-timeago"
 import { GetMangaDetails } from '#api/Manga/MangaDetails';
 import {
     changeActivePage,
@@ -16,6 +16,7 @@ import {
     StyleSheet,
     Text,
     View,
+    TouchableOpacity
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -29,6 +30,8 @@ import { LargeText } from '#comps/LargeText';
 import MediaItem from '#comps/MediaItem';
 import { Colors } from '#config/Colors';
 import { HomeStackParamList } from '../MainStacks/HomeStack';
+import { niceTextFormat } from '#helpers/textFormatting';
+import { ListStatus } from '#comps/ListStatus';
 
 type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "Details">;
@@ -126,7 +129,7 @@ export default class Details extends React.Component<Props, State> {
         if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
-    NiceString(text: string | undefined) {
+    niceString(text: string | undefined) {
         if (text == undefined) return "";
         text = text.replace("_", " ");
         return text.slice(0, 1).toUpperCase() + text.slice(1, text.length);
@@ -231,7 +234,7 @@ export default class Details extends React.Component<Props, State> {
                                         </View>
                                         <View style={styles.TopAreaValues}>
                                             <Text style={styles.TopAreaValue}>
-                                                {this.NiceString(
+                                                {this.niceString(
                                                     this.state.anime.status
                                                 )}
                                             </Text>
@@ -273,6 +276,12 @@ export default class Details extends React.Component<Props, State> {
                                     />
                                 </View>
                             ) : undefined}
+                            <Text style={styles.head2}>Your list status</Text>
+                            <Divider
+                                color={Colors.DIVIDER}
+                                widthPercentage={100}
+                            />
+                            <ListStatus props={this.state.anime.my_list_status} navigation={this.props.navigation} route={this.props.route} mediaType={this.state.mediaType} />
                             <Divider
                                 color={Colors.DIVIDER}
                                 widthPercentage={0}
@@ -387,5 +396,5 @@ const styles = StyleSheet.create({
     TopAreaValue: {
         color: Colors.TEXT,
         fontSize: 12,
-    },
+    }
 });

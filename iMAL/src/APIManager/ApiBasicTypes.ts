@@ -116,13 +116,24 @@ export type MediaGenre = {
     name: string;
 };
 
-export type ListStatus = {
+export type ListStatus = ListStatusAnime | ListStatusManga
+
+export type ListStatusAnime = {
     status: "watching" | "completed" | "on_hold" | "dropped" | "plan_to_watch";
     score: number;
     num_episodes_watched: number;
     is_rewatching: boolean;
     updated_at: string;
-};
+}
+
+export type ListStatusManga = {
+    status: "reading" | "completed" | "on_hold" | "dropped" | "plan_to_read";
+    score: number;
+    num_volumes_read: number,
+    num_chapters_read: number,
+    is_rereading: boolean;
+    updated_at: string;
+}
 
 export type ListPagination<T> = {
     data: T[];
@@ -134,11 +145,11 @@ export type ListPagination<T> = {
 
 export type RequestResponse<T> = {
     response:
-        | {
-              response: T;
-              tokens: tokenResponse;
-          }
-        | ErrorResponse;
+    | {
+        response: T;
+        tokens: tokenResponse;
+    }
+    | ErrorResponse;
 };
 
 export type MediaNode = {
