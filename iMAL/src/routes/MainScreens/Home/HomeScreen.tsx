@@ -10,6 +10,7 @@ import AnimeSeasonalSource from "#api/Anime/AnimeSeasonal";
 import MediaNodeSource from "#api/MediaNodeSource";
 import MediaList from "#comps/MediaList";
 import { Colors } from "#config/Colors";
+import { getCurrentSeason } from "#helpers/seasonProvider";
 
 type PropsType = {
     navigation: StackNavigationProp<HomeStackParamList, "Home">;
@@ -30,7 +31,7 @@ export default class Home extends React.Component<any, StateType> {
         this.state = {
             node: {
                 key: "Currently Airing",
-                nodeSource: new AnimeSeasonalSource(2021, "spring"),
+                nodeSource: new AnimeSeasonalSource(new Date().getFullYear(), getCurrentSeason()),
             },
             listenerToUnMount: undefined,
         };
