@@ -38,7 +38,7 @@ export function registerRerenderer(func: voidFunction): void {
     backButtonState.rerenderers.push(func);
 }
 
-export function changeBackButton(page: keyof BackButtonFunctionsType, func: voidFunction) {
+export function changeBackButton(page: keyof BackButtonFunctionsType, func: voidFunction | undefined) {
     backButtonState.backButtons[page] = func;
     changeActivePage(page);
 }

@@ -1,7 +1,7 @@
 import { Media } from "../ApiBasicTypes";
 import Authentication from "../Authenticate";
 import { handleError } from "../ErrorHandler";
-import { baseRequest } from "../helper/RequestBuilder";
+import { baseRequest } from "#helpers/RequestBuilder";
 
 export async function GetMangaDetails(mangaid: number): Promise<Media> {
     let auth = await Authentication.getInstance();

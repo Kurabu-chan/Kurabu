@@ -1,7 +1,7 @@
 import React from "react";
 import { Dimensions, View } from "react-native";
 import Kurabu from "../../../assets/pinklogin.svg";
-import Auth from "../../APIManager/Authenticate";
+import Auth from "#api/Authenticate";
 import * as RootNavigator from "../RootNavigator";
 import { DoSwitch } from "../RootNavigator";
 

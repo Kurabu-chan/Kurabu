@@ -1,12 +1,12 @@
-import { changeActivePage } from "#routes/MainDrawer";
+import { changeActivePage } from "#helpers/backButton";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import AnimeSuggestionsSource from "../../APIManager/Anime/AnimeSuggestions";
-import MediaNodeSource from "../../APIManager/MediaNodeSource";
-import MediaList from "../../components/MediaList";
-import { Colors } from "../../config/Colors";
+import AnimeSuggestionsSource from "#api/Anime/AnimeSuggestions";
+import MediaNodeSource from "#api/MediaNodeSource";
+import MediaList from "#comps/MediaList";
+import { Colors } from "#config/Colors";
 
 type StateType = {
     node: {

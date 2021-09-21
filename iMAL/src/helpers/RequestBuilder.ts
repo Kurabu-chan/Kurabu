@@ -1,5 +1,5 @@
 import fetch, { BodyInit, HeadersInit, Response } from "node-fetch";
-import { Config } from "../../config/Config";
+import { Config } from "#config/Config";
 
 export type RequestBuilderBuildType = {
     url: string;

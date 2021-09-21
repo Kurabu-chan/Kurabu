@@ -1,7 +1,7 @@
 import { Fields, MediaNode } from "../ApiBasicTypes";
 import Authentication from "../Authenticate";
 import { handleError } from "../ErrorHandler";
-import { baseRequest } from "../helper/RequestBuilder";
+import { baseRequest } from "#helpers/RequestBuilder";
 import MediaNodeSource from "../MediaNodeSource";
 
 type JSONType = {
@@ -70,7 +70,7 @@ class AnimeSuggestionsSource implements MediaNodeSource {
                 console.log(json);
                 throw json;
             }
-        } catch (e) {}
+        } catch (e) { }
 
         return {
             data: [],

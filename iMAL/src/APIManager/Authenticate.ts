@@ -1,8 +1,8 @@
 import * as Linking from "expo-linking";
 import { Alert, AsyncStorage } from "react-native";
-import { Config } from "../config/Config";
+import { Config } from "#config/Config";
 import { handleError } from "./ErrorHandler";
-import { isUUID } from "./helper/FormatChecker";
+import { isUUID } from "#helpers/FormatChecker";
 
 type JsonType = {
     status: "success" | "error";

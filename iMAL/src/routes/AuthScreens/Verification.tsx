@@ -12,8 +12,8 @@ import {
 import { CodeField, Cursor } from "react-native-confirmation-code-field";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Authentication from "../../APIManager/Authenticate";
-import { Colors } from "../../config/Colors";
+import Authentication from "#api/Authenticate";
+import { Colors } from "#config/Colors";
 import { AuthStackParamList } from "../AuthStack";
 import * as RootNavigator from "../RootNavigator";
 

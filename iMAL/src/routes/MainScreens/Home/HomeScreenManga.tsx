@@ -1,5 +1,5 @@
 import { MangaRankingSource } from "#api/Manga/MangaRanking";
-import { changeActivePage } from "#routes/MainDrawer";
+import { changeActivePage } from "#helpers/backButton";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -7,7 +7,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import MediaNodeSource from "../../../APIManager/MediaNodeSource";
+import MediaNodeSource from "#api/MediaNodeSource";
 import MediaList from "../../../components/MediaList";
 import { Colors } from "../../../config/Colors";
 

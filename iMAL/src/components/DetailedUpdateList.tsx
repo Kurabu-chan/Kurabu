@@ -8,9 +8,9 @@ import {
     Text,
     View,
 } from "react-native";
-import { MediaNode } from "../APIManager/ApiBasicTypes";
-import MediaNodeSource from "../APIManager/MediaNodeSource";
-import { Colors } from "../config/Colors";
+import { MediaNode } from "#api/ApiBasicTypes";
+import MediaNodeSource from "#api/MediaNodeSource";
+import { Colors } from "#config/Colors";
 import DetailedUpdateItem from "./DetailedUpdateItem";
 
 const BatchSize = 20;

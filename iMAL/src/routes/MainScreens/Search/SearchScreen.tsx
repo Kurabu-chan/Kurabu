@@ -4,11 +4,11 @@ import React from "react";
 import { Dimensions } from "react-native";
 import SearchBar from "react-native-dynamic-search-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { AnimeSearchSource } from "../../../APIManager/Anime/AnimeSearch";
-import MediaNodeSource from "../../../APIManager/MediaNodeSource";
-import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
-import SearchList from "../../../components/DetailedUpdateList";
-import { Colors } from "../../../config/Colors";
+import { AnimeSearchSource } from "#api/Anime/AnimeSearch";
+import MediaNodeSource from "#api/MediaNodeSource";
+import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
+import SearchList from "#comps/DetailedUpdateList";
+import { Colors } from "#config/Colors";
 
 type StateType = {
     search: {

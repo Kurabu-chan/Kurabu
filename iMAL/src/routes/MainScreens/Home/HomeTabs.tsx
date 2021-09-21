@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { Icon } from "react-native-elements";
-import { Colors } from "../../../config/Colors";
+import { Colors } from "#config/Colors";
 import Anime from "./HomeScreen";
 import Manga from "./HomeScreenManga";
 

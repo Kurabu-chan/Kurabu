@@ -3,9 +3,9 @@ import React from 'react';
 import { GetMangaDetails } from '#api/Manga/MangaDetails';
 import {
     changeActivePage,
-    changeTopRightButton,
-    getActiveScreen,
-} from '#routes/MainDrawer';
+    changeBackButton,
+    getActivePage,
+} from '#helpers/backButton';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
     ActivityIndicator,
@@ -22,12 +22,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-import { GetAnimeDetails } from '../../APIManager/Anime/AnimeDetails';
-import { Media } from '../../APIManager/ApiBasicTypes';
-import { Divider } from '../../components/Divider';
-import { LargeText } from '../../components/LargeText';
-import MediaItem from '../../components/MediaItem';
-import { Colors } from '../../config/Colors';
+import { GetAnimeDetails } from '#api/Anime/AnimeDetails';
+import { Media } from '#api/ApiBasicTypes';
+import { Divider } from '#comps/Divider';
+import { LargeText } from '#comps/LargeText';
+import MediaItem from '#comps/MediaItem';
+import { Colors } from '#config/Colors';
 import { HomeStackParamList } from '../MainStacks/HomeStack';
 
 type Props = {
@@ -63,7 +63,7 @@ export default class Details extends React.Component<Props, State> {
         this.state = {
             mediaId: mediaId,
             listenerToUnMount: undefined,
-            page: getActiveScreen(),
+            page: getActivePage(),
             mediaType: mediaType,
         };
 
@@ -105,9 +105,9 @@ export default class Details extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        changeTopRightButton(this.state.page as any, () => {
+        changeBackButton(this.state.page as any, () => {
             this.props.navigation.popToTop();
-            changeTopRightButton(this.state.page as any, undefined);
+            changeBackButton(this.state.page as any, undefined);
         });
 
         const unsubscribe = this.props.navigation.addListener("focus", () => {

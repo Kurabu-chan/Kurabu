@@ -1,15 +1,15 @@
 import { AnimeRankingSource } from "#api/Anime/AnimeRanking";
-import { changeActivePage } from "#routes/MainDrawer";
+import { changeActivePage } from "#helpers/backButton";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import MediaNodeSource from "../../../APIManager/MediaNodeSource";
-import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
-import SearchList from "../../../components/DetailedUpdateList";
-import { Colors } from "../../../config/Colors";
+import MediaNodeSource from "#api/MediaNodeSource";
+import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
+import SearchList from "#comps/DetailedUpdateList";
+import { Colors } from "#config/Colors";
 
 type StateType = {
     ranking: {

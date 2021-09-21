@@ -4,17 +4,17 @@ import React from "react";
 import AppLoading from "expo-app-loading";
 import * as Linking from "expo-linking";
 import { AppState, AppStateStatus } from "react-native";
-import Authentication from "./src/APIManager/Authenticate";
-import { Config } from "./src/config/Config";
+import Authentication from "#api/Authenticate";
+import { Config } from "#config/Config";
 import { NavigationContainer } from "@react-navigation/native";
-import Drawer from "./src/routes/MainDrawer";
-import Auth from "./src/routes/AuthStack";
+import Drawer from "#routes/MainDrawer";
+import Auth from "#routes/AuthStack";
 import {
     DoSwitch,
     navigationRef,
     navigationRefReady,
-} from "./src/routes/RootNavigator";
-import { registerSwitchListener } from "./src/routes/RootNavigator";
+} from "#routes/RootNavigator";
+import { registerSwitchListener } from "#routes/RootNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 type StateType = {

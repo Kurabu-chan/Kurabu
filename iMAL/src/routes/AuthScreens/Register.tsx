@@ -5,9 +5,9 @@ import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Kurabu from "../../../assets/pinkregister.svg";
-import Auth from "../../APIManager/Authenticate";
-import PasswordStrength from "../../components/PasswordStrength";
-import { Colors } from "../../config/Colors";
+import Auth from "#api/Authenticate";
+import PasswordStrength from "#comps/PasswordStrength";
+import { Colors } from "#config/Colors";
 import { AuthStackParamList } from "../AuthStack";
 
 type RegisterProps = {

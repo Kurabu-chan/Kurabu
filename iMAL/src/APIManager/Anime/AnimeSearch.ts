@@ -1,7 +1,7 @@
 import { Fields, ListPagination, MediaNode } from "../ApiBasicTypes";
 import Authentication from "../Authenticate";
 import { handleError } from "../ErrorHandler";
-import { baseRequest } from "../helper/RequestBuilder";
+import { baseRequest } from "#helpers/RequestBuilder";
 import MediaNodeSource from "../MediaNodeSource";
 
 export class AnimeSearchSource implements MediaNodeSource {

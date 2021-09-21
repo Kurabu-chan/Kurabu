@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Queue } from "../helpers/Queue";
+import { Queue } from "#helpers/Queue";
 
 export const navigationRef = React.createRef<any>();
 var ready = false;

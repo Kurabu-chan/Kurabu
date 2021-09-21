@@ -1,15 +1,15 @@
 import AnimeSeasonalSource from "#api/Anime/AnimeSeasonal";
-import { changeActivePage } from "#routes/MainDrawer";
+import { changeActivePage } from "#helpers/backButton";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import MediaNodeSource from "../../APIManager/MediaNodeSource";
-import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
-import DetailedUpdateList from "../../components/DetailedUpdateList";
-import { Colors } from "../../config/Colors";
+import MediaNodeSource from "#api/MediaNodeSource";
+import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
+import DetailedUpdateList from "#comps/DetailedUpdateList";
+import { Colors } from "#config/Colors";
 
 type StateType = {
     seasonal: {

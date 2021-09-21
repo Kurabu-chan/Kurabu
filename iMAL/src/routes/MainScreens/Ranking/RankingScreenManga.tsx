@@ -6,10 +6,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import MediaNodeSource from "../../../APIManager/MediaNodeSource";
-import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
-import SearchList from "../../../components/DetailedUpdateList";
-import { Colors } from "../../../config/Colors";
+import MediaNodeSource from "#api/MediaNodeSource";
+import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
+import SearchList from "#comps/DetailedUpdateList";
+import { Colors } from "#config/Colors";
 
 type StateType = {
     ranking: {
