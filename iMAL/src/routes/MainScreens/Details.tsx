@@ -2,20 +2,20 @@ import React from 'react';
 
 import { GetMangaDetails } from '#api/Manga/MangaDetails';
 import {
-  changeActivePage,
-  changeTopRightButton,
-  getActiveScreen,
+    changeActivePage,
+    changeTopRightButton,
+    getActiveScreen,
 } from '#routes/MainDrawer';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
-  ActivityIndicator,
-  Dimensions,
-  FlatList,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
+    ActivityIndicator,
+    Dimensions,
+    FlatList,
+    Image,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    View,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -27,7 +27,7 @@ import { Media } from '../../APIManager/ApiBasicTypes';
 import { Divider } from '../../components/Divider';
 import { LargeText } from '../../components/LargeText';
 import MediaItem from '../../components/MediaItem';
-import { Colors } from '../../Configuration/Colors';
+import { Colors } from '../../config/Colors';
 import { HomeStackParamList } from '../MainStacks/HomeStack';
 
 type Props = {
@@ -168,7 +168,7 @@ export default class Details extends React.Component<Props, State> {
                                         {this.state.anime.title}
                                     </Text>
                                     {this.state.anime.title !=
-                                    this.state.anime.alternative_titles?.en ? (
+                                        this.state.anime.alternative_titles?.en ? (
                                         <Text style={styles.alternateTitle}>
                                             {
                                                 this.state.anime
@@ -243,7 +243,7 @@ export default class Details extends React.Component<Props, State> {
                                                     .num_episodes == 0
                                                     ? "N/A"
                                                     : this.state.anime
-                                                          .num_episodes}
+                                                        .num_episodes}
                                             </Text>
                                             <Text style={styles.TopAreaValue}>
                                                 {this.state.anime.genres
@@ -261,7 +261,7 @@ export default class Details extends React.Component<Props, State> {
                             />
                             <LargeText text={this.state.anime.synopsis} />
                             {this.state.anime.background != undefined &&
-                            this.state.anime.background != "" ? (
+                                this.state.anime.background != "" ? (
                                 <View>
                                     <Text style={styles.head2}>Background</Text>
                                     <Divider

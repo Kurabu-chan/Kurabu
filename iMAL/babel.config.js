@@ -10,6 +10,8 @@ module.exports = function (api) {
                         "#api": "./src/APIManager",
                         "#routes": "./src/routes",
                         "#comps": "./src/components",
+                        "#helpers": "./src/helpers",
+                        "#config": "./src/config"
                     },
                 },
             ],

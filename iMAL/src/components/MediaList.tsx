@@ -3,7 +3,7 @@ import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { MediaNode } from "../APIManager/ApiBasicTypes";
 import MediaNodeSource from "../APIManager/MediaNodeSource";
-import { Colors } from "../Configuration/Colors";
+import { Colors } from "../config/Colors";
 import MediaItem from "./MediaItem";
 
 type MediaListState = {

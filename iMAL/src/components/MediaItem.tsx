@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { MediaNode } from "../APIManager/ApiBasicTypes";
-import { Colors } from "../Configuration/Colors";
+import { Colors } from "../config/Colors";
 
 type MediaItemProps = {
     item: MediaNode;

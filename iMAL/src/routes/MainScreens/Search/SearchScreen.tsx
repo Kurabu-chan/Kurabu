@@ -1,4 +1,4 @@
-import { changeActivePage } from "#routes/MainDrawer";
+import { changeActivePage } from "#helpers/backButton";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions } from "react-native";
@@ -8,7 +8,7 @@ import { AnimeSearchSource } from "../../../APIManager/Anime/AnimeSearch";
 import MediaNodeSource from "../../../APIManager/MediaNodeSource";
 import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
 import SearchList from "../../../components/DetailedUpdateList";
-import { Colors } from "../../../Configuration/Colors";
+import { Colors } from "../../../config/Colors";
 
 type StateType = {
     search: {

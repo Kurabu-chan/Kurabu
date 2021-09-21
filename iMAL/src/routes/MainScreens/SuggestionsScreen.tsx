@@ -6,7 +6,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import AnimeSuggestionsSource from "../../APIManager/Anime/AnimeSuggestions";
 import MediaNodeSource from "../../APIManager/MediaNodeSource";
 import MediaList from "../../components/MediaList";
-import { Colors } from "../../Configuration/Colors";
+import { Colors } from "../../config/Colors";
 
 type StateType = {
     node: {

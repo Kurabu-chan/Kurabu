@@ -8,10 +8,13 @@
         "skipLibCheck": true,
         "resolveJsonModule": true,
         "strict": true,
+        "baseUrl": ".",
         "paths": {
             "#api/*": ["./src/APIManager/*"],
             "#routes/*": ["./src/routes/*"],
-            "#comps/*": ["./src/components/*"]
+            "#comps/*": ["./src/components/*"],
+            "#helpers/*": ["./src/helpers/*"],
+            "#config/*": ["./src/config/*"]
         }
     },
     "extends": "expo/tsconfig.base"

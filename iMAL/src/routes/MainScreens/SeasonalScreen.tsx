@@ -9,7 +9,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import MediaNodeSource from "../../APIManager/MediaNodeSource";
 import { DetailedUpdateItemFields } from "../../components/DetailedUpdateItem";
 import DetailedUpdateList from "../../components/DetailedUpdateList";
-import { Colors } from "../../Configuration/Colors";
+import { Colors } from "../../config/Colors";
 
 type StateType = {
     seasonal: {
@@ -80,8 +80,7 @@ export default class Seasonal extends React.Component<any, StateType> {
         if (this.state.animeList) {
             console.log(this.state.seasonal.seasonValue);
             this.state.animeList.changeSource(
-                `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${
-                    this.state.seasonal.yearValue
+                `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${this.state.seasonal.yearValue
                 }`,
                 nodeSource
             );
@@ -96,13 +95,13 @@ export default class Seasonal extends React.Component<any, StateType> {
 
         this.setState(
             (prevState) =>
-                ({
-                    ...prevState,
-                    seasonal: {
-                        ...prevState.seasonal,
-                        seasonValue: val.toString(),
-                    },
-                } as StateType),
+            ({
+                ...prevState,
+                seasonal: {
+                    ...prevState.seasonal,
+                    seasonValue: val.toString(),
+                },
+            } as StateType),
             this.DoSeasonal.bind(this)
         );
     }
@@ -115,13 +114,13 @@ export default class Seasonal extends React.Component<any, StateType> {
 
         this.setState(
             (prevState) =>
-                ({
-                    ...prevState,
-                    seasonal: {
-                        ...prevState.seasonal,
-                        yearValue: year,
-                    },
-                } as StateType),
+            ({
+                ...prevState,
+                seasonal: {
+                    ...prevState.seasonal,
+                    yearValue: year,
+                },
+            } as StateType),
             this.DoSeasonal.bind(this)
         );
     }

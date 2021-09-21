@@ -6,7 +6,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Kurabu from "../../../assets/pinklogin.svg";
 import Auth from "../../APIManager/Authenticate";
-import { Colors } from "../../Configuration/Colors";
+import { Colors } from "../../config/Colors";
 import { AuthStackParamList } from "../AuthStack";
 import { DoSwitch } from "../RootNavigator";
 

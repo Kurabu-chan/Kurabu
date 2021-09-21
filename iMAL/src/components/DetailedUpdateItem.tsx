@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { Fields, MediaNode } from "../APIManager/ApiBasicTypes";
-import { Colors } from "../Configuration/Colors";
+import { Colors } from "../config/Colors";
 import { Divider } from "./Divider";
 
 type DetailedUpdateItemProps = {

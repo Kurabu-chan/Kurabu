@@ -9,7 +9,7 @@ import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import MediaNodeSource from "../../../APIManager/MediaNodeSource";
 import MediaList from "../../../components/MediaList";
-import { Colors } from "../../../Configuration/Colors";
+import { Colors } from "../../../config/Colors";
 
 type PropsType = {
     navigation: StackNavigationProp<HomeStackParamList, "Home">;

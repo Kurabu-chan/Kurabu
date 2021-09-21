@@ -1,5 +1,5 @@
 import { MangaRankingSource } from "#api/Manga/MangaRanking";
-import { changeActivePage } from "#routes/MainDrawer";
+import { changeActivePage } from "#helpers/backButton";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { LinearGradient } from "expo-linear-gradient";
@@ -9,7 +9,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import MediaNodeSource from "../../../APIManager/MediaNodeSource";
 import { DetailedUpdateItemFields } from "../../../components/DetailedUpdateItem";
 import SearchList from "../../../components/DetailedUpdateList";
-import { Colors } from "../../../Configuration/Colors";
+import { Colors } from "../../../config/Colors";
 
 type StateType = {
     ranking: {
@@ -93,8 +93,7 @@ export default class Ranking extends React.Component<any, StateType> {
 
             console.log(this.state.ranking.rankingValue);
             this.state.animeList.changeSource(
-                `Top ${
-                    goodNamingMapping[this.state.ranking.rankingValue]
+                `Top ${goodNamingMapping[this.state.ranking.rankingValue]
                 } Rankings Manga`,
                 nodeSource
             );
@@ -104,13 +103,13 @@ export default class Ranking extends React.Component<any, StateType> {
     changeRanking(val: ItemValue, index: number) {
         this.setState(
             (prevState) =>
-                ({
-                    ...prevState,
-                    ranking: {
-                        ...prevState.ranking,
-                        rankingValue: val.toString(),
-                    },
-                } as StateType),
+            ({
+                ...prevState,
+                ranking: {
+                    ...prevState.ranking,
+                    rankingValue: val.toString(),
+                },
+            } as StateType),
             this.DoRanking.bind(this)
         );
     }

@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Kurabu from "../../../assets/pinkregister.svg";
 import Auth from "../../APIManager/Authenticate";
 import PasswordStrength from "../../components/PasswordStrength";
-import { Colors } from "../../Configuration/Colors";
+import { Colors } from "../../config/Colors";
 import { AuthStackParamList } from "../AuthStack";
 
 type RegisterProps = {

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { MediaNode } from "../APIManager/ApiBasicTypes";
 import MediaNodeSource from "../APIManager/MediaNodeSource";
-import { Colors } from "../Configuration/Colors";
+import { Colors } from "../config/Colors";
 import DetailedUpdateItem from "./DetailedUpdateItem";
 
 const BatchSize = 20;
