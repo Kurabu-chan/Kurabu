@@ -130,3 +130,6 @@ docs/pages/versions/*/react-native/*.diff
 /home/dist
 iMAL/config.json
 iMAL/.vscode/launch.json
+iMAL/.vscode/.react/AppEntry.map
+iMAL/.vscode/.react/debuggerWorker.js
+iMAL/.vscode/.react/node_modules%5Cexpo%5CAppEntry.bundle
