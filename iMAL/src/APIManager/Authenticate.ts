@@ -1,8 +1,9 @@
 import * as Linking from "expo-linking";
 import { Alert, AsyncStorage } from "react-native";
 import { Config } from "#config/Config";
-import { handleError } from "./ErrorHandler";
+import { handleError, listenError } from "./ErrorHandler";
 import { isUUID } from "#helpers/FormatChecker";
+import * as Updates from "expo-updates";
 
 type JsonType = {
     status: "success" | "error";
@@ -19,6 +20,11 @@ class Authentication {
 
     private constructor() {
         console.log("Starting Authenticator...");
+
+        listenError("023", () => {
+            Authentication.ClearAsync();
+            Updates.reloadAsync();
+        })
 
         if (this.stateCode) {
             this.loaded = true;

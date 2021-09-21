@@ -1,18 +1,24 @@
-import * as Updates from "expo-updates";
-import Auth from "./Authenticate";
+type Listeners = {
+    [code: string]: (() => void)[] | undefined
+}
+
+let listeners: Listeners = {}
+
+export function listenError(code: string, func: () => void) {
+    if (listeners[code] === undefined) listeners[code] = []
+
+    listeners[code]?.push(func);
+}
 
 export function handleError(jsonRes: any) {
     if (jsonRes.status !== "error") return;
     if (jsonRes.code === undefined)
         throw new Error("error result did not have a code!");
 
-    switch (jsonRes.code) {
-        case "023":
-            //user didn't exist clear the cache and restart the app after a dialog box or something similar
-            Auth.ClearAsync();
-            Updates.reloadAsync();
-            return;
-        default:
-            console.log(JSON.stringify(jsonRes));
+    if (listeners[jsonRes.code] !== undefined) {
+        listeners[jsonRes]?.forEach(x => x());
+        return;
+    } else {
+        console.log(JSON.stringify(jsonRes));
     }
 }
