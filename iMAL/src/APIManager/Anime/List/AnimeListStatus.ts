@@ -14,7 +14,7 @@ export async function GetAnimeListStatus(animeid: number): Promise<UpdateListSta
     var detailsReq = baseRequest()
         .addPath("anime")
         .addPath("details")
-        .setQueryParam("fields", "id, title, main_picture, alternative_titles, my_list_status{status, comments, is_rewatching, num_times_rewatched, num_episodes_watched, priority, rewatch_value, score, tags}")
+        .setQueryParam("fields", "id, title, main_picture, alternative_titles, my_list_status{status, comments, is_rewatching, num_times_rewatched, num_watched_episodes, priority, rewatch_value, score, tags}")
         .setQueryParam("state", code)
         .setQueryParam("animeid", animeid.toString());
 

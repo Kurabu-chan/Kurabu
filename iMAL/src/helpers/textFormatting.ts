@@ -5,7 +5,7 @@ export function niceDateFormat(date: Date): string {
     return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
 }
 
-export function niceTextFormat(str: string | undefined): string {
+export function niceTextFormat(str: string | undefined, sentenceCase: boolean = false): string {
     if (str === undefined) return "";
 
     var retStr = "";
@@ -13,7 +13,7 @@ export function niceTextFormat(str: string | undefined): string {
     const toUpperCaseChars = ["-", "_"];
     for (const char of str) {
         if (toUpperCaseChars.includes(char)) {
-            upper = true;
+            if (sentenceCase) upper = true;
             retStr += " ";
         }
         else if (upper) {

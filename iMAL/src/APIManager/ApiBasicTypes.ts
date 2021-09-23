@@ -171,7 +171,7 @@ export type UpdateListStatusResult = UpdateListStatusResultAnime | UpdateListSta
 export type UpdateListStatusResultAnime = {
     status: "watching" | "completed" | "on_hold" | "dropped" | "plan_to_watch";
     score: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-    num_watched_episodes: number;
+    num_episodes_watched: number;
     is_rewatching: boolean;
     updated_at: Date;
     priority: 0 | 1 | 2;
