@@ -165,3 +165,32 @@ export type Studio = {
     id: number;
     name: string;
 };
+
+export type UpdateListStatusResult = UpdateListStatusResultAnime | UpdateListStatusResultManga;
+
+export type UpdateListStatusResultAnime = {
+    status: "watching" | "completed" | "on_hold" | "dropped" | "plan_to_watch";
+    score: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+    num_watched_episodes: number;
+    is_rewatching: boolean;
+    updated_at: Date;
+    priority: 0 | 1 | 2;
+    num_times_rewatched: number;
+    rewatch_value: 0 | 1 | 2 | 3 | 4 | 5;
+    tags: any[];
+    comments: string;
+}
+
+export type UpdateListStatusResultManga = {
+    status: "reading" | "completed" | "on_hold" | "dropped" | "plan_to_read";
+    score: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+    num_volumes_read: number,
+    num_chapters_read: number,
+    is_rereading: boolean;
+    updated_at: Date;
+    priority: 0 | 1 | 2;
+    num_times_reread: number;
+    reread_value: 0 | 1 | 2 | 3 | 4 | 5;
+    tags: any[];
+    comments: string;
+}

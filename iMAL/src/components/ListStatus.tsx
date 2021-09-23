@@ -8,12 +8,16 @@ import TimeAgo from "react-native-timeago"
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
+import { AnimeAddToList } from "#api/Anime/List/AnimeAddToList";
+import { MangaAddToList } from "#api/Manga/List/MangaAddToList";
 
 type Props = {
-    navigation: StackNavigationProp<HomeStackParamList, "Details">;
-    route: RouteProp<HomeStackParamList, "Details">;
+    navigation: StackNavigationProp<HomeStackParamList, "DetailsScreen">;
+    route: RouteProp<HomeStackParamList, "DetailsScreen">;
     props?: ListStatusProps;
-    mediaType: string
+    mediaType: string;
+    id: number;
+    parentRefresh: () => void;
 };
 
 type State = {
@@ -40,7 +44,20 @@ export class ListStatus extends React.PureComponent<Props, State> {
     }
 
     showListStatus() {
-        this.props.navigation.pop();
+        this.props.navigation.push("ListDetailsScreen", {
+            id: this.props.id,
+            media_type: this.props.mediaType
+        });
+    }
+
+    async addToList() {
+        let success = false;
+        if (this.state.isAnime == true) {
+            success = await AnimeAddToList(this.props.id) !== undefined;
+        } else {
+            success = await MangaAddToList(this.props.id) !== undefined;
+        }
+        if (success) this.props.parentRefresh();
     }
 
     renderAnime(props: ListStatusAnime) {
@@ -144,13 +161,24 @@ export class ListStatus extends React.PureComponent<Props, State> {
     }
 
     showListStatusButton() {
-        return (<TouchableOpacity style={styles.listStatusEdit} onPress={() => {
-            this.showListStatus();
-        }}>
-            <Text style={{
-                alignSelf: "center"
-            }}>Details</Text>
-        </TouchableOpacity>);
+        if (this.props.props == undefined) {
+            return (<TouchableOpacity style={styles.listStatusEdit} onPress={async () => {
+                await this.addToList();
+            }}>
+                <Text style={{
+                    alignSelf: "center"
+                }}>Add to list</Text>
+            </TouchableOpacity>);
+        } else {
+            return (<TouchableOpacity style={styles.listStatusEdit} onPress={() => {
+                this.showListStatus();
+            }}>
+                <Text style={{
+                    alignSelf: "center"
+                }}>Details</Text>
+            </TouchableOpacity>);
+        }
+
     }
 }
 

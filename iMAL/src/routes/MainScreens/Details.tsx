@@ -34,8 +34,8 @@ import { niceTextFormat } from '#helpers/textFormatting';
 import { ListStatus } from '#comps/ListStatus';
 
 type Props = {
-    navigation: StackNavigationProp<HomeStackParamList, "Details">;
-    route: RouteProp<HomeStackParamList, "Details">;
+    navigation: StackNavigationProp<HomeStackParamList, "DetailsScreen">;
+    route: RouteProp<HomeStackParamList, "DetailsScreen">;
 };
 
 type State = {
@@ -49,12 +49,6 @@ type State = {
 var sizer = Dimensions.get("window").width / 400;
 
 export default class Details extends React.Component<Props, State> {
-    private styles = StyleSheet.create({
-        appContainer: {
-            backgroundColor: Colors.INVISIBLE_BACKGROUND,
-        },
-    });
-
     constructor(props: Props) {
         super(props);
         let mediaId = props.route.params.id;
@@ -70,6 +64,12 @@ export default class Details extends React.Component<Props, State> {
             mediaType: mediaType,
         };
 
+        this.refresh();
+    }
+
+    refresh() {
+        if (this.state.mediaId === undefined) return;
+
         const mangaMediatTypes = [
             "manga",
             "light_novel",
@@ -80,11 +80,11 @@ export default class Details extends React.Component<Props, State> {
             "novel",
         ];
 
-        if (mangaMediatTypes.includes(mediaType)) {
-            GetMangaDetails(mediaId)
+        if (mangaMediatTypes.includes(this.state.mediaType)) {
+            GetMangaDetails(this.state.mediaId)
                 .then((res) => {
                     this.setState({
-                        mediaId: mediaId,
+                        mediaId: this.state.mediaId,
                         anime: res,
                     });
                 })
@@ -93,10 +93,10 @@ export default class Details extends React.Component<Props, State> {
                     console.log(err);
                 });
         } else {
-            GetAnimeDetails(mediaId)
+            GetAnimeDetails(this.state.mediaId)
                 .then((res) => {
                     this.setState({
-                        mediaId: mediaId,
+                        mediaId: this.state.mediaId,
                         anime: res,
                     });
                 })
@@ -137,7 +137,7 @@ export default class Details extends React.Component<Props, State> {
 
     render() {
         return (
-            <SafeAreaView style={this.styles.appContainer}>
+            <SafeAreaView style={styles.appContainer}>
                 <LinearGradient
                     // Background Linear Gradient
                     colors={[
@@ -276,12 +276,16 @@ export default class Details extends React.Component<Props, State> {
                                     />
                                 </View>
                             ) : undefined}
+                            <Divider
+                                color={Colors.DIVIDER}
+                                widthPercentage={0}
+                            />
                             <Text style={styles.head2}>Your list status</Text>
                             <Divider
                                 color={Colors.DIVIDER}
                                 widthPercentage={100}
                             />
-                            <ListStatus props={this.state.anime.my_list_status} navigation={this.props.navigation} route={this.props.route} mediaType={this.state.mediaType} />
+                            <ListStatus parentRefresh={this.refresh.bind(this)} id={this.state.mediaId as number} props={this.state.anime.my_list_status} navigation={this.props.navigation} route={this.props.route} mediaType={this.state.mediaType} />
                             <Divider
                                 color={Colors.DIVIDER}
                                 widthPercentage={0}
@@ -332,6 +336,9 @@ export default class Details extends React.Component<Props, State> {
 var fontSize = Dimensions.get("window").width / 36;
 
 const styles = StyleSheet.create({
+    appContainer: {
+        backgroundColor: Colors.INVISIBLE_BACKGROUND,
+    },
     loading: {
         marginTop: Dimensions.get("window").height / 2,
     },
