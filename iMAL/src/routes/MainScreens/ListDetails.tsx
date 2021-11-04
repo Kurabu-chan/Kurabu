@@ -1,45 +1,53 @@
 import { GetAnimeListStatus } from "#api/Anime/List/AnimeListStatus";
-import { ListStatus, UpdateListStatusResult, UpdateListStatusResultAnime, UpdateListStatusResultManga } from "#api/ApiBasicTypes";
+import { AnimeUpdateList } from "#api/Anime/List/AnimeUpdateList";
+import { UpdateListStatusResult, UpdateListStatusResultAnime, UpdateListStatusResultManga } from "#api/ApiBasicTypes";
 import { GetMangaListStatus } from "#api/Manga/List/MangaListStatus";
-import { Divider } from "#comps/Divider";
-import MediaItem from "#comps/MediaItem";
+import { MangaUpdateList } from "#api/Manga/List/MangaUpdateList";
 import { Colors } from "#config/Colors";
 import { changeActivePage, changeBackButton, getActivePage } from "#helpers/backButton";
+import { ListDetailsStateManager } from "#helpers/Screens/Main/ListDetails/StateManager";
 import { niceTextFormat } from "#helpers/textFormatting";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
+import { Picker } from "@react-native-community/picker";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, SafeAreaView, ScrollView, View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
+import { TextInput } from "react-native-gesture-handler";
 import TimeAgo from "react-native-timeago";
 
-type Props = {
+export type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "ListDetailsScreen">;
     route: RouteProp<HomeStackParamList, "ListDetailsScreen">;
 };
 
-type State = {
+export type State = {
     mediaId: number;
-    listStatus?: UpdateListStatusResult;
+    listStatus?: Partial<UpdateListStatusResult>
     listenerToUnMount: any;
     page: string;
     mediaType: string;
     isAnime: boolean;
     isEditing: boolean;
+    before?: Partial<UpdateListStatusResult>
 };
 
 
 var sizer = Dimensions.get("window").width / 400;
 
 export class ListDetails extends React.PureComponent<Props, State> {
+    private stateManager: ListDetailsStateManager;
     constructor(props: Props) {
         super(props);
+        this.stateManager = new ListDetailsStateManager(this);
+
         let mediaId = props.route.params.id;
         let mediaType = props.route.params.media_type;
         if (mediaId == undefined) {
             mediaId = 1;
         }
+
         console.log(`${mediaType} ${mediaId}`);
 
 
@@ -59,7 +67,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
             page: getActivePage(),
             mediaType: mediaType,
             isAnime: isAnime,
-            isEditing: false
+            isEditing: false,
         };
 
         this.refresh();
@@ -70,10 +78,15 @@ export class ListDetails extends React.PureComponent<Props, State> {
         if (!this.state.isAnime) {
             GetMangaListStatus(this.state.mediaId)
                 .then((res) => {
+                    if (res === undefined) {
+                        this.props.navigation.pop();
+                        return;
+                    }
                     this.setState({
                         mediaId: this.state.mediaId,
                         listStatus: res,
-                        isEditing: false
+                        isEditing: false,
+                        before: res
                     });
                 })
                 .catch((err) => {
@@ -83,10 +96,15 @@ export class ListDetails extends React.PureComponent<Props, State> {
         } else {
             GetAnimeListStatus(this.state.mediaId)
                 .then((res) => {
+                    if (res === undefined) {
+                        this.props.navigation.pop();
+                        return;
+                    }
                     this.setState({
                         mediaId: this.state.mediaId,
                         listStatus: res,
-                        isEditing: false
+                        isEditing: false,
+                        before: res
                     });
                 })
                 .catch((err) => {
@@ -119,283 +137,232 @@ export class ListDetails extends React.PureComponent<Props, State> {
     }
 
     renderAnime(listStatus: UpdateListStatusResultAnime) {
-        return (<View style={styles.Table}>
-            <View style={styles.Labels}>
-                <Text style={styles.Label}>
-                    Status:
-                </Text>
-                <Text style={styles.Label}>
-                    Watched episodes:
-                </Text>
-                <Text style={styles.Label}>
-                    Score:
-                </Text>
-                <Text style={styles.Label}>
-                    Priority:
-                </Text>
-
-                <Text style={styles.Label}>
-
-                </Text>
-
-                <Text style={styles.Label}>
-                    Rewatching:
-                </Text>
-                <Text style={styles.Label}>
-                    Num times rewatched:
-                </Text>
-                <Text style={styles.Label}>
-                    Rewatch value:
-                </Text>
-
-                <Text style={styles.Label}>
-
-                </Text>
-
-                <Text style={styles.Label}>
-                    Comments:
-                </Text>
-                <Text style={styles.Label}>
-                    Tags:
-                </Text>
-
-                <Text style={styles.Label}>
-
-                </Text>
-
-                <Text style={styles.Label}>
-                    Updated:
-                </Text>
-            </View>
-            {this.state.isEditing == true ? this.animeEditing(listStatus) : this.animeDisplay(listStatus)}
-        </View>)
+        if (this.state.isEditing) return this.animeEditing(listStatus);
+        else return this.animeDisplay(listStatus)
     }
 
     renderManga(listStatus: UpdateListStatusResultManga) {
-        return (<View style={styles.Table}>
-            <View style={styles.Labels}>
-                <Text style={styles.Label}>
-                    Status:
-                </Text>
-                <Text style={styles.Label}>
-                    Chapters read:
-                </Text>
-                <Text style={styles.Label}>
-                    Volumes read:
-                </Text>
-                <Text style={styles.Label}>
-                    Score:
-                </Text>
-
-                <Text style={styles.Label}>
-
-                </Text>
-
-                <Text style={styles.Label}>
-                    Rereading:
-                </Text>
-                <Text style={styles.Label}>
-                    Number of times reread:
-                </Text>
-                <Text style={styles.Label}>
-                    Reread value:
-                </Text>
-
-                <Text style={styles.Label}>
-
-                </Text>
-
-                <Text style={styles.Label}>
-                    Updated:
-                </Text>
-            </View>
-            {this.state.isEditing ? this.mangaEditing(listStatus) : this.mangaDisplay(listStatus)}
-        </View>)
+        if (this.state.isEditing) return this.mangaEditing(listStatus);
+        else return this.mangaDisplay(listStatus)
     }
 
     animeDisplay(listStatus: UpdateListStatusResultAnime) {
-        return (<View style={styles.Values}>
-            <Text style={styles.Value}>
-                {niceTextFormat(listStatus.status)}
-            </Text>
-            <Text style={styles.Value}>
-                {listStatus.num_episodes_watched}
-            </Text>
-            <Text style={styles.Value}>
-                # {listStatus.score}
-            </Text>
-            <Text style={styles.Value}>
-                {listStatus.priority}
-            </Text>
+        return (
+            <View style={styles.Table}>
+                <View style={styles.Labels}>
+                    <Text style={styles.Label}>
+                        Status:
+                    </Text>
+                    <Text style={styles.Label}>
+                        Watched episodes:
+                    </Text>
+                    <Text style={styles.Label}>
+                        Score:
+                    </Text>
+                    <Text style={styles.Label}>
+                        Priority:
+                    </Text>
 
-            <Text style={styles.Value}>
+                    <Text style={styles.Label}>
 
-            </Text>
+                    </Text>
 
-            <Text style={styles.Value}>
-                {listStatus.is_rewatching == true ? "yes" : "no"}
-            </Text>
-            <Text style={styles.Value}>
-                {listStatus.num_times_rewatched}
-            </Text>
-            <Text style={styles.Value}>
-                {listStatus.rewatch_value}
-            </Text>
+                    <Text style={styles.Label}>
+                        Rewatching:
+                    </Text>
+                    <Text style={styles.Label}>
+                        Num times rewatched:
+                    </Text>
+                    <Text style={styles.Label}>
+                        Rewatch value:
+                    </Text>
 
-            <Text style={styles.Value}>
+                    <Text style={styles.Label}>
 
-            </Text>
+                    </Text>
+
+                    <Text style={styles.Label}>
+                        Tags:
+                    </Text>
+                    <Text style={styles.Label}>
+                        Comments:
+                    </Text>
+
+                    <Text style={styles.Label}>
+
+                    </Text>
+
+                    <Text style={styles.Label}>
+                        Updated:
+                    </Text>
+                </View>
+                <View style={styles.Values}>
+                    <Text style={styles.Value}>
+                        {niceTextFormat(listStatus.status)}
+                    </Text>
+                    <Text style={styles.Value}>
+                        {listStatus.num_episodes_watched}
+                    </Text>
+                    <Text style={styles.Value}>
+                        # {listStatus.score}
+                    </Text>
+                    <Text style={styles.Value}>
+                        {listStatus.priority}
+                    </Text>
+
+                    <Text style={styles.Value}>
+
+                    </Text>
+
+                    <Text style={styles.Value}>
+                        {listStatus.is_rewatching == true ? "yes" : "no"}
+                    </Text>
+                    <Text style={styles.Value}>
+                        {listStatus.num_times_rewatched}
+                    </Text>
+                    <Text style={styles.Value}>
+                        {listStatus.rewatch_value}
+                    </Text>
+
+                    <Text style={styles.Value}>
+
+                    </Text>
 
 
-            <Text style={styles.Value}>
-                {(listStatus.comments ?? "") == "" ? "N/A" : listStatus.comments}
-            </Text>
-            <Text style={styles.Value}>
-                {listStatus.tags == undefined || listStatus.tags.length == 0 ? "N/A" : listStatus.tags.join(", ")}
-            </Text>
+                    <Text style={styles.Value}>
+                        {listStatus.tags == undefined || listStatus.tags.length == 0 ? "N/A" : listStatus.tags.join(", ")}
+                    </Text>
+                    <Text style={styles.Value}>
+                        {(listStatus.comments ?? "") == "" ? "N/A" : listStatus.comments}
+                    </Text>
 
-            <Text style={styles.Value}>
+                    <Text style={styles.Value}>
 
-            </Text>
+                    </Text>
 
-            <Text style={styles.Value}>
-                <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
-            </Text>
-        </View>);
+                    <Text style={styles.Value}>
+                        <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
+                    </Text>
+                </View>
+            </View>);
     }
 
     animeEditing(listStatus: UpdateListStatusResultAnime) {
         return (
-            <View style={styles.Values}>
-                <Text style={styles.Value}>
-                    {niceTextFormat(listStatus.status)}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.num_episodes_watched}
-                </Text>
-                <Text style={styles.Value}>
-                    ## {listStatus.score}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.priority}
-                </Text>
 
-                <Text style={styles.Value}>
+            <View style={styles.newTable}>
+                <View style={styles.newPair}></View>{/* for some crazy reason 2 empty ones are required for the first 2 to show up */}
+                <View style={styles.newPair}></View>
 
-                </Text>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Status:</Text>
+                    <Picker
+                        selectedValue={listStatus.status}
+                        style={styles.newValue}
+                        onValueChange={this.stateManager.changeStatus.bind(this)}
+                    >
+                        <Picker.Item label={niceTextFormat("watching")} value="watching" />
+                        <Picker.Item label={niceTextFormat("completed")} value="completed" />
+                        <Picker.Item label={niceTextFormat("on_hold")} value="on_hold" />
+                        <Picker.Item label={niceTextFormat("dropped")} value="dropped" />
+                        <Picker.Item label={niceTextFormat("plan_to_watch")} value="plan_to_watch" />
+                    </Picker>
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Watched episodes:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.num_episodes_watched?.toString() ?? ""}
+                        onChangeText={this.stateManager.changeEpisodesWatched.bind(this)}
+                        keyboardType={"numeric"}
+                    />
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Score:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.score?.toString() ?? ""}
+                        onChangeText={this.stateManager.changeScore.bind(this)}
+                        keyboardType={"numeric"}
+                    />
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Priority:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.priority?.toString() ?? ""}
+                        onChangeText={this.stateManager.changePriority.bind(this)}
+                        keyboardType={"numeric"}
+                    />
+                </View>
 
-                <Text style={styles.Value}>
-                    {listStatus.is_rewatching == true ? "yes" : "no"}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.num_times_rewatched}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.rewatch_value}
-                </Text>
+                <View style={styles.empty}></View>
 
-                <Text style={styles.Value}>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Rewatching:</Text>
+                    <Picker
+                        selectedValue={listStatus.is_rewatching == true ? "true" : "false"}
+                        style={styles.newValue}
+                        onValueChange={this.stateManager.changeIsRewatching.bind(this)}
+                    >
+                        <Picker.Item label={niceTextFormat("yes")} value="true" />
+                        <Picker.Item label={niceTextFormat("no")} value="false" />
+                    </Picker>
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Num times rewatched:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.num_times_rewatched?.toString() ?? ""}
+                        onChangeText={this.stateManager.changeNumTimesRewatched.bind(this)}
+                        keyboardType={"numeric"}
+                    />
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Rewatch value:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.rewatch_value?.toString() ?? ""}
+                        onChangeText={this.stateManager.changeRewatchValue.bind(this)}
+                        keyboardType={"numeric"}
+                    />
+                </View>
 
-                </Text>
+                <View style={styles.empty}></View>
+
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Tags:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.tags?.join(" ") ?? ""}
+                        onChangeText={this.stateManager.changeTags.bind(this)}
+                        keyboardType={"ascii-capable"}
+                    />
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Comments:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.comments ?? ""}
+                        onChangeText={this.stateManager.changeComments.bind(this)}
+                        keyboardType={"ascii-capable"}
+                    />
+                </View>
 
 
-                <Text style={styles.Value}>
-                    {(listStatus.comments ?? "") == "" ? "N/A" : listStatus.comments}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.tags == undefined || listStatus.tags.length == 0 ? "N/A" : listStatus.tags.join(", ")}
-                </Text>
+                <View style={styles.empty}></View>
 
-                <Text style={styles.Value}>
-
-                </Text>
-
-                <Text style={styles.Value}>
-                    <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
-                </Text>
-            </View>)
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Updated:</Text>
+                    <Text style={styles.newValue}>
+                        <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
+                    </Text>
+                </View>
+            </View>
+        );
     }
 
     mangaDisplay(listStatus: UpdateListStatusResultManga) {
-        return (
-            <View style={styles.Values}>
-                <Text style={styles.Value}>
-                    {niceTextFormat(listStatus.status)}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.num_chapters_read}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.num_volumes_read}
-                </Text>
-                <Text style={styles.Value}>
-                    # {listStatus.score}
-                </Text>
-                <Text style={styles.Value}>
-
-                </Text>
-
-                <Text style={styles.Value}>
-                    {listStatus.is_rereading == true ? "yes" : "no"}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.num_times_reread}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.reread_value}
-                </Text>
-
-                <Text style={styles.Value}>
-
-                </Text>
-
-                <Text style={styles.Value}>
-                    <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
-                </Text>
-            </View>
-        );
-    }
-    mangaEditing(listStatus: UpdateListStatusResultManga) {
-        return (
-            <View style={styles.Values}>
-                <Text style={styles.Value}>
-                    {niceTextFormat(listStatus.status)}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.num_chapters_read}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.num_volumes_read}
-                </Text>
-                <Text style={styles.Value}>
-                    ## {listStatus.score}
-                </Text>
-                <Text style={styles.Value}>
-
-                </Text>
-
-                <Text style={styles.Value}>
-                    {listStatus.is_rereading == true ? "yes" : "no"}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.num_times_reread}
-                </Text>
-                <Text style={styles.Value}>
-                    {listStatus.reread_value}
-                </Text>
-
-                <Text style={styles.Value}>
-
-                </Text>
-
-                <Text style={styles.Value}>
-                    <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
-                </Text>
-            </View>
-        );
-    }
-
-    renderMangaEditing(listStatus: UpdateListStatusResultManga) {
         return (<View style={styles.Table}>
             <View style={styles.Labels}>
                 <Text style={styles.Label}>
@@ -412,7 +379,6 @@ export class ListDetails extends React.PureComponent<Props, State> {
                 </Text>
 
                 <Text style={styles.Label}>
-
                 </Text>
 
                 <Text style={styles.Label}>
@@ -426,7 +392,17 @@ export class ListDetails extends React.PureComponent<Props, State> {
                 </Text>
 
                 <Text style={styles.Label}>
+                </Text>
 
+
+                <Text style={styles.Label}>
+                    Tags:
+                </Text>
+                <Text style={styles.Label}>
+                    Comments:
+                </Text>
+
+                <Text style={styles.Label}>
                 </Text>
 
                 <Text style={styles.Label}>
@@ -446,8 +422,8 @@ export class ListDetails extends React.PureComponent<Props, State> {
                 <Text style={styles.Value}>
                     # {listStatus.score}
                 </Text>
-                <Text style={styles.Value}>
 
+                <Text style={styles.Value}>
                 </Text>
 
                 <Text style={styles.Value}>
@@ -461,21 +437,160 @@ export class ListDetails extends React.PureComponent<Props, State> {
                 </Text>
 
                 <Text style={styles.Value}>
+                </Text>
 
+                <Text style={styles.Value}>
+                    {listStatus.tags == undefined || listStatus.tags.length == 0 ? "N/A" : listStatus.tags.join(", ")}
+                </Text>
+                <Text style={styles.Value}>
+                    {(listStatus.comments ?? "") == "" ? "N/A" : listStatus.comments}
+                </Text>
+
+                <Text style={styles.Value}>
                 </Text>
 
                 <Text style={styles.Value}>
                     <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
                 </Text>
             </View>
-        </View>)
+        </View>
+
+        );
+    }
+    mangaEditing(listStatus: UpdateListStatusResultManga) {
+        if (this.state.listStatus == undefined) return;
+        return (
+            <View style={styles.newTable}>
+                <View style={styles.newPair}></View>{/* for some crazy reason 2 empty ones are required for the first 2 to show up */}
+                <View style={styles.newPair}></View>
+
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Status:</Text>
+                    <Picker
+                        selectedValue={listStatus.status}
+                        style={styles.newValue}
+                        onValueChange={this.stateManager.changeStatus.bind(this)}
+                    >
+                        <Picker.Item label={niceTextFormat("reading")} value="reading" />
+                        <Picker.Item label={niceTextFormat("completed")} value="completed" />
+                        <Picker.Item label={niceTextFormat("on_hold")} value="on_hold" />
+                        <Picker.Item label={niceTextFormat("dropped")} value="dropped" />
+                        <Picker.Item label={niceTextFormat("plan_to_read")} value="plan_to_read" />
+                    </Picker>
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Chapters read:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.num_chapters_read?.toString() ?? ""}
+                        onChangeText={this.stateManager.changeChaptersRead.bind(this)}
+                        keyboardType={"numeric"}
+                    />
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Volumes read:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.num_chapters_read?.toString() ?? ""}
+                        onChangeText={this.stateManager.changeVolumesRead.bind(this)}
+                        keyboardType={"numeric"}
+                    />
+                </View>
+
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Score:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.score?.toString() ?? ""}
+                        onChangeText={this.stateManager.changeScore.bind(this)}
+                        keyboardType={"numeric"}
+                    />
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Priority:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.priority?.toString() ?? ""}
+                        onChangeText={this.stateManager.changePriority.bind(this)}
+                        keyboardType={"numeric"}
+                    />
+                </View>
+
+                <View style={styles.empty}></View>
+
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Rereading:</Text>
+                    <Picker
+                        selectedValue={listStatus.is_rereading == true ? "true" : "false"}
+                        style={styles.newValue}
+                        onValueChange={this.stateManager.changeIsRereading.bind(this)}
+                    >
+                        <Picker.Item label={niceTextFormat("yes")} value="true" />
+                        <Picker.Item label={niceTextFormat("no")} value="false" />
+                    </Picker>
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Num times rewatched:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.num_times_reread?.toString() ?? ""}
+                        onChangeText={this.stateManager.changeNumTimesReread.bind(this)}
+                        keyboardType={"numeric"}
+                    />
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Rewatch value:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.reread_value?.toString() ?? ""}
+                        onChangeText={this.stateManager.changeRereadValue.bind(this)}
+                        keyboardType={"numeric"}
+                    />
+                </View>
+
+                <View style={styles.empty}></View>
+
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Tags:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.tags?.join(" ") ?? ""}
+                        onChangeText={this.stateManager.changeTags.bind(this)}
+                        keyboardType={"ascii-capable"}
+                    />
+                </View>
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Comments:</Text>
+                    <TextInput
+                        style={styles.newValue}
+                        value={listStatus.comments ?? ""}
+                        onChangeText={this.stateManager.changeComments.bind(this)}
+                        keyboardType={"ascii-capable"}
+                    />
+                </View>
+
+                <View style={styles.empty}></View>
+
+                <View style={styles.newPair}>
+                    <Text style={styles.newLabel}>Updated:</Text>
+                    <Text style={styles.newValue}>
+                        <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
+                    </Text>
+                </View>
+            </View>
+        );
     }
 
-
     saveEdit() {
-        console.log("save");
+        if (this.state.listStatus == undefined) return;
 
-        this.refresh();
+        if (this.state.isAnime == true) {
+            AnimeUpdateList(this.state.mediaId, this.state.before as UpdateListStatusResultAnime, this.state.listStatus as UpdateListStatusResultAnime)
+                .then(this.refresh.bind(this))
+        } else {
+            MangaUpdateList(this.state.mediaId, this.state.before as UpdateListStatusResultManga, this.state.listStatus as UpdateListStatusResultManga)
+                .then(this.refresh.bind(this))
+        }
     }
 
     render() {
@@ -513,11 +628,18 @@ export class ListDetails extends React.PureComponent<Props, State> {
                                 }}>
                                     <Text style={{ alignSelf: "center" }}>Edit</Text>
                                 </TouchableOpacity>)
-                                : <TouchableOpacity style={styles.listStatusEdit} onPress={() => {
+                                : (<TouchableOpacity style={styles.listStatusEdit} onPress={() => {
                                     this.saveEdit()
                                 }}>
                                     <Text style={{ alignSelf: "center" }}>Save</Text>
-                                </TouchableOpacity>
+                                </TouchableOpacity>)
+                        }
+                        {
+                            this.state.isEditing == true ? <TouchableOpacity style={styles.listStatusEdit} onPress={() => {
+                                this.refresh()
+                            }}>
+                                <Text style={{ alignSelf: "center" }}>Cancel</Text>
+                            </TouchableOpacity> : undefined
                         }
 
                     </ScrollView>
@@ -569,5 +691,30 @@ const styles = StyleSheet.create({
         fontSize: fontSize,
         color: Colors.KURABUPINK,
         marginTop: 10
+    },
+    newLabel: {
+        flex: 1,
+        fontWeight: "bold",
+        color: Colors.TEXT,
+        fontSize: fontSize * 1.2,
+        textAlignVertical: "center"
+    },
+    newValue: {
+        flex: 1,
+        color: Colors.TEXT,
+        fontSize: fontSize * 1.2,
+    },
+    newPair: {
+        flexDirection: "row",
+        flex: 1,
+        margin: 2
+    },
+    empty: {
+        flexDirection: "row",
+        flex: 1,
+        margin: 6
+    },
+    newTable: {
+        flexDirection: "column"
     }
 });
