@@ -6,7 +6,7 @@ import {
 	makeVerifCode,
 } from "#helpers/randomCodes";
 
-export function randomCodes():void {
+export function randomCodes(): void {
 	describe("Random Codes", () => {
 		describe("UUID", () => {
 			it("isUUID Should return true on valid lower case uuid", () => {
@@ -64,7 +64,7 @@ export function randomCodes():void {
 					codes.push(makeVerifCode());
 				}
 				expect(hasDuplicates(codes)).to.equal(false);
-			})
+			});
 			it("makeVerifCode should make every digit just as likely as all others", () => {
 				let str = "";
 				const runs = 100000;
@@ -73,7 +73,7 @@ export function randomCodes():void {
 				}
 				const counts: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 				for (let i = 0; i < str.length; i++) {
-					counts[parseInt(str.charAt(i),10)]++;
+					counts[parseInt(str.charAt(i), 10)]++;
 				}
 
 				let avr = 0;
@@ -85,12 +85,12 @@ export function randomCodes():void {
 					// eslint-disable-next-line max-len
 					const msg = `nr ${i} was overrepresented, the average count for a digit was ${avr} but this number occured ${x} times`;
 					expect(x + range > avr && x - range < avr).to.equal(true, msg);
-				})
-			})
+				});
+			});
 		});
 	});
 }
 
 function hasDuplicates(array: any[]) {
-    return (new Set(array)).size !== array.length;
+	return (new Set(array)).size !== array.length;
 }

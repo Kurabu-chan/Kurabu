@@ -15,7 +15,7 @@ function loadDocs(): string {
 				"utf-8"
 			);
 		} else {
-			Logger.Warn("no docs file " + resolve("src/controllers/views/documentation.html"))
+			Logger.Warn("no docs file " + resolve("src/controllers/views/documentation.html"));
 			loaded = "no docs";
 		}
 	}
