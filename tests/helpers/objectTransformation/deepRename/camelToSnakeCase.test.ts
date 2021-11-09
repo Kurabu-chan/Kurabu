@@ -51,7 +51,7 @@ export function camelToSnakeCase(): void {
                     camelCase: "optioEaqueRerum",
                     snakeCase: "optio_eaque_rerum"
                 }
-            ]
+            ];
 
             for (const mapping of mappings) {
                 expect(converter.single(mapping.camelCase)).to.equal(mapping.snakeCase);
@@ -62,17 +62,17 @@ export function camelToSnakeCase(): void {
             const input = {
                 helloHowAreYou: "hi",
                 iAmGoodThanks: "great"
-            }
+            };
 
             const expected = {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 hello_how_are_you: "hi",
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 i_am_good_thanks: "great"
-            }
+            };
 
             expect(JSON.stringify(converter.fullObject(input), null, 2))
-                .to.equal(JSON.stringify(expected, null, 2))
+                .to.equal(JSON.stringify(expected, null, 2));
         });
 
         it("Should convert a multi layered object to snake case from camel case", () => {
@@ -80,7 +80,7 @@ export function camelToSnakeCase(): void {
                 helloHowAreYou: {
                     iAmGoodThanks: "great"
                 }
-            }
+            };
 
             const expected = {
                 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -88,10 +88,10 @@ export function camelToSnakeCase(): void {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     i_am_good_thanks: "great"
                 },
-            }
+            };
 
             expect(JSON.stringify(converter.fullObject(input), null, 2))
-                .to.equal(JSON.stringify(expected, null, 2))
+                .to.equal(JSON.stringify(expected, null, 2));
         });
 
         it("Should convert a objects inside of an array to snake case from camel case", () => {
@@ -104,7 +104,7 @@ export function camelToSnakeCase(): void {
                     helloHowAreYou: "hi",
                     iAmGoodThanks: "great"
                 }
-            ]
+            ];
 
             const expected = [
                 {
@@ -119,10 +119,10 @@ export function camelToSnakeCase(): void {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     i_am_good_thanks: "great"
                 }
-            ]
+            ];
 
             expect(JSON.stringify(converter.fullObject(input), null, 2))
-                .to.equal(JSON.stringify(expected, null, 2))
+                .to.equal(JSON.stringify(expected, null, 2));
         });
     });
 }

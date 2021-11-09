@@ -10,11 +10,11 @@ import serialize from "#helpers/objectTransormation/objectToUrlEncoded";
 @autoInjectable()
 export class UpdateUserMangaListWebRequestHandler
     implements
-        IWebRequestHandler<
-            UpdateUserMangaListWebRequest,
-            UpdateUserMangaListWebRequestResult
+    IWebRequestHandler<
+    UpdateUserMangaListWebRequest,
+    UpdateUserMangaListWebRequestResult
     > {
-    async handle({ mangaId, user, ...body}: UpdateUserMangaListWebRequest):
+    async handle({ mangaId, user, ...body }: UpdateUserMangaListWebRequest):
         Promise<UpdateUserMangaListWebRequestResult> {
 
         const camelToSnakeCase = new CamelToSnakeCase();
@@ -30,7 +30,7 @@ export class UpdateUserMangaListWebRequestHandler
             .setHeader("Content-Type", "application/x-www-form-urlencoded");
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const response =( await request.refreshRequest(user, "PUT")) as any;
+        const response = (await request.refreshRequest(user, "PUT")) as any;
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (response.error !== undefined) {
@@ -38,13 +38,13 @@ export class UpdateUserMangaListWebRequestHandler
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
                 status: undefined,
                 success: IWebRequestResultStatus.failure,
-            }
+            };
         }
 
         return {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
             status: response,
             success: IWebRequestResultStatus.success,
-        }
+        };
     }
 }

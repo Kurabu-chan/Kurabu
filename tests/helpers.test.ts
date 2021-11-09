@@ -1,4 +1,4 @@
-import "reflect-metadata"
+import "reflect-metadata";
 import { basicTypes } from "./helpers/basicTypes.test";
 import { hasher } from "./helpers/hasher.test";
 import { objectTransformation } from "./helpers/objectTransformation.test";

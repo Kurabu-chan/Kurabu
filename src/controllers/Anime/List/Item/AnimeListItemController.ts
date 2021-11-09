@@ -71,17 +71,17 @@ export class AnimeListItemController {
 		}
 
 		if (arg.status !== undefined && !verifyStatus(arg.status)) {
-			const msg = "status has to be one of the following " + allowedStati.join(", ")
+			const msg = "status has to be one of the following " + allowedStati.join(", ");
 			throw new MalformedParameterError(msg);
 		}
 
 		if (arg.score !== undefined && !verifyScore(arg.score)) {
-			const msg = `score has to be a number in the range of 0 to 10 but was ${arg.score}`
+			const msg = `score has to be a number in the range of 0 to 10 but was ${arg.score}`;
 			throw new MalformedParameterError(msg);
 		}
 
 		if (arg.priority !== undefined && !verifyPriority(arg.priority)) {
-			const msg = `priority has to be a number in the range of 0 to 2 but was ${arg.score}`
+			const msg = `priority has to be a number in the range of 0 to 2 but was ${arg.score}`;
 			throw new MalformedParameterError(msg);
 		}
 

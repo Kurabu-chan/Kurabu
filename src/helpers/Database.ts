@@ -53,9 +53,9 @@ export class Database {
 		this._sequelize.databaseVersion().then((version) => {
 			Logger.Info(`Databases initialized with db version ${version}`);
 		})
-		.catch((err) => {
-			Logger.Err(err)
-		});
+			.catch((err) => {
+				Logger.Err(err);
+			});
 
 		void this.migrate();
 	}
@@ -80,7 +80,7 @@ export class Database {
 				throw new Error("Found migration on database that was not present on server");
 			}
 
-			for(const present of presentMigrations){
+			for (const present of presentMigrations) {
 				consoleMessages += `\t✔ ${present}\n`;
 			}
 
@@ -90,7 +90,7 @@ export class Database {
 
 			for (const notPresent of diff?.filter(x => x.kind === "A")) {
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
-				consoleMessages += `\t❌ ${(notPresent as any).item.rhs}\n`
+				consoleMessages += `\t❌ ${(notPresent as any).item.rhs}\n`;
 			}
 
 			// eslint-disable-next-line max-len
@@ -117,11 +117,11 @@ export class Database {
 	}
 }
 
-function aReaddir(p: string):Promise<string[]> {
+function aReaddir(p: string): Promise<string[]> {
 	return new Promise((resolve) => {
 		readdir(p, (err, files) => {
 			if (err) throw err;
 			resolve(files);
-		})
+		});
 	});
 }

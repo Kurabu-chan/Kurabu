@@ -7,7 +7,6 @@ import { Request, Response } from "express";
 import {
 	mock,
 	instance,
-	verify,
 	when,
 	anyNumber,
 	anything,
@@ -19,7 +18,7 @@ import {
 	ParamType,
 } from "../../src/decorators/ParamDecorator";
 
-let callbackListener: (success: any) => void = () => {};
+let callbackListener: (success: any) => void = () => { };
 
 class ParamMockClass {
 	@param(
@@ -140,7 +139,7 @@ class ParamMockClass {
 	}
 }
 
-export function paramDecorator():void {
+export function paramDecorator(): void {
 	describe("ParamDecorator", () => {
 		const mockClass = new ParamMockClass();
 
