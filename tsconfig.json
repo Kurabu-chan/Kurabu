@@ -10,7 +10,6 @@
 		"moduleResolution": "node",
 		"importHelpers": true,
 		"sourceMap": true,
-		"types": ["node", "mocha"],
 		"typeRoots": ["node_modules/@types"],
 		"baseUrl": "./",
 		"paths": {
@@ -27,6 +26,6 @@
 			"#webreq/*": ["src/webRequest/*"]
 		}
 	},
-	"include": ["./src/**/*.ts", "./tests/**/*.ts"],
+	"include": ["./src/**/*.ts"],
 	"exclude": ["./src/public/"]
 }
