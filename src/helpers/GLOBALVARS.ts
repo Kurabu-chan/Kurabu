@@ -3,7 +3,8 @@ let CLIENT_SECRET = process.env.CLIENT_SECRET || "noenv";
 let EMAIL_DOMAIN = process.env.EMAIL_DOMAIN || "kurabu.moe";
 
 const JWT_ENCRYPTION = process.env.JWT_ENCRYPTION ?? "";
-if (JWT_ENCRYPTION === "") throw new Error("No Jwt key in env");
+if (JWT_ENCRYPTION === "" && process.env.NODE_ENV === "production")
+	throw new Error("No Jwt key in env");
 
 const ERROR_STATUS = "error";
 const SUCCESS_STATUS = "success";
