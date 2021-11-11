@@ -7,23 +7,24 @@ import {
 	Controller,
 	Post,
 } from "@overnightjs/core";
-import * as jwt from "jsonwebtoken";
 import * as Options from "./LoginJwtControllerOptions";
 import {
 	param,
 	ParamType,
 } from "#decorators/ParamDecorator";
 import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
-import { JWT_ENCRYPTION, SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
 import {
 	UserLoginQueryHandler,
 } from "#queries/Users/Login/UserLoginQueryHandler";
 import { UserStatus } from "#queries/Users/Status/UserStatusQueryHandler";
+import { UserJwtQueryHandler } from "#queries/Users/Jwt/UserJwtQueryHandler";
 
 @Controller(Options.controllerPath)
 @injectable()
 export class LoginJwtController {
-	constructor(private _userLoginQuery: UserLoginQueryHandler) { }
+	constructor(private _userLoginQuery: UserLoginQueryHandler,
+		private _userJwtQuery: UserJwtQueryHandler) { }
 
 	@Post(Options.controllerName)
 	@requestHandlerDecorator()
@@ -35,10 +36,12 @@ export class LoginJwtController {
 			password: arg.pass,
 		});
 
-		const signed = jwt.sign({ id: result.id }, JWT_ENCRYPTION);
+		const jwt = await this._userJwtQuery.handle({
+			uuid: result.id
+		});
 
 		return {
-			message: signed,
+			message: jwt.jwtToken,
 			status: SUCCESS_STATUS,
 			userStatus: UserStatus[result.status],
 		};
