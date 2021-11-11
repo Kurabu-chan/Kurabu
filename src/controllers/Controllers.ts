@@ -60,6 +60,7 @@ export default [
 	container.resolve(LoginJwtController),
 	container.resolve(RegisterJwtController),
 	container.resolve(VerifJwtController),
+	container.resolve(CancelRegisterJwtController),
 
 	container.resolve(AuthedController),
 

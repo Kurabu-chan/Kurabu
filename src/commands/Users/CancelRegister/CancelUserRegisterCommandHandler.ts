@@ -13,21 +13,29 @@ import {
 	UserStatus,
 	UserStatusQueryHandler,
 } from "#queries/Users/Status/UserStatusQueryHandler";
+import { CheckUserUUIDQueryHandler } from "#queries/Users/CheckUUID/CheckUserUUIDQueryHandler";
 
 
 @autoInjectable()
 export class CancelUserRegisterCommandHandler
 	implements
-		ICommandHandler<
-			CancelUserRegisterCommand,
-			CancelUserRegisterCommandResult
-		> {
-	constructor(private _getUserStatus: UserStatusQueryHandler) {}
+	ICommandHandler<
+	CancelUserRegisterCommand,
+	CancelUserRegisterCommandResult
+	> {
+	constructor(
+		private _getUserStatus: UserStatusQueryHandler,
+		private _checkUserUUIDQuery: CheckUserUUIDQueryHandler
+	) { }
 
 	async handle({
-		user,
+		state,
 	}: CancelUserRegisterCommand): Promise<CancelUserRegisterCommandResult> {
-		if (!user) throw new MissingStateError("State missing during cancel");
+		if (!state) throw new MissingStateError("State missing during cancel");
+
+		const { user } = await this._checkUserUUIDQuery.handle({
+			uuid: state
+		});
 
 		const status = await this._getUserStatus.handle({ user });
 		if (status.status !== UserStatus.verif)

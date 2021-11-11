@@ -7,22 +7,19 @@ import {
 	Controller,
 	Post,
 } from "@overnightjs/core";
-import * as Options from "./CancelRegisterControllerOptions";
+import * as Options from "./CancelRegisterJwtControllerOptions";
 import {
 	CancelUserRegisterCommandHandler,
 } from "#commands/Users/CancelRegister/CancelUserRegisterCommandHandler";
 import logArg from "#decorators/LogArgDecorator";
-import {
-	param,
-	ParamType,
-} from "#decorators/ParamDecorator";
 import requestHandlerDecorator from "#decorators/RequestHandlerDecorator";
 import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
+import { stateFromJwtWithoutVerification } from "#decorators/StateDecorator";
 
 
 @Controller(Options.controllerPath)
 @injectable()
-export class CancelRegisterController {
+export class CancelRegisterJwtController {
 	private _cancelUserRegisterCommand: CancelUserRegisterCommandHandler;
 
 	constructor(cancelUserRegisterCommand: CancelUserRegisterCommandHandler) {
@@ -31,7 +28,7 @@ export class CancelRegisterController {
 
 	@Post(Options.controllerName)
 	@requestHandlerDecorator()
-	@param("uuid", ParamType.string, false)
+	@stateFromJwtWithoutVerification("uuid")
 	@logArg()
 	private async post(req: Request, res: Response, arg: Options.Params) {
 		await this._cancelUserRegisterCommand.handle({
