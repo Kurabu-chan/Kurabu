@@ -25,6 +25,7 @@ import { AnimeListItemController } from "./Anime/List/Item/AnimeListItemControll
 import { MangaListController } from "./Manga/List/GetMy/MangaListController";
 import { MangaListItemController } from "./Manga/List/Item/MangaListItemController";
 import { LoginJwtController } from "./Authed/jwt/Login/LoginJwtController";
+import { RegisterJwtController } from "./Authed/jwt/Register/RegisterJwtController";
 import ContainerManager from "#helpers/ContainerManager";
 
 const container = ContainerManager.getInstance().container;
@@ -51,7 +52,9 @@ export default [
 	container.resolve(VerifController),
 	container.resolve(StatusController),
 	container.resolve(ReAuthController),
+
 	container.resolve(LoginJwtController),
+	container.resolve(RegisterJwtController),
 
 	container.resolve(AuthedController),
 
