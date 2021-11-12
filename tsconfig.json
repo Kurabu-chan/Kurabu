@@ -9,6 +9,7 @@
 		"emitDecoratorMetadata": true,
 		"moduleResolution": "node",
 		"importHelpers": true,
+		"resolveJsonModule": true,
 		"sourceMap": true,
 		"typeRoots": ["node_modules/@types"],
 		"baseUrl": "./",
