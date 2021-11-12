@@ -65,7 +65,7 @@ jobs:
         with:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: cf4e0afd95dc722d3ccf24fbe8a5775b
-          filename: your-repo-name__${{ env.BRANCH }}.json
+          filename: iMAL_API__${{ env.BRANCH }}.json
           label: Test Coverage
           message: ${{ env.COVERAGE }}
           color: green
