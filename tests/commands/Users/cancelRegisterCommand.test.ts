@@ -11,6 +11,7 @@ import {
 } from "#queries/Users/Status/UserStatusQueryHandler";
 import { ICommandResultStatus } from "#commands/ICommand";
 import { IQueryResultStatus } from "#queries/IQuery";
+import { CheckUserUUIDQueryHandler } from "#queries/Users/CheckUUID/CheckUserUUIDQueryHandler";
 
 export function cancelRegisterCommand(): void {
 	describe("CancelRegisterCommand", () => {
@@ -29,13 +30,22 @@ export function cancelRegisterCommand(): void {
 			});
 			const userStatusMockInstance = instance(userStatusMock);
 
-			const sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
+			const userCheckMock = mock(CheckUserUUIDQueryHandler);
+			when(userCheckMock.handle(anything())).thenResolve({
+				success: ICommandResultStatus.success,
+				user: userMockInstance
+			});
+			const userCheckMockInstance = instance(userCheckMock);
+
+			const sut = new CancelUserRegisterCommandHandler(
+				userStatusMockInstance,
+				userCheckMockInstance);
 			let result;
 			try {
 				result = await sut.handle({
-					user: userMockInstance,
+					state: "yeah",
 				} as any);
-			} catch (err) {}
+			} catch (err) { }
 
 			verify(userMock.destroy()).never();
 			verify(userStatusMock.handle(anything())).once();
@@ -50,10 +60,19 @@ export function cancelRegisterCommand(): void {
 			});
 			const userStatusMockInstance = instance(userStatusMock);
 
-			const sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
+			const userCheckMock = mock(CheckUserUUIDQueryHandler);
+			when(userCheckMock.handle(anything())).thenResolve({
+				success: ICommandResultStatus.success,
+				user: userMockInstance
+			});
+			const userCheckMockInstance = instance(userCheckMock);
+
+			const sut = new CancelUserRegisterCommandHandler(
+				userStatusMockInstance,
+				userCheckMockInstance);
 
 			const result = await sut.handle({
-				user: userMockInstance,
+				state: "cool",
 			} as any);
 
 			verify(userMock.destroy()).once();
@@ -69,13 +88,22 @@ export function cancelRegisterCommand(): void {
 			});
 			const userStatusMockInstance = instance(userStatusMock);
 
-			const sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
+			const userCheckMock = mock(CheckUserUUIDQueryHandler);
+			when(userCheckMock.handle(anything())).thenResolve({
+				success: ICommandResultStatus.success,
+				user: userMockInstance
+			});
+			const userCheckMockInstance = instance(userCheckMock);
+
+			const sut = new CancelUserRegisterCommandHandler(
+				userStatusMockInstance,
+				userCheckMockInstance);
 
 			let thrown = "";
 			let result;
 			try {
 				result = await sut.handle({
-					user: userMockInstance,
+					state: "yeahbuddy",
 				} as any);
 			} catch (err) {
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
@@ -88,7 +116,7 @@ export function cancelRegisterCommand(): void {
 			expect(thrown).to.be.equal("State had wrong status during cancel");
 		});
 
-		it("Should throw with no user", async () => {
+		it("Should throw with no state", async () => {
 			const userStatusMock = mock(UserStatusQueryHandler);
 			when(userStatusMock.handle(anything())).thenResolve({
 				status: UserStatus.done,
@@ -96,13 +124,22 @@ export function cancelRegisterCommand(): void {
 			});
 			const userStatusMockInstance = instance(userStatusMock);
 
-			const sut = new CancelUserRegisterCommandHandler(userStatusMockInstance);
+			const userCheckMock = mock(CheckUserUUIDQueryHandler);
+			when(userCheckMock.handle(anything())).thenResolve({
+				success: ICommandResultStatus.success,
+				user: userMockInstance
+			});
+			const userCheckMockInstance = instance(userCheckMock);
+
+			const sut = new CancelUserRegisterCommandHandler(
+				userStatusMockInstance,
+				userCheckMockInstance);
 
 			let thrown = "";
 			let result;
 			try {
 				result = await sut.handle({
-					user: undefined,
+					state: undefined,
 				} as any);
 			} catch (err) {
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
