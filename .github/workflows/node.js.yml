@@ -27,7 +27,7 @@ jobs:
       - run: npm run build
       - run: npm run test-setup
       - run: npm test
-      - if: ${{ matrix.node-version == '14.x' }}
+      - if: ${{ matrix.node-version == '14' }}
         name: Get Coverage for badge
         run: |
           # var SUMMARY = [
