@@ -59,7 +59,7 @@ jobs:
           echo $BRANCH_NAME
           # process.env.BRANCH = 'pull_27';
           echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
-      - if: ${{ matrix.node-version == '14.x' }}
+      - if: ${{ matrix.node-version == '14' }}
         name: Create the Badge
         uses: schneegans/dynamic-badges-action@v1.0.0
         with:
