@@ -1,25 +1,12 @@
 {
-    "cache": false,
-    "check-coverage": true,
-    "extension": [
-        ".ts"
-    ],
-    "include": [
-        "src/**/*.js",
-        "src/**/*.ts"
-    ],
-    "exclude": [
-        "coverage/**",
-        "node_modules/**",
-        "src/database/**",
-        "**/*.d.ts",
-        "**/*.test.ts"
-    ],
-    "sourceMap": false,
+    "extends": "@istanbuljs/nyc-config-typescript",
     "reporter": [
+        "text",
         "text-summary",
         "lcovonly"
     ],
     "all": true,
-    "instrument": true
+    "include": [
+        "src/**/*.ts"
+    ]
 }
