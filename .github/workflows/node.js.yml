@@ -44,6 +44,10 @@ jobs:
           # SUMMARY = SUMMARY.split(':')[1].split('(')[0].trim(); // '31.93%'
           SUMMARY="$(npm run test:coverage | tail -2 | head -1)"
           TOKENS=($SUMMARY)
+
+          PERCENTAGEDECIMAL=${TOKENS[2]%"%"}
+          PERCENTAGE=$(echo $PERCENTAGEDECIMAL | cut -d . -f 1)
+
           # process.env.COVERAGE = '31.93%';
           echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
 
@@ -59,8 +63,8 @@ jobs:
           echo $BRANCH_NAME
           # process.env.BRANCH = 'pull_27';
           echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
-      - if: ${{ matrix.node-version == '14' }}
-        name: Create the Badge
+      - if: ${{ matrix.node-version == '14' && env.PERCENTAGE > 90 }}
+        name: Create the Badge Green
         uses: schneegans/dynamic-badges-action@v1.0.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
@@ -70,3 +74,37 @@ jobs:
           message: ${{ env.COVERAGE }}
           color: green
           namedLogo: mocha
+      - if: ${{ matrix.node-version == '14' && env.PERCENTAGE > 75 && env.PERCENTAGE <= 90 }}
+        name: Create the Badge Orange
+        uses: schneegans/dynamic-badges-action@v1.0.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: cf4e0afd95dc722d3ccf24fbe8a5775b
+          filename: iMAL_API__${{ env.BRANCH }}.json
+          label: Test Coverage
+          message: ${{ env.COVERAGE }}
+          color: orange
+          namedLogo: mocha
+      - if: ${{ matrix.node-version == '14' && env.PERCENTAGE > 50 && env.PERCENTAGE <= 75 }}
+        name: Create the Badge Yellow
+        uses: schneegans/dynamic-badges-action@v1.0.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: cf4e0afd95dc722d3ccf24fbe8a5775b
+          filename: iMAL_API__${{ env.BRANCH }}.json
+          label: Test Coverage
+          message: ${{ env.COVERAGE }}
+          color: yellow
+          namedLogo: mocha 
+      - if: ${{ matrix.node-version == '14' && env.PERCENTAGE <= 50 }}
+        name: Create the Badge Red
+        uses: schneegans/dynamic-badges-action@v1.0.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: cf4e0afd95dc722d3ccf24fbe8a5775b
+          filename: iMAL_API__${{ env.BRANCH }}.json
+          label: Test Coverage
+          message: ${{ env.COVERAGE }}
+          color: red
+          namedLogo: mocha 
+        
