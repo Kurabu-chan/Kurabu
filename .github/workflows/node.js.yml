@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ["10", "12", "14", "15"]
+        node-version: ["14", "10", "12", "15"]
 
     steps:
       - uses: actions/checkout@v2
@@ -27,3 +27,69 @@ jobs:
       - run: npm run build
       - run: npm run test-setup
       - run: npm test
+      - if: ${{ matrix.node-version == '14' }}
+        name: Get Coverage for badge
+        run: |
+          # var SUMMARY = [
+          #   '',
+          #   '=============================== Coverage summary ===============================',
+          #   'Statements   : 32.5% ( 39/120 )',
+          #   'Branches     : 38.89% ( 21/54 )',
+          #   'Functions    : 21.74% ( 5/23 )',
+          #   'Lines        : 31.93% ( 38/119 )',
+          #   '================================================================================',
+          #   ''
+          # ];
+          # SUMMARY = SUMMARY.split('\n')[5]; // 'Lines        : 31.93% ( 38/119 )'
+          # SUMMARY = SUMMARY.split(':')[1].split('(')[0].trim(); // '31.93%'
+          SUMMARY="$(npm run test:coverage | tail -2 | head -1)"
+          TOKENS=($SUMMARY)
+
+          PERCENTAGEDECIMAL=${TOKENS[2]%"%"}
+          PERCENTAGE=$(echo $PERCENTAGEDECIMAL | cut -d . -f 1)
+
+          COLOR="black"
+          if [ $PERCENTAGE -ge 90 ]; then
+            COLOR="brightgreen"
+          elif [ $PERCENTAGE -ge 80 ]; then
+            COLOR="green"
+          elif [ $PERCENTAGE -ge 70 ]; then
+            COLOR="yellowgreen"
+          elif [ $PERCENTAGE -ge 60 ]; then
+            COLOR="yellow"
+          elif [ $PERCENTAGE -ge 50 ]; then
+            COLOR="orange"
+          else
+            COLOR="red"
+          fi
+
+          echo "COLOR=$(echo $COLOR)" >> $GITHUB_ENV
+
+          # process.env.COVERAGE = '31.93%';
+          echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
+
+          # var REF = 'refs/pull/27/merge.json';
+          REF=${{ github.ref }}
+          # console.log('github.ref: ' + REF);
+          echo "github.ref: $REF"
+          # var PATHS = REF.split('/');
+          IFS='/' read -ra PATHS <<< "$REF"
+          # var BRANCH_NAME = PATHS[1] + PATHS[2];
+          BRANCH_NAME="${PATHS[1]}_${PATHS[2]}"
+          # console.log(BRANCH_NAME); // 'pull_27'
+          echo $BRANCH_NAME
+          # process.env.BRANCH = 'pull_27';
+          echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
+      - if: ${{ matrix.node-version == '14' }}
+        name: Create the Badge
+        uses: schneegans/dynamic-badges-action@v1.0.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: cf4e0afd95dc722d3ccf24fbe8a5775b
+          filename: iMAL_API__${{ env.BRANCH }}.json
+          label: Test Coverage
+          message: ${{ env.COVERAGE }}
+          color: ${{ env.COLOR }}
+          namedLogo: mocha
+      
+        

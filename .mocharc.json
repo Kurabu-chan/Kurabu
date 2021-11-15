@@ -1,10 +1,11 @@
 {
-	"package": "./package.json",
-	"spec": "tests/**/*.ts",
-	"files": "tests/**/*.ts",
-	"require": [
-		"ts-node/register",
-		"tsconfig-paths/register"
-	],
-	"recursive": true
+    "package": "./package.json",
+    "spec": "tests/**/*.ts",
+    "files": "tests/**/*.ts",
+    "require": [
+        "ts-node/register",
+        "tsconfig-paths/register",
+        "source-map-support/register"
+    ],
+    "recursive": true
 }

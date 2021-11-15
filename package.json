@@ -16,12 +16,14 @@
         "db:addmigration": "ts-node -r tsconfig-paths/register ./src/database/createmigration.ts",
         "lint": "eslint \"**/*.ts\"",
         "install:dev": "npm install --only=dev",
-        "install:prod": "npm install --only=prod"
+        "install:prod": "npm install --only=prod",
+        "test:coverage": "tsc && nyc npm run test"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@istanbuljs/nyc-config-typescript": "^1.0.1",
         "@overnightjs/core": "^1.7.5",
         "@overnightjs/logger": "^1.2.0",
         "@sendgrid/mail": "^7.4.2",
@@ -47,6 +49,7 @@
         "sequelize": "^6.9.0",
         "sequelize-typescript": "^2.1.1",
         "sequelize-typescript-migration-rafaeltab": "^0.0.1-beta.7",
+        "source-map-support": "^0.5.20",
         "swagger-express-ts": "^1.1.0",
         "swagger-ui-dist": "^4.1.0",
         "ts-node": "^8.10.2",
@@ -71,6 +74,7 @@
         "eslint-plugin-prefer-arrow": "^1.2.3",
         "mocha": "^8.3.0",
         "nodemon": "^2.0.7",
+        "nyc": "^15.1.0",
         "sequelize-cli": "^6.2.0",
         "sqlite3": "^4.2.0",
         "ts-mockito": "^2.6.1",
