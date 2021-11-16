@@ -12,7 +12,7 @@ const config: swagger.ISwaggerExpressOptions = {
 };
 
 export function apply(app: express.Express): void {
-    app.use("/api-docs/swagger", express.static("swagger"));
+    app.use("/api-docs", express.static("swagger"));
     app.use("/api-docs/swagger/assets", express.static("node_modules/swagger-ui-dist"));
-    app.use(swagger.express(config));
+    // app.use(swagger.express(config));
 }
