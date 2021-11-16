@@ -1,0 +1,188 @@
+{
+    "post": {
+        "description": "Update the list status for an anime",
+        "tags": [
+            "Anime"
+        ],
+        "parameters": [{
+                "name": "animeId",
+                "description": "The id of the anime whose list status you want to update",
+                "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                },
+                "example": "2"
+            },
+            {
+                "name": "comments",
+                "description": "Just some comments",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                },
+                "example": "we need more seasons"
+            },
+            {
+                "name": "isRewatching",
+                "description": "Whether the anime is being rewatched right now",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "boolean"
+                },
+                "example": "true"
+            },
+            {
+                "name": "numTimesRewatched",
+                "description": "The amount of times rewatched",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                },
+                "example": "100"
+            },
+            {
+                "name": "numWatchedEpisodes",
+                "description": "The amount of episodes watched",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                },
+                "example": "24"
+            },
+            {
+                "name": "priority",
+                "description": "The priority to give the anime",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "maximum": 2,
+                    "minimum": 0,
+                    "type": "integer"
+                },
+                "example": "1"
+            },
+            {
+                "name": "rewatchValue",
+                "description": "No clue what this does, but we give it to MAL and it works",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "maximum": 5,
+                    "minimum": 0,
+                    "type": "integer"
+                },
+                "example": "5"
+            },
+            {
+                "name": "score",
+                "description": "The score to give to the anime",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "maximum": 10,
+                    "minimum": 0,
+                    "type": "integer"
+                },
+                "example": "5"
+            },
+            {
+                "name": "state",
+                "description": "The code used for authentication",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb"
+            },
+            {
+                "name": "status",
+                "description": "The status to give the anime",
+                "in": "query",
+                "required": null,
+                "schema": {
+                    "type": "string"
+                },
+                "example": "watching"
+            },
+            {
+                "name": "tags",
+                "description": "Some tags to add to the anime",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                },
+                "example": "idk, what, this, even, is, used, for, tbh"
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Success"
+            },
+            "403": {
+                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+            },
+            "404": {
+                "description": "Media not found. More info disclosed in error message"
+            },
+            "422": {
+                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+            },
+            "500": {
+                "description": "Undocumented and unexpected error"
+            }
+        }
+    },
+    "delete": {
+        "description": "Remove an anime from your list",
+        "tags": [
+            "Anime"
+        ],
+        "parameters": [{
+                "name": "animeid",
+                "in": "query",
+                "description": "The id of the anime you want the details of",
+                "required": true,
+                "example": "0",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "state",
+                "in": "query",
+                "description": "The code used for authentication",
+                "required": true,
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Success"
+            },
+            "403": {
+                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+            },
+            "404": {
+                "description": "Media not found. More info disclosed in error message"
+            },
+            "422": {
+                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+            },
+            "500": {
+                "description": "Undocumented and unexpected error"
+            }
+        }
+    }
+}
