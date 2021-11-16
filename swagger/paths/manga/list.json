@@ -1,14 +1,14 @@
 {
     "get": {
-        "description": "Get your anime list",
+        "description": "Get your manga list",
         "tags": [
-            "Anime",
+            "Manga",
             "List"
         ],
         "parameters": [{
                 "name": "fields",
                 "in": "query",
-                "description": "The fields that should be included in the individual animes retrieved.",
+                "description": "The fields that should be included in the individual mangas retrieved.",
                 "example": "id, title, main_picture, alternative_titles",
                 "required": false,
                 "schema": {
@@ -18,7 +18,7 @@
             {
                 "name": "limit",
                 "in": "query",
-                "description": "The maximum amount of animes you want to retrieve",
+                "description": "The maximum amount of mangas you want to retrieve",
                 "example": "5",
                 "required": false,
                 "schema": {
@@ -28,7 +28,7 @@
             {
                 "name": "offset",
                 "in": "query",
-                "description": "The index at which you want to start gettign animes, used for pagination",
+                "description": "The index at which you want to start gettign mangas, used for pagination",
                 "example": "5",
                 "required": false,
                 "schema": {

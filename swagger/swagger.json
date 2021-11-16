@@ -1,4 +1,5 @@
 {
+    "$schema": "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.0/schema.json",
     "openapi": "3.0.3",
     "info": {
         "title": "IMal API",
@@ -11,14 +12,71 @@
         "/anime/list": {
             "$ref": "./paths/anime/list.json"
         },
-        "anime/list/item": {
+        "/anime/list/item": {
             "$ref": "./paths/anime/list/item.json"
+        },
+        "/anime/ranking": {
+            "$ref": "./paths/anime/ranking.json"
+        },
+        "/anime/search": {
+            "$ref": "./paths/anime/search.json"
+        },
+        "/anime/seasonal": {
+            "$ref": "./paths/anime/seasonal.json"
+        },
+        "/anime/suggestions": {
+            "$ref": "./paths/anime/suggestions.json"
+        },
+
+
+        "/manga/details": {
+            "$ref": "./paths/manga/details.json"
+        },
+        "/manga/list": {
+            "$ref": "./paths/manga/list.json"
+        },
+        "/manga/list/item": {
+            "$ref": "./paths/manga/list/item.json"
+        },
+        "/manga/ranking": {
+            "$ref": "./paths/manga/ranking.json"
+        },
+        "/manga/search": {
+            "$ref": "./paths/manga/search.json"
+        },
+        "/manga/seasonal": {
+            "$ref": "./paths/manga/seasonal.json"
+        },
+        "/manga/suggestions": {
+            "$ref": "./paths/manga/suggestions.json"
         }
     },
     "tags": [
 
         {
             "name": "Anime"
+        },
+        {
+            "name": "Manga"
+        },
+        {
+            "name": "List"
+        }
+    ],
+    "servers": [{
+            "url": "http://localhost:15000",
+            "description": "Localhost environment",
+            "variables": {}
+        },
+        {
+            "url": "http://api.kurabu.moe",
+            "description": "IMal staging environment",
+            "variables": {}
+        },
+        {
+            "url": "http://stage.kurabu.moe",
+            "description": "IMal production environment",
+            "variables": {}
         }
     ]
 }

@@ -1,21 +1,10 @@
 {
     "get": {
-        "description": "Get your anime list",
+        "description": "Get the animes airing in a given season",
         "tags": [
-            "Anime",
-            "List"
+            "Anime"
         ],
         "parameters": [{
-                "name": "fields",
-                "in": "query",
-                "description": "The fields that should be included in the individual animes retrieved.",
-                "example": "id, title, main_picture, alternative_titles",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            {
                 "name": "limit",
                 "in": "query",
                 "description": "The maximum amount of animes you want to retrieve",
@@ -36,11 +25,11 @@
                 }
             },
             {
-                "name": "sort",
+                "name": "fields",
                 "in": "query",
-                "description": "The thing you want to sort by",
-                "example": "list_score",
+                "description": "The fields you want to get from the anime.",
                 "required": false,
+                "example": "id, title, main_picture, alternative_titles",
                 "schema": {
                     "type": "string"
                 }
@@ -49,20 +38,45 @@
                 "name": "state",
                 "in": "query",
                 "description": "The code used for authentication",
-                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
                 "required": true,
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "uuid"
                 }
             },
             {
-                "name": "status",
+                "name": "year",
                 "in": "query",
-                "description": "",
-                "example": "watching",
+                "descritpion": "The year to get the season from",
                 "required": false,
+                "example": 2021,
                 "schema": {
-                    "type": "string"
+                    "type": "integer",
+                    "minimum": 1917,
+                    "maximum": 2022
+                }
+            },
+            {
+                "name": "season",
+                "in": "query",
+                "descritpion": "The season to get",
+                "required": false,
+                "example": "winter",
+                "schema": {
+                    "type": "string",
+                    "enum": ["winter", "summer", "fall", "spring"]
+                }
+            },
+            {
+                "name": "sort",
+                "in": "query",
+                "descritpion": "The field to sort by",
+                "required": false,
+                "example": "anime_score",
+                "schema": {
+                    "type": "string",
+                    "enum": ["anime_score", "anime_num_list_users"]
                 }
             }
         ],

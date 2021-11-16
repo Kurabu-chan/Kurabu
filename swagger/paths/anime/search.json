@@ -1,21 +1,10 @@
 {
     "get": {
-        "description": "Get your anime list",
+        "description": "Search for animes using a query",
         "tags": [
-            "Anime",
-            "List"
+            "Anime"
         ],
         "parameters": [{
-                "name": "fields",
-                "in": "query",
-                "description": "The fields that should be included in the individual animes retrieved.",
-                "example": "id, title, main_picture, alternative_titles",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            {
                 "name": "limit",
                 "in": "query",
                 "description": "The maximum amount of animes you want to retrieve",
@@ -36,11 +25,11 @@
                 }
             },
             {
-                "name": "sort",
+                "name": "fields",
                 "in": "query",
-                "description": "The thing you want to sort by",
-                "example": "list_score",
+                "description": "The fields you want to get from the anime.",
                 "required": false,
+                "example": "id, title, main_picture, alternative_titles",
                 "schema": {
                     "type": "string"
                 }
@@ -49,18 +38,19 @@
                 "name": "state",
                 "in": "query",
                 "description": "The code used for authentication",
-                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
                 "required": true,
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "uuid"
                 }
             },
             {
-                "name": "status",
+                "name": "query",
                 "in": "query",
-                "description": "",
-                "example": "watching",
-                "required": false,
+                "descritpion": "The type of ranking to get.",
+                "required": true,
+                "example": "sword art",
                 "schema": {
                     "type": "string"
                 }

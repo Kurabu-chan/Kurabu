@@ -1,13 +1,13 @@
 {
     "post": {
-        "description": "Update the list status for an anime",
+        "description": "Update the list status for an manga",
         "tags": [
-            "Anime",
+            "Manga",
             "List"
         ],
         "parameters": [{
-                "name": "animeId",
-                "description": "The id of the anime whose list status you want to update",
+                "name": "mangaId",
+                "description": "The id of the manga whose list status you want to update",
                 "in": "query",
                 "required": true,
                 "schema": {
@@ -26,8 +26,8 @@
                 "example": "we need more seasons"
             },
             {
-                "name": "isRewatching",
-                "description": "Whether the anime is being rewatched right now",
+                "name": "isRereading",
+                "description": "Whether the manga is being reread right now",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -36,8 +36,8 @@
                 "example": "true"
             },
             {
-                "name": "numTimesRewatched",
-                "description": "The amount of times rewatched",
+                "name": "numTimesReread",
+                "description": "The amount of times reread",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -46,8 +46,18 @@
                 "example": "100"
             },
             {
-                "name": "numWatchedEpisodes",
-                "description": "The amount of episodes watched",
+                "name": "numVolumesRead",
+                "description": "The amount of volumes read",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                },
+                "example": "24"
+            },
+            {
+                "name": "numChaptersRead",
+                "description": "The amount of chapters read",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -57,7 +67,7 @@
             },
             {
                 "name": "priority",
-                "description": "The priority to give the anime",
+                "description": "The priority to give the manga",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -68,7 +78,7 @@
                 "example": "1"
             },
             {
-                "name": "rewatchValue",
+                "name": "rereadValue",
                 "description": "No clue what this does, but we give it to MAL and it works",
                 "in": "query",
                 "required": false,
@@ -81,7 +91,7 @@
             },
             {
                 "name": "score",
-                "description": "The score to give to the anime",
+                "description": "The score to give to the manga",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -104,7 +114,7 @@
             },
             {
                 "name": "status",
-                "description": "The status to give the anime",
+                "description": "The status to give the manga",
                 "in": "query",
                 "required": null,
                 "schema": {
@@ -114,7 +124,7 @@
             },
             {
                 "name": "tags",
-                "description": "Some tags to add to the anime",
+                "description": "Some tags to add to the manga",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -142,15 +152,15 @@
         }
     },
     "delete": {
-        "description": "Remove an anime from your list",
+        "description": "Remove a manga from your list",
         "tags": [
-            "Anime",
+            "Manga",
             "List"
         ],
         "parameters": [{
-                "name": "animeid",
+                "name": "mangaid",
                 "in": "query",
-                "description": "The id of the anime you want to delete",
+                "description": "The id of the manga you want to remove from your list",
                 "required": true,
                 "example": "0",
                 "schema": {
