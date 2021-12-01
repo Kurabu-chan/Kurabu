@@ -5,6 +5,9 @@
             "Anime",
             "List"
         ],
+        "security": [{
+            "bearerAuth": []
+        }],
         "parameters": [{
                 "name": "animeId",
                 "description": "The id of the anime whose list status you want to update",
@@ -93,14 +96,15 @@
             },
             {
                 "name": "state",
-                "description": "The code used for authentication",
                 "in": "query",
+                "description": "The code used for authentication",
                 "required": false,
+                "deprecated": true,
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
                 "schema": {
                     "type": "string",
                     "format": "uuid"
-                },
-                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb"
+                }
             },
             {
                 "name": "status",
@@ -147,6 +151,9 @@
             "Anime",
             "List"
         ],
+        "security": [{
+            "bearerAuth": []
+        }],
         "parameters": [{
                 "name": "animeid",
                 "in": "query",
@@ -161,7 +168,8 @@
                 "name": "state",
                 "in": "query",
                 "description": "The code used for authentication",
-                "required": true,
+                "required": false,
+                "deprecated": true,
                 "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
                 "schema": {
                     "type": "string",

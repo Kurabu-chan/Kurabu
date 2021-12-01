@@ -5,6 +5,9 @@
             "Anime",
             "List"
         ],
+        "security": [{
+            "bearerAuth": []
+        }],
         "parameters": [{
                 "name": "fields",
                 "in": "query",
@@ -49,10 +52,12 @@
                 "name": "state",
                 "in": "query",
                 "description": "The code used for authentication",
+                "required": false,
+                "deprecated": true,
                 "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
-                "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "uuid"
                 }
             },
             {

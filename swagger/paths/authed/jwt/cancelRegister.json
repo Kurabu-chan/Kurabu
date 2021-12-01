@@ -5,11 +5,15 @@
             "Auth",
             "JWT"
         ],
+        "security": [{
+            "bearerAuth": []
+        }],
         "parameters": [{
             "name": "uuid",
             "in": "query",
             "description": "The JWT token for the user to cancel registration for",
-            "required": true,
+            "required": false,
+            "deprecated": true,
             "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
             "schema": {
                 "type": "string",

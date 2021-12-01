@@ -5,6 +5,9 @@
             "Auth",
             "JWT"
         ],
+        "security": [{
+            "bearerAuth": []
+        }],
         "parameters": [{
                 "name": "redirect",
                 "in": "query",
@@ -30,8 +33,9 @@
                 "name": "uuid",
                 "in": "query",
                 "description": "The JWT token used for authentication",
-                "required": true,
+                "required": false,
                 "example": "",
+                "deprecated": true,
                 "schema": {
                     "type": "string",
                     "format": "JWT"

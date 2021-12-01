@@ -4,6 +4,9 @@
         "tags": [
             "Auth"
         ],
+        "security": [{
+            "bearerAuth": []
+        }],
         "parameters": [{
                 "name": "redirect",
                 "in": "query",

@@ -4,6 +4,9 @@
         "tags": [
             "Manga"
         ],
+        "security": [{
+            "bearerAuth": []
+        }],
         "parameters": [
 
             {
@@ -30,7 +33,8 @@
                 "name": "state",
                 "in": "query",
                 "description": "The code used for authentication",
-                "required": true,
+                "required": false,
+                "deprecated": true,
                 "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
                 "schema": {
                     "type": "string",
