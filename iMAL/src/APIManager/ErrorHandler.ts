@@ -14,9 +14,9 @@ export function handleError(jsonRes: any) {
     if (jsonRes.status !== "error") return;
     if (jsonRes.code === undefined)
         throw new Error("error result did not have a code!");
-
+    
     if (listeners[jsonRes.code] !== undefined) {
-        listeners[jsonRes]?.forEach(x => x());
+        listeners[jsonRes.code]?.forEach(x => x());
         return;
     } else {
         console.log(JSON.stringify(jsonRes));
