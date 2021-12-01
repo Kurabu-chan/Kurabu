@@ -49,6 +49,38 @@
         },
         "/manga/suggestions": {
             "$ref": "./paths/manga/suggestions.json"
+        },
+
+        "/authed/cancelRegister": {
+            "$ref": "./paths/authed/cancelRegister.json"
+        },
+        "/authed/login": {
+            "$ref": "./paths/authed/login.json"
+        },
+        "/authed/reauth": {
+            "$ref": "./paths/authed/reauth.json"
+        },
+        "/authed/register": {
+            "$ref": "./paths/authed/register.json"
+        },
+        "/authed/status": {
+            "$ref": "./paths/authed/status.json"
+        },
+        "/authed/verify": {
+            "$ref": "./paths/authed/verify.json"
+        },
+
+        "/authed/jwt/cancelRegister": {
+            "$ref": "./paths/authed/jwt/cancelRegister.json"
+        },
+        "/authed/jwt/login": {
+            "$ref": "./paths/authed/jwt/login.json"
+        },
+        "/authed/jwt/register": {
+            "$ref": "./paths/authed/jwt/register.json"
+        },
+        "/authed/jwt/verify": {
+            "$ref": "./paths/authed/jwt/verify.json"
         }
     },
     "tags": [
@@ -61,8 +93,24 @@
         },
         {
             "name": "List"
+        },
+        {
+            "name": "Auth"
+        },
+        {
+            "name": "JWT"
         }
     ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Bearer authentication. Use the jwt endpoints to get a token."
+            }
+        }
+    },
     "servers": [{
             "url": "http://localhost:15000",
             "description": "Localhost environment",
