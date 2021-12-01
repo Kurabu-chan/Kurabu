@@ -1,0 +1,208 @@
+{
+    "post": {
+        "description": "Update the list status for an manga",
+        "tags": [
+            "Manga",
+            "List"
+        ],
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
+                "name": "mangaId",
+                "description": "The id of the manga whose list status you want to update",
+                "in": "query",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                },
+                "example": "2"
+            },
+            {
+                "name": "comments",
+                "description": "Just some comments",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                },
+                "example": "we need more seasons"
+            },
+            {
+                "name": "isRereading",
+                "description": "Whether the manga is being reread right now",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "boolean"
+                },
+                "example": "true"
+            },
+            {
+                "name": "numTimesReread",
+                "description": "The amount of times reread",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                },
+                "example": "100"
+            },
+            {
+                "name": "numVolumesRead",
+                "description": "The amount of volumes read",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                },
+                "example": "24"
+            },
+            {
+                "name": "numChaptersRead",
+                "description": "The amount of chapters read",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                },
+                "example": "24"
+            },
+            {
+                "name": "priority",
+                "description": "The priority to give the manga",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "maximum": 2,
+                    "minimum": 0,
+                    "type": "integer"
+                },
+                "example": "1"
+            },
+            {
+                "name": "rereadValue",
+                "description": "No clue what this does, but we give it to MAL and it works",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "maximum": 5,
+                    "minimum": 0,
+                    "type": "integer"
+                },
+                "example": "5"
+            },
+            {
+                "name": "score",
+                "description": "The score to give to the manga",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "maximum": 10,
+                    "minimum": 0,
+                    "type": "integer"
+                },
+                "example": "5"
+            },
+            {
+                "name": "state",
+                "in": "query",
+                "description": "The code used for authentication",
+                "required": false,
+                "deprecated": true,
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            {
+                "name": "status",
+                "description": "The status to give the manga",
+                "in": "query",
+                "required": null,
+                "schema": {
+                    "type": "string"
+                },
+                "example": "watching"
+            },
+            {
+                "name": "tags",
+                "description": "Some tags to add to the manga",
+                "in": "query",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                },
+                "example": "idk, what, this, even, is, used, for, tbh"
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Success"
+            },
+            "403": {
+                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+            },
+            "404": {
+                "description": "Media not found. More info disclosed in error message"
+            },
+            "422": {
+                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+            },
+            "500": {
+                "description": "Undocumented and unexpected error"
+            }
+        }
+    },
+    "delete": {
+        "description": "Remove a manga from your list",
+        "tags": [
+            "Manga",
+            "List"
+        ],
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
+                "name": "mangaid",
+                "in": "query",
+                "description": "The id of the manga you want to remove from your list",
+                "required": true,
+                "example": "0",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "state",
+                "in": "query",
+                "description": "The code used for authentication",
+                "required": false,
+                "deprecated": true,
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Success"
+            },
+            "403": {
+                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+            },
+            "404": {
+                "description": "Media not found. More info disclosed in error message"
+            },
+            "422": {
+                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+            },
+            "500": {
+                "description": "Undocumented and unexpected error"
+            }
+        }
+    }
+}

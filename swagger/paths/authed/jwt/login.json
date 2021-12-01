@@ -1,0 +1,48 @@
+{
+    "post": {
+        "description": "Login with a username and password using the jwt flow",
+        "tags": [
+            "Auth",
+            "JWT"
+        ],
+        "parameters": [{
+                "name": "email",
+                "in": "query",
+                "description": "The email of the user",
+                "required": true,
+                "example": "bill@microsoft.com",
+                "schema": {
+                    "type": "string",
+                    "format": "email"
+                }
+            },
+            {
+                "name": "pass",
+                "in": "query",
+                "description": "The password of the user",
+                "required": true,
+                "example": "Password123!",
+                "schema": {
+                    "type": "string"
+                }
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Success"
+            },
+            "403": {
+                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+            },
+            "404": {
+                "description": "Media not found. More info disclosed in error message"
+            },
+            "422": {
+                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+            },
+            "500": {
+                "description": "Undocumented and unexpected error"
+            }
+        }
+    }
+}

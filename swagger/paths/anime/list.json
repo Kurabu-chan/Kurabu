@@ -1,0 +1,92 @@
+{
+    "get": {
+        "description": "Get your anime list",
+        "tags": [
+            "Anime",
+            "List"
+        ],
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
+                "name": "fields",
+                "in": "query",
+                "description": "The fields that should be included in the individual animes retrieved.",
+                "example": "id, title, main_picture, alternative_titles",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            {
+                "name": "limit",
+                "in": "query",
+                "description": "The maximum amount of animes you want to retrieve",
+                "example": "5",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "offset",
+                "in": "query",
+                "description": "The index at which you want to start gettign animes, used for pagination",
+                "example": "5",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "sort",
+                "in": "query",
+                "description": "The thing you want to sort by",
+                "example": "list_score",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            {
+                "name": "state",
+                "in": "query",
+                "description": "The code used for authentication",
+                "required": false,
+                "deprecated": true,
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            {
+                "name": "status",
+                "in": "query",
+                "description": "",
+                "example": "watching",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Success"
+            },
+            "403": {
+                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+            },
+            "404": {
+                "description": "Media not found. More info disclosed in error message"
+            },
+            "422": {
+                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+            },
+            "500": {
+                "description": "Undocumented and unexpected error"
+            }
+        }
+    }
+}

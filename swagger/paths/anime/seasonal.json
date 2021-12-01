@@ -1,0 +1,105 @@
+{
+    "get": {
+        "description": "Get the animes airing in a given season",
+        "tags": [
+            "Anime"
+        ],
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
+                "name": "limit",
+                "in": "query",
+                "description": "The maximum amount of animes you want to retrieve",
+                "example": "5",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "offset",
+                "in": "query",
+                "description": "The index at which you want to start gettign animes, used for pagination",
+                "example": "5",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "fields",
+                "in": "query",
+                "description": "The fields you want to get from the anime.",
+                "required": false,
+                "example": "id, title, main_picture, alternative_titles",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            {
+                "name": "state",
+                "in": "query",
+                "description": "The code used for authentication",
+                "required": false,
+                "deprecated": true,
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            {
+                "name": "year",
+                "in": "query",
+                "descritpion": "The year to get the season from",
+                "required": false,
+                "example": 2021,
+                "schema": {
+                    "type": "integer",
+                    "minimum": 1917,
+                    "maximum": 2022
+                }
+            },
+            {
+                "name": "season",
+                "in": "query",
+                "descritpion": "The season to get",
+                "required": false,
+                "example": "winter",
+                "schema": {
+                    "type": "string",
+                    "enum": ["winter", "summer", "fall", "spring"]
+                }
+            },
+            {
+                "name": "sort",
+                "in": "query",
+                "descritpion": "The field to sort by",
+                "required": false,
+                "example": "anime_score",
+                "schema": {
+                    "type": "string",
+                    "enum": ["anime_score", "anime_num_list_users"]
+                }
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Success"
+            },
+            "403": {
+                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+            },
+            "404": {
+                "description": "Media not found. More info disclosed in error message"
+            },
+            "422": {
+                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+            },
+            "500": {
+                "description": "Undocumented and unexpected error"
+            }
+        }
+    }
+}
