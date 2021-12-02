@@ -40,7 +40,7 @@ class AnimeSeasonalSource implements MediaNodeSource {
         offset?: number
     ): Promise<JSONType> {
         let auther = await Authentication.getInstance();
-        let stateCode = auther.GetStateCode();
+        let stateCode = await auther.GetStateCode();
         try {
             if (!stateCode) throw new Error("We have no state code");
 

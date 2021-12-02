@@ -1,15 +1,19 @@
 import * as Linking from "expo-linking";
 import { Alert } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Config } from "#config/Config";
 import { handleError, listenError } from "./ErrorHandler";
 import { isUUID } from "#helpers/FormatChecker";
 import * as Updates from "expo-updates";
+import { WHEN_UNLOCKED_THIS_DEVICE_ONLY, SecureStoreOptions, deleteItemAsync, getItemAsync, setItemAsync} from "expo-secure-store";
 
 type JsonType = {
     status: "success" | "error";
     message: string;
 };
+
+const secureStoreOptions: SecureStoreOptions = {
+    keychainAccessible: WHEN_UNLOCKED_THIS_DEVICE_ONLY
+}
 
 class Authentication {
     private static instance: Authentication;
@@ -34,32 +38,29 @@ class Authentication {
     }
 
     private async LoadStorage(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
             //try to load stateCode from local storage
-            AsyncStorage.getItem("stateCode").then((value) => {
-                if (value != null && isUUID(value)) {
-                    //value was in localstorage so put it in the variable
-                    this.loaded = true;
-                    this.stateCode = value;
-                    console.log(value);
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-            });
-        });
+        
+        var token = await getItemAsync("token", secureStoreOptions)
+        if (token == null) {
+            return false;
+        }
+
+        this.loaded = true;
+        this.stateCode = token;
+
+        return true;
     }
 
-    public ClearCode() {
+    public async ClearCode() {
         this.loaded = false;
         this.stateCode = undefined;
-        AsyncStorage.removeItem("stateCode");
+        await deleteItemAsync("token", secureStoreOptions);
     }
 
-    private SetCode(uuid: string) {
+    private async SetCode(uuid: string) {
         this.loaded = true;
         this.stateCode = uuid;
-        AsyncStorage.setItem("stateCode", uuid);
+        await setItemAsync("token", uuid, secureStoreOptions);
     }
 
     public getLoaded(): boolean {
@@ -75,11 +76,9 @@ class Authentication {
         }
     }
 
-    public GetStateCode(): string | undefined {
+    public async GetStateCode(): Promise<string | undefined> {
         if (this.stateCode == undefined) {
-            this.LoadStorage().then(() => {
-                return this.stateCode;
-            });
+            await this.LoadStorage()
         }
         return this.stateCode;
     }
@@ -112,7 +111,7 @@ class Authentication {
 
         //we good
         if (isUUID(json.message)) {
-            this.SetCode(json.message);
+            await this.SetCode(json.message);
             return true;
         }
 
@@ -236,11 +235,7 @@ class Authentication {
     }
 
     public static async ClearAsync() {
-        return new Promise((resolve, reject) => {
-            AsyncStorage.removeItem("stateCode", () => {
-                resolve(undefined);
-            });
-        });
+        await deleteItemAsync("token", secureStoreOptions);
     }
 }
 

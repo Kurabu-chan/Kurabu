@@ -6,7 +6,7 @@ import { Media, UpdateListStatusResultManga } from "#api/ApiBasicTypes";
 export async function GetMangaListStatus(mangaid: number): Promise<UpdateListStatusResultManga | undefined> {
     let auth = await Authentication.getInstance();
 
-    let code = auth.GetStateCode();
+    let code = await auth.GetStateCode();
 
     if (!code) throw new Error("We have no state code");
 
