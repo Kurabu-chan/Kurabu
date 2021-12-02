@@ -6,7 +6,7 @@ import { baseRequest } from "#helpers/RequestBuilder";
 export async function GetMangaDetails(mangaid: number): Promise<Media> {
     let auth = await Authentication.getInstance();
 
-    let code = auth.GetStateCode();
+    let code = await auth.GetStateCode();
 
     if (!code) throw new Error("We have no state code");
 
