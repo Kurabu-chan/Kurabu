@@ -7,7 +7,7 @@ import { GetAnimeDetails } from "../AnimeDetails";
 export async function GetAnimeListStatus(animeid: number): Promise<UpdateListStatusResultAnime | undefined> {
     let auth = await Authentication.getInstance();
 
-    let code = auth.GetStateCode();
+    let code = await auth.GetStateCode();
 
     if (!code) throw new Error("We have no state code");
 
