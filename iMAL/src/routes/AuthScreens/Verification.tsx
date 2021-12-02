@@ -23,7 +23,7 @@ type RegisterProps = {
 };
 
 type State = {
-    uuid: string;
+    token: string;
     code: string;
     failed: boolean;
     attempt: number;
@@ -33,7 +33,7 @@ export default class Verif extends React.Component<RegisterProps, State> {
     constructor(props: RegisterProps) {
         super(props);
         this.state = {
-            uuid: props.route.params.uuid,
+            token: props.route.params.token,
             code: "",
             failed: false,
             attempt: 0,
@@ -42,14 +42,14 @@ export default class Verif extends React.Component<RegisterProps, State> {
 
     async Submit(code: string): Promise<boolean> {
         let auth = await Authentication.getInstance();
-        let uuid = auth.GetStateCode();
-        if (uuid == undefined) {
+        let token = await auth.GetToken();
+        if (token == undefined) {
             Alert.alert(
                 "An error occured during the authentication process, please retry entering the verification code. If that doesn't work close and open the app."
             );
             return false;
         }
-        let resp = await auth.TryVerif(uuid, code);
+        let resp = await auth.TryVerif(token, code);
         if (resp.status == "error") {
             Alert.alert(resp.message);
             return false;
@@ -62,17 +62,17 @@ export default class Verif extends React.Component<RegisterProps, State> {
 
     async Cancel() {
         let auth = await Authentication.getInstance();
-        let uuid = auth.GetStateCode();
-        if (uuid == undefined) {
+        let token = await auth.GetToken();
+        if (token == undefined) {
             Alert.alert(
                 "An error occured during the authentication process, please retry canceling. If that doesn't work close and open the app."
             );
             return false;
         }
-        let result = await auth.TryCancelRegister(uuid);
+        let result = await auth.TryCancelRegister(token);
         if (result) {
-            console.log("Going to register and clearing stateCode");
-            auth.ClearCode();
+            console.log("Going to register and clearing token");
+            auth.ClearToken();
 
             RootNavigator.navigate("Register", undefined);
         }

@@ -16,3 +16,8 @@ export function getUUID() {
     );
     return uuid;
 }
+
+export function isJWT(token: string) {
+    const jwtReg = /^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)/gi;
+    return token.match(jwtReg) != null;
+}

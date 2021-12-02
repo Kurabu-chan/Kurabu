@@ -72,7 +72,6 @@ export default class Application extends React.Component<any, StateType> {
             appstate: nextAppState,
         }));
     };
-
     private _checkInitialUrl = async () => {
         const url = await Linking.getInitialURL();
         if (url?.includes("auth")) {
@@ -83,11 +82,11 @@ export default class Application extends React.Component<any, StateType> {
     private _handleUrl = (url: string | null) => {
         if (url != null) {
             if (url.includes("auth")) {
-                let uuid = url.split("auth/")[1];
-                console.log(uuid);
+                let token = url.split("auth/")[1];
+                console.log(token);
                 Authentication.getInstance()
                     .then((auth) => {
-                        auth.setCode(uuid);
+                        auth.setToken(token);
                         try {
                             DoSwitch("Drawer");
                         } catch (e) {

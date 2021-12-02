@@ -6,15 +6,15 @@ import { baseRequest } from "#helpers/RequestBuilder";
 export async function GetMangaDetails(mangaid: number): Promise<Media> {
     let auth = await Authentication.getInstance();
 
-    let code = await auth.GetStateCode();
+    let token = await auth.GetToken();
 
-    if (!code) throw new Error("We have no state code");
+    if (!token) throw new Error("We have no token");
 
-    var req = baseRequest()
+    var req = await baseRequest()
         .addPath("manga")
         .addPath("details")
         .setQueryParam("mangaid", mangaid.toString())
-        .setQueryParam("state", code);
+        .addAuthentication();
 
     console.log(req.build().url);
 

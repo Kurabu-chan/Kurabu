@@ -29,6 +29,6 @@ export type AuthStackParamList = {
     Login: undefined;
     Register: undefined;
     Verify: {
-        uuid: string;
+        token: string;
     };
 };

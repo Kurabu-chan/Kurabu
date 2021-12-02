@@ -6,16 +6,16 @@ import { Media, UpdateListStatusResultManga } from "#api/ApiBasicTypes";
 export async function GetMangaListStatus(mangaid: number): Promise<UpdateListStatusResultManga | undefined> {
     let auth = await Authentication.getInstance();
 
-    let code = await auth.GetStateCode();
+    let token = await auth.GetToken();
 
-    if (!code) throw new Error("We have no state code");
+    if (!token) throw new Error("We have no token");
 
-    var detailsReq = baseRequest()
+    var detailsReq = await baseRequest()
         .addPath("manga")
         .addPath("details")
         .setQueryParam("fields", "id, title, main_picture, alternative_titles, my_list_status{status, score, num_volumes_read, num_chapters_read, is_rereading, updated_at, priority, num_times_reread, reread_value, tags, comments}")
-        .setQueryParam("state", code)
-        .setQueryParam("mangaid", mangaid.toString());
+        .setQueryParam("mangaid", mangaid.toString())
+        .addAuthentication();
 
     console.log(detailsReq.build().url);
 
