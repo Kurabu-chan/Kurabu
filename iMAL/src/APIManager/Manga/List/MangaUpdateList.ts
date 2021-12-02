@@ -10,19 +10,20 @@ export async function MangaUpdateList(mangaid: number, before: listStatus, after
 
     let auth = await Authentication.getInstance();
 
-    let code = await auth.GetStateCode();
+    let token = await auth.GetToken();
 
-    if (!code) throw new Error("We have no state code");
+    if (!token) throw new Error("We have no token");
 
     var changes = calculateAlteredFields(before, after);
 
     if (changes.length === 0) return;
 
-    var req = baseRequest()
+    var req = await baseRequest()
         .addPath("manga/list")
         .addPath("item")
-        .setQueryParam("state", code)
-        .setQueryParam("mangaId", mangaid.toString());
+        .setQueryParam("mangaId", mangaid.toString())
+        .addAuthentication();
+
 
     if (changes.includes("status")) req.setQueryParam("status", after.status);
     if (changes.includes("score")) req.setQueryParam("score", after.score.toString())

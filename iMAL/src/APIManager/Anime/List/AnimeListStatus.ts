@@ -7,16 +7,16 @@ import { GetAnimeDetails } from "../AnimeDetails";
 export async function GetAnimeListStatus(animeid: number): Promise<UpdateListStatusResultAnime | undefined> {
     let auth = await Authentication.getInstance();
 
-    let code = await auth.GetStateCode();
+    let token = await auth.GetToken();
 
-    if (!code) throw new Error("We have no state code");
+    if (!token) throw new Error("We have no token");
 
-    var detailsReq = baseRequest()
+    var detailsReq = await baseRequest()
         .addPath("anime")
         .addPath("details")
         .setQueryParam("fields", "id, title, main_picture, alternative_titles, my_list_status{status, comments, is_rewatching, num_times_rewatched, num_watched_episodes, priority, rewatch_value, score, tags}")
-        .setQueryParam("state", code)
-        .setQueryParam("animeid", animeid.toString());
+        .setQueryParam("animeid", animeid.toString())
+        .addAuthentication();
 
     console.log(detailsReq.build().url);
 

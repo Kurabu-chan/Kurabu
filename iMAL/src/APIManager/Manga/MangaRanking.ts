@@ -17,15 +17,16 @@ export class MangaRankingSource implements MediaNodeSource {
     ): Promise<{ data: MediaNode[] }> {
         let auth = await Authentication.getInstance();
 
-        let code = await auth.GetStateCode();
+        let token = await auth.GetToken();
 
-        if (!code) throw new Error("We have no state code");
+        if (!token) throw new Error("We have no token");
 
-        var req = baseRequest()
+        var req = await baseRequest()
             .addPath("manga")
             .addPath("ranking")
             .setQueryParam("rankingtype", this.rankingtype)
-            .setQueryParam("state", code);
+            .addAuthentication();
+
 
         if (limit) {
             req.setQueryParam("limit", limit.toString());

@@ -32,14 +32,14 @@ class AnimeSuggestionsSource implements MediaNodeSource {
         offset?: number
     ): Promise<JSONType> {
         let auther = await Authentication.getInstance();
-        let stateCode = await auther.GetStateCode();
+        let token = await auther.GetToken();
         try {
-            if (!stateCode) throw new Error("We have no state code");
+            if (!token) throw new Error("We have no token");
 
-            var req = baseRequest()
+            var req = await baseRequest()
                 .addPath("anime")
                 .addPath("suggestions")
-                .setQueryParam("state", stateCode);
+                .addAuthentication();
 
             if (limit) {
                 req.setQueryParam("limit", limit.toString());

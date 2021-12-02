@@ -5,7 +5,7 @@ import Auth from "#api/Authenticate";
 import * as RootNavigator from "../RootNavigator";
 import { DoSwitch } from "../RootNavigator";
 
-//uncomment to reset saved uuid and go into developer mode for the Auth system
+//uncomment to reset saved token and go into developer mode for the Auth system
 //Auth.devMode = true;
 //Auth.ClearAsync();
 

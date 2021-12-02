@@ -47,11 +47,11 @@ class Register extends React.Component<RegisterProps, RegisterState> {
         Auth.getInstance().then((auth) => {
             auth.TryRegister(this.state.email, this.state.pass).then((res) => {
                 if (res != "") {
-                    //we got the uuid for the verification
-                    auth.setCode(res);
-                    console.log("Obtained uuid: " + res);
+                    //we got the token for the verification
+                    auth.setToken(res);
+                    console.log("Obtained token: " + res);
                     this.props.navigation.replace("Verify", {
-                        uuid: res,
+                        token: res,
                     });
                 }
             });

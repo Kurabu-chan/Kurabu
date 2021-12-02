@@ -2,7 +2,7 @@ import * as Linking from "expo-linking";
 import { Alert } from "react-native";
 import { Config } from "#config/Config";
 import { handleError, listenError } from "./ErrorHandler";
-import { isUUID } from "#helpers/FormatChecker";
+import { isJWT } from "#helpers/FormatChecker";
 import * as Updates from "expo-updates";
 import { WHEN_UNLOCKED_THIS_DEVICE_ONLY, SecureStoreOptions, deleteItemAsync, getItemAsync, setItemAsync} from "expo-secure-store";
 
@@ -17,7 +17,7 @@ const secureStoreOptions: SecureStoreOptions = {
 
 class Authentication {
     private static instance: Authentication;
-    private stateCode?: string;
+    private token?: string;
     private loaded: boolean = false;
     public static devMode = false;
 
@@ -31,14 +31,19 @@ class Authentication {
             Updates.reloadAsync();
         })
 
-        if (this.stateCode) {
+        listenError("012", () => {
+            Authentication.ClearAsync();
+            Updates.reloadAsync();
+        })
+
+        if (this.token) {
             this.loaded = true;
             return;
         }
     }
 
     private async LoadStorage(): Promise<boolean> {
-            //try to load stateCode from local storage
+            //try to load token from local storage
         
         var token = await getItemAsync("token", secureStoreOptions)
         if (token == null) {
@@ -46,47 +51,47 @@ class Authentication {
         }
 
         this.loaded = true;
-        this.stateCode = token;
+        this.token = token;
 
         return true;
     }
 
-    public async ClearCode() {
+    public async ClearToken() {
         this.loaded = false;
-        this.stateCode = undefined;
+        this.token = undefined;
         await deleteItemAsync("token", secureStoreOptions);
     }
 
-    private async SetCode(uuid: string) {
+    private async SetToken(token: string) {
         this.loaded = true;
-        this.stateCode = uuid;
-        await setItemAsync("token", uuid, secureStoreOptions);
+        this.token = token;
+        await setItemAsync("token", token, secureStoreOptions);
     }
 
     public getLoaded(): boolean {
         return this.loaded;
     }
 
-    public setCode(uuid: string) {
-        if (isUUID(uuid)) {
+    public setToken(token: string) {
+        if (isJWT(token)) {
             this.loaded = true;
-            this.stateCode = uuid;
+            this.token = token;
         } else {
-            throw new Error("param uuid is not correct format");
+            throw new Error("param token is not correct format");
         }
     }
 
-    public async GetStateCode(): Promise<string | undefined> {
-        if (this.stateCode == undefined) {
+    public async GetToken(): Promise<string | undefined> {
+        if (this.token == undefined) {
             await this.LoadStorage()
         }
-        return this.stateCode;
+        return this.token;
     }
 
-    /** make request to MAL, check status and save stateCode */
+    /** make request to MAL, check status and save token */
     public async Trylogin(email: string, password: string): Promise<boolean> {
         //url to make request to
-        let url = `${Authentication.root}authed/login`;
+        let url = `${Authentication.root}authed/jwt/login`;
         //the body of the request
         let body = {
             email: email.replace(" ", ""),
@@ -110,8 +115,8 @@ class Authentication {
         }
 
         //we good
-        if (isUUID(json.message)) {
-            await this.SetCode(json.message);
+        if (isJWT(json.message)) {
+            await this.SetToken(json.message);
             return true;
         }
 
@@ -121,7 +126,7 @@ class Authentication {
 
     public async TryRegister(email: string, password: string): Promise<string> {
         //url to make request to
-        let url = `${Authentication.root}authed/register`;
+        let url = `${Authentication.root}authed/jwt/register`;
         //the body of the request
 
         let body = {
@@ -132,7 +137,7 @@ class Authentication {
         let res = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(body),
         });
@@ -147,19 +152,14 @@ class Authentication {
         return json.message;
     }
 
-    public async TryCancelRegister(uuid: string): Promise<boolean> {
-        let url = `${Authentication.root}authed/cancelRegister`;
-
-        let body = {
-            uuid: uuid,
-        };
+    public async TryCancelRegister(token: string): Promise<boolean> {
+        let url = `${Authentication.root}authed/jwt/cancelRegister`;
 
         let res = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
+                "Authorization": `Bearer ${token}`
+            }
         });
 
         let json: JsonType = await res.json();
@@ -172,13 +172,12 @@ class Authentication {
         return true;
     }
 
-    public async TryVerif(uuid: string, code: string): Promise<JsonType> {
+    public async TryVerif(token: string, code: string): Promise<JsonType> {
         //url to make request to
-        let url = `${Authentication.root}authed/verif`;
+        let url = `${Authentication.root}authed/jwt/verif`;
         //the body of the request
 
         let body = {
-            uuid: uuid,
             code: code,
             redirect: this.MakeRedirect(),
         };
@@ -187,6 +186,7 @@ class Authentication {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify(body),
         });

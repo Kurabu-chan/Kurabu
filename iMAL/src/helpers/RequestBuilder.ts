@@ -1,5 +1,6 @@
 import fetch, { BodyInit, HeadersInit, Response } from "node-fetch";
 import { Config } from "#config/Config";
+import Authentication from "#api/Authenticate";
 
 export type RequestBuilderBuildType = {
     url: string;
@@ -48,6 +49,17 @@ export class RequestBuilder {
             key: key,
             value: value,
         });
+
+        return this;
+    }
+
+    public async addAuthentication() {
+        var auth = await Authentication.getInstance();
+        var token = await auth.GetToken();
+        
+        if (!token) throw new ReferenceError("No token present");
+        console.log(token);
+        this.setHeader("Authorization", "Bearer " + token);
 
         return this;
     }
