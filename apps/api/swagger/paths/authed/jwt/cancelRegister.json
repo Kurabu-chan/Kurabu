@@ -1,0 +1,41 @@
+{
+    "post": {
+        "description": "Cancel the registration for a user using the jwt flow",
+        "tags": [
+            "Auth",
+            "JWT"
+        ],
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
+            "name": "uuid",
+            "in": "query",
+            "description": "The JWT token for the user to cancel registration for",
+            "required": false,
+            "deprecated": true,
+            "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
+            "schema": {
+                "type": "string",
+                "format": "jwt"
+            }
+        }],
+        "responses": {
+            "200": {
+                "description": "Success"
+            },
+            "403": {
+                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+            },
+            "404": {
+                "description": "Media not found. More info disclosed in error message"
+            },
+            "422": {
+                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+            },
+            "500": {
+                "description": "Undocumented and unexpected error"
+            }
+        }
+    }
+}

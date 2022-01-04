@@ -1,0 +1,10 @@
+version: 2.1
+orbs:
+  node: circleci/node@3.0.0
+  discord: teka23/discord@0.0.1
+workflows:
+  node-tests:
+    jobs:
+      - node/test
+      - discord/approval-notification:
+          webhook: https://discord.com/api/webhooks/813888957036232724/8Xg6mEbc4FyMYv1MetrCmlWWrYLwBAZpwSOC2V0CzzM7BUsHnVNBoEuRsdzf2BTJwGfi

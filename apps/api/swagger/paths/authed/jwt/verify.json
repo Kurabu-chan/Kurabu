@@ -1,0 +1,63 @@
+{
+    "post": {
+        "description": "Verify the email of your account using the jwt flow",
+        "tags": [
+            "Auth",
+            "JWT"
+        ],
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
+                "name": "redirect",
+                "in": "query",
+                "description": "The url to use for redirecting",
+                "required": false,
+                "example": "http://localhost:15000",
+                "schema": {
+                    "type": "string",
+                    "format": "url"
+                }
+            },
+            {
+                "name": "code",
+                "in": "query",
+                "description": "The code that was received in an email message",
+                "required": false,
+                "example": "000000",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            {
+                "name": "uuid",
+                "in": "query",
+                "description": "The JWT token used for authentication",
+                "required": false,
+                "example": "",
+                "deprecated": true,
+                "schema": {
+                    "type": "string",
+                    "format": "JWT"
+                }
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Success"
+            },
+            "403": {
+                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+            },
+            "404": {
+                "description": "Media not found. More info disclosed in error message"
+            },
+            "422": {
+                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+            },
+            "500": {
+                "description": "Undocumented and unexpected error"
+            }
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"strict": true,
+		"outDir": "build",
+		"removeComments": true,
+		"experimentalDecorators": true,
+		"target": "es6",
+		"emitDecoratorMetadata": true,
+		"moduleResolution": "node",
+		"importHelpers": true,
+		"resolveJsonModule": true,
+		"sourceMap": true,
+		"typeRoots": ["node_modules/@types"],
+		"baseUrl": "./",
+		"paths": {
+			"#builders/*": ["src/builders/*"],
+			"#commands/*": ["src/commands/*"],
+			"#controllers/*": ["src/controllers/*"],
+			"#database/*": ["src/database/*"],
+			"#decorators/*": ["src/decorators/*"],
+			"#errors/*": ["src/errors/*"],
+			"#helpers/*": ["src/helpers/*"],
+			"#models/*": ["src/models/*"],
+			"#queries/*": ["./src/queries/*"],
+			"#serviceprovs/*": ["src/ServiceProviders/*"],
+			"#webreq/*": ["src/webRequest/*"]
+		}
+	},
+	"include": ["./src/**/*.ts"],
+	"exclude": ["./src/public/"]
+}

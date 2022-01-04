@@ -1,0 +1,81 @@
+{
+    "get": {
+        "description": "Search for mangas using a query",
+        "tags": [
+            "Manga"
+        ],
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
+                "name": "limit",
+                "in": "query",
+                "description": "The maximum amount of mangas you want to retrieve",
+                "example": "5",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "offset",
+                "in": "query",
+                "description": "The index at which you want to start gettign mangas, used for pagination",
+                "example": "5",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "fields",
+                "in": "query",
+                "description": "The fields you want to get from the manga.",
+                "required": false,
+                "example": "id, title, main_picture, alternative_titles",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            {
+                "name": "state",
+                "in": "query",
+                "description": "The code used for authentication",
+                "required": false,
+                "deprecated": true,
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            {
+                "name": "query",
+                "in": "query",
+                "descritpion": "The type of ranking to get.",
+                "required": true,
+                "example": "sword art",
+                "schema": {
+                    "type": "string"
+                }
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Success"
+            },
+            "403": {
+                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+            },
+            "404": {
+                "description": "Media not found. More info disclosed in error message"
+            },
+            "422": {
+                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+            },
+            "500": {
+                "description": "Undocumented and unexpected error"
+            }
+        }
+    }
+}

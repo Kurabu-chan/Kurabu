@@ -1,0 +1,7 @@
+.env
+build/
+node_modules/
+src/database/config/config.json
+coverage/
+.nyc_output/
+.VsCodeCounter/
