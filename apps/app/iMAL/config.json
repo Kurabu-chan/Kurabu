@@ -1,0 +1,7 @@
+{
+    "api": {
+        "domain": "api.kurabu.moe",
+        "scheme": "http",
+        "root": "/"
+    }
+}
