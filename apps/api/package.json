@@ -1,5 +1,5 @@
 {
-    "name": "imal",
+    "name": "@kurabu/api",
     "version": "2.0.0",
     "description": "",
     "main": "build/start.js",
@@ -58,6 +58,7 @@
         "uuid": "^8.3.2"
     },
     "devDependencies": {
+        "@kurabu/config": "*",
         "@types/bluebird": "^3.5.33",
         "@types/chai": "^4.2.15",
         "@types/mocha": "^8.2.1",
