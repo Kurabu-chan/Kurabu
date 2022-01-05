@@ -2,17 +2,17 @@
 export abstract class IWebRequest {}
 
 export abstract class IWebRequestResult {
-	success!: IWebRequestResultStatus;
+    success!: IWebRequestResultStatus;
 }
 
 export enum IWebRequestResultStatus {
-	success,
-	failure,
+    success,
+    failure,
 }
 
 export interface IWebRequestHandler<
-	TWebRequest extends IWebRequest,
-	TResult extends IWebRequestResult
+    TWebRequest extends IWebRequest,
+    TResult extends IWebRequestResult
 > {
-	handle(query: TWebRequest): Promise<TResult>;
+    handle(query: TWebRequest): Promise<TResult>;
 }

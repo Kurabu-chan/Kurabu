@@ -3,7 +3,9 @@ import { handleError } from "#api/ErrorHandler";
 import { baseRequest } from "#helpers/RequestBuilder";
 import { UpdateListStatusResultManga } from "#api/ApiBasicTypes";
 
-export async function MangaAddToList(mangaid: number): Promise<UpdateListStatusResultManga | undefined> {
+export async function MangaAddToList(
+    mangaid: number
+): Promise<UpdateListStatusResultManga | undefined> {
     let auth = await Authentication.getInstance();
 
     let token = await auth.GetToken();
@@ -21,8 +23,8 @@ export async function MangaAddToList(mangaid: number): Promise<UpdateListStatusR
 
     var res = await req.request("POST");
     var json: {
-        success: number,
-        status: UpdateListStatusResultManga
+        success: number;
+        status: UpdateListStatusResultManga;
     } = await res.json();
 
     handleError(json);
@@ -31,5 +33,5 @@ export async function MangaAddToList(mangaid: number): Promise<UpdateListStatusR
         return undefined;
     }
 
-    return (json.status as unknown) as UpdateListStatusResultManga;
+    return json.status as unknown as UpdateListStatusResultManga;
 }

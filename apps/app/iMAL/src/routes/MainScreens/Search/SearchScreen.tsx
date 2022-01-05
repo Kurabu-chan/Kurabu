@@ -47,14 +47,14 @@ export default class Search extends React.Component<any, StateType> {
 
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new AnimeSearchSource(
-            this.state.search.searchText,
-            fields
-        );
+        var nodeSource = new AnimeSearchSource(this.state.search.searchText, fields);
         this.setState((prevState) => ({
             ...prevState,
             searchSource: nodeSource,
-            search: { ...prevState.search, searched: true },
+            search: {
+                ...prevState.search,
+                searched: true,
+            },
         }));
         if (this.state.animeList) {
             console.log(this.state.search.searchText);
@@ -128,19 +128,29 @@ export default class Search extends React.Component<any, StateType> {
     }
 
     onSearchListCreate(list: SearchList) {
-        this.setState((prevState) => ({ ...prevState, animeList: list }));
+        this.setState((prevState) => ({
+            ...prevState,
+            animeList: list,
+        }));
     }
 
     onSearchListDataGather() {
         this.setState((prevState) => ({
             ...prevState,
-            search: { ...prevState.search, found: true },
+            search: {
+                ...prevState.search,
+                found: true,
+            },
         }));
     }
 
     render() {
         return (
-            <SafeAreaProvider style={{ backgroundColor: "#1a1a1a" }}>
+            <SafeAreaProvider
+                style={{
+                    backgroundColor: "#1a1a1a",
+                }}
+            >
                 <LinearGradient
                     // Background Linear Gradient
                     colors={[
@@ -152,7 +162,8 @@ export default class Search extends React.Component<any, StateType> {
                     style={{
                         width: Dimensions.get("window").width,
                         height: Dimensions.get("window").height,
-                    }}>
+                    }}
+                >
                     {this.createSearchBar()}
                     {this.state.searchSource !== undefined ? (
                         <SearchList
@@ -160,9 +171,7 @@ export default class Search extends React.Component<any, StateType> {
                             mediaNodeSource={this.state.searchSource}
                             navigator={this.props.navigation}
                             onCreate={this.onSearchListCreate.bind(this)}
-                            onDataGather={this.onSearchListDataGather.bind(
-                                this
-                            )}
+                            onDataGather={this.onSearchListDataGather.bind(this)}
                         />
                     ) : undefined}
                 </LinearGradient>

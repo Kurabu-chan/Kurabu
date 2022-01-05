@@ -3,7 +3,10 @@ import { Queue } from "#helpers/Queue";
 
 export const navigationRef = React.createRef<any>();
 var ready = false;
-var navQueue = new Queue<{ name: string; params: any }>();
+var navQueue = new Queue<{
+    name: string;
+    params: any;
+}>();
 
 export function navigationRefReady() {
     ready = true;

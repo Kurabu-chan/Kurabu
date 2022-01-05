@@ -1,13 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import {
-    Dimensions,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { MediaNode } from "#api/ApiBasicTypes";
 import { Colors } from "#config/Colors";
@@ -82,9 +75,7 @@ class MediaItem extends React.Component<MediaItemProps, MediaItemState> {
         });
 
         return (
-            <TouchableOpacity
-                style={styles.mediaContainer}
-                onPress={this.openDetails.bind(this)}>
+            <TouchableOpacity style={styles.mediaContainer} onPress={this.openDetails.bind(this)}>
                 {this.state.item.node.main_picture !== undefined ? (
                     <Image
                         style={styles.image}

@@ -10,8 +10,14 @@ export type RequestBuilderBuildType = {
 };
 
 export class RequestBuilder {
-    private headers: { key: string; value: string }[];
-    private queryParams: { key: string; value: string }[];
+    private headers: {
+        key: string;
+        value: string;
+    }[];
+    private queryParams: {
+        key: string;
+        value: string;
+    }[];
     private body?: BodyInit;
     private path: string;
 
@@ -56,7 +62,7 @@ export class RequestBuilder {
     public async addAuthentication() {
         var auth = await Authentication.getInstance();
         var token = await auth.GetToken();
-        
+
         if (!token) throw new ReferenceError("No token present");
         console.log(token);
         this.setHeader("Authorization", "Bearer " + token);

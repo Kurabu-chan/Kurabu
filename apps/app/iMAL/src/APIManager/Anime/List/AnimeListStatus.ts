@@ -1,10 +1,16 @@
 import Authentication from "#api/Authenticate";
 import { handleError } from "#api/ErrorHandler";
 import { baseRequest } from "#helpers/RequestBuilder";
-import { Media, UpdateListStatusResultAnime, UpdateListStatusResultManga } from "#api/ApiBasicTypes";
+import {
+    Media,
+    UpdateListStatusResultAnime,
+    UpdateListStatusResultManga,
+} from "#api/ApiBasicTypes";
 import { GetAnimeDetails } from "../AnimeDetails";
 
-export async function GetAnimeListStatus(animeid: number): Promise<UpdateListStatusResultAnime | undefined> {
+export async function GetAnimeListStatus(
+    animeid: number
+): Promise<UpdateListStatusResultAnime | undefined> {
     let auth = await Authentication.getInstance();
 
     let token = await auth.GetToken();
@@ -14,7 +20,10 @@ export async function GetAnimeListStatus(animeid: number): Promise<UpdateListSta
     var detailsReq = await baseRequest()
         .addPath("anime")
         .addPath("details")
-        .setQueryParam("fields", "id, title, main_picture, alternative_titles, my_list_status{status, comments, is_rewatching, num_times_rewatched, num_watched_episodes, priority, rewatch_value, score, tags}")
+        .setQueryParam(
+            "fields",
+            "id, title, main_picture, alternative_titles, my_list_status{status, comments, is_rewatching, num_times_rewatched, num_watched_episodes, priority, rewatch_value, score, tags}"
+        )
         .setQueryParam("animeid", animeid.toString())
         .addAuthentication();
 
@@ -29,5 +38,5 @@ export async function GetAnimeListStatus(animeid: number): Promise<UpdateListSta
         return undefined;
     }
 
-    return (details.my_list_status as unknown) as UpdateListStatusResultAnime;
+    return details.my_list_status as unknown as UpdateListStatusResultAnime;
 }

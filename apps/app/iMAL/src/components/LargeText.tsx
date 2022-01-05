@@ -52,7 +52,8 @@ export class LargeText extends React.Component<Props, State> {
                                 ...prevState,
                                 readmore: !prevState.readmore,
                             }));
-                        }}>
+                        }}
+                    >
                         <Text style={styles.ReadMore}>{read}</Text>
                     </TouchableOpacity>
                 ) : undefined}

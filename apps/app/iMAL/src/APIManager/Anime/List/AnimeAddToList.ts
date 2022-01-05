@@ -3,7 +3,9 @@ import { handleError } from "#api/ErrorHandler";
 import { baseRequest } from "#helpers/RequestBuilder";
 import { UpdateListStatusResultAnime } from "#api/ApiBasicTypes";
 
-export async function AnimeAddToList(animeid: number): Promise<UpdateListStatusResultAnime | undefined> {
+export async function AnimeAddToList(
+    animeid: number
+): Promise<UpdateListStatusResultAnime | undefined> {
     let auth = await Authentication.getInstance();
 
     let token = await auth.GetToken();
@@ -21,8 +23,8 @@ export async function AnimeAddToList(animeid: number): Promise<UpdateListStatusR
 
     var res = await req.request("POST");
     var json: {
-        success: number,
-        status: UpdateListStatusResultAnime
+        success: number;
+        status: UpdateListStatusResultAnime;
     } = await res.json();
 
     handleError(json);
@@ -31,5 +33,5 @@ export async function AnimeAddToList(animeid: number): Promise<UpdateListStatusR
         return undefined;
     }
 
-    return (json.status as unknown) as UpdateListStatusResultAnime;
+    return json.status as unknown as UpdateListStatusResultAnime;
 }

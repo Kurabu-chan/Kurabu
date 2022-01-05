@@ -21,12 +21,14 @@ export class CamelToSnakeCase {
 
         // check if camel is an array
         if (Array.isArray(camel)) {
-            return camel.map(x => this.fullObject(x));
+            return camel.map((x) => this.fullObject(x));
         }
 
         // check if camel is an object
         if (typeof camel === "object") {
-            const obj: {[key:string]: any} = {};
+            const obj: {
+                [key: string]: any;
+            } = {};
             for (const prop of Object.keys(camel)) {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
                 obj[this.single(prop)] = this.fullObject(camel[prop]);

@@ -16,7 +16,8 @@ export default function RankingStack() {
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="RankingScreen">
+            initialRouteName="RankingScreen"
+        >
             <Stack.Screen name="RankingScreen" component={Ranking} />
             <Stack.Screen name="DetailsScreen" component={Details} />
         </Stack.Navigator>

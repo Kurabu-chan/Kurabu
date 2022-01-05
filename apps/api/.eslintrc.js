@@ -23,7 +23,7 @@ module.exports = {
     ],
     parser: "@typescript-eslint/parser",
     parserOptions: {
-        project: ["./tsconfig.json", "./tests/tsconfig.json"],
+        project: ["./apps/api/tsconfig.json", "./apps/api/tests/tsconfig.json"],
         sourceType: "module",
     },
     plugins: [
@@ -89,7 +89,14 @@ module.exports = {
         "@typescript-eslint/prefer-for-of": "error",
         "@typescript-eslint/prefer-function-type": "error",
         "@typescript-eslint/prefer-namespace-keyword": "error",
-        "@typescript-eslint/quotes": ["error", "double"],
+        "@typescript-eslint/quotes": [
+            "error",
+            "double",
+            {
+                "avoidEscape": true,
+                "allowTemplateLiterals": true
+            }
+        ],
         "@typescript-eslint/triple-slash-reference": [
             "error",
             {
@@ -118,7 +125,8 @@ module.exports = {
                 ignoreComments: true,
                 ignoreTemplateLiterals: true,
                 ignoreRegExpLiterals: true,
-                ignoreUrls: true
+                ignoreUrls: true,
+                ignorePattern: '^import .*'
             },
         ],
         "new-parens": "error",
@@ -155,7 +163,14 @@ module.exports = {
         "one-var": ["error", "never"],
         "prefer-const": "error",
         "sort-keys": "error",
-        quotes: "error",
+        quotes: [
+            "error",
+            "double",
+            {
+                "avoidEscape": true,
+                "allowTemplateLiterals": true
+            }
+        ],
         radix: "error",
         "spaced-comment": [
             "error",

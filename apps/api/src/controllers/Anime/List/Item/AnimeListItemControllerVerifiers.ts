@@ -4,8 +4,7 @@ export function verifyAnimeId(animeId: number): boolean {
     return animeId > 0;
 }
 
-export function verifyStatus(status: string): boolean
-{
+export function verifyStatus(status: string): boolean {
     return allowedStati.includes(status);
 }
 

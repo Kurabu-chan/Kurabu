@@ -1,12 +1,8 @@
-import React from 'react';
-import TimeAgo from "react-native-timeago"
-import { GetMangaDetails } from '#api/Manga/MangaDetails';
-import {
-    changeActivePage,
-    changeBackButton,
-    getActivePage,
-} from '#helpers/backButton';
-import { LinearGradient } from 'expo-linear-gradient';
+import React from "react";
+import TimeAgo from "react-native-timeago";
+import { GetMangaDetails } from "#api/Manga/MangaDetails";
+import { changeActivePage, changeBackButton, getActivePage } from "#helpers/backButton";
+import { LinearGradient } from "expo-linear-gradient";
 import {
     ActivityIndicator,
     Dimensions,
@@ -16,22 +12,22 @@ import {
     StyleSheet,
     Text,
     View,
-    TouchableOpacity
-} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+    TouchableOpacity,
+} from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
-import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-import { GetAnimeDetails } from '#api/Anime/AnimeDetails';
-import { Media } from '#api/ApiBasicTypes';
-import { Divider } from '#comps/Divider';
-import { LargeText } from '#comps/LargeText';
-import MediaItem from '#comps/MediaItem';
-import { Colors } from '#config/Colors';
-import { HomeStackParamList } from '../MainStacks/HomeStack';
-import { niceTextFormat } from '#helpers/textFormatting';
-import { ListStatus } from '#comps/ListStatus';
+import { GetAnimeDetails } from "#api/Anime/AnimeDetails";
+import { Media } from "#api/ApiBasicTypes";
+import { Divider } from "#comps/Divider";
+import { LargeText } from "#comps/LargeText";
+import MediaItem from "#comps/MediaItem";
+import { Colors } from "#config/Colors";
+import { HomeStackParamList } from "../MainStacks/HomeStack";
+import { niceTextFormat } from "#helpers/textFormatting";
+import { ListStatus } from "#comps/ListStatus";
 
 type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "DetailsScreen">;
@@ -149,7 +145,8 @@ export default class Details extends React.Component<Props, State> {
                     style={{
                         width: Dimensions.get("window").width,
                         height: Dimensions.get("window").height,
-                    }}>
+                    }}
+                >
                     {this.state.anime == undefined ? (
                         <ActivityIndicator
                             style={styles.loading}
@@ -162,44 +159,26 @@ export default class Details extends React.Component<Props, State> {
                                 <Image
                                     style={styles.image}
                                     source={{
-                                        uri: this.state.anime?.main_picture
-                                            ?.large,
+                                        uri: this.state.anime?.main_picture?.large,
                                     }}
                                 />
                                 <View style={styles.TitleArea}>
-                                    <Text style={styles.title}>
-                                        {this.state.anime.title}
-                                    </Text>
+                                    <Text style={styles.title}>{this.state.anime.title}</Text>
                                     {this.state.anime.title !=
-                                        this.state.anime.alternative_titles?.en ? (
+                                    this.state.anime.alternative_titles?.en ? (
                                         <Text style={styles.alternateTitle}>
-                                            {
-                                                this.state.anime
-                                                    .alternative_titles?.en
-                                            }
+                                            {this.state.anime.alternative_titles?.en}
                                         </Text>
                                     ) : undefined}
                                     <Text style={styles.alternateTitle}>
-                                        {
-                                            this.state.anime.alternative_titles
-                                                ?.ja
-                                        }
+                                        {this.state.anime.alternative_titles?.ja}
                                     </Text>
-                                    <Divider
-                                        color={Colors.DIVIDER}
-                                        widthPercentage={100}
-                                    />
+                                    <Divider color={Colors.DIVIDER} widthPercentage={100} />
                                     <View style={styles.TopAreaData}>
                                         <View style={styles.TopAreaLabels}>
-                                            <Text style={styles.TopAreaLabel}>
-                                                Score:
-                                            </Text>
-                                            <Text style={styles.TopAreaLabel}>
-                                                Rank:
-                                            </Text>
-                                            <Text style={styles.TopAreaLabel}>
-                                                Popularity:
-                                            </Text>
+                                            <Text style={styles.TopAreaLabel}>Score:</Text>
+                                            <Text style={styles.TopAreaLabel}>Rank:</Text>
+                                            <Text style={styles.TopAreaLabel}>Popularity:</Text>
                                         </View>
                                         <View style={styles.TopAreaValues}>
                                             <Text style={styles.TopAreaValue}>
@@ -213,40 +192,25 @@ export default class Details extends React.Component<Props, State> {
                                             </Text>
                                         </View>
                                     </View>
-                                    <Divider
-                                        color={Colors.DIVIDER}
-                                        widthPercentage={100}
-                                    />
+                                    <Divider color={Colors.DIVIDER} widthPercentage={100} />
                                     <View style={styles.TopAreaData}>
                                         <View style={styles.TopAreaLabels}>
-                                            <Text style={styles.TopAreaLabel}>
-                                                Status:
-                                            </Text>
-                                            <Text style={styles.TopAreaLabel}>
-                                                Aired:
-                                            </Text>
-                                            <Text style={styles.TopAreaLabel}>
-                                                Episodes:
-                                            </Text>
-                                            <Text style={styles.TopAreaLabel}>
-                                                Genres:
-                                            </Text>
+                                            <Text style={styles.TopAreaLabel}>Status:</Text>
+                                            <Text style={styles.TopAreaLabel}>Aired:</Text>
+                                            <Text style={styles.TopAreaLabel}>Episodes:</Text>
+                                            <Text style={styles.TopAreaLabel}>Genres:</Text>
                                         </View>
                                         <View style={styles.TopAreaValues}>
                                             <Text style={styles.TopAreaValue}>
-                                                {this.niceString(
-                                                    this.state.anime.status
-                                                )}
+                                                {this.niceString(this.state.anime.status)}
                                             </Text>
                                             <Text style={styles.TopAreaValue}>
                                                 {this.state.anime.start_date}
                                             </Text>
                                             <Text style={styles.TopAreaValue}>
-                                                {this.state.anime
-                                                    .num_episodes == 0
+                                                {this.state.anime.num_episodes == 0
                                                     ? "N/A"
-                                                    : this.state.anime
-                                                        .num_episodes}
+                                                    : this.state.anime.num_episodes}
                                             </Text>
                                             <Text style={styles.TopAreaValue}>
                                                 {this.state.anime.genres
@@ -258,54 +222,39 @@ export default class Details extends React.Component<Props, State> {
                                 </View>
                             </View>
                             <Text style={styles.head2}>Synopsis</Text>
-                            <Divider
-                                color={Colors.DIVIDER}
-                                widthPercentage={100}
-                            />
+                            <Divider color={Colors.DIVIDER} widthPercentage={100} />
                             <LargeText text={this.state.anime.synopsis} />
                             {this.state.anime.background != undefined &&
-                                this.state.anime.background != "" ? (
+                            this.state.anime.background != "" ? (
                                 <View>
                                     <Text style={styles.head2}>Background</Text>
-                                    <Divider
-                                        color={Colors.DIVIDER}
-                                        widthPercentage={100}
-                                    />
-                                    <LargeText
-                                        text={this.state.anime.background}
-                                    />
+                                    <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                                    <LargeText text={this.state.anime.background} />
                                 </View>
                             ) : undefined}
-                            <Divider
-                                color={Colors.DIVIDER}
-                                widthPercentage={0}
-                            />
+                            <Divider color={Colors.DIVIDER} widthPercentage={0} />
                             <Text style={styles.head2}>Your list status</Text>
-                            <Divider
-                                color={Colors.DIVIDER}
-                                widthPercentage={100}
+                            <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                            <ListStatus
+                                parentRefresh={this.refresh.bind(this)}
+                                id={this.state.mediaId as number}
+                                props={this.state.anime.my_list_status}
+                                navigation={this.props.navigation}
+                                route={this.props.route}
+                                mediaType={this.state.mediaType}
                             />
-                            <ListStatus parentRefresh={this.refresh.bind(this)} id={this.state.mediaId as number} props={this.state.anime.my_list_status} navigation={this.props.navigation} route={this.props.route} mediaType={this.state.mediaType} />
-                            <Divider
-                                color={Colors.DIVIDER}
-                                widthPercentage={0}
-                            />
+                            <Divider color={Colors.DIVIDER} widthPercentage={0} />
                             <Text style={styles.head2}>Recommendations</Text>
-                            <Divider
-                                color={Colors.DIVIDER}
-                                widthPercentage={100}
-                            />
+                            <Divider color={Colors.DIVIDER} widthPercentage={100} />
                             <FlatList
                                 horizontal={true}
-                                data={this.state.anime.recommendations?.map(
-                                    (x) => ({
-                                        ...x,
-                                        node: {
-                                            ...x.node,
-                                            media_type: this.state.mediaType,
-                                        },
-                                    })
-                                )}
+                                data={this.state.anime.recommendations?.map((x) => ({
+                                    ...x,
+                                    node: {
+                                        ...x.node,
+                                        media_type: this.state.mediaType,
+                                    },
+                                }))}
                                 renderItem={(item) => (
                                     <MediaItem
                                         item={item.item}
@@ -315,10 +264,7 @@ export default class Details extends React.Component<Props, State> {
                                 )}
                                 keyExtractor={(_, index) => index.toString()}
                             />
-                            <Divider
-                                color={Colors.DIVIDER}
-                                widthPercentage={0}
-                            />
+                            <Divider color={Colors.DIVIDER} widthPercentage={0} />
                             <View
                                 style={{
                                     height: 80,
@@ -403,5 +349,5 @@ const styles = StyleSheet.create({
     TopAreaValue: {
         color: Colors.TEXT,
         fontSize: 12,
-    }
+    },
 });

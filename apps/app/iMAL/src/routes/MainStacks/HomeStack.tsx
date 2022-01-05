@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 export type HomeStackParamList = {
     HomeScreen: undefined;
     DetailsScreen: DetailsStackParams;
-    ListDetailsScreen: ListDetailsStackParams
+    ListDetailsScreen: ListDetailsStackParams;
 };
 
 export default function HomeStack(params: any) {
@@ -19,7 +19,8 @@ export default function HomeStack(params: any) {
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="HomeScreen">
+            initialRouteName="HomeScreen"
+        >
             <Stack.Screen name="HomeScreen" component={HomeTabs} />
             <Stack.Screen name="DetailsScreen" component={Details} />
             <Stack.Screen name="ListDetailsScreen" component={ListDetails} />

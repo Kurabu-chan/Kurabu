@@ -41,26 +41,27 @@ class MediaList extends React.Component<MediaListProps, MediaListState> {
 
     public refresh(nodeSource: MediaNodeSource) {
         nodeSource.MakeRequest(20).then((data) => {
-            this.setState((prevState) => ({ ...prevState, data: data.data }));
+            this.setState((prevState) => ({
+                ...prevState,
+                data: data.data,
+            }));
         });
     }
 
     public loadExtra() {
-        this.state.mediaNodeSource
-            .MakeRequest(20, this.state.offset + 20)
-            .then((data) => {
-                this.setState((old) => {
-                    old.data.push(...data.data);
+        this.state.mediaNodeSource.MakeRequest(20, this.state.offset + 20).then((data) => {
+            this.setState((old) => {
+                old.data.push(...data.data);
 
-                    return {
-                        title: old.title,
-                        data: old.data,
-                        mediaNodeSource: old.mediaNodeSource,
-                        navigator: old.navigator,
-                        offset: old.data.length,
-                    };
-                });
+                return {
+                    title: old.title,
+                    data: old.data,
+                    mediaNodeSource: old.mediaNodeSource,
+                    navigator: old.navigator,
+                    offset: old.data.length,
+                };
             });
+        });
     }
 
     render() {
@@ -73,10 +74,7 @@ class MediaList extends React.Component<MediaListProps, MediaListState> {
                     numColumns={2}
                     renderItem={(item) =>
                         item.index > 1 ? (
-                            <MediaItem
-                                item={item.item}
-                                navigator={this.state.navigator}
-                            />
+                            <MediaItem item={item.item} navigator={this.state.navigator} />
                         ) : item.index == 0 ? (
                             <Text style={styles.title}>{this.state.title}</Text>
                         ) : (

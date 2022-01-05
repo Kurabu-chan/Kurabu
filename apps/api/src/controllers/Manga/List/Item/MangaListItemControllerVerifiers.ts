@@ -4,8 +4,7 @@ export function verifyMangaId(mangaId: number): boolean {
     return mangaId > 0;
 }
 
-export function verifyStatus(status: string): boolean
-{
+export function verifyStatus(status: string): boolean {
     return allowedStati.includes(status);
 }
 

@@ -32,11 +32,17 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
 
     private changeEmail(newstr: string) {
-        this.setState((prevState) => ({ ...prevState, email: newstr }));
+        this.setState((prevState) => ({
+            ...prevState,
+            email: newstr,
+        }));
     }
 
     private changePass(newstr: string) {
-        this.setState((prevState) => ({ ...prevState, pass: newstr }));
+        this.setState((prevState) => ({
+            ...prevState,
+            pass: newstr,
+        }));
     }
 
     private DoLogin() {
@@ -67,7 +73,11 @@ class Login extends React.Component<LoginProps, LoginState> {
                 <SafeAreaView style={styles.safeContainer} />
                 <View style={styles.content}>
                     <View
-                        style={{ width: 10, height: `${30 * sizer}%` }}></View>
+                        style={{
+                            width: 10,
+                            height: `${30 * sizer}%`,
+                        }}
+                    ></View>
                     <TextInput
                         onChangeText={this.changeEmail.bind(this)}
                         placeholder="Email"
@@ -86,14 +96,22 @@ class Login extends React.Component<LoginProps, LoginState> {
                     <TouchableOpacity
                         style={styles.LoginButton}
                         activeOpacity={0.6}
-                        onPress={this.DoLogin.bind(this)}>
+                        onPress={this.DoLogin.bind(this)}
+                    >
                         <Text style={styles.LoginButtonText}>Login</Text>
                     </TouchableOpacity>
-                    <Text style={{ color: "white" }}>No Account?</Text>
+                    <Text
+                        style={{
+                            color: "white",
+                        }}
+                    >
+                        No Account?
+                    </Text>
                     <TouchableOpacity
                         style={styles.SignupButton}
                         activeOpacity={0.6}
-                        onPress={this.DoSignup.bind(this)}>
+                        onPress={this.DoSignup.bind(this)}
+                    >
                         <Text style={styles.SignupButtonText}>Sign up</Text>
                     </TouchableOpacity>
                 </View>

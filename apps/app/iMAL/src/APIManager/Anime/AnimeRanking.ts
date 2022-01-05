@@ -11,10 +11,7 @@ export class AnimeRankingSource implements MediaNodeSource {
         }
     }
 
-    async MakeRequest(
-        limit?: number,
-        offset?: number
-    ): Promise<{ data: MediaNode[] }> {
+    async MakeRequest(limit?: number, offset?: number): Promise<{ data: MediaNode[] }> {
         let auth = await Authentication.getInstance();
 
         let token = await auth.GetToken();
@@ -35,13 +32,9 @@ export class AnimeRankingSource implements MediaNodeSource {
         }
 
         if (this.fields) {
-            if (!this.fields.includes(Fields.media_type))
-                this.fields.push(Fields.media_type);
+            if (!this.fields.includes(Fields.media_type)) this.fields.push(Fields.media_type);
 
-            req.setQueryParam(
-                "fields",
-                this.fields.map((x) => Fields[x]).join(", ")
-            );
+            req.setQueryParam("fields", this.fields.map((x) => Fields[x]).join(", "));
         }
 
         console.log(req.build().url);

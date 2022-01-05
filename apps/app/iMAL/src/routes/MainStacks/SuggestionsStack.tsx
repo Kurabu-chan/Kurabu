@@ -16,7 +16,8 @@ export default function SearchStack() {
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="SuggestionsScreen">
+            initialRouteName="SuggestionsScreen"
+        >
             <Stack.Screen name="SuggestionsScreen" component={Suggestions} />
             <Stack.Screen name="DetailsScreen" component={Details} />
         </Stack.Navigator>

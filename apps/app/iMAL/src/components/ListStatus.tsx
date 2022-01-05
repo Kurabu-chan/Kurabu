@@ -1,10 +1,14 @@
-import { ListStatus as ListStatusProps, ListStatusAnime, ListStatusManga } from "#api/ApiBasicTypes";
+import {
+    ListStatus as ListStatusProps,
+    ListStatusAnime,
+    ListStatusManga,
+} from "#api/ApiBasicTypes";
 import { Colors } from "#config/Colors";
 import { niceTextFormat } from "#helpers/textFormatting";
 import React from "react";
 import { TouchableOpacity, View, Text, Dimensions, StyleSheet } from "react-native";
-import { Divider } from '#comps/Divider';
-import TimeAgo from "react-native-timeago"
+import { Divider } from "#comps/Divider";
+import TimeAgo from "react-native-timeago";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
@@ -21,8 +25,8 @@ type Props = {
 };
 
 type State = {
-    isAnime: boolean
-}
+    isAnime: boolean;
+};
 
 export class ListStatus extends React.PureComponent<Props, State> {
     constructor(props: Props) {
@@ -39,23 +43,23 @@ export class ListStatus extends React.PureComponent<Props, State> {
         ];
 
         this.state = {
-            isAnime: !mangaMediatTypes.includes(props.mediaType)
-        }
+            isAnime: !mangaMediatTypes.includes(props.mediaType),
+        };
     }
 
     showListStatus() {
         this.props.navigation.push("ListDetailsScreen", {
             id: this.props.id,
-            media_type: this.props.mediaType
+            media_type: this.props.mediaType,
         });
     }
 
     async addToList() {
         let success = false;
         if (this.state.isAnime == true) {
-            success = await AnimeAddToList(this.props.id) !== undefined;
+            success = (await AnimeAddToList(this.props.id)) !== undefined;
         } else {
-            success = await MangaAddToList(this.props.id) !== undefined;
+            success = (await MangaAddToList(this.props.id)) !== undefined;
         }
         if (success) this.props.parentRefresh();
     }
@@ -64,121 +68,113 @@ export class ListStatus extends React.PureComponent<Props, State> {
         return (
             <View style={styles.TopAreaData}>
                 <View style={styles.TopAreaLabels}>
-                    <Text style={styles.TopAreaLabel}>
-                        Status:
-                    </Text>
-                    <Text style={styles.TopAreaLabel}>
-                        Watched episodes:
-                    </Text>
-                    <Text style={styles.TopAreaLabel}>
-                        Status updated:
-                    </Text>
+                    <Text style={styles.TopAreaLabel}>Status:</Text>
+                    <Text style={styles.TopAreaLabel}>Watched episodes:</Text>
+                    <Text style={styles.TopAreaLabel}>Status updated:</Text>
                 </View>
                 <View style={styles.TopAreaValues}>
-                    <Text style={styles.TopAreaValue}>
-                        {niceTextFormat(props.status)}
-                    </Text>
-                    <Text style={styles.TopAreaValue}>
-                        {props.num_episodes_watched}
-                    </Text>
+                    <Text style={styles.TopAreaValue}>{niceTextFormat(props.status)}</Text>
+                    <Text style={styles.TopAreaValue}>{props.num_episodes_watched}</Text>
 
                     <Text style={styles.TopAreaValue}>
                         <TimeAgo time={props.updated_at ?? ""} interval={5000} />
                     </Text>
                 </View>
-            </View>);
+            </View>
+        );
     }
 
     renderManga(props: ListStatusManga) {
         return (
             <View style={styles.TopAreaData}>
                 <View style={styles.TopAreaLabels}>
-                    <Text style={styles.TopAreaLabel}>
-                        Status:
-                    </Text>
-                    <Text style={styles.TopAreaLabel}>
-                        Volumes read:
-                    </Text>
-                    <Text style={styles.TopAreaLabel}>
-                        Chapters read:
-                    </Text>
-                    <Text style={styles.TopAreaLabel}>
-                        Status updated:
-                    </Text>
+                    <Text style={styles.TopAreaLabel}>Status:</Text>
+                    <Text style={styles.TopAreaLabel}>Volumes read:</Text>
+                    <Text style={styles.TopAreaLabel}>Chapters read:</Text>
+                    <Text style={styles.TopAreaLabel}>Status updated:</Text>
                 </View>
                 <View style={styles.TopAreaValues}>
-                    <Text style={styles.TopAreaValue}>
-                        {niceTextFormat(props.status)}
-                    </Text>
-                    <Text style={styles.TopAreaValue}>
-                        {props.num_volumes_read}
-                    </Text>
-                    <Text style={styles.TopAreaValue}>
-                        {props.num_chapters_read}
-                    </Text>
-
+                    <Text style={styles.TopAreaValue}>{niceTextFormat(props.status)}</Text>
+                    <Text style={styles.TopAreaValue}>{props.num_volumes_read}</Text>
+                    <Text style={styles.TopAreaValue}>{props.num_chapters_read}</Text>
 
                     <Text style={styles.TopAreaValue}>
                         <TimeAgo time={props.updated_at ?? ""} interval={5000} />
                     </Text>
                 </View>
-            </View>);
+            </View>
+        );
     }
 
     render() {
         if (this.props.props === undefined) {
-            return (<View>
-                <View style={styles.TopAreaData}>
-                    <View style={styles.TopAreaLabels}>
-                        <Text style={styles.TopAreaLabel}>
-                            Status:
-                        </Text>
+            return (
+                <View>
+                    <View style={styles.TopAreaData}>
+                        <View style={styles.TopAreaLabels}>
+                            <Text style={styles.TopAreaLabel}>Status:</Text>
+                        </View>
+                        <View style={styles.TopAreaValues}>
+                            <Text style={styles.TopAreaValue}>
+                                {this.state.isAnime
+                                    ? niceTextFormat("not-watching")
+                                    : niceTextFormat("not-reading")}
+                            </Text>
+                        </View>
                     </View>
-                    <View style={styles.TopAreaValues}>
-                        <Text style={styles.TopAreaValue}>
-                            {this.state.isAnime ? niceTextFormat("not-watching") : niceTextFormat("not-reading")}
-                        </Text>
-                    </View>
+                    <Divider color={Colors.DIVIDER} widthPercentage={0} />
+                    {this.showListStatusButton()}
                 </View>
-                <Divider
-                    color={Colors.DIVIDER}
-                    widthPercentage={0}
-                />
-                {this.showListStatusButton()}
-            </View>);
+            );
         }
 
-        return (<View>
-            {this.state.isAnime ?
-                this.renderAnime(this.props.props as ListStatusAnime)
-                : this.renderManga(this.props.props as ListStatusManga)}
-            <Divider
-                color={Colors.DIVIDER}
-                widthPercentage={0}
-            />
-            {this.showListStatusButton()}
-        </View>);
+        return (
+            <View>
+                {this.state.isAnime
+                    ? this.renderAnime(this.props.props as ListStatusAnime)
+                    : this.renderManga(this.props.props as ListStatusManga)}
+                <Divider color={Colors.DIVIDER} widthPercentage={0} />
+                {this.showListStatusButton()}
+            </View>
+        );
     }
 
     showListStatusButton() {
         if (this.props.props == undefined) {
-            return (<TouchableOpacity style={styles.listStatusEdit} onPress={async () => {
-                await this.addToList();
-            }}>
-                <Text style={{
-                    alignSelf: "center"
-                }}>Add to list</Text>
-            </TouchableOpacity>);
+            return (
+                <TouchableOpacity
+                    style={styles.listStatusEdit}
+                    onPress={async () => {
+                        await this.addToList();
+                    }}
+                >
+                    <Text
+                        style={{
+                            alignSelf: "center",
+                        }}
+                    >
+                        Add to list
+                    </Text>
+                </TouchableOpacity>
+            );
         } else {
-            return (<TouchableOpacity style={styles.listStatusEdit} onPress={() => {
-                this.showListStatus();
-            }}>
-                <Text style={{
-                    alignSelf: "center"
-                }}>Details</Text>
-            </TouchableOpacity>);
+            return (
+                <TouchableOpacity
+                    style={styles.listStatusEdit}
+                    onPress={() => {
+                        this.showListStatus();
+                    }}
+                >
+                    <Text
+                        style={{
+                            alignSelf: "center",
+                        }}
+                    >
+                        Details
+                    </Text>
+                </TouchableOpacity>
+            );
         }
-
     }
 }
 
@@ -211,6 +207,6 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         backgroundColor: Colors.KURABUPINK,
         fontSize: fontSize,
-        color: Colors.KURABUPINK
-    }
+        color: Colors.KURABUPINK,
+    },
 });

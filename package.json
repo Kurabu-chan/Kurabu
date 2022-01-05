@@ -1,42 +1,48 @@
 {
-  "name": "turborepo-basic-shared",
-  "version": "0.0.0",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
-  },
-  "devDependencies": {
-    "prettier": "^2.5.1",
-    "turbo": "latest"
-  },
-  "turbo": {
-    "pipeline": {
-      "build": {
-        "dependsOn": [
-          "^build"
-        ],
-        "outputs": [
-          "dist/**",
-          ".next/**"
-        ]
-      },
-      "lint": {
-        "outputs": []
-      },
-      "dev": {
-        "cache": false
-      }
+    "name": "turborepo-basic-shared",
+    "version": "0.0.0",
+    "private": true,
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "build": "turbo run build",
+        "dev": "turbo run dev --parallel",
+        "lint": "turbo run lint",
+        "format": "prettier --config \"./.prettierrc.json\" --write \"**/*.{ts,tsx,md}\"",
+        "lint:fix": "turbo run lint:fix"
+    },
+    "devDependencies": {
+        "cross-env": "^7.0.3",
+        "prettier": "^2.5.1",
+        "rimraf": "^3.0.2",
+        "turbo": "latest"
+    },
+    "turbo": {
+        "pipeline": {
+            "build": {
+                "dependsOn": [
+                    "^build"
+                ],
+                "outputs": [
+                    "dist/**",
+                    "build/**"
+                ]
+            },
+            "lint": {
+                "outputs": []
+            },
+            "dev": {
+                "cache": false
+            },
+            "lint:fix": {
+                "outputs": []
+            }
+        }
+    },
+    "engines": {
+        "npm": ">=7.0.0",
+        "node": ">=14.0.0"
     }
-  },
-  "engines": {
-    "npm": ">=7.0.0",
-    "node": ">=14.0.0"
-  }
 }

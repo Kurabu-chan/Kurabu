@@ -10,13 +10,13 @@ import serialize from "#helpers/objectTransormation/objectToUrlEncoded";
 @autoInjectable()
 export class UpdateUserMangaListWebRequestHandler
     implements
-    IWebRequestHandler<
-    UpdateUserMangaListWebRequest,
-    UpdateUserMangaListWebRequestResult
-    > {
-    async handle({ mangaId, user, ...body }: UpdateUserMangaListWebRequest):
-        Promise<UpdateUserMangaListWebRequestResult> {
-
+        IWebRequestHandler<UpdateUserMangaListWebRequest, UpdateUserMangaListWebRequestResult>
+{
+    async handle({
+        mangaId,
+        user,
+        ...body
+    }: UpdateUserMangaListWebRequest): Promise<UpdateUserMangaListWebRequestResult> {
         const camelToSnakeCase = new CamelToSnakeCase();
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

@@ -4,7 +4,13 @@ import { Config } from "#config/Config";
 import { handleError, listenError } from "./ErrorHandler";
 import { isJWT } from "#helpers/FormatChecker";
 import * as Updates from "expo-updates";
-import { WHEN_UNLOCKED_THIS_DEVICE_ONLY, SecureStoreOptions, deleteItemAsync, getItemAsync, setItemAsync} from "expo-secure-store";
+import {
+    WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+    SecureStoreOptions,
+    deleteItemAsync,
+    getItemAsync,
+    setItemAsync,
+} from "expo-secure-store";
 
 type JsonType = {
     status: "success" | "error";
@@ -12,8 +18,8 @@ type JsonType = {
 };
 
 const secureStoreOptions: SecureStoreOptions = {
-    keychainAccessible: WHEN_UNLOCKED_THIS_DEVICE_ONLY
-}
+    keychainAccessible: WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+};
 
 class Authentication {
     private static instance: Authentication;
@@ -29,12 +35,12 @@ class Authentication {
         listenError("023", () => {
             Authentication.ClearAsync();
             Updates.reloadAsync();
-        })
+        });
 
         listenError("012", () => {
             Authentication.ClearAsync();
             Updates.reloadAsync();
-        })
+        });
 
         if (this.token) {
             this.loaded = true;
@@ -43,9 +49,9 @@ class Authentication {
     }
 
     private async LoadStorage(): Promise<boolean> {
-            //try to load token from local storage
-        
-        var token = await getItemAsync("token", secureStoreOptions)
+        //try to load token from local storage
+
+        var token = await getItemAsync("token", secureStoreOptions);
         if (token == null) {
             return false;
         }
@@ -83,7 +89,7 @@ class Authentication {
 
     public async GetToken(): Promise<string | undefined> {
         if (this.token == undefined) {
-            await this.LoadStorage()
+            await this.LoadStorage();
         }
         return this.token;
     }
@@ -137,7 +143,7 @@ class Authentication {
         let res = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(body),
         });
@@ -158,8 +164,8 @@ class Authentication {
         let res = await fetch(url, {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${token}`
-            }
+                Authorization: `Bearer ${token}`,
+            },
         });
 
         let json: JsonType = await res.json();
@@ -186,7 +192,7 @@ class Authentication {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(body),
         });

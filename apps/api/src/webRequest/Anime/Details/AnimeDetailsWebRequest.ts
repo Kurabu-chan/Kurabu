@@ -4,7 +4,7 @@ import { User } from "#models/User";
 import { IWebRequest } from "#webreq/IWebRequest";
 
 export class AnimeDetailsWebRequest extends IWebRequest {
-	user!: User;
-	animeid!: number;
-	fields?: Fields | undefined;
+    user!: User;
+    animeid!: number;
+    fields?: Fields | undefined;
 }

@@ -3,7 +3,9 @@ import { handleError } from "#api/ErrorHandler";
 import { baseRequest } from "#helpers/RequestBuilder";
 import { Media, UpdateListStatusResultManga } from "#api/ApiBasicTypes";
 
-export async function GetMangaListStatus(mangaid: number): Promise<UpdateListStatusResultManga | undefined> {
+export async function GetMangaListStatus(
+    mangaid: number
+): Promise<UpdateListStatusResultManga | undefined> {
     let auth = await Authentication.getInstance();
 
     let token = await auth.GetToken();
@@ -13,7 +15,10 @@ export async function GetMangaListStatus(mangaid: number): Promise<UpdateListSta
     var detailsReq = await baseRequest()
         .addPath("manga")
         .addPath("details")
-        .setQueryParam("fields", "id, title, main_picture, alternative_titles, my_list_status{status, score, num_volumes_read, num_chapters_read, is_rereading, updated_at, priority, num_times_reread, reread_value, tags, comments}")
+        .setQueryParam(
+            "fields",
+            "id, title, main_picture, alternative_titles, my_list_status{status, score, num_volumes_read, num_chapters_read, is_rereading, updated_at, priority, num_times_reread, reread_value, tags, comments}"
+        )
         .setQueryParam("mangaid", mangaid.toString())
         .addAuthentication();
 
@@ -28,5 +33,5 @@ export async function GetMangaListStatus(mangaid: number): Promise<UpdateListSta
         return undefined;
     }
 
-    return (details.my_list_status as unknown) as UpdateListStatusResultManga;
+    return details.my_list_status as unknown as UpdateListStatusResultManga;
 }

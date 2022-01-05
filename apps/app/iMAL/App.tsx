@@ -9,11 +9,7 @@ import { Config } from "#config/Config";
 import { NavigationContainer } from "@react-navigation/native";
 import Drawer from "#routes/MainDrawer";
 import Auth from "#routes/AuthStack";
-import {
-    DoSwitch,
-    navigationRef,
-    navigationRefReady,
-} from "#routes/RootNavigator";
+import { DoSwitch, navigationRef, navigationRefReady } from "#routes/RootNavigator";
 import { registerSwitchListener } from "#routes/RootNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -61,10 +57,7 @@ export default class Application extends React.Component<any, StateType> {
     }
 
     private _handleAppStateChange = async (nextAppState: AppStateStatus) => {
-        if (
-            this.state.appstate.match(/inactive|background/) &&
-            nextAppState === "active"
-        ) {
+        if (this.state.appstate.match(/inactive|background/) && nextAppState === "active") {
             this._checkInitialUrl();
         }
         this.setState((prevState) => ({
@@ -93,26 +86,23 @@ export default class Application extends React.Component<any, StateType> {
                             console.log(e);
                         }
                     })
-                    .catch((e) => { });
+                    .catch((e) => {});
             }
         }
     };
 
     render() {
         const setFontsLoaded = (yes: boolean) => {
-            this.setState((prevState) => ({ ...prevState, fonts: yes }));
+            this.setState((prevState) => ({
+                ...prevState,
+                fonts: yes,
+            }));
         };
         if (this.state.fonts == true) {
             return (
                 <SafeAreaProvider>
-                    <NavigationContainer
-                        ref={navigationRef}
-                        onReady={navigationRefReady}>
-                        {this.state.RootSwitch == "Auth" ? (
-                            <Auth />
-                        ) : (
-                            <Drawer />
-                        )}
+                    <NavigationContainer ref={navigationRef} onReady={navigationRefReady}>
+                        {this.state.RootSwitch == "Auth" ? <Auth /> : <Drawer />}
                     </NavigationContainer>
                 </SafeAreaProvider>
             );

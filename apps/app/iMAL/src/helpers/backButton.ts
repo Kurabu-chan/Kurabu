@@ -1,9 +1,9 @@
 type voidFunction = () => void;
 type ButtonState = {
-    currentPage: keyof BackButtonFunctionsType,
-    backButtons: BackButtonFunctionsType,
-    rerenderers: voidFunction[]
-}
+    currentPage: keyof BackButtonFunctionsType;
+    backButtons: BackButtonFunctionsType;
+    rerenderers: voidFunction[];
+};
 type BackButtonFunctionsType = {
     Main?: voidFunction;
     Ranking?: voidFunction;
@@ -21,11 +21,11 @@ let backButtonState: ButtonState = {
         Seasonal: undefined,
         Suggestions: undefined,
     },
-    rerenderers: []
-}
+    rerenderers: [],
+};
 
 export function changeActivePage(page: keyof BackButtonFunctionsType): void {
-    console.log(`Changing active page to ${page}`)
+    console.log(`Changing active page to ${page}`);
     backButtonState.currentPage = page;
     rerender();
 }
@@ -38,7 +38,10 @@ export function registerRerenderer(func: voidFunction): void {
     backButtonState.rerenderers.push(func);
 }
 
-export function changeBackButton(page: keyof BackButtonFunctionsType, func: voidFunction | undefined) {
+export function changeBackButton(
+    page: keyof BackButtonFunctionsType,
+    func: voidFunction | undefined
+) {
     backButtonState.backButtons[page] = func;
     changeActivePage(page);
 }

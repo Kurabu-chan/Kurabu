@@ -61,9 +61,9 @@ export default class DrawerComp extends React.Component {
                             <TouchableOpacity
                                 onPress={() => {
                                     currentFunction = getCurrentBackButtonFunc();
-                                    if (currentFunction)
-                                        (currentFunction)();
-                                }}>
+                                    if (currentFunction) currentFunction();
+                                }}
+                            >
                                 <Icon
                                     name="arrow-alt-circle-left"
                                     type="font-awesome-5"
@@ -75,13 +75,11 @@ export default class DrawerComp extends React.Component {
                             </TouchableOpacity>
                         );
                     },
-                }}>
+                }}
+            >
                 <Drawer.Screen name="Main" component={MainStack} />
                 <Drawer.Screen name="Search" component={SearchStack} />
-                <Drawer.Screen
-                    name="Suggestions"
-                    component={SuggestionsStack}
-                />
+                <Drawer.Screen name="Suggestions" component={SuggestionsStack} />
                 <Drawer.Screen name="Ranking" component={RankingStack} />
                 <Drawer.Screen name="Seasonal" component={SeasonalStack} />
             </Drawer.Navigator>

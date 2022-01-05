@@ -8,26 +8,23 @@ import { Logger } from "@overnightjs/logger";
 let loaded: string | undefined;
 
 function loadDocs(): string {
-	if (!loaded || true) {
-		if (fs.existsSync("src/controllers/views/documentation.html")) {
-			loaded = fs.readFileSync(
-				"src/controllers/views/documentation.html",
-				"utf-8"
-			);
-		} else {
-			Logger.Warn("no docs file " + resolve("src/controllers/views/documentation.html"));
-			loaded = "no docs";
-		}
-	}
+    if (!loaded || true) {
+        if (fs.existsSync("src/controllers/views/documentation.html")) {
+            loaded = fs.readFileSync("src/controllers/views/documentation.html", "utf-8");
+        } else {
+            Logger.Warn("no docs file " + resolve("src/controllers/views/documentation.html"));
+            loaded = "no docs";
+        }
+    }
 
-	return loaded;
+    return loaded;
 }
 
 @Controller("documentation")
 @autoInjectable()
 export class DocsController {
-	@Get("/")
-	private getDocs(req: Request, res: Response) {
-		res.status(200).send(loadDocs());
-	}
+    @Get("/")
+    private getDocs(req: Request, res: Response) {
+        res.status(200).send(loadDocs());
+    }
 }

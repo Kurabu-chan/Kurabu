@@ -1,13 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import {
-    Dimensions,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { Fields, MediaNode } from "#api/ApiBasicTypes";
 import { Colors } from "#config/Colors";
@@ -77,9 +70,7 @@ export class DetailedUpdateItem extends React.PureComponent<
 
     render() {
         return (
-            <TouchableOpacity
-                style={styles.mediaContainer}
-                onPress={this.openDetails.bind(this)}>
+            <TouchableOpacity style={styles.mediaContainer} onPress={this.openDetails.bind(this)}>
                 {this.state.item.node.main_picture !== undefined ? (
                     <Image
                         style={styles.image}
@@ -93,9 +84,7 @@ export class DetailedUpdateItem extends React.PureComponent<
                     </View>
                 )}
                 <View style={styles.TitleArea}>
-                    <Text style={styles.title}>
-                        {this.state.item.node.title}
-                    </Text>
+                    <Text style={styles.title}>{this.state.item.node.title}</Text>
                     <Divider color={Colors.DIVIDER} widthPercentage={100} />
                     <View style={TopArea.Data}>
                         <View style={TopArea.TopLeftLabels}>
@@ -103,13 +92,9 @@ export class DetailedUpdateItem extends React.PureComponent<
                             <Text style={TopArea.Label}>Rank:</Text>
                         </View>
                         <View style={TopArea.TopLeftValues}>
+                            <Text style={TopArea.Value}>{this.state.item.node.mean ?? "NA"}</Text>
                             <Text style={TopArea.Value}>
-                                {this.state.item.node.mean ?? "NA"}
-                            </Text>
-                            <Text style={TopArea.Value}>
-                                {this.state.item.node.rank
-                                    ? "#" + this.state.item.node.rank
-                                    : "NA"}
+                                {this.state.item.node.rank ? "#" + this.state.item.node.rank : "NA"}
                             </Text>
                         </View>
                         <View style={TopArea.TopRightLabels}>
@@ -122,9 +107,7 @@ export class DetailedUpdateItem extends React.PureComponent<
                                     ? "N/A"
                                     : this.state.item.node.num_episodes}
                             </Text>
-                            <Text style={TopArea.Value}>
-                                #{this.state.item.node.popularity}
-                            </Text>
+                            <Text style={TopArea.Value}>#{this.state.item.node.popularity}</Text>
                         </View>
                     </View>
                     <Divider color={Colors.DIVIDER} widthPercentage={100} />
@@ -134,9 +117,7 @@ export class DetailedUpdateItem extends React.PureComponent<
                             <Text style={TopArea.Label}>Status:</Text>
                         </View>
                         <View style={TopArea.Values}>
-                            <Text style={TopArea.Value}>
-                                {this.state.item.node.start_date}
-                            </Text>
+                            <Text style={TopArea.Value}>{this.state.item.node.start_date}</Text>
                             <Text style={TopArea.Value}>
                                 {this.NiceString(this.state.item.node.status)}
                             </Text>
@@ -149,9 +130,7 @@ export class DetailedUpdateItem extends React.PureComponent<
                         </View>
                         <View style={TopArea.Values}>
                             <Text style={TopArea.Value}>
-                                {this.state.item.node.genres
-                                    ?.map((x) => x.name)
-                                    .join(", ")}
+                                {this.state.item.node.genres?.map((x) => x.name).join(", ")}
                             </Text>
                         </View>
                     </View>

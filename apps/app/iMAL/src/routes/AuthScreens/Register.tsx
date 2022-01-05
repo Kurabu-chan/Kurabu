@@ -32,15 +32,24 @@ class Register extends React.Component<RegisterProps, RegisterState> {
     }
 
     private changeEmail(newstr: string) {
-        this.setState((prevState) => ({ ...prevState, email: newstr }));
+        this.setState((prevState) => ({
+            ...prevState,
+            email: newstr,
+        }));
     }
 
     private changePass(newstr: string) {
-        this.setState((prevState) => ({ ...prevState, pass: newstr }));
+        this.setState((prevState) => ({
+            ...prevState,
+            pass: newstr,
+        }));
     }
 
     private changeRetype(newstr: string) {
-        this.setState((prevState) => ({ ...prevState, retype: newstr }));
+        this.setState((prevState) => ({
+            ...prevState,
+            retype: newstr,
+        }));
     }
 
     private DoSignup() {
@@ -75,7 +84,12 @@ class Register extends React.Component<RegisterProps, RegisterState> {
                 />
                 <SafeAreaView style={styles.safeContainer} />
                 <View style={styles.content}>
-                    <View style={{ width: 10, height: "25%" }}></View>
+                    <View
+                        style={{
+                            width: 10,
+                            height: "25%",
+                        }}
+                    ></View>
                     <TextInput
                         onChangeText={this.changeEmail.bind(this)}
                         placeholder="Email"
@@ -106,14 +120,22 @@ class Register extends React.Component<RegisterProps, RegisterState> {
                     <TouchableOpacity
                         style={styles.SignupButton}
                         activeOpacity={0.6}
-                        onPress={this.DoSignup.bind(this)}>
+                        onPress={this.DoSignup.bind(this)}
+                    >
                         <Text style={styles.SignupButtonText}>Sign up</Text>
                     </TouchableOpacity>
-                    <Text style={{ color: "white" }}>Have an account?</Text>
+                    <Text
+                        style={{
+                            color: "white",
+                        }}
+                    >
+                        Have an account?
+                    </Text>
                     <TouchableOpacity
                         style={styles.LoginButton}
                         activeOpacity={0.6}
-                        onPress={this.DoSignin.bind(this)}>
+                        onPress={this.DoSignin.bind(this)}
+                    >
                         <Text style={styles.LoginButtonText}>Login</Text>
                     </TouchableOpacity>
                 </View>

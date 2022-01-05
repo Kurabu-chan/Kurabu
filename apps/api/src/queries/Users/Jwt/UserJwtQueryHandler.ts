@@ -6,22 +6,23 @@ import { IQueryHandler, IQueryResultStatus } from "#queries/IQuery";
 import { JWT_ENCRYPTION } from "#helpers/GLOBALVARS";
 
 @autoInjectable()
-export class UserJwtQueryHandler implements IQueryHandler<UserJwtQuery, UserJwtQueryResult>{
+export class UserJwtQueryHandler implements IQueryHandler<UserJwtQuery, UserJwtQueryResult> {
     handle(query: UserJwtQuery): Promise<UserJwtQueryResult> {
         return new Promise((resolve, reject) => {
-
             try {
-                const token = jwt.sign({
-                    id: query.uuid
-                }, JWT_ENCRYPTION);
+                const token = jwt.sign(
+                    {
+                        id: query.uuid,
+                    },
+                    JWT_ENCRYPTION
+                );
                 resolve({
                     jwtToken: token,
-                    success: IQueryResultStatus.success
+                    success: IQueryResultStatus.success,
                 });
             } catch (error) {
                 reject(error);
             }
-
         });
     }
 }

@@ -6,9 +6,9 @@ import { randomCodes } from "./helpers/randomCodes.test";
 import { refresher } from "./helpers/refresher.test";
 
 describe("Helpers", () => {
-	basicTypes();
-	hasher();
-	randomCodes();
-	refresher();
-	objectTransformation();
+    basicTypes();
+    hasher();
+    randomCodes();
+    refresher();
+    objectTransformation();
 });

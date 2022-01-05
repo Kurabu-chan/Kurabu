@@ -2,12 +2,14 @@ import { EMAIL_DOMAIN } from "./GLOBALVARS";
 
 export enum EmailType {
     verification,
-    noreply
+    noreply,
 }
 
-const emailTypeAdressMapping: { [key in EmailType]: string } = {
+const emailTypeAdressMapping: {
+    [key in EmailType]: string;
+} = {
     0: "verification",
-    1: "noreply"
+    1: "noreply",
 };
 
 export function getEmailAddress(emailType: EmailType): string {

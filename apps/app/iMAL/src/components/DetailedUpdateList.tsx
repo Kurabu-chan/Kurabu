@@ -1,13 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import {
-    ActivityIndicator,
-    Dimensions,
-    FlatList,
-    StyleSheet,
-    Text,
-    View,
-} from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
 import { MediaNode } from "#api/ApiBasicTypes";
 import MediaNodeSource from "#api/MediaNodeSource";
 import { Colors } from "#config/Colors";
@@ -33,10 +26,7 @@ type DetailedUpdateListProps = {
     onDataGather?: () => void;
 };
 
-class DetailedUpdateList extends React.Component<
-    DetailedUpdateListProps,
-    DetailedUpdateListState
-> {
+class DetailedUpdateList extends React.Component<DetailedUpdateListProps, DetailedUpdateListState> {
     constructor(props: DetailedUpdateListProps) {
         super(props);
         this.state = {
@@ -79,44 +69,40 @@ class DetailedUpdateList extends React.Component<
         if (this.state.onDataGather != undefined) {
             this.state.onDataGather();
         }
-        this.state.mediaNodeSource
-            ?.MakeRequest(BatchSize, this.state.offset)
-            .then((data) => {
-                this.setState((prevState) => ({
-                    ...prevState,
-                    data: data.data,
-                    offset: data.data.length,
-                }));
-            });
+        this.state.mediaNodeSource?.MakeRequest(BatchSize, this.state.offset).then((data) => {
+            this.setState((prevState) => ({
+                ...prevState,
+                data: data.data,
+                offset: data.data.length,
+            }));
+        });
     }
 
     public loadExtra() {
-        this.state.mediaNodeSource
-            ?.MakeRequest(BatchSize, this.state.offset)
-            .then((data) => {
-                this.setState((old) => {
-                    old.data.push(...data.data);
-                    if (data.data.length < BatchSize) {
-                        return {
-                            title: old.title,
-                            data: old.data,
-                            mediaNodeSource: old.mediaNodeSource,
-                            navigator: old.navigator,
-                            offset: old.data.length,
-                            needmore: false,
-                        };
-                    }
-
+        this.state.mediaNodeSource?.MakeRequest(BatchSize, this.state.offset).then((data) => {
+            this.setState((old) => {
+                old.data.push(...data.data);
+                if (data.data.length < BatchSize) {
                     return {
                         title: old.title,
                         data: old.data,
                         mediaNodeSource: old.mediaNodeSource,
                         navigator: old.navigator,
                         offset: old.data.length,
-                        needmore: true,
+                        needmore: false,
                     };
-                });
+                }
+
+                return {
+                    title: old.title,
+                    data: old.data,
+                    mediaNodeSource: old.mediaNodeSource,
+                    navigator: old.navigator,
+                    offset: old.data.length,
+                    needmore: true,
+                };
             });
+        });
     }
 
     render() {
@@ -130,10 +116,7 @@ class DetailedUpdateList extends React.Component<
                         onEndReachedThreshold={0.5}
                         onEndReached={this.loadExtra.bind(this)}
                         renderItem={(item) => (
-                            <DetailedUpdateItem
-                                item={item.item}
-                                navigator={this.state.navigator}
-                            />
+                            <DetailedUpdateItem item={item.item} navigator={this.state.navigator} />
                         )}
                         keyExtractor={(item, index) => index.toString()}
                     />
@@ -141,11 +124,7 @@ class DetailedUpdateList extends React.Component<
             );
         } else {
             return (
-                <ActivityIndicator
-                    style={styles.loading}
-                    size="large"
-                    color={Colors.KURABUPINK}
-                />
+                <ActivityIndicator style={styles.loading} size="large" color={Colors.KURABUPINK} />
             );
         }
     }

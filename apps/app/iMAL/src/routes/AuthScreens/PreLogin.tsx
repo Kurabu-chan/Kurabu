@@ -30,7 +30,8 @@ class PreLogin extends React.Component<any> {
                     justifyContent: "center",
                     height: Dimensions.get("window").height,
                     backgroundColor: "#1a1a1a",
-                }}>
+                }}
+            >
                 <Kurabu
                     height={Dimensions.get("window").height * 1.5}
                     width={Dimensions.get("window").width * 3}

@@ -1,6 +1,17 @@
 export function niceDateFormat(date: Date): string {
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+    const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
     ];
     return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
 }
@@ -15,12 +26,10 @@ export function niceTextFormat(str: string | undefined, sentenceCase: boolean = 
         if (toUpperCaseChars.includes(char)) {
             if (sentenceCase) upper = true;
             retStr += " ";
-        }
-        else if (upper) {
+        } else if (upper) {
             retStr += char.toUpperCase();
             upper = false;
-        }
-        else retStr += char;
+        } else retStr += char;
     }
     return retStr;
 }

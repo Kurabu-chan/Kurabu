@@ -11,10 +11,7 @@ export class MangaRankingSource implements MediaNodeSource {
         }
     }
 
-    async MakeRequest(
-        limit?: number,
-        offset?: number
-    ): Promise<{ data: MediaNode[] }> {
+    async MakeRequest(limit?: number, offset?: number): Promise<{ data: MediaNode[] }> {
         let auth = await Authentication.getInstance();
 
         let token = await auth.GetToken();
@@ -27,7 +24,6 @@ export class MangaRankingSource implements MediaNodeSource {
             .setQueryParam("rankingtype", this.rankingtype)
             .addAuthentication();
 
-
         if (limit) {
             req.setQueryParam("limit", limit.toString());
         }
@@ -36,12 +32,8 @@ export class MangaRankingSource implements MediaNodeSource {
         }
 
         if (this.fields) {
-            if (!this.fields.includes(Fields.media_type))
-                this.fields.push(Fields.media_type);
-            req.setQueryParam(
-                "fields",
-                this.fields.map((x) => Fields[x]).join(", ")
-            );
+            if (!this.fields.includes(Fields.media_type)) this.fields.push(Fields.media_type);
+            req.setQueryParam("fields", this.fields.map((x) => Fields[x]).join(", "));
         }
 
         console.log(req.build().url);

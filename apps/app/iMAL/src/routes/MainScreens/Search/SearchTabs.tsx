@@ -22,28 +22,27 @@ export default function SearchTabs() {
                 style: {
                     height: 55,
                 },
-            }}>
+            }}
+        >
             <Tab.Screen
                 name="Anime"
                 component={Anime}
                 options={{
                     tabBarIcon: createIconAnime,
-                }}></Tab.Screen>
+                }}
+            ></Tab.Screen>
             <Tab.Screen
                 name="Manga"
                 component={Manga}
                 options={{
                     tabBarIcon: createIconManga,
-                }}></Tab.Screen>
+                }}
+            ></Tab.Screen>
         </Tab.Navigator>
     );
 }
 
-function createIconAnime(props: {
-    focused: boolean;
-    color: string;
-    size: number;
-}) {
+function createIconAnime(props: { focused: boolean; color: string; size: number }) {
     return (
         <Icon
             name="film"
@@ -56,11 +55,7 @@ function createIconAnime(props: {
     );
 }
 
-function createIconManga(props: {
-    focused: boolean;
-    color: string;
-    size: number;
-}) {
+function createIconManga(props: { focused: boolean; color: string; size: number }) {
     return (
         <Icon
             name="book"

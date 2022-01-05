@@ -52,7 +52,9 @@ export type Media = {
     background?: string;
     related_anime?: Relation[];
     related_manga?: Relation[];
-    recommendations?: (MediaNode & { num_recommendations?: number })[];
+    recommendations?: (MediaNode & {
+        num_recommendations?: number;
+    })[];
     studios?: Studio[];
     statistics?: {
         status?: {
@@ -116,7 +118,7 @@ export type MediaGenre = {
     name: string;
 };
 
-export type ListStatus = ListStatusAnime | ListStatusManga
+export type ListStatus = ListStatusAnime | ListStatusManga;
 
 export type ListStatusAnime = {
     status: "watching" | "completed" | "on_hold" | "dropped" | "plan_to_watch";
@@ -124,16 +126,16 @@ export type ListStatusAnime = {
     num_episodes_watched: number;
     is_rewatching: boolean;
     updated_at: string;
-}
+};
 
 export type ListStatusManga = {
     status: "reading" | "completed" | "on_hold" | "dropped" | "plan_to_read";
     score: number;
-    num_volumes_read: number,
-    num_chapters_read: number,
+    num_volumes_read: number;
+    num_chapters_read: number;
     is_rereading: boolean;
     updated_at: string;
-}
+};
 
 export type ListPagination<T> = {
     data: T[];
@@ -145,11 +147,11 @@ export type ListPagination<T> = {
 
 export type RequestResponse<T> = {
     response:
-    | {
-        response: T;
-        tokens: tokenResponse;
-    }
-    | ErrorResponse;
+        | {
+              response: T;
+              tokens: tokenResponse;
+          }
+        | ErrorResponse;
 };
 
 export type MediaNode = {
@@ -179,13 +181,13 @@ export type UpdateListStatusResultAnime = {
     rewatch_value: 0 | 1 | 2 | 3 | 4 | 5;
     tags: any[];
     comments: string;
-}
+};
 
 export type UpdateListStatusResultManga = {
     status: "reading" | "completed" | "on_hold" | "dropped" | "plan_to_read";
     score: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-    num_volumes_read: number,
-    num_chapters_read: number,
+    num_volumes_read: number;
+    num_chapters_read: number;
     is_rereading: boolean;
     updated_at: Date;
     priority: 0 | 1 | 2;
@@ -193,4 +195,4 @@ export type UpdateListStatusResultManga = {
     reread_value: 0 | 1 | 2 | 3 | 4 | 5;
     tags: any[];
     comments: string;
-}
+};

@@ -16,7 +16,8 @@ export default function SeasonalStack() {
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="SeasonalScreen">
+            initialRouteName="SeasonalScreen"
+        >
             <Stack.Screen name="SeasonalScreen" component={Seasonal} />
             <Stack.Screen name="DetailsScreen" component={Details} />
         </Stack.Navigator>

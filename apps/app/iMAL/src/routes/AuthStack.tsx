@@ -15,7 +15,8 @@ export default function MainStack() {
             screenOptions={{
                 headerShown: false,
             }}
-            initialRouteName="PreLogin">
+            initialRouteName="PreLogin"
+        >
             <Stack.Screen name="PreLogin" component={PreLogin} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />

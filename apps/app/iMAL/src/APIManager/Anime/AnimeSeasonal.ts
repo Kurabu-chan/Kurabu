@@ -35,10 +35,7 @@ class AnimeSeasonalSource implements MediaNodeSource {
         }
     }
 
-    public async MakeRequest(
-        limit?: number,
-        offset?: number
-    ): Promise<JSONType> {
+    public async MakeRequest(limit?: number, offset?: number): Promise<JSONType> {
         let auther = await Authentication.getInstance();
         let token = await auther.GetToken();
         try {
@@ -60,12 +57,8 @@ class AnimeSeasonalSource implements MediaNodeSource {
             }
 
             if (this.fields) {
-                if (!this.fields.includes(Fields.media_type))
-                    this.fields.push(Fields.media_type);
-                req.setQueryParam(
-                    "fields",
-                    this.fields.map((x) => Fields[x]).join(", ")
-                );
+                if (!this.fields.includes(Fields.media_type)) this.fields.push(Fields.media_type);
+                req.setQueryParam("fields", this.fields.map((x) => Fields[x]).join(", "));
             }
 
             console.log(req.build().url);
@@ -80,7 +73,7 @@ class AnimeSeasonalSource implements MediaNodeSource {
                 console.log(json);
                 throw json;
             }
-        } catch (e) { }
+        } catch (e) {}
 
         return {
             data: [],

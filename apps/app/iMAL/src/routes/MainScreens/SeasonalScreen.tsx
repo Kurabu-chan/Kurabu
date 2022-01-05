@@ -75,12 +75,16 @@ export default class Seasonal extends React.Component<any, StateType> {
         this.setState((prevState) => ({
             ...prevState,
             rankingSource: nodeSource,
-            seasonal: { ...prevState.seasonal, searched: true },
+            seasonal: {
+                ...prevState.seasonal,
+                searched: true,
+            },
         }));
         if (this.state.animeList) {
             console.log(this.state.seasonal.seasonValue);
             this.state.animeList.changeSource(
-                `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${this.state.seasonal.yearValue
+                `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${
+                    this.state.seasonal.yearValue
                 }`,
                 nodeSource
             );
@@ -95,13 +99,13 @@ export default class Seasonal extends React.Component<any, StateType> {
 
         this.setState(
             (prevState) =>
-            ({
-                ...prevState,
-                seasonal: {
-                    ...prevState.seasonal,
-                    seasonValue: val.toString(),
-                },
-            } as StateType),
+                ({
+                    ...prevState,
+                    seasonal: {
+                        ...prevState.seasonal,
+                        seasonValue: val.toString(),
+                    },
+                } as StateType),
             this.DoSeasonal.bind(this)
         );
     }
@@ -114,26 +118,25 @@ export default class Seasonal extends React.Component<any, StateType> {
 
         this.setState(
             (prevState) =>
-            ({
-                ...prevState,
-                seasonal: {
-                    ...prevState.seasonal,
-                    yearValue: year,
-                },
-            } as StateType),
+                ({
+                    ...prevState,
+                    seasonal: {
+                        ...prevState.seasonal,
+                        yearValue: year,
+                    },
+                } as StateType),
             this.DoSeasonal.bind(this)
         );
     }
 
     createSearchBar() {
-        var allowedSeasons = getAllowedSeasons(
-            maxSeason(this.state.seasonal.yearValue)
-        );
+        var allowedSeasons = getAllowedSeasons(maxSeason(this.state.seasonal.yearValue));
         return (
             <View
                 style={{
                     flexDirection: "row",
-                }}>
+                }}
+            >
                 <Picker
                     selectedValue={this.state.seasonal.seasonValue}
                     onValueChange={this.changeSeason.bind(this)}
@@ -144,7 +147,8 @@ export default class Seasonal extends React.Component<any, StateType> {
                         marginRight: 5,
                         width: (Dimensions.get("window").width - 20) / 2,
                         color: Colors.TEXT,
-                    }}>
+                    }}
+                >
                     <Picker.Item label="Winter" value="winter" />
                     {allowedSeasons.includes("spring") ? (
                         <Picker.Item label="Spring" value="spring" />
@@ -166,11 +170,9 @@ export default class Seasonal extends React.Component<any, StateType> {
                         marginRight: 5,
                         width: (Dimensions.get("window").width - 20) / 2,
                         color: Colors.TEXT,
-                    }}>
-                    {arrayFromXToY(
-                        1917,
-                        maxYear(this.state.seasonal.seasonValue) + 1
-                    )
+                    }}
+                >
+                    {arrayFromXToY(1917, maxYear(this.state.seasonal.seasonValue) + 1)
                         .reverse()
                         .map((x) => (
                             <Picker.Item
@@ -185,19 +187,29 @@ export default class Seasonal extends React.Component<any, StateType> {
     }
 
     onSearchListCreate(list: DetailedUpdateList) {
-        this.setState((prevState) => ({ ...prevState, animeList: list }));
+        this.setState((prevState) => ({
+            ...prevState,
+            animeList: list,
+        }));
     }
 
     onSearchListDataGather() {
         this.setState((prevState) => ({
             ...prevState,
-            seasonal: { ...prevState.seasonal, found: true },
+            seasonal: {
+                ...prevState.seasonal,
+                found: true,
+            },
         }));
     }
 
     render() {
         return (
-            <SafeAreaProvider style={{ backgroundColor: "#1a1a1a" }}>
+            <SafeAreaProvider
+                style={{
+                    backgroundColor: "#1a1a1a",
+                }}
+            >
                 <LinearGradient
                     // Background Linear Gradient
                     colors={[
@@ -209,19 +221,18 @@ export default class Seasonal extends React.Component<any, StateType> {
                     style={{
                         width: Dimensions.get("window").width,
                         height: Dimensions.get("window").height,
-                    }}>
+                    }}
+                >
                     {this.createSearchBar()}
                     {this.state.rankingSource !== undefined ? (
                         <DetailedUpdateList
-                            title={`${capitalizeFirstLetter(
-                                this.state.seasonal.seasonValue
-                            )} ${this.state.seasonal.yearValue}`}
+                            title={`${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${
+                                this.state.seasonal.yearValue
+                            }`}
                             mediaNodeSource={this.state.rankingSource}
                             navigator={this.props.navigation}
                             onCreate={this.onSearchListCreate.bind(this)}
-                            onDataGather={this.onSearchListDataGather.bind(
-                                this
-                            )}
+                            onDataGather={this.onSearchListDataGather.bind(this)}
                         />
                     ) : undefined}
                 </LinearGradient>

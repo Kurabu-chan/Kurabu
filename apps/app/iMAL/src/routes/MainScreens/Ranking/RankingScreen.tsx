@@ -68,17 +68,19 @@ export default class Ranking extends React.Component<any, StateType> {
 
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new AnimeRankingSource(
-            this.state.ranking.rankingValue,
-            fields
-        );
+        var nodeSource = new AnimeRankingSource(this.state.ranking.rankingValue, fields);
         this.setState((prevState) => ({
             ...prevState,
             rankingSource: nodeSource,
-            ranking: { ...prevState.ranking, searched: true },
+            ranking: {
+                ...prevState.ranking,
+                searched: true,
+            },
         }));
         if (this.state.animeList) {
-            var goodNamingMapping: { [index: string]: string } = {
+            var goodNamingMapping: {
+                [index: string]: string;
+            } = {
                 all: "Overall",
                 airing: "Airing anime",
                 upcoming: "Upcoming anime",
@@ -92,8 +94,7 @@ export default class Ranking extends React.Component<any, StateType> {
 
             console.log(this.state.ranking.rankingValue);
             this.state.animeList.changeSource(
-                `Top ${goodNamingMapping[this.state.ranking.rankingValue]
-                } Rankings`,
+                `Top ${goodNamingMapping[this.state.ranking.rankingValue]} Rankings`,
                 nodeSource
             );
         }
@@ -102,13 +103,13 @@ export default class Ranking extends React.Component<any, StateType> {
     changeRanking(val: ItemValue, index: number) {
         this.setState(
             (prevState) =>
-            ({
-                ...prevState,
-                ranking: {
-                    ...prevState.ranking,
-                    rankingValue: val.toString(),
-                },
-            } as StateType),
+                ({
+                    ...prevState,
+                    ranking: {
+                        ...prevState.ranking,
+                        rankingValue: val.toString(),
+                    },
+                } as StateType),
             this.DoRanking.bind(this)
         );
     }
@@ -125,7 +126,8 @@ export default class Ranking extends React.Component<any, StateType> {
                     marginRight: 5,
                     width: Dimensions.get("window").width - 10,
                     color: Colors.TEXT,
-                }}>
+                }}
+            >
                 <Picker.Item label="All" value="all" />
                 <Picker.Item label="Airing" value="airing" />
                 <Picker.Item label="Upcoming" value="upcoming" />
@@ -140,19 +142,29 @@ export default class Ranking extends React.Component<any, StateType> {
     }
 
     onSearchListCreate(list: SearchList) {
-        this.setState((prevState) => ({ ...prevState, animeList: list }));
+        this.setState((prevState) => ({
+            ...prevState,
+            animeList: list,
+        }));
     }
 
     onSearchListDataGather() {
         this.setState((prevState) => ({
             ...prevState,
-            ranking: { ...prevState.ranking, found: true },
+            ranking: {
+                ...prevState.ranking,
+                found: true,
+            },
         }));
     }
 
     render() {
         return (
-            <SafeAreaProvider style={{ backgroundColor: "#1a1a1a" }}>
+            <SafeAreaProvider
+                style={{
+                    backgroundColor: "#1a1a1a",
+                }}
+            >
                 <LinearGradient
                     // Background Linear Gradient
                     colors={[
@@ -164,7 +176,8 @@ export default class Ranking extends React.Component<any, StateType> {
                     style={{
                         width: Dimensions.get("window").width,
                         height: Dimensions.get("window").height,
-                    }}>
+                    }}
+                >
                     {this.createSearchBar()}
                     {this.state.rankingSource !== undefined ? (
                         <SearchList
@@ -172,9 +185,7 @@ export default class Ranking extends React.Component<any, StateType> {
                             mediaNodeSource={this.state.rankingSource}
                             navigator={this.props.navigation}
                             onCreate={this.onSearchListCreate.bind(this)}
-                            onDataGather={this.onSearchListDataGather.bind(
-                                this
-                            )}
+                            onDataGather={this.onSearchListDataGather.bind(this)}
                         />
                     ) : undefined}
                 </LinearGradient>

@@ -1,14 +1,7 @@
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import {
-    Alert,
-    Dimensions,
-    Linking,
-    StyleSheet,
-    Text,
-    View,
-} from "react-native";
+import { Alert, Dimensions, Linking, StyleSheet, Text, View } from "react-native";
 import { CodeField, Cursor } from "react-native-confirmation-code-field";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -81,7 +74,10 @@ export default class Verif extends React.Component<RegisterProps, State> {
     async SetCode(code: string) {
         if (code.match(/.*\D.*/)) return;
 
-        this.setState((prevState) => ({ ...prevState, code: code }));
+        this.setState((prevState) => ({
+            ...prevState,
+            code: code,
+        }));
 
         if (code.length == 6) {
             if (!(await this.Submit(code))) {
@@ -92,9 +88,7 @@ export default class Verif extends React.Component<RegisterProps, State> {
                 }));
             }
         } else {
-            console.log(
-                "hey: " + code.length.toString() + " " + this.state.failed
-            );
+            console.log("hey: " + code.length.toString() + " " + this.state.failed);
         }
     }
 
@@ -113,14 +107,9 @@ export default class Verif extends React.Component<RegisterProps, State> {
                 <View style={styles.content}>
                     <Text style={styles.head}>iMAL</Text>
                     <Text style={styles.sentMailText}>
-                        We've sent you an email with a verification code, please
-                        enter it below.
+                        We've sent you an email with a verification code, please enter it below.
                     </Text>
-                    <Text
-                        style={[
-                            styles.hidden,
-                            this.state.failed && styles.incorrect,
-                        ]}>
+                    <Text style={[styles.hidden, this.state.failed && styles.incorrect]}>
                         Incorrect Code
                     </Text>
                     <CodeField
@@ -133,18 +122,13 @@ export default class Verif extends React.Component<RegisterProps, State> {
                         renderCell={(data: renderCell) => (
                             <Text
                                 key={data.index}
-                                style={[
-                                    styles.cell,
-                                    data.isFocused && styles.focusCell,
-                                ]}>
-                                {data.symbol ||
-                                    (data.isFocused ? <Cursor /> : null)}
+                                style={[styles.cell, data.isFocused && styles.focusCell]}
+                            >
+                                {data.symbol || (data.isFocused ? <Cursor /> : null)}
                             </Text>
                         )}
                     />
-                    <TouchableOpacity
-                        style={styles.cancel}
-                        onPress={this.Cancel.bind(this)}>
+                    <TouchableOpacity style={styles.cancel} onPress={this.Cancel.bind(this)}>
                         <Text>Cancel</Text>
                     </TouchableOpacity>
                 </View>
@@ -155,7 +139,10 @@ export default class Verif extends React.Component<RegisterProps, State> {
 
 const styles = StyleSheet.create({
     root: { flex: 1, padding: 20 },
-    title: { textAlign: "center", fontSize: 30 },
+    title: {
+        textAlign: "center",
+        fontSize: 30,
+    },
     codeFieldRoot: { marginTop: 20 },
     cell: {
         width: 40,
