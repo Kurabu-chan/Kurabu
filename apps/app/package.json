@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/app",
-    "main": "node_modules/expo/AppEntry.js",
+    "main": "index.js",
     "version": "1.0.0",
     "scripts": {
         "dev": "expo start --android",
