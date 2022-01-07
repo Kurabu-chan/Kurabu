@@ -1,14 +1,14 @@
 {
+    "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "allowJs": true,
+        "esModuleInterop": true,
         "jsx": "react-native",
-        "lib": ["dom", "esnext"],
+        "lib": ["DOM", "ESNext"],
         "moduleResolution": "node",
         "noEmit": true,
-        "skipLibCheck": true,
-        "resolveJsonModule": true,
-        "strict": true,
-        "baseUrl": ".",
         "paths": {
             "#api/*": ["./src/APIManager/*"],
             "#routes/*": ["./src/routes/*"],
@@ -17,5 +17,6 @@
             "#config/*": ["./src/config/*"]
         }
     },
-    "extends": "expo/tsconfig.base"
+    "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"],
+    "extends": "tsconfig/base.json"
 }

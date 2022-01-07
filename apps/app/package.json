@@ -50,6 +50,7 @@
         "expo-secure-store": "~11.0.3"
     },
     "devDependencies": {
+        "tsconfig": "*",
         "@babel/core": "^7.12.9",
         "@types/react": "~17.0.21",
         "@types/react-native": "^0.64.18",

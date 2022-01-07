@@ -1,18 +1,14 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
-		"strict": true,
 		"outDir": "build",
 		"removeComments": true,
 		"experimentalDecorators": true,
-		"target": "es6",
 		"emitDecoratorMetadata": true,
-		"moduleResolution": "node",
 		"importHelpers": true,
-		"resolveJsonModule": true,
-		"sourceMap": true,
 		"typeRoots": ["node_modules/@types"],
 		"baseUrl": "./",
+		"target": "ES6",
 		"paths": {
 			"#builders/*": ["src/builders/*"],
 			"#commands/*": ["src/commands/*"],
@@ -28,5 +24,6 @@
 		}
 	},
 	"include": ["./src/**/*.ts"],
-	"exclude": ["./src/public/"]
+	"exclude": ["./src/public/"],
+	"extends": "tsconfig/base.json"
 }
