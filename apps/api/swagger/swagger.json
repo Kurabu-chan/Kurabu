@@ -66,7 +66,7 @@
         "/authed/status": {
             "$ref": "./paths/authed/status.json"
         },
-        "/authed/verify": {
+        "/authed/verif": {
             "$ref": "./paths/authed/verify.json"
         },
 
@@ -79,7 +79,7 @@
         "/authed/jwt/register": {
             "$ref": "./paths/authed/jwt/register.json"
         },
-        "/authed/jwt/verify": {
+        "/authed/jwt/verif": {
             "$ref": "./paths/authed/jwt/verify.json"
         }
     },
