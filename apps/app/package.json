@@ -24,6 +24,7 @@
         "expo-font": "~10.0.3",
         "expo-linear-gradient": "~10.0.3",
         "expo-linking": "~2.4.2",
+        "expo-secure-store": "~11.0.3",
         "expo-status-bar": "~1.1.0",
         "expo-updates": "~0.10.12",
         "http": "0.0.1-security",
@@ -46,17 +47,16 @@
         "react-native-timeago": "^0.5.0",
         "react-native-web": "0.17.1",
         "tslib": "^2.1.0",
-        "url": "^0.11.0",
-        "expo-secure-store": "~11.0.3"
+        "url": "^0.11.0"
     },
     "devDependencies": {
-        "@kurabu/tsconfig": "*",
         "@babel/core": "^7.12.9",
+        "@kurabu/tsconfig": "*",
         "@types/react": "~17.0.21",
         "@types/react-native": "^0.64.18",
         "babel-plugin-module-resolver": "^3.2.0",
         "npm-force-resolutions": "0.0.10",
-        "typescript": "~4.3.5"
+        "typescript": "^4.5.4"
     },
     "resolutions": {
         "logkitty": ">=0.7.1",
