@@ -8,6 +8,13 @@
 			"cwd": "${workspaceFolder}",
 			"runtimeExecutable": "npm",
 			"runtimeArgs": ["run-script", "dev", "-w=@kurabu/api"]
+		},
+		{
+			"name": "Attach to @kurabu/app",
+			"request": "attach",
+			"type": "reactnative",
+			"cwd": "${workspaceFolder}/apps/app",
+			"port": 19000
 		}
 	]
 }
