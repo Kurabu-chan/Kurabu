@@ -8,7 +8,6 @@
 		"importHelpers": true,
 		"typeRoots": ["node_modules/@types"],
 		"baseUrl": "./",
-		"target": "ES6",
 		"paths": {
 			"#builders/*": ["src/builders/*"],
 			"#commands/*": ["src/commands/*"],
