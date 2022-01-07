@@ -121,37 +121,33 @@ var rollbackCommands = [{
 
 module.exports = {
     pos: 0,
-    up: function(queryInterface, Sequelize)
-    {
+    up: function(queryInterface, Sequelize) {
+        queryInterface = queryInterface.context;
         var index = this.pos;
         return new Promise(function(resolve, reject) {
             function next() {
-                if (index < migrationCommands.length)
-                {
+                if (index < migrationCommands.length) {
                     let command = migrationCommands[index];
-                    console.log("[#"+index+"] execute: " + command.fn);
+                    console.log("[#" + index + "] execute: " + command.fn);
                     index++;
                     queryInterface[command.fn].apply(queryInterface, command.params).then(next, reject);
-                }
-                else
+                } else
                     resolve();
             }
             next();
         });
     },
-    down: function(queryInterface, Sequelize)
-    {
+    down: function(queryInterface, Sequelize) {
+        queryInterface = queryInterface.context;
         var index = this.pos;
         return new Promise(function(resolve, reject) {
             function next() {
-                if (index < rollbackCommands.length)
-                {
+                if (index < rollbackCommands.length) {
                     let command = rollbackCommands[index];
-                    console.log("[#"+index+"] execute: " + command.fn);
+                    console.log("[#" + index + "] execute: " + command.fn);
                     index++;
                     queryInterface[command.fn].apply(queryInterface, command.params).then(next, reject);
-                }
-                else
+                } else
                     resolve();
             }
             next();
