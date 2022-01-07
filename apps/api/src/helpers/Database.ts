@@ -29,6 +29,9 @@ export class Database {
 
     constructor() {
         this._models = models;
+
+        const sqlSsl = process.env.SQL_SSL !== "false";
+
         const sequelizeOptions: SequelizeOptions = {
             dialect: "postgres",
             dialectOptions: {
@@ -39,6 +42,11 @@ export class Database {
             logging: false,
             models: ModelsArray,
         };
+
+        if (!sqlSsl && sequelizeOptions.dialectOptions !== undefined) {
+            sequelizeOptions.dialectOptions = undefined;
+            sequelizeOptions.ssl = false;
+        }
 
         this._sequelize = new Sequelize(process.env.DATABASE_URL as string, sequelizeOptions);
         this._sequelize
