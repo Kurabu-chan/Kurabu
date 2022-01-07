@@ -5,9 +5,9 @@
 			"name": "Launch via npm",
 			"type": "node",
 			"request": "launch",
-			"cwd": "${workspaceFolder}",
+			"cwd": "${workspaceFolder}/apps/api",
 			"runtimeExecutable": "npm",
-			"runtimeArgs": ["run-script", "start-dev"]
+			"runtimeArgs": ["run-script", "dev"]
 		}
 	]
 }
