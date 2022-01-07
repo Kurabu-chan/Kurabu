@@ -80,7 +80,7 @@
         "sequelize-cli": "^6.2.0",
         "sqlite3": "^4.2.0",
         "ts-mockito": "^2.6.1",
-        "tsconfig": "*",
+        "@kurabu/tsconfig": "*",
         "typescript": "^4.4.4"
     }
 }
