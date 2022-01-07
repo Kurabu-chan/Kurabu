@@ -17,7 +17,7 @@ export class User extends Model {
     @PrimaryKey
     @AllowNull(false)
     @Column(DataType.UUID)
-    id!: string;
+    userId!: string;
 
     @AllowNull(false)
     @Column(DataType.STRING)

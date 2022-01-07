@@ -37,7 +37,7 @@ export class UserLoginQueryHandler implements IQueryHandler<UserLoginQuery, User
 
         return {
             email: user.email,
-            id: user.id,
+            id: user.userId,
             refreshtoken: tokens.refreshtoken,
             status: status.status,
             success: IQueryResultStatus.success,

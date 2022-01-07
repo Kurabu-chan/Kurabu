@@ -17,7 +17,7 @@ export class Tokens extends Model {
     @AllowNull(false)
     @PrimaryKey
     @Column
-    id!: number;
+    tokensId!: number;
 
     @AllowNull(true)
     @Column(DataType.TEXT)
@@ -43,13 +43,13 @@ export async function ensureTokensOnUser(user: User): Promise<User> {
         // insert tokens
         const userTokens = await Tokens.create();
         await user.update({
-            tokensId: userTokens.id,
+            tokensId: userTokens.tokensId,
         });
     }
 
     const loadedUser = await User.findOne({
         include: Tokens,
-        where: { id: user.id },
+        where: { id: user.userId },
     });
 
     if (!loadedUser) throw new AuthenticationError("user doesn't exist");
