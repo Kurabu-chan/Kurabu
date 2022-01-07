@@ -129,6 +129,4 @@ docs/pages/versions/*/react-native/*.diff
 # Home
 /home/dist
 # config.json
-.vscode/.react/AppEntry.map
-.vscode/.react/debuggerWorker.js
-.vscode/.react/node_modules%5Cexpo%5CAppEntry.bundle
+.vscode/.react/
