@@ -48,7 +48,7 @@
         "sequelize-typescript": "^2.1.1",
         "sequelize-typescript-migration-rafaeltab": "^0.0.1-beta.7",
         "source-map-support": "^0.5.20",
-        "swagger-ui-dist": "^4.1.0",
+        "swagger-ui-express": "^4.3.0",
         "ts-node": "^8.10.2",
         "tsconfig-paths": "^3.10.1",
         "tslib": "^2.1.0",
