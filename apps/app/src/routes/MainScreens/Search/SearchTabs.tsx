@@ -10,18 +10,20 @@ const Tab = createBottomTabNavigator();
 export default function SearchTabs() {
     return (
         <Tab.Navigator
-            tabBarOptions={{
-                activeBackgroundColor: Colors.KURABUPINK,
-                inactiveBackgroundColor: Colors.KURABUPURPLE,
-                labelStyle: {
+            screenOptions={{
+                tabBarActiveBackgroundColor: Colors.KURABUPINK,
+                tabBarInactiveBackgroundColor: Colors.KURABUPURPLE,
+                tabBarLabelStyle: {
                     fontFamily: "AGRevueCyr",
                     color: Colors.TEXT,
                     padding: 5,
                     fontSize: 12,
                 },
-                style: {
+                tabBarStyle: {
                     height: 55,
+                    display: "flex"
                 },
+                headerShown: false
             }}
         >
             <Tab.Screen
