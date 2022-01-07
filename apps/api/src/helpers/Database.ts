@@ -55,54 +55,73 @@ export class Database {
 
     private async migrate() {
         let consoleMessages = "";
-        await (async () => {
-            consoleMessages += "Checking migrations\n";
-            const [results] = await this._sequelize.query('SELECT * FROM "SequelizeMeta"', {
-                raw: true,
-            });
+        try {
+            await (async () => {
+                consoleMessages += "Checking migrations\n";
+                let results: unknown[]|undefined;
+                try {
+                    [results] = await this._sequelize.query('SELECT * FROM "SequelizeMeta"', {
+                        raw: true,
+                    });
+                } catch (err: unknown) {
+                    if (isSequelizeMetaNotExistError(err)) {
+                        Logger.Info("No migrations were present on the database");
+                    } else {
+                        throw err;
+                    }
+                }
 
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment
-            const presentMigrations: string[] = (results as any[]).map((x) => x.name);
+                let presentMigrations: string[] = [];
 
-            const migrationsPath = path.join(process.cwd(), "./src/database/migrations");
-            const availableMigrations = await aReaddir(migrationsPath);
+                if (results) {
 
-            const diff = DeepDiff.diff(presentMigrations, availableMigrations);
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment
+                    presentMigrations = (results as any[]).map((x) => x.name);
+                }
+                const migrationsPath = path.join(process.cwd(), "./src/database/migrations");
+                const availableMigrations = await aReaddir(migrationsPath);
 
-            if (diff !== undefined && diff?.filter((x) => x.kind === "D").length > 0) {
-                throw new Error("Found migration on database that was not present on server");
-            }
+                const diff = DeepDiff.diff(presentMigrations, availableMigrations);
 
-            for (const present of presentMigrations) {
-                consoleMessages += `\t✔ ${present}\n`;
-            }
+                if (diff !== undefined && diff?.filter((x) => x.kind === "D").length > 0) {
+                    throw new Error("Found migration on database that was not present on server");
+                }
 
-            if (diff === undefined) {
-                return;
-            }
+                for (const present of presentMigrations) {
+                    consoleMessages += `\t✔ ${present}\n`;
+                }
 
-            for (const notPresent of diff?.filter((x) => x.kind === "A")) {
-                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
-                consoleMessages += `\t❌ ${(notPresent as any).item.rhs}\n`;
-            }
+                if (diff === undefined) {
+                    return;
+                }
 
-            consoleMessages +=
-                // eslint-disable-next-line max-len
-                "Since there were unapplied migrations detected we are now migrating the database to the latest version\n";
+                for (const notPresent of diff?.filter((x) => x.kind === "A")) {
+                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
+                    consoleMessages += `\t❌ ${(notPresent as any).item.rhs}\n`;
+                }
 
-            const umzug = new Umzug({
-                context: this._sequelize.getQueryInterface(),
-                logger: console,
-                migrations: {
-                    glob: migrationsPath + "/*.js",
-                },
-                storage: new SequelizeStorage({
-                    sequelize: this._sequelize,
-                }),
-            });
+                consoleMessages +=
+                    // eslint-disable-next-line max-len
+                    "Since there were unapplied migrations detected we are now migrating the database to the latest version\n";
 
-            void umzug.up();
-        })();
+                const umzug = new Umzug({
+                    context: this._sequelize.getQueryInterface(),
+                    logger: console,
+                    migrations: {
+                        glob: migrationsPath + "/*.js",
+                    },
+                    storage: new SequelizeStorage({
+                        sequelize: this._sequelize,
+                    }),
+                });
+
+                void umzug.up();
+            })();
+        } catch (err) {
+            Logger.Info(consoleMessages);
+            Logger.Err(err);
+            return;
+        }
 
         Logger.Info(consoleMessages);
     }
@@ -115,4 +134,12 @@ function aReaddir(p: string): Promise<string[]> {
             resolve(files);
         });
     });
+}
+
+function isSequelizeMetaNotExistError(err: unknown) {
+    if (typeof err === "object" && err !== null && "message" in err) {
+        return (err as { message: string })
+            .message.includes("relation \"SequelizeMeta\" does not exist");
+    }
+    return false;
 }
