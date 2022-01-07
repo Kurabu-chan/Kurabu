@@ -8,7 +8,7 @@
     ],
     "scripts": {
         "build": "turbo run build",
-        "dev": "turbo run dev --parallel",
+        "dev": "turbo run dev --parallel --stream --continue",
         "lint": "turbo run lint",
         "format": "prettier --config \"./.prettierrc.json\" --write \"**/*.{ts,tsx,md}\"",
         "lint:fix": "turbo run lint:fix"
