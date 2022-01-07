@@ -49,7 +49,7 @@ export async function ensureTokensOnUser(user: User): Promise<User> {
 
     const loadedUser = await User.findOne({
         include: Tokens,
-        where: { id: user.userId },
+        where: { userId: user.userId },
     });
 
     if (!loadedUser) throw new AuthenticationError("user doesn't exist");

@@ -29,7 +29,7 @@ export class PendingUserCommandHandler
 
         const user = await usr.findOne({
             include: Tokens,
-            where: { id: command.uuid },
+            where: { userId: command.uuid },
         });
 
         if (!user) throw new MissingStateError("uuid does not exist yet");
@@ -43,7 +43,7 @@ export class PendingUserCommandHandler
 
         const tokenModel = await this._database.models.tokens.findOne({
             where: {
-                id: user.tokensId,
+                tokensId: user.tokensId,
             },
         });
         if (!tokenModel) throw new TokensNotPresentError("No tokens for pending user");

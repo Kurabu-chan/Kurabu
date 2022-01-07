@@ -8,7 +8,7 @@ import * as DeepDiff from "deep-diff";
 import ModelsArray, { models, ModelsType } from "#models/index";
 
 export type UserDatabaseEntry = {
-    id: string;
+    userId: string;
     email: string;
     token: string;
     refreshtoken: string;

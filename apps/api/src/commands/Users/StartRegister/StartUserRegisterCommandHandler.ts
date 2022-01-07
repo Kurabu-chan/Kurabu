@@ -53,8 +53,8 @@ export class StartUserRegisterCommandHandler
         const hash = await hasher.hash(command.password);
         await this._database.models.user.create({
             email: command.email,
-            id: uuid,
             pass: hash,
+            userId: uuid,
             verifCode: code,
         });
 

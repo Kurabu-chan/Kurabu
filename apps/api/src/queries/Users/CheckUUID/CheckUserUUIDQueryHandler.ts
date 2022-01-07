@@ -16,7 +16,7 @@ export class CheckUserUUIDQueryHandler
         const user = await this._database.models.user.findOne({
             include: Tokens,
             where: {
-                id: command.uuid,
+                userId: command.uuid,
             },
         });
         if (user) {

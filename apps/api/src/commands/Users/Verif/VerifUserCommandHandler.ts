@@ -21,7 +21,7 @@ export class VerifUserCommandHandler
     async handle(command: VerifUserCommand): Promise<VerifUserCommandResult> {
         const user = await this._database.models.user.findOne({
             where: {
-                id: command.uuid,
+                userId: command.uuid,
             },
         });
 
