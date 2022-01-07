@@ -44,7 +44,7 @@
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "jsonwebtoken": "^8.5.1",
-        "node-fetch": "^2.6.1",
+        "node-fetch": "^2.6.6",
         "path": "^0.12.7",
         "pg": "^8.5.1",
         "reflect-metadata": "^0.1.13",
@@ -63,6 +63,7 @@
     },
     "devDependencies": {
         "@kurabu/config": "*",
+        "@kurabu/tsconfig": "*",
         "@types/bluebird": "^3.5.33",
         "@types/chai": "^4.2.15",
         "@types/mocha": "^8.2.1",
@@ -80,7 +81,6 @@
         "sequelize-cli": "^6.2.0",
         "sqlite3": "^4.2.0",
         "ts-mockito": "^2.6.1",
-        "@kurabu/tsconfig": "*",
         "typescript": "^4.4.4"
     }
 }
