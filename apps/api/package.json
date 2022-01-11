@@ -5,7 +5,7 @@
     "main": "build/start.js",
     "scripts": {
         "format": "prettier --write .",
-        "test-setup": "npm install chai mocha ts-node @types/chai @types/mocha",
+        "test-setup": "yarn install chai mocha ts-node @types/chai @types/mocha",
         "test": "mocha \"tests/**/*.ts\" --config .mocharc.json --timeout 15000",
         "dev": "nodemon --config \"./util/nodemon.json\"/",
         "build": "rimraf ./build/ && tsc",
@@ -15,9 +15,9 @@
         "db:downconfig": "ts-node -r tsconfig-paths/register ./src/database/downgradeconfig",
         "db:listmigrations": "ts-node -r tsconfig-paths/register ./src/database/listmigrations.ts",
         "lint": "eslint \"**/*.ts\"",
-        "install:dev": "npm install --only=dev",
-        "install:prod": "npm install --only=prod",
-        "test:coverage": "tsc && nyc npm run test",
+        "install:dev": "yarn install --only=dev",
+        "install:prod": "yarn install --only=prod",
+        "test:coverage": "tsc && nyc yarn run test",
         "lint:fix": "eslint \"**/*.ts\" --fix"
     },
     "keywords": [],
