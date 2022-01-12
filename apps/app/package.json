@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "scripts": {
         "dev": "expo start --android",
-        "start": "expo start",
+        "start:dev": "expo start",
         "android": "expo start --android",
         "ios": "expo start --ios",
         "web": "expo start --web",
@@ -31,7 +31,6 @@
         "http": "0.0.1-security",
         "https": "^1.0.0",
         "moment": "^2.29.1",
-        "node": "^14.5.0",
         "react": "17.0.1",
         "react-native": "0.64.3",
         "react-native-confirmation-code-field": "^7.2.0",

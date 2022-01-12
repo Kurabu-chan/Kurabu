@@ -1,7 +1,7 @@
 {
     "name": "turborepo-basic-shared",
     "version": "0.0.0",
-    "packageManager": "yarn@3.1.1",
+    "packageManager": "yarn@1.22.17",
     "private": true,
     "workspaces": [
         "apps/*",
@@ -31,6 +31,11 @@
                     "build/**"
                 ]
             },
+            "start": {
+                "dependsOn": [
+                    "build"
+                ]
+            },
             "lint": {
                 "outputs": []
             },
@@ -43,10 +48,7 @@
         }
     },
     "engines": {
-        "npm": ">=7.0.0",
+        "yarn": ">=1.22.17",
         "node": ">=14.0.0"
-    },
-    "dependencies": {
-        "node": "^17.3.0"
     }
 }

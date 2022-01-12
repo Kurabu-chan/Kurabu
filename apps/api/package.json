@@ -8,8 +8,8 @@
         "test-setup": "yarn install chai mocha ts-node @types/chai @types/mocha",
         "test": "mocha \"tests/**/*.ts\" --config .mocharc.json --timeout 15000",
         "dev": "nodemon --config \"./util/nodemon.json\"/",
-        "build": "rimraf ./build/ && tsc",
-        "start": "cross-env TS_NODE_PROJECT=tsconfig.json node -r tsconfig-paths/register -r ts-node/register build/start.js",
+        "build": "yarn rimraf ./build/ && yarn tsc",
+        "start": "yarn cross-env TS_NODE_PROJECT=tsconfig.json node -r tsconfig-paths/register -r ts-node/register build/start.js",
         "db:addmigration": "ts-node -r tsconfig-paths/register ./src/database/createmigration.ts",
         "db:localmigration": "ts-node -r tsconfig-paths/register ./src/database/runMigration.ts",
         "db:downconfig": "ts-node -r tsconfig-paths/register ./src/database/downgradeconfig",
@@ -50,7 +50,7 @@
         "reflect-metadata": "^0.1.13",
         "sequelize": "^6.9.0",
         "sequelize-typescript": "^2.1.1",
-        "sequelize-typescript-migration-rafaeltab": "^0.0.1-beta.8",
+        "sequelize-typescript-migration-rafaeltab": "^0.0.1-beta.9",
         "source-map-support": "^0.5.20",
         "swagger-ui-express": "^4.3.0",
         "ts-node": "^10.4.0",
@@ -79,7 +79,7 @@
         "nodemon": "^2.0.7",
         "nyc": "^15.1.0",
         "sequelize-cli": "^6.2.0",
-        "sqlite3": "^4.2.0",
+        "sqlite3": "^5.0.0",
         "ts-mockito": "^2.6.1",
         "typescript": "^4.4.4"
     }
