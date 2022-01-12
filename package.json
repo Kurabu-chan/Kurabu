@@ -12,7 +12,8 @@
         "dev": "turbo run dev --parallel --stream --continue",
         "lint": "turbo run lint",
         "format": "prettier --config \"./.prettierrc.json\" --write \"**/*.{ts,tsx,md}\"",
-        "lint:fix": "turbo run lint:fix"
+        "lint:fix": "turbo run lint:fix",
+        "build:docker": "turbo run build:docker"
     },
     "devDependencies": {
         "cross-env": "^7.0.3",
@@ -29,6 +30,11 @@
                 "outputs": [
                     "dist/**",
                     "build/**"
+                ]
+            },
+            "build:docker": {
+                "outputs": [
+                    "docker/build/**"
                 ]
             },
             "start": {

@@ -18,7 +18,8 @@
         "install:dev": "yarn install --only=dev",
         "install:prod": "yarn install --only=prod",
         "test:coverage": "tsc && nyc yarn run test",
-        "lint:fix": "eslint \"**/*.ts\" --fix"
+        "lint:fix": "eslint \"**/*.ts\" --fix",
+        "build:docker": "docker build -t kurabu/api:0.1 -f ./docker/Dockerfile ../../ && docker save kurabu/api -o ./docker/build/build.tar"
     },
     "keywords": [],
     "author": "",
