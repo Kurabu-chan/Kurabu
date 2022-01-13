@@ -3,6 +3,8 @@ import { config } from "dotenv";
 config();
 import { reload } from "./helpers/GLOBALVARS";
 reload();
+import { check } from "./env";
+check();
 
 import ExampleServer from "./ExampleServer";
 import { Logger } from "@overnightjs/logger";
