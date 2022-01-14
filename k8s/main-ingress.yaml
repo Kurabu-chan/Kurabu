@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: api.kurabu.moe
+    http:
+      paths:
+      - backend:
+          serviceName: prod-api-service
+          servicePort: 15000
+        path: /
+  - host: stage.kurabu.moe
+    http:
+      paths:
+      - backend:
+          serviceName: stage-api-service
+          servicePort: 15000
+        path: /

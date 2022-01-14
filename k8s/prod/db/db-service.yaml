@@ -1,0 +1,14 @@
+# Use type node port sicne there will only ever be one instance
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-service
+  namespace: prod
+spec:
+  type: NodePort
+  selector:
+    app: db-deployment
+  ports:
+    - port: 5432
+      targetPort: 5432
+      

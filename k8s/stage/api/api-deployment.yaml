@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  namespace: stage
+  labels:
+    app: api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kurabu/api
+  template:
+    metadata:
+      labels:
+        app: kurabu/api
+    spec:
+      containers:
+      - name: kurabu/api
+        image: kurabu/api:latest
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "500m"
+        ports:
+        - containerPort: 15000
+
+      
+         

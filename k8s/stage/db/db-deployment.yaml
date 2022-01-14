@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: db-pod
+  namespace: stage
+  labels:
+    app: postgres
+spec:
+  containers:
+  - name: postgres
+    image: postgres:14.1
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "1Gi"
+        cpu: "1000m"
+    ports:
+    - containerPort: 5432
+  volumes:
+    - name: db-volume
+      persistentVolumeClaim:
+        claimName: db-persistent-volume-claim
+
+      
+         

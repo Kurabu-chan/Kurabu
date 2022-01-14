@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: db-persistent-volume
+  namespace: prod
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  hostPath: # change this to some device that it can be stored on such as aws or nfs or smth. This is testing purposes only
+    path: "/mnt/data/prod" 
+  persistentVolumeReclaimPolicy: Retain

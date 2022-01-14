@@ -1,0 +1,14 @@
+# use node port, load balancing will be done by ingress
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service
+  namespace: prod
+spec:
+  type: NodePort
+  selector:
+    app: api-deployment
+  ports:
+    - port: 15000
+      targetPort: 15000
+      
