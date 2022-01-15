@@ -12,15 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: List before
-        env:
-          BEFORE: ${{ github.event.before }}
-          AFTER: ${{ github.event.after }}
-        run: |
-          echo "$BEFORE"
-          echo "$AFTER"
-      - name: Go to previous commit
-        run: git reset --hard HEAD~1  
+        with:
+          ref: ${{ github.event.before }}
       - name: Use Node.js 16
         uses: actions/setup-node@v2
         with:
@@ -29,8 +22,10 @@ jobs:
         run: yarn global add turbo
       - name: Run the yarn run check-build-required
         run: yarn run check-build-required
-      - name: Go to latest version
-        run: git pull
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.after }}
       - name: Run the yarn run check-build-required
         run: yarn run check-build-required
       - name: Check if it is full turbo
@@ -38,6 +33,8 @@ jobs:
           yarn run check-build-required > ./check-build-required.txt
           if grep -q "FULL TURBO" ./check-build-required.txt; then
             echo "::set-output name=full_turbo_check::true"
+            echo "fullturbo"
           else
             echo "::set-output name=full_turbo_check::false"
+            echo "nofullturbo"
           fi
