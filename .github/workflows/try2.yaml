@@ -21,12 +21,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-
-      - name: Find yarn location
-        run: which yarn
-
-      - name: Find yarnrc
-        run: find / -name "*.yarnrc*" 2>/dev/null
+          
+      - name: Delete yarnrc
+        run: rm /home/runner/work/Kurabu/Kurabu/.yarnrc.yml
 
       - name: Check yarn version
         run: yarn --version
