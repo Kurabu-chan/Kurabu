@@ -14,8 +14,8 @@ jobs:
         uses: actions/checkout@v2
       - name: List before
         env:
-          BEFORE: ${{ context.github.event.before }}
-          AFTER: ${{ context.github.event.after }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.event.after }}
         run: |
           echo "$BEFORE"
           echo "$AFTER"
