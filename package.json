@@ -2,7 +2,6 @@
     "name": "turborepo-basic-shared",
     "version": "0.0.0",
     "packageManager": "yarn@1.22.17",
-    "private": true,
     "workspaces": [
         "apps/*",
         "packages/*"

@@ -1,7 +1,6 @@
 {
     "name": "@kurabu/env-schema",
     "version": "0.0.0",
-    "private": true,
     "main": "./build/index.js",
     "files": [
         "./build/**"
