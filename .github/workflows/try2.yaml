@@ -22,8 +22,11 @@ jobs:
         with:
           node-version: 16
 
-      - name: Remove yarnrc
-        run: rm ~/.yarnrc || rm ~/.yarnrc.yml
+      - name: Find yarn location
+        run: which yarn
+
+      - name: Find yarnrc
+        run: find / -name "*.yarnrc*" 2>/dev/null
 
       - name: Check yarn version
         run: yarn --version
