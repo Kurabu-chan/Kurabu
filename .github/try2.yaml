@@ -1,0 +1,36 @@
+name: "Publish docker"
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  # job for verifying content is not malicious?
+  check-build:
+    name: Check if a build is necessary
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Go to previous commit
+        run: git reset --hard HEAD~1  
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Add turbo globally
+        run: yarn global add turbo
+      - name: Run the yarn run check-build-required
+        run: yarn run check-build-required
+      - name: Go to latest version
+        run: git pull
+      - name: Run the yarn run check-build-required
+        run: yarn run check-build-required
+      - name: Check if it is full turbo
+        run: |
+          yarn run check-build-required > ./check-build-required.txt
+          if grep -q "FULL TURBO" ./check-build-required.txt; then
+            echo "::set-output name=full_turbo_check::true"
+          else
+            echo "::set-output name=full_turbo_check::false"
+          fi

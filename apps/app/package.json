@@ -8,7 +8,8 @@
         "android": "expo start --android",
         "ios": "expo start --ios",
         "web": "expo start --web",
-        "eject": "expo eject"
+        "eject": "expo eject",
+        "check-build-required": "echo \"@kurabu/app\""
     },
     "dependencies": {
         "@babel/helper-builder-react-jsx": "^7.12.13",
