@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: List some commits
+        run: git log -n 10
       - name: Go to previous commit
         run: git reset --hard HEAD~1  
       - name: Use Node.js 16
