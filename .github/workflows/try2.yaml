@@ -22,11 +22,8 @@ jobs:
         with:
           node-version: 16
 
-      - name: Log current location
-        run: pwd
-
-      - name: Delete yarnrc
-        run: rm /home/runner/work/Kurabu/Kurabu/.yarnrc.yml
+      - name: Remove yarnrc
+        run: rm ./.yarnrc || rm ./.yarnrc.yml
 
       - name: Check yarn version
         run: yarn --version
