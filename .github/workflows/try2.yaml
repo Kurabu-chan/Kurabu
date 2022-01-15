@@ -23,7 +23,7 @@ jobs:
           node-version: 16
 
       - name: Remove yarnrc
-        run: rm ~/.yarnrc; rm ~/.yarnrc.yml
+        run: rm ~/.yarnrc; || rm ~/.yarnrc.yml
 
       - name: Check yarn version
         run: yarn --version
