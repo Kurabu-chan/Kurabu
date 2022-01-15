@@ -18,7 +18,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          cache: 'yarn'
+      - name: Install yarn
+        run: npm install -g yarn
       - name: Add turbo globally
         run: yarn global add turbo
       - name: Run the yarn run check-build-required
