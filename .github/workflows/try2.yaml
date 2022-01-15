@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: List some commits
-        run: git log -n 10
+        run: /usr/bin/git log -10 --format='%H'
       - name: Go to previous commit
         run: git reset --hard HEAD~1  
       - name: Use Node.js 16
