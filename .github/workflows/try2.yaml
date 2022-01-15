@@ -12,8 +12,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: List some commits from origin
+        run: git log origin/main -10 --format='%H'
       - name: List some commits
-        run: git log origin/main -5 --format='%H'
+        run: git log -10 --format='%H'
       - name: Go to previous commit
         run: git reset --hard HEAD~1  
       - name: Use Node.js 16
