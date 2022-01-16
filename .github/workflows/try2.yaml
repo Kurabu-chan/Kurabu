@@ -58,7 +58,9 @@ jobs:
       - name: Remove yarnrc
         run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
       - name: Add ts-node globally
-        run: yarn global add ts-node typescript
+        run: yarn global add ts-node
+      - name: Install script dependencies
+        run: cd scripts && npm install && cd ..
       - name: Bump versions
         env:
           BEFORE_SHA: ${{ github.event.before }}
