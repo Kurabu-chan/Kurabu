@@ -31,10 +31,9 @@ jobs:
         with:
           ref: ${{ github.event.after }}
       - name: Run the yarn run check-build-required
-        run: yarn run check-build-required
+        run: yarn run check-build-required > ./check-build-required.txt
       - name: Check if it is full turbo
         run: |
-          yarn run check-build-required > ./check-build-required.txt
           if grep -q "FULL TURBO" ./check-build-required.txt; then
             echo "::set-output name=full_turbo_check::true"
             echo "fullturbo"
