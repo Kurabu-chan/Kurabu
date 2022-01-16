@@ -81,7 +81,7 @@ jobs:
         run: git add -A
       - name: Configure git
         run: |
-          git config --global user.email "${{ github.event.head_commit.committer.email }}"
+          git config --global user.email "${{ github.event.head_commit.committer.username }}@users.noreply.github.com"
           git config --global user.name "${{ github.event.head_commit.committer.name }}"
       - name: commit
         run: git commit -am "Bump version numbers"
