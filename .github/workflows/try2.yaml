@@ -82,7 +82,7 @@ jobs:
       - name: commit
         run: git commit -am "Bump version numbers"
       - name: push
-        run: git push origin main
+        run: git push
   build-docker:
     name: Build docker image
     runs-on: ubuntu-latest
