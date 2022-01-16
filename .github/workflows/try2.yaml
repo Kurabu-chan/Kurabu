@@ -31,7 +31,9 @@ jobs:
         with:
           ref: ${{ github.event.after }}
       - name: Run the yarn run check-build-required
-        run: yarn run check-build-required > ./check-build-required.txt
+        run: |
+          yarn run check-build-required > ./check-build-required.txt
+          cat ./check-build-required.txt
       - name: Check if it is full turbo
         run: |
           if grep -q "FULL TURBO" ./check-build-required.txt; then
@@ -47,12 +49,18 @@ jobs:
     needs: check-build
     if: ${{ needs.check-build.outputs.full_turbo_check == false }}
     steps:
-      - name: Echo github obj
-        run: echo ${{ toJson(github) }}
+      - name: Count commits
+        env:
+          COMMITS: ${{ github.event.commits }}
+        run: |
+          echo "$COMMITS"
+          LL=$(echo "$COMMITS" | jq '. | length' )
+          echo "::set-output name=commit-count::$LL"
       - name: Checkout
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.after }}
+          fetch-depth: ${{ outputs.commit-count }}
       - name: Use Node.js 16
         uses: actions/setup-node@v2
         with:
