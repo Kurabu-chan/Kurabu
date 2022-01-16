@@ -74,18 +74,19 @@ jobs:
         run: cd scripts && npm install && cd ..
 
       - name: Get changed packages
+        id: get-changes
         env:
           BEFORE_SHA: ${{ github.event.before }}
           AFTER_SHA: ${{ github.event.after }}
-        run: |
-          export CHANGED_JSONS="$(ts-node ./scripts/get-changes.ts)"
-          echo $CHANGED_JSONS
+        run: echo "::set-output name=changes::$(ts-node ./scripts/get-changes.ts)"
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Install script dependencies
         run: cd scripts && npm install && cd ..
       - name: Apply version changes
+        env: 
+          CHANGED_JSONS: ${{ steps.get-changes.outputs.changes }}
         run: ts-node ./scripts/bump-versions.ts
 
       - name: Configure git
