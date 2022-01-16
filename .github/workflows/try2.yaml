@@ -9,6 +9,8 @@ jobs:
   check-build:
     name: Check if a build is necessary
     runs-on: ubuntu-latest
+    outputs:
+      full_turbo_check: ${{ steps.check-full-turbo.outputs.full_turbo_check }}
     steps:  
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -51,7 +53,7 @@ jobs:
     name: Bump version numbers
     runs-on: ubuntu-latest
     needs: check-build
-    if: ${{ always() }}#needs.check-build.outputs.full_turbo_check == 'nofullturbo' }}
+    if: ${{ needs.check-build.outputs.full_turbo_check == 'nofullturbo' }}
     steps:
       - name: Print output
         run: echo "${{ toJson(needs.check-build) }}"
