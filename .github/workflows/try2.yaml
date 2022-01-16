@@ -84,9 +84,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Install script dependencies
+        run: cd scripts && npm install && cd ..
       - name: Apply version changes
         run: ts-node ./scripts/bump-versions.ts
-        
+
       - name: Configure git
         run: |
           git config --global user.email "${{ github.event.head_commit.committer.username }}@users.noreply.github.com"
