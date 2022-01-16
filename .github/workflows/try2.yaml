@@ -51,7 +51,7 @@ jobs:
     steps:
       - name: Count commits
         env:
-          COMMITS: ${{ github.event.commits }}
+          COMMITS: ${{ toJson(github.event.commits) }}
         run: |
           echo "$COMMITS"
           LL=$(echo "$COMMITS" | jq '. | length' )
