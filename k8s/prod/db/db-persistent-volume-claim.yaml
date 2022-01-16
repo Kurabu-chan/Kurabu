@@ -4,9 +4,11 @@ metadata:
   name: db-persistent-volume-claim
   namespace: prod
 spec:
-  storageClassName: "" # Empty string must be explicitly set otherwise default StorageClass will be set
-  volumeName: db-persistent-volume
+  storageClassName: standard # Empty string must be explicitly set otherwise default StorageClass will be set
+  volumeName: db-persistent-volume-prod
+  accessModes:
+    - "ReadWriteOnce"
   resources:
     requests:
-      storage: 5Gi
+      storage: 1Gi
   

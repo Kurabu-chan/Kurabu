@@ -9,22 +9,24 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: kurabu/api
+      app: kurabu-api
   template:
     metadata:
       labels:
-        app: kurabu/api
+        app: kurabu-api
     spec:
       containers:
-      - name: kurabu/api
-        image: kurabu/api:latest
+      - name: kurabu-api
+        image: rafaeltab/kurabu.api:2.0.8
+        command:
+          - "yarn run start --scope=@kurabu/api"
         resources:
           requests:
             memory: "64Mi"
-            cpu: "250m"
+            cpu: "100m"
           limits:
-            memory: "4Gi"
-            cpu: "1000m"
+            memory: "250Mi"
+            cpu: "100m"
         ports:
         - containerPort: 15000
 

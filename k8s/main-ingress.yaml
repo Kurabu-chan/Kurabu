@@ -10,14 +10,41 @@ spec:
   - host: api.kurabu.moe
     http:
       paths:
-      - backend:
-          serviceName: prod-api-service
-          servicePort: 15000
-        path: /
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: prod-api-service
+            port:
+              number: 15000
+        
   - host: stage.kurabu.moe
     http:
       paths:
-      - backend:
-          serviceName: stage-api-service
-          servicePort: 15000
-        path: /
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: stage-api-service
+            port:
+              number: 15000
+  - http:
+      paths:
+      - path: /prod
+        pathType: Prefix
+        backend:
+          service:
+            name: prod-api-service
+            port:
+              number: 15000
+        
+  - http:
+      paths:
+      - path: /stage
+        pathType: Prefix
+        backend:
+          service:
+            name: stage-api-service
+            port:
+              number: 15000
+        
