@@ -49,18 +49,18 @@ jobs:
     needs: check-build
     if: ${{ needs.check-build.outputs.full_turbo_check == false }}
     steps:
-      - name: Count commits
-        env:
-          COMMITS: ${{ toJson(github.event.commits) }}
-        run: |
-          echo "$COMMITS"
-          LL=$(echo "$COMMITS" | jq '. | length' )
-          export commit_count=$(($LL+1))
+      # - name: Count commits
+      #   env:
+      #     COMMITS: ${{ toJson(github.event.commits) }}
+      #   run: |
+      #     echo "$COMMITS"
+      #     LL=$(echo "$COMMITS" | jq '. | length' )
+      #     export commit_count=$(($LL+1))
       - name: Checkout
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.after }}
-          fetch-depth: ${{ env.commit_count }}
+          fetch-depth: 0 #${{ env.commit_count }}
       - name: Use Node.js 16
         uses: actions/setup-node@v2
         with:
