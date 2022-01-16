@@ -36,6 +36,7 @@ jobs:
           yarn run check-build-required --cache-dir=/tmp/turbocache > ./check-build-required.txt
           cat ./check-build-required.txt
       - name: Check if it is full turbo
+        id: check-full-turbo
         run: |
           if grep -q "FULL TURBO" ./check-build-required.txt; then
             echo "::set-output name=full_turbo_check::true"
@@ -44,11 +45,13 @@ jobs:
             echo "::set-output name=full_turbo_check::false"
             echo "nofullturbo"
           fi
+      - name: Display output
+        run: echo "${{ toJson(steps.check-full-turbo.outputs) }}"
   bump-versions:
     name: Bump version numbers
     runs-on: ubuntu-latest
     needs: check-build
-    if: ${{ needs.check-build.outputs.full_turbo_check == 'false' }}
+    if: ${{ needs.check-build.outputs.full_turbo_check != 'false' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
