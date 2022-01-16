@@ -72,13 +72,21 @@ jobs:
         run: yarn global add ts-node
       - name: Install script dependencies
         run: cd scripts && npm install && cd ..
-      - name: Bump versions
+
+      - name: Get changed packages
         env:
           BEFORE_SHA: ${{ github.event.before }}
           AFTER_SHA: ${{ github.event.after }}
+        run: export CHANGED_JSONS="$(ts-node ./scripts/get-changes.ts)"
+      - name: Print changed packages
+        run: echo $CHANGED_JSONS
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Apply version changes
         run: ts-node ./scripts/bump-versions.ts
-      - name: Add all
-        run: git add -A
+        
       - name: Configure git
         run: |
           git config --global user.email "${{ github.event.head_commit.committer.username }}@users.noreply.github.com"
