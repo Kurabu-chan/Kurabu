@@ -9,9 +9,7 @@ jobs:
   check-build:
     name: Check if a build is necessary
     runs-on: ubuntu-latest
-    steps:
-      
-
+    steps:  
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
@@ -21,12 +19,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-
       - name: Remove yarnrc
         run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
-
-      - name: Check yarn version
-        run: yarn --version
 
       - name: Add turbo globally
         run: yarn global add turbo
@@ -48,3 +42,33 @@ jobs:
             echo "::set-output name=full_turbo_check::false"
             echo "nofullturbo"
           fi
+  bump-versions:
+    name: Bump version numbers
+    runs-on: ubuntu-latest
+    needs: check-build
+    if: ${{ needs.check-build.outputs.full_turbo_check == 'false' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.after }}
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Remove yarnrc
+        run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
+      - name: Add ts-node globally
+        run: yarn global add ts-node
+      - name: Bump versions
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.event.after }}
+        run: ts-node ./scripts/bump-versions.ts
+      - name: Add all
+        run: git add -A
+      - name: commit
+        run: git commit -am "Bump version numbers"
+      - name: push
+        run: git push origin main
+    
