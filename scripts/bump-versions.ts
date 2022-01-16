@@ -6,7 +6,7 @@ if (process.env.CHANGED_JSONS === undefined) {
     throw new Error("CHANGED_JSONS environment variable is not set");
 }
 
-const workspacePackageJsons = process.env.CHANGED_JSONS.split(", ").map(x => `${x}/package.json`)
+const workspacePackageJsons = process.env.CHANGED_JSONS.split(", ")
 
 for (const packjson of workspacePackageJsons) {
     let fileContent = readFileSync(packjson).toString('utf-8');
