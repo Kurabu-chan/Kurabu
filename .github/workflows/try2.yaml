@@ -55,12 +55,12 @@ jobs:
         run: |
           echo "$COMMITS"
           LL=$(echo "$COMMITS" | jq '. | length' )
-          export commit-count=$LL
+          export commit_count=$LL
       - name: Checkout
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.after }}
-          fetch-depth: ${{ env.commit-count }}
+          fetch-depth: ${{ env.commit_count }}
       - name: Use Node.js 16
         uses: actions/setup-node@v2
         with:
