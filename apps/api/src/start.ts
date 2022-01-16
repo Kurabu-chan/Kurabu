@@ -18,7 +18,7 @@ if (PORT === 15000) {
 
 ContainerManager.getInstance();
 
-console.log("Test");
+console.log("Testsss");
 
 const exampleServer = new ExampleServer();
 exampleServer.start(PORT);
