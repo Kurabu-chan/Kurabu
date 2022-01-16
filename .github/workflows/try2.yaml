@@ -50,18 +50,11 @@ jobs:
     needs: check-build
     if: ${{ needs.check-build.outputs.full_turbo_check == 'false' }}
     steps:
-      # - name: Count commits
-      #   env:
-      #     COMMITS: ${{ toJson(github.event.commits) }}
-      #   run: |
-      #     echo "$COMMITS"
-      #     LL=$(echo "$COMMITS" | jq '. | length' )
-      #     export commit_count=$(($LL+1))
       - name: Checkout
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.after }}
-          fetch-depth: 0 #${{ env.commit_count }}
+          fetch-depth: 0 
       - name: Use Node.js 16
         uses: actions/setup-node@v2
         with:
@@ -83,4 +76,26 @@ jobs:
         run: git commit -am "Bump version numbers"
       - name: push
         run: git push origin main
-    
+  build-docker:
+    name: Build docker image
+    runs-on: ubuntu-latest
+    needs: bump-versions
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Remove yarnrc
+        run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
+      - name: Add ts-node globally
+        run: yarn global add turbo
+      - name: Run docker build
+        run: yarn run build:docker --scope=@kurabu/api
+      - name: Upload image as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: kurabu-api-image
+          path: apps/api/docker/build/build.tar
+     
