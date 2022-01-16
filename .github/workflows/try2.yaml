@@ -55,7 +55,7 @@ jobs:
         run: |
           echo "$COMMITS"
           LL=$(echo "$COMMITS" | jq '. | length' )
-          export commit_count=$LL
+          export commit_count=$(($LL+1))
       - name: Checkout
         uses: actions/checkout@v2
         with:
