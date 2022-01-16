@@ -121,6 +121,8 @@ jobs:
       - name: Add ts-node globally
         run: yarn global add turbo
       
+      - name: Globally add turbo
+        run: yarn global add turbo
       - name: Install script dependencies
         run: cd scripts && npm install && cd ..
       - name: Apply version changes
