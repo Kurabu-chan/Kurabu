@@ -77,10 +77,9 @@ jobs:
         env:
           BEFORE_SHA: ${{ github.event.before }}
           AFTER_SHA: ${{ github.event.after }}
-        run: export CHANGED_JSONS="$(ts-node ./scripts/get-changes.ts)"
-      - name: Print changed packages
-        run: echo $CHANGED_JSONS
-
+        run: |
+          export CHANGED_JSONS="$(ts-node ./scripts/get-changes.ts)"
+          echo $CHANGED_JSONS
       - name: Checkout
         uses: actions/checkout@v2
 
