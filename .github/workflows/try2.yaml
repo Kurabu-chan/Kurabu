@@ -39,10 +39,10 @@ jobs:
         id: check-full-turbo
         run: |
           if grep -q "FULL TURBO" ./check-build-required.txt; then
-            echo "::set-output name=full_turbo_check::true"
+            echo "::set-output name=full_turbo_check::fullturbo"
             echo "fullturbo"
           else
-            echo "::set-output name=full_turbo_check::false"
+            echo "::set-output name=full_turbo_check::nofullturbo"
             echo "nofullturbo"
           fi
       - name: Display output
@@ -51,7 +51,7 @@ jobs:
     name: Bump version numbers
     runs-on: ubuntu-latest
     needs: check-build
-    if: ${{ needs.check-build.outputs.full_turbo_check == false }}
+    if: ${{ needs.check-build.outputs.full_turbo_check == 'nofullturbo' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
