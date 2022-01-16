@@ -19,7 +19,7 @@
         "install:prod": "yarn install --only=prod",
         "test:coverage": "tsc && nyc yarn run test",
         "lint:fix": "eslint \"**/*.ts\" --fix",
-        "build:docker": "mkdir -p ./docker/build/ && docker build -t kurabu/api:0.1 --output type=tar,dest=./docker/build/build.tar -f ./docker/Dockerfile ../../ && docker import ./docker/build/build.tar kurabu/api",
+        "build:docker": "mkdir -p ./docker/build/ && docker build -t kurabu/api:0.1 --output type=tar,dest=./docker/build/build.tar -f ./docker/Dockerfile ../../",
         "check-build-required": "echo \"@kurabu/api\""
     },
     "keywords": [],

@@ -114,6 +114,8 @@ jobs:
         run: yarn global add turbo
       - name: Run docker build
         run: yarn run build:docker --scope=@kurabu/api
+      - name: Show all files
+        run: tree -a ./
       - name: Upload image as artifact
         uses: actions/upload-artifact@v2
         with:
