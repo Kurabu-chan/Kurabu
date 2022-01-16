@@ -47,6 +47,8 @@ jobs:
     needs: check-build
     if: ${{ needs.check-build.outputs.full_turbo_check == false }}
     steps:
+      - name: Echo github obj
+        run: echo ${{ toJson(github) }}
       - name: Checkout
         uses: actions/checkout@v2
         with:
