@@ -16,7 +16,7 @@ for (const packjson of workspacePackageJsons) {
     const versionSplit = version.split(".");
     const newVersion = `${versionSplit[0]}.${versionSplit[1]}.${Number(versionSplit[2]) + 1}`;
     console.log(`Updating version for ${packname} from ${version} to ${newVersion}`);
-    fileContent = fileContent.replace(/"version":\s*"[0-9]*\.[0-9]*\.[0-9]",/, `"version": "${newVersion}",`);
+    fileContent = fileContent.replace(/"version":\s*"[0-9]*\.[0-9]*\.[0-9]*",/, `"version": "${newVersion}",`);
     writeFileSync(packjson, fileContent);
 }
 
