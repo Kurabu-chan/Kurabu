@@ -155,6 +155,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Import docker image
-        run: docker load ./build/build.tar rafaeltab/kurabu.api:${{ needs.bump-versions.outputs.api_version }}
+        run: docker load -i./build/build.tar 
+      - name: Tag the image
+        run: |
+          docker tag kurabu-api:latest rafaeltab/kurabu.api:${{ needs.bump-versions.outputs.api_version }}
+          docker tag kurabu-api:latest rafaeltab/kurabu.api:latest
+          docker rmi kurabu-api:latest
       - name: Push image to docker hub
-        run: docker push rafaeltab/kurabu.api:${{ needs.bump-versions.outputs.api_version }}
+        run: docker push -a rafaeltab/kurabu.api
