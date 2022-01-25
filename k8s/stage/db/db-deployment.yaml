@@ -9,6 +9,22 @@ spec:
   containers:
   - name: postgres
     image: postgres:14.1
+    env:
+      - name: POSTGRES_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: secret-config
+            key: db.POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        valueFrom:
+          secretKeyRef:
+            name: secret-config
+            key: db.POSTGRES_USER
+      - name: POSTGRES_DB
+        valueFrom:
+          secretKeyRef:
+            name: secret-config
+            key: db.POSTGRES_DB
     resources:
       requests:
         memory: "64Mi"
