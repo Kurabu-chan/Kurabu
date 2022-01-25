@@ -1,13 +1,13 @@
 {
     "name": "@kurabu/env-schema",
     "version": "0.0.0",
-    "private": true,
     "main": "./build/index.js",
     "files": [
         "./build/**"
     ],
     "scripts": {
-        "build": "yarn rimraf ./build/ && yarn tsc"
+        "build": "yarn rimraf ./build/ && yarn tsc",
+        "check-build-required": "echo \"@kurabu/env-schema\""
     },
     "devDependencies": {
         "@kurabu/config": "*",

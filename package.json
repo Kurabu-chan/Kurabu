@@ -2,18 +2,19 @@
     "name": "turborepo-basic-shared",
     "version": "0.0.0",
     "packageManager": "yarn@1.22.17",
-    "private": true,
     "workspaces": [
         "apps/*",
         "packages/*"
     ],
+    "private": true,
     "scripts": {
         "build": "turbo run build",
         "dev": "turbo run dev --parallel --stream --continue",
         "lint": "turbo run lint",
         "format": "prettier --config \"./.prettierrc.json\" --write \"**/*.{ts,tsx,md}\"",
         "lint:fix": "turbo run lint:fix",
-        "build:docker": "turbo run build:docker"
+        "build:docker": "turbo run build:docker",
+        "check-build-required": "turbo run check-build-required"
     },
     "devDependencies": {
         "cross-env": "^7.0.3",
@@ -50,6 +51,12 @@
             },
             "lint:fix": {
                 "outputs": []
+            },
+            "check-build-required": {
+                "outputs": [],
+                "dependsOn": [
+                    "^check-build-required"
+                ]
             }
         }
     },

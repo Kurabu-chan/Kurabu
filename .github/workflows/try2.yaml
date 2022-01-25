@@ -1,0 +1,165 @@
+name: "Publish docker"
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  # job for verifying content is not malicious?
+  check-build:
+    name: Check if a build is necessary
+    runs-on: ubuntu-latest
+    outputs:
+      full_turbo_check: ${{ steps.check-full-turbo.outputs.full_turbo_check }}
+    steps:  
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.before }}
+      
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Remove yarnrc
+        run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
+
+      - name: Add turbo globally
+        run: yarn global add turbo
+      - name: Run the yarn run check-build-required
+        run: yarn run check-build-required --cache-dir=/tmp/turbocache
+      - run: ls -la /tmp/turbocache
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.after }}
+      - name: Run the yarn run check-build-required
+        run: |
+          yarn run check-build-required --cache-dir=/tmp/turbocache > ./check-build-required.txt
+          cat ./check-build-required.txt
+      - name: Check if it is full turbo
+        id: check-full-turbo
+        run: |
+          if grep -q "FULL TURBO" ./check-build-required.txt; then
+            echo "::set-output name=full_turbo_check::fullturbo"
+            echo "fullturbo"
+          else
+            echo "::set-output name=full_turbo_check::nofullturbo"
+            echo "nofullturbo"
+          fi
+      - name: Display output
+        run: echo "${{ toJson(steps.check-full-turbo.outputs) }}"
+  bump-versions:
+    name: Bump version numbers
+    runs-on: ubuntu-latest
+    needs: check-build
+    outputs:
+      changed_workspaces: ${{ steps.get-changes.outputs.changes }}
+      api_version: ${{steps.retrieve-version.outputs.version}}
+    if: ${{ needs.check-build.outputs.full_turbo_check == 'nofullturbo' }}
+    steps:
+      - name: Print output
+        run: echo "${{ toJson(needs.check-build) }}"
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.after }}
+          fetch-depth: 0 
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Remove yarnrc
+        run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
+      - name: Add ts-node globally
+        run: yarn global add ts-node
+      - name: Install script dependencies
+        run: cd scripts && npm install && cd ..
+
+      - name: Get changed packages
+        id: get-changes
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.event.after }}
+        run: echo "::set-output name=changes::$(ts-node ./scripts/get-changes.ts)"
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install script dependencies
+        run: cd scripts && npm install && cd ..
+      - name: Apply version changes
+        env: 
+          CHANGED_JSONS: ${{ steps.get-changes.outputs.changes }}
+        run: ts-node ./scripts/bump-versions.ts
+      - name: Get version from @kurabu/api
+        id: retrieve-version
+        run: |
+          VERSION=$(cat apps/api/package.json | grep '"version":\s*"[0-9]*\.[0-9]*\.[0-9]*",' | grep -o '[0-9]*\.[0-9]*\.[0-9]*')
+          echo "::set-output name=version::$VERSION"
+
+      - name: Configure git
+        run: |
+          git config --global user.email "${{ github.event.head_commit.committer.username }}@users.noreply.github.com"
+          git config --global user.name "${{ github.event.head_commit.committer.name }}"
+      - name: commit
+        run: git commit -am "Bump version numbers"
+      - name: push
+        run: git push
+  build-docker:
+    name: Build docker image
+    runs-on: ubuntu-latest
+    needs: bump-versions
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Remove yarnrc
+        run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
+      - name: Add ts-node globally
+        run: yarn global add turbo
+      
+      - name: Globally add ts-node
+        run: yarn global add ts-node
+      - name: Install script dependencies
+        run: cd scripts && npm install && cd ..
+      - name: Apply version changes
+        env: 
+          CHANGED_JSONS: ${{ needs.bump-versions.outputs.changed_workspaces }}
+        run: ts-node ./scripts/bump-versions.ts
+
+      - name: Run docker build
+        run: yarn run build:docker --scope=@kurabu/api
+      - name: Show all files
+        run: tree -a ./
+      - name: Upload image as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: kurabu-api-image
+          path: apps/api/docker/build/build.tar
+  publish_docker:
+    name: Publish to docker hub
+    runs-on: ubuntu-latest
+    needs: [build-docker, bump-versions]
+    steps:
+      - name: Retrieve artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: kurabu-api-image
+          path: ./build
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Import docker image
+        run: docker load -i./build/build.tar 
+      - name: Tag the image
+        run: |
+          docker tag kurabu/api:latest rafaeltab/kurabu.api:${{ needs.bump-versions.outputs.api_version }}
+          docker tag kurabu/api:latest rafaeltab/kurabu.api:latest
+          docker rmi kurabu/api:latest
+      - name: Push image to docker hub
+        run: docker push -a rafaeltab/kurabu.api
