@@ -32,3 +32,4 @@ yarn-error.log*
 # turbo
 .turbo
 .yarn
+k8s/stage/secret.yaml
