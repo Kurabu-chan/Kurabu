@@ -5,13 +5,13 @@ bases:
 - "../../core"
 
 commonLabels:
-  app: staging
+  app: production
 
-namespace: staging       
+namespace: production       
 
 resources:
 - namespace.yaml
-- host-ingress.yaml
 - path-ingress.yaml
+- host-ingress.yaml
 - secret.yaml
 - db-persistent-volume.yaml

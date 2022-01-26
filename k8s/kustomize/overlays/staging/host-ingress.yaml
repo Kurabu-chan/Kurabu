@@ -1,12 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress
+  name: host-ingress
   labels:
     section: kurabu
     kind: ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   # defaultBackend:
   #   service:
@@ -18,15 +18,6 @@ spec:
     http:
       paths:
       - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: api-service
-            port:
-              number: 15000
-  - http:
-      paths:
-      - path: /stage(/|$)(.*)
         pathType: Prefix
         backend:
           service:
