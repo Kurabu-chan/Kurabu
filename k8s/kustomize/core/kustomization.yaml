@@ -7,5 +7,4 @@ resources:
 
 - db\db-deployment.yaml
 - db\db-persistent-volume-claim.yaml
-- db\db-persistent-volume.yaml
 - db\db-service.yaml

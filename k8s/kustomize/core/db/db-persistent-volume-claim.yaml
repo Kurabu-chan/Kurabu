@@ -7,7 +7,11 @@ metadata:
     kind: pvc
 spec:
   storageClassName: standard # Empty string must be explicitly set otherwise default StorageClass will be set
-  volumeName: db-persistent-volume-stage
+  selector:
+    matchLabels:
+      type: local
+      kind: pv
+      section: kurabu-db
   accessModes:
     - "ReadWriteOnce"
   resources:
