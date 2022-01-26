@@ -1,8 +1,0 @@
-kind: Service
-apiVersion: v1
-metadata:
-  name: prod-api-service
-  namespace: default
-spec:
-  type: ExternalName
-  externalName: api-service.prod.svc.cluster.local

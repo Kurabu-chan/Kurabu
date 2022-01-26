@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-deployment
-  namespace: stage
   labels:
-    app: api-deployment
+    section: kurabu-api
+    kind: deployment
 spec:
   replicas: 1
   selector:
@@ -13,11 +13,13 @@ spec:
   template:
     metadata:
       labels:
-        app: kurabu-api
+        section: kurabu-api
+        kind: pod
     spec:
       containers:
       - name: kurabu-api
-        image: rafaeltab/kurabu.api:2.0.11
+        imagePullPolicy: Never
+        image: kurabu/api:latest
         env:
           - name: CLIENT_ID
             valueFrom:
@@ -59,14 +61,19 @@ spec:
               secretKeyRef:
                 name: secret-config
                 key: api.EMAIL_DOMAIN
+          - name: SQL_SSL
+            valueFrom:
+              secretKeyRef:
+                name: secret-config
+                key: api.SQL_SSL
 
         resources:
           requests:
-            memory: "32Mi"
-            cpu: "100m"
-          limits:
             memory: "250Mi"
             cpu: "100m"
+          limits:
+            memory: "1000Mi"
+            cpu: "250m"
         ports:
         - containerPort: 15000
         

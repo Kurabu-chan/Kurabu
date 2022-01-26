@@ -1,8 +1,0 @@
-kind: Service
-apiVersion: v1
-metadata:
-  name: stage-api-service
-  namespace: default
-spec:
-  type: ExternalName
-  externalName: api-service.stage.svc.cluster.local
