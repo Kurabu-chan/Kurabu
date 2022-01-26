@@ -6,13 +6,13 @@ metadata:
     section: kurabu
     kind: ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
-  defaultBackend:
-    service:
-      name: api-service
-      port:
-        number: 15000
+  # defaultBackend:
+  #   service:
+  #     name: api-service
+  #     port:
+  #       number: 15000
   rules:
   - host: stage.kurabu.moe
     http:
@@ -26,7 +26,7 @@ spec:
               number: 15000
   - http:
       paths:
-      - path: /stage
+      - path: /stage(/|$)(.*)
         pathType: Prefix
         backend:
           service:
