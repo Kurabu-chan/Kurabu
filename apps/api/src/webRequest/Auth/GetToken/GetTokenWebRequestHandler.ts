@@ -19,6 +19,11 @@ export class GetTokenWebRequestHandler
 {
     async handle(query: GetTokenWebRequest): Promise<GetTokenWebRequestResult> {
         try {
+            let redirect: string = "http://localhost:15000/authed";
+            if (!process.env.LOCALMODE) {
+                redirect = new URL('authed', query.redirect).href;
+            }
+
             const request = new RequestBuilder("https", "myanimelist.net")
                 .addPath("v1/oauth2/token")
                 .setHeader("Content-Type", "application/x-www-form-urlencoded")
@@ -26,11 +31,7 @@ export class GetTokenWebRequestHandler
                     // eslint-disable-next-line max-len
                     `client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=authorization_code&code=${
                         query.code
-                    }&code_verifier=${query.verifier}&redirect_uri=${
-                        process.env.LOCALMODE
-                            ? "http://localhost:15000/authed"
-                            : query.ourdomain + "/authed"
-                    }`
+                    }&code_verifier=${query.verifier}&redirect_uri=${redirect}`
                 );
 
             const data = await request.request("POST");
