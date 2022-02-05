@@ -15,3 +15,8 @@ resources:
 - path-ingress.yaml
 - secret.yaml
 - db-persistent-volume.yaml
+
+images:
+- name: kurabu-api
+  newTag: 'latest'
+  newName: 'rafaeltab/kurabu.api'

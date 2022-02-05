@@ -18,8 +18,8 @@ spec:
     spec:
       containers:
       - name: kurabu-api
-        imagePullPolicy: Never
-        image: kurabu/api:latest
+        imagePullPolicy: Always
+        image: kurabu-api
         env:
           - name: CLIENT_ID
             valueFrom:

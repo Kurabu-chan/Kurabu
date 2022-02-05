@@ -15,3 +15,8 @@ resources:
 - host-ingress.yaml
 - secret.yaml
 - db-persistent-volume.yaml
+
+images:
+- name: kurabu-api
+  newTag: 'production'
+  newName: 'rafaeltab/kurabu.api'
