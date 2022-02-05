@@ -30,10 +30,12 @@ export class ReAuthUserCommandHandler
             .setQueryParam("code_challenge", codeVerifier)
             .setQueryParam("state", command.uuid);
 
-        if (process.env.LOCALMODE) {
+        if (command.redirect !== undefined) {
+            request.setQueryParam("redirect_uri", new URL('authed', command.redirect).href);
+        }else if (process.env.LOCALMODE) {
             request.setQueryParam("redirect_uri", "http://localhost:15000/authed");
         } else {
-            request.setQueryParam("redirect_uri", command.ourdomain + "/authed");
+            request.setQueryParam("redirect_uri", new URL('authed', command.ourdomain).href);
         }
 
         const url = request.build().url;
