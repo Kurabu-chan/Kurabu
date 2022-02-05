@@ -34,10 +34,14 @@ spec:
         cpu: "100m"
     ports:
     - containerPort: 5432
+    volumeMounts:
+    - name: db-volume
+      mountPath: /var/lib/postgresql/data
   volumes:
     - name: db-volume
       persistentVolumeClaim:
         claimName: db-persistent-volume-claim
+      
 
       
          

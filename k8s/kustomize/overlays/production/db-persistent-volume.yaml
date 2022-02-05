@@ -14,5 +14,5 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/mnt/data/prod" 
+    path: "/data/prod" 
   persistentVolumeReclaimPolicy: Retain
