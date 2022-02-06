@@ -14,7 +14,8 @@
         "format": "prettier --config \"./.prettierrc.json\" --write \"**/*.{ts,tsx,md}\"",
         "lint:fix": "turbo run lint:fix",
         "build:docker": "turbo run build:docker",
-        "check-build-required": "turbo run check-build-required"
+        "check-build-required": "turbo run check-build-required",
+        "test": "turbo run test"
     },
     "devDependencies": {
         "cross-env": "^7.0.3",
