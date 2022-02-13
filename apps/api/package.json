@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/api",
-    "version": "2.0.11",
+    "version": "2.0.12",
     "description": "",
     "main": "build/start.js",
     "scripts": {
@@ -19,7 +19,9 @@
         "install:prod": "yarn install --only=prod",
         "test:coverage": "tsc && nyc yarn run test",
         "lint:fix": "eslint \"**/*.ts\" --fix",
-        "build:docker": "mkdir -p ./docker/build/ && docker buildx build -t kurabu/api -f ./docker/Dockerfile ../../ && docker save --output ./docker/build/build.tar kurabu/api ",
+        "build:docker": "ts-node --project ./scripts/tsconfig.json ./scripts/docker.ts -- --context latest",
+        "build:docker-prod": "ts-node --project ./scripts/tsconfig.json ./scripts/docker.ts -- --context production",
+        "build:docker-dev": "ts-node --project ./scripts/tsconfig.json ./scripts/docker.ts -- --context development",
         "check-build-required": "echo \"@kurabu/api\""
     },
     "keywords": [],
@@ -62,7 +64,8 @@
         "tsyringe": "^4.4.0",
         "umzug": "^3.0.0",
         "uuid": "^8.3.2",
-        "@kurabu/env-schema": "*"
+        "@kurabu/env-schema": "*",
+        "@kurabu/logging": "*"
     },
     "devDependencies": {
         "@kurabu/config": "*",

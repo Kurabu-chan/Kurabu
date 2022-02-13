@@ -48,15 +48,18 @@ export class PendingUserCommandHandler
         });
         if (!tokenModel) throw new TokensNotPresentError("No tokens for pending user");
 
+
+
+        const redirect = command.redirect || userTokens.redirect || command.ourdomain;
         // get the tokens from MAL
         const tokens = await this._getTokenWebRequest.handle({
             code: command.code,
-            ourdomain: command.ourdomain,
+            redirect: redirect,
             verifier: userTokens.verifier as string,
         });
 
         await tokenModel.update({
-            redirect: null,
+            redirect: redirect,
             refreshtoken: tokens.refreshToken,
             token: tokens.accessToken,
             verifier: null,

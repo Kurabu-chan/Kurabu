@@ -14,51 +14,18 @@
         "format": "prettier --config \"./.prettierrc.json\" --write \"**/*.{ts,tsx,md}\"",
         "lint:fix": "turbo run lint:fix",
         "build:docker": "turbo run build:docker",
-        "check-build-required": "turbo run check-build-required"
+        "build:docker-dev": "turbo run build:docker-dev",
+        "build:docker-prod": "turbo run build:docker-prod",
+        "check-build-required": "turbo run check-build-required",
+        "test": "turbo run test"
     },
     "devDependencies": {
+        "@types/mocha": "^9.1.0",
         "cross-env": "^7.0.3",
         "prettier": "^2.5.1",
         "rimraf": "^3.0.2",
-        "turbo": "latest"
-    },
-    "turbo": {
-        "pipeline": {
-            "build": {
-                "dependsOn": [
-                    "^build"
-                ],
-                "outputs": [
-                    "dist/**",
-                    "build/**"
-                ]
-            },
-            "build:docker": {
-                "outputs": [
-                    "docker/build/**"
-                ]
-            },
-            "start": {
-                "dependsOn": [
-                    "build"
-                ]
-            },
-            "lint": {
-                "outputs": []
-            },
-            "dev": {
-                "cache": false
-            },
-            "lint:fix": {
-                "outputs": []
-            },
-            "check-build-required": {
-                "outputs": [],
-                "dependsOn": [
-                    "^check-build-required"
-                ]
-            }
-        }
+        "turbo": "1.1.2",
+        "ts-node": "^10.4.0"
     },
     "engines": {
         "yarn": ">=1.22.17",

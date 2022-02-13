@@ -1,0 +1,45 @@
+{
+    "pipeline": {
+        "build": {
+            "dependsOn": [
+                "^build"
+            ],
+            "outputs": [
+                "dist/**",
+                "build/**"
+            ]
+        },
+        "build:docker": {
+
+        },
+        "build:docker-dev": {
+
+        },
+        "build:docker-prod": {
+
+        },
+        "start": {
+            "dependsOn": [
+                "build"
+            ]
+        },
+        "lint": {
+            "outputs": []
+        },
+        "dev": {
+            "cache": false
+        },
+        "lint:fix": {
+            "outputs": []
+        },
+        "check-build-required": {
+            "outputs": [],
+            "dependsOn": [
+                "^check-build-required"
+            ]
+        },
+        "test": {
+
+        }
+    }
+}

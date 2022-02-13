@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-deployment
+  labels:
+    section: kurabu-db
+    kind: pod
+spec:
+  containers:
+  - name: postgres
+    image: postgres:14.2-alpine
+    env:
+      - name: POSTGRES_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: secret-config
+            key: db.POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        valueFrom:
+          secretKeyRef:
+            name: secret-config
+            key: db.POSTGRES_USER
+      - name: POSTGRES_DB
+        valueFrom:
+          secretKeyRef:
+            name: secret-config
+            key: db.POSTGRES_DB
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "300Mi"
+        cpu: "100m"
+    ports:
+    - containerPort: 5432
+    volumeMounts:
+    - name: db-volume
+      mountPath: /var/lib/postgresql/data
+  volumes:
+    - name: db-volume
+      persistentVolumeClaim:
+        claimName: db-persistent-volume-claim
+      
+
+      
+         

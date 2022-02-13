@@ -125,6 +125,16 @@
             "url": "http://stage.kurabu.moe",
             "description": "IMal production environment",
             "variables": {}
+        },
+        {
+            "url": "/stage/",
+            "description": "K8s staging environment",
+            "variables": {}
+        },
+        {
+            "url": "/prod/",
+            "description": "K8s production environment",
+            "variables": {}
         }
     ]
 }
