@@ -88,7 +88,7 @@ async function createBuilder(): Promise<Builder> {
     }
 
     console.log("\nCreating new builder\n\n");
-    await execAsync("docker", ["buildx", "create", "--driver", "docker-container" ,"--name", name]);
+    await execAsync("docker", ["buildx", "create", "--driver", "docker-container" ,"--name", name, "--driver-opt", "env.BUILDKIT_STEP_LOG_MAX_SIZE=-1", "--driver-opt", "env.BUILDKIT_STEP_LOG_MAX_SPEED=-1"]);
 
     // get platforms from builder
     console.log("\nGetting platforms from builder\n\n");
