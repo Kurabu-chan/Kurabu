@@ -1,4 +1,4 @@
-name: "Publish docker"
+name: "Publish on release"
 
 on:
   release:
