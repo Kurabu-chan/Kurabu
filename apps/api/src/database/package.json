@@ -1,0 +1,12 @@
+{
+    "name": "database",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "dependencies": {
+        "sqlite3": "^5.0.0"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
