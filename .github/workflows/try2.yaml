@@ -136,6 +136,8 @@ jobs:
         env: 
           CHANGED_JSONS: ${{ needs.bump-versions.outputs.changed_workspaces }}
         run: ts-node ./scripts/bump-versions.ts
+      - name: Install script dependencies
+        run: cd apps/api/scripts && npm install && cd ../../..
       - name: Build and publish docker
         run: yarn run build:docker --scope=@kurabu/api
   build-docker-prod:
@@ -168,6 +170,8 @@ jobs:
         env: 
           CHANGED_JSONS: ${{ needs.bump-versions.outputs.changed_workspaces }}
         run: ts-node ./scripts/bump-versions.ts
+      - name: Install script dependencies
+        run: cd apps/api/scripts && npm install && cd ../../..
       - name: Build and publish docker
         run: yarn run build:docker-prod --scope=@kurabu/api
   publish-stage:
