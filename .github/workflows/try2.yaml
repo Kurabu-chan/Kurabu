@@ -196,9 +196,9 @@ jobs:
       - name: Get config from secrets
         env:
           KUBECTL_CONFIG: ${{ secrets.KUBECTL_CONFIG }}
-        run: echo "$KUBECTL_CONFIG" > ~/kubectl-config.yaml
+        run: echo "$KUBECTL_CONFIG" > kubectl-config.yaml
       - name: Do rollout for staging
-        run: kubectl rollout restart deployments api-deployment -n=staging --kubeconfig=~/kubectl-config.yaml
+        run: kubectl rollout restart deployments api-deployment -n=staging --kubeconfig=kubectl-config.yaml
   publish-prod:
     name: Publish to oracle cloud k8s production
     runs-on: ubuntu-latest
@@ -209,6 +209,6 @@ jobs:
       - name: Get config from secrets
         env:
           KUBECTL_CONFIG: ${{ secrets.KUBECTL_CONFIG }}
-        run: echo "$KUBECTL_CONFIG" > ~/kubectl-config.yaml
+        run: echo "$KUBECTL_CONFIG" > kubectl-config.yaml
       - name: Do rollout for staging
-        run: kubectl rollout restart deployments api-deployment -n=production --kubeconfig=~/kubectl-config.yaml
+        run: kubectl rollout restart deployments api-deployment -n=production --kubeconfig=kubectl-config.yaml
