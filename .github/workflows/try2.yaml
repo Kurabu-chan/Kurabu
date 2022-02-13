@@ -112,6 +112,12 @@ jobs:
     needs: bump-versions
     if: ${{ github.event_name == 'push' }}
     steps:
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: amd64,arm64/v8,arm64
       - name: Checkout
         uses: actions/checkout@v2
       - name: Use Node.js 16
@@ -146,6 +152,12 @@ jobs:
     needs: bump-versions
     if: ${{ github.event_name == 'release' }}
     steps:
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: amd64,arm64/v8,arm64
       - name: Checkout
         uses: actions/checkout@v2
       - name: Use Node.js 16
