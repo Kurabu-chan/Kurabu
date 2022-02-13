@@ -40,6 +40,6 @@ WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=builder /app/out/full/ .
 COPY .gitignore .gitignore
-RUN yarn turbo run build --scope=@kurabu/api --includeDependencies --no-deps
+RUN yarn turbo run build --scope=@kurabu/api --include-dependencies --no-deps
 
 ENTRYPOINT [ "yarn", "turbo", "run", "start", "--scope=@kurabu/api" ]
