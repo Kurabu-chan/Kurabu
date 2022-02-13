@@ -1,0 +1,51 @@
+name: "Publish docker"
+
+on:
+  release:
+    branches: [main]
+
+jobs:
+  build-docker-prod:
+    name: Build and publish docker image for staging
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'release' }}
+    steps:
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: amd64,arm64/v8,arm64
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Remove yarnrc
+        run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
+      - name: Add ts-node globally
+        run: yarn global add turbo     
+      - name: Globally add ts-node
+        run: yarn global add ts-node
+      - name: Install script dependencies
+        run: cd apps/api/scripts && npm install && cd ../../..
+      - name: Build and publish docker
+        run: yarn run build:docker-prod --scope=@kurabu/api
+  publish-prod:
+    name: Publish to oracle cloud k8s production
+    runs-on: ubuntu-latest
+    needs: build-docker-prod
+    steps:
+      - name: Start rollout
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.K8S_HOST }}
+          username: ${{ secrets.K8S_USER }}
+          key: ${{ secrets.K8S_SSH }}
+          script: kubectl rollout restart deployments api-deployment -n=staging
