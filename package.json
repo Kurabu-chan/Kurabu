@@ -14,6 +14,8 @@
         "format": "prettier --config \"./.prettierrc.json\" --write \"**/*.{ts,tsx,md}\"",
         "lint:fix": "turbo run lint:fix",
         "build:docker": "turbo run build:docker",
+        "build:docker-dev": "turbo run build:docker-dev",
+        "build:docker-prod": "turbo run build:docker-prod",
         "check-build-required": "turbo run check-build-required",
         "test": "turbo run test"
     },
