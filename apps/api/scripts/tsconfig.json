@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES2021",
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  },
+  "include": ["./"]
+}
