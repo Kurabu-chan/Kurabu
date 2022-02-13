@@ -50,4 +50,4 @@ jobs:
           host: ${{ secrets.K8S_HOST }}
           username: ${{ secrets.K8S_USER }}
           key: ${{ secrets.K8S_SSH }}
-          script: kubectl rollout restart deployments api-deployment -n=staging
+          script: kubectl rollout restart deployments api-deployment -n=production
