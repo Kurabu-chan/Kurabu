@@ -1,4 +1,6 @@
-FROM node:alpine AS builder
+ARG ARCH=
+
+FROM ${ARCH}node:alpine AS builder
 
 ENV YARN_VERSION 1.22.17
 RUN yarn policies set-version $YARN_VERSION
@@ -12,21 +14,21 @@ RUN yarn global add turbo
 RUN turbo prune --scope=@kurabu/api --docker
 
 # Add lockfile and package.json's of isolated subworkspace
-FROM node:alpine AS installer
+FROM ${ARCH}node:alpine AS installer
 
 ENV YARN_VERSION 1.22.17
 RUN yarn policies set-version $YARN_VERSION
 
-RUN apk add gcc g++ git python3
+RUN apk add gcc g++ git python2 make
 RUN apk update
 
 WORKDIR /app
 COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/yarn.lock ./yarn.lock
+# COPY --from=builder /app/out/yarn.lock ./yarn.lock
 
 RUN yarn install
 
-FROM node:alpine AS sourcer
+FROM ${ARCH}node:alpine AS sourcer
 
 ENV YARN_VERSION 1.22.17
 RUN yarn policies set-version $YARN_VERSION
