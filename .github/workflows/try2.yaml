@@ -193,12 +193,14 @@ jobs:
     steps:
       - name: Install kubectl
         uses: azure/setup-kubectl@v2.0
-      - name: Get config from secrets
+      - name: Get ssh from secrets
         env:
-          KUBECTL_CONFIG: ${{ secrets.KUBECTL_CONFIG }}
-        run: echo "$KUBECTL_CONFIG" > kubectl-config.yaml
+          KUBECTL_CONFIG: ${{ secrets.K8S_SSH }}
+        run: |
+          echo "$K8S_SSH" > k8s_ssh.key
+          chmod 600 k8s_ssh.key
       - name: Do rollout for staging
-        run: kubectl rollout restart deployments api-deployment -n=staging --kubeconfig=kubectl-config.yaml
+        run: ssh -i 'k8s_ssh.key' opc@143.47.189.16 "kubectl rollout restart deployments api-deployment -n=staging"
   publish-prod:
     name: Publish to oracle cloud k8s production
     runs-on: ubuntu-latest
@@ -206,9 +208,11 @@ jobs:
     steps:
       - name: Install kubectl
         uses: azure/setup-kubectl@v2.0
-      - name: Get config from secrets
+      - name: Get ssh from secrets
         env:
-          KUBECTL_CONFIG: ${{ secrets.KUBECTL_CONFIG }}
-        run: echo "$KUBECTL_CONFIG" > kubectl-config.yaml
+          KUBECTL_CONFIG: ${{ secrets.K8S_SSH }}
+        run: |
+          echo "$K8S_SSH" > k8s_ssh.key
+          chmod 600 k8s_ssh.key
       - name: Do rollout for staging
-        run: kubectl rollout restart deployments api-deployment -n=production --kubeconfig=kubectl-config.yaml
+        run: ssh -i 'k8s_ssh.key' opc@143.47.189.16 "kubectl rollout restart deployments api-deployment -n=staging"
