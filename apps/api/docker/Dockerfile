@@ -19,7 +19,8 @@ FROM ${ARCH}node:alpine AS installer
 ENV YARN_VERSION 1.22.17
 RUN yarn policies set-version $YARN_VERSION
 
-RUN apk add gcc g++ git python2 make
+# RUN apk add gcc g++ git python2 make
+RUN apk add git
 RUN apk update
 
 WORKDIR /app
@@ -33,7 +34,8 @@ FROM ${ARCH}node:alpine AS sourcer
 ENV YARN_VERSION 1.22.17
 RUN yarn policies set-version $YARN_VERSION
 
-RUN apk add gcc g++ git python3
+# RUN apk add gcc g++ git python3
+RUN apk add git
 RUN apk update
 
 WORKDIR /app
