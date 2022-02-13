@@ -13,6 +13,7 @@ spec:
   #     name: api-service
   #     port:
   #       number: 15000
+  ingressClassName: nginx
   rules:
   - http:
       paths:
