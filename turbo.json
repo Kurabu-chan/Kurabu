@@ -10,9 +10,13 @@
             ]
         },
         "build:docker": {
-            "outputs": [
-                "docker/build/**"
-            ]
+
+        },
+        "build:docker-dev": {
+
+        },
+        "build:docker-prod": {
+
         },
         "start": {
             "dependsOn": [
