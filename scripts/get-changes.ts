@@ -2,7 +2,7 @@ import { execSync } from "child_process";
 import packagejson from "../package.json";
 import { readFileSync, writeFileSync } from "fs";
 
-const workspaces = packagejson.workspaces.map(x => x.split("/")[0]);
+const workspaces = packagejson.workspaces.packages.map(x => x.split("/")[0]);
 
 if (process.env.BEFORE_SHA === undefined) {
     console.error("BEFORE_SHA environment variable is not set");
