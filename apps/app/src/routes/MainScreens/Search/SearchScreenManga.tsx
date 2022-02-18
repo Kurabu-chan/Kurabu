@@ -3,7 +3,7 @@ import { changeActivePage } from "#helpers/backButton";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions } from "react-native";
-import SearchBar from "react-native-dynamic-search-bar";
+import { SearchBar } from "react-native-elements";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import MediaNodeSource from "#api/MediaNodeSource";
 import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
@@ -82,47 +82,67 @@ export default class Search extends React.Component<any, StateType> {
         }
     }
 
+    updateSearch(search: string) {
+        this.setState((prevState) => ({
+            ...prevState,
+            search: {
+                ...prevState.search,
+                searchText: search,
+            },
+        }));
+    }
+
     createSearchBar() {
         return (
             <SearchBar
                 placeholder="Search for a Manga Title.."
-                placeholderTextColor={Colors.TEXT}
-                searchIconImageStyle={{
-                    tintColor: Colors.TEXT,
-                }}
-                clearIconImageStyle={{
-                    tintColor: Colors.TEXT,
-                }}
-                textInputStyle={{
-                    color: Colors.TEXT,
-                }}
+                loadingProps={{}}
+                showLoading={false}
+                lightTheme={false}
+                round={true}
+                onFocus={() => { }}
+                onBlur={() => { }}
                 style={{
                     backgroundColor: Colors.KURABUPURPLE,
-                    marginTop: 5,
-                    marginLeft: 5,
-                    marginRight: 5,
-                    width: Dimensions.get("window").width - 10,
+                    color: Colors.TEXT,
+                    width: Dimensions.get("window").width - 10
                 }}
-                onChangeText={(text) =>
-                    this.setState((prevState) => ({
-                        ...prevState,
-                        search: {
-                            ...prevState.search,
-                            searchText: text,
-                        },
-                    }))
-                }
-                onClearPress={() =>
-                    this.setState((prevState) => ({
-                        ...prevState,
-                        search: {
-                            ...prevState.search,
-                            searchText: "",
-                        },
-                    }))
-                }
-                onSearchPress={this.DoSearch.bind(this)}
+                inputStyle={{
+                    color: Colors.TEXT,
+                }}
+                labelStyle={{
+                    backgroundColor: Colors.KURABUPURPLE,
+                }}
+                searchIcon={{
+                    name: "search",
+                    color: Colors.TEXT,
+                }}
+                clearIcon={{
+                    name: "close",
+                    color: Colors.TEXT
+                }}
+                inputContainerStyle={{
+                    backgroundColor: Colors.KURABUPURPLE,
+                }}
+                containerStyle={{
+                    backgroundColor: "transparent",
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                }}
+                leftIconContainerStyle={{
+                    backgroundColor: Colors.KURABUPURPLE,
+                }}
                 onEndEditing={this.DoSearch.bind(this)}
+                platform={"default"}
+                onChangeText={this.updateSearch.bind(this) as any}
+                onClear={() => {
+                    this.updateSearch("");
+                }}
+                onCancel={this.DoSearch.bind(this)}
+                value={this.state.search.searchText}
+                cancelButtonTitle={"Cancel"}
+                cancelButtonProps={{}}
+                showCancel={this.state.search.searchText != undefined}
             />
         );
     }

@@ -51,7 +51,7 @@ function createIconAnime(props: { focused: boolean; color: string; size: number 
             type="font-awesome-5"
             color={Colors.TEXT}
             style={{
-                padding: 5,
+                padding: 0,
             }}
         />
     );
@@ -64,7 +64,7 @@ function createIconManga(props: { focused: boolean; color: string; size: number 
             type="font-awesome-5"
             color={Colors.TEXT}
             style={{
-                padding: 10,
+                padding: 0,
             }}
         />
     );
