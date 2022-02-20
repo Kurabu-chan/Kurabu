@@ -20,6 +20,9 @@ if (isEmptyOrUndefined(head)) {
 }
 
 (async () => {
+    // disable protection
+    const contexts = await disableBranchProtection(access_token as string);
+
     const changedWorkspaces = await findChangedWorkspaces(base as string, head as string);
     const blobs = [];
 
@@ -58,9 +61,79 @@ if (isEmptyOrUndefined(head)) {
 
     const commit = await createCommit(branchHead.sha, tree, access_token as string);
 
+    
+
     await updateRef(access_token as string, commit);
 
+    // enable protection
+    await enableBranchProtection(access_token as string, contexts);
+
 })();
+
+async function getBranchProtection(access_token: string) {
+    const url = `https://api.github.com/repos/Kurabu-chan/Kurabu/branches/main/protection/required_status_checks/contexts`;
+    const res = await fetch(url, {
+        headers: {
+            "Authorization": `token ${access_token}`,
+            "Accept": "application/vnd.github.v3+json"
+        }
+    });
+
+    const json = await res.json();
+    if (!Array.isArray(json)) {
+        throw new Error("Invalid contexts");
+    }
+    console.log(json);
+    return json as string[];
+}
+
+async function disableBranchProtection(access_token: string) {
+    // get current contexts
+    const contexts = await getBranchProtection(access_token);
+
+    if (contexts === []) {
+        console.log("Branch protection is already disabled");
+        return [];
+    }
+
+    const url = `https://api.github.com/repos/Kurabu-chan/Kurabu/branches/main/protection/required_status_checks/contexts`;
+    const res = await fetch(url, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `token ${access_token}`,
+            "Accept": "application/vnd.github.v3+json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(contexts)
+    });
+    const json = await res.json();
+
+    if ("message" in json) {
+        console.log(json);
+        throw new Error("Context delete error");
+    }
+    return contexts;
+}
+
+async function enableBranchProtection(access_token: string, contexts: string[]) {
+    if (contexts.length === 0) {
+        console.log("No branch protections to enable");
+        return;
+    }
+
+    const url = `https://api.github.com/repos/Kurabu-chan/Kurabu/branches/main/protection/required_status_checks/contexts`;
+    const res = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Authorization": `token ${access_token}`,
+            "Accept": "application/vnd.github.v3+json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(contexts)
+    });
+    const json = await res.json();
+    console.log(json);
+}
 
 async function updateRef(access_token: string, commit_sha: string) {
     const url = `https://api.github.com/repos/Kurabu-chan/Kurabu/git/refs/heads/main`;
@@ -85,7 +158,11 @@ async function createCommit(head_sha: string, tree_sha: string, access_token: st
         tree: tree_sha,
         parents: [
             head_sha
-        ]
+        ],
+        author: {
+            name: 'kurabu-bot[bot]',
+            email: '99994112+kurabu-bot[bot]@users.noreply.github.com',
+        }
     }
 
     const res = await fetch(url, {
