@@ -31,20 +31,25 @@ if (isEmptyOrUndefined(head)) {
         }
         // construct package'jsons with updated versions
         const version = parse(packJson.json.version);
-        
+
         if (version === null) {
             throw new Error("Invalid version");
         }
         const newVersion = version?.inc("patch");
-        
+
         packJson.content = packJson.content.replace(`"version": "${packJson.json.version}"`, `"version": "${newVersion.format()}"`);
-        
+
         const path = join(workspace, "package.json").replace(/\\/g, "/");
         const blobOut = await createBlob(packJson.content, access_token as string);
         blobs.push({
             sha: blobOut,
             path
         });
+    }
+
+    if (blobs.length === 0) {
+        console.log("All workspaces are up to date");
+        return;
     }
 
     const branchHead = await getBranchHead();
@@ -54,6 +59,7 @@ if (isEmptyOrUndefined(head)) {
     const commit = await createCommit(branchHead.sha, tree, access_token as string);
 
     await updateRef(access_token as string, commit);
+
 })();
 
 async function updateRef(access_token: string, commit_sha: string) {
@@ -72,7 +78,7 @@ async function updateRef(access_token: string, commit_sha: string) {
     const json = await res.json();
 }
 
-async function createCommit(head_sha: string, tree_sha: string,access_token: string) {
+async function createCommit(head_sha: string, tree_sha: string, access_token: string) {
     const url = `https://api.github.com/repos/Kurabu-chan/Kurabu/git/commits`;
     const body = {
         message: "Update versions",
@@ -132,7 +138,7 @@ async function findChangedWorkspaces(base: string, head: string) {
     const packJson = await getRootPackageJson(head);
 
     if (!("workspaces" in (packJson as any))) {
-        throw new Error("No workspaces in package.json");   
+        throw new Error("No workspaces in package.json");
     }
 
     if (!("packages" in (packJson as any).workspaces)) {
@@ -140,16 +146,16 @@ async function findChangedWorkspaces(base: string, head: string) {
     }
 
     const workspaces = (packJson as any).workspaces.packages;
-    
+
     const changedFiles = await listChangedFiles(base, head);
     const changedWorkspaces = [];
-    
+
     for (const file of changedFiles) {
         const sections = file.split("/");
-        
+
         let subPaths = [""];
         let path = "";
-        
+
         for (const section of sections) {
             path = join(path, section);
             subPaths.push(path);
@@ -158,18 +164,18 @@ async function findChangedWorkspaces(base: string, head: string) {
             changedWorkspaces.push(...match(subPaths, workspace));
         }
     }
-    
+
     return changedWorkspaces;
 }
 
 async function listChangedFiles(base: string, head: string) {
     const perPage = 100;
-    
+
     const diffUrl = `https://api.github.com/repos/Kurabu-chan/Kurabu/compare/${base}...${head}?page=1&per_page=${perPage}`;
-    
+
     const res = await fetch(diffUrl);
     const json = await res.json();
-    
+
     if (!("files" in (json as any))) {
         throw new Error("Invalid diff");
     }
@@ -179,30 +185,30 @@ async function listChangedFiles(base: string, head: string) {
 
 async function getRootPackageJson(ref?: string) {
     let url = "https://api.github.com/repos/Kurabu-chan/Kurabu/contents/package.json";
-    if (ref !== undefined) { 
+    if (ref !== undefined) {
         url += "?ref=" + ref;
     }
     const jsonRes = await (await fetch(url)).json();
-    
+
     if (!("download_url" in (jsonRes as any))) {
         throw new Error("No download_url for package.json");
     }
 
     const content = await (await fetch((jsonRes as any).download_url)).json();
     return content as any;
-}   
+}
 
 async function findSubPackageJson(subDirectory: string, ref?: string) {
     let url = join("https://api.github.com/repos/Kurabu-chan/Kurabu/contents/", subDirectory, "package.json");
-    
+
     if (ref !== undefined) {
         url += "?ref=" + ref;
     }
-    
+
     const res = await fetch(url);
     if (res.status !== 200) return undefined;
     const jsonRes = await res.json();
-    
+
     if (!("download_url" in (jsonRes as any))) {
         throw new Error("No download_url for sub package.json");
     }
@@ -214,12 +220,12 @@ async function findSubPackageJson(subDirectory: string, ref?: string) {
     };
 }
 
-async function getBranchHead(branch: string = "main"){
+async function getBranchHead(branch: string = "main") {
     let url = `https://api.github.com/repos/Kurabu-chan/Kurabu/branches/${branch}`;
-    
+
     const res = await fetch(url);
     const json = await res.json();
-    
+
     if (!("commit" in (json as any))) {
         throw new Error("No commit in branch");
     }
@@ -236,7 +242,7 @@ async function createBlob(content: string, access_token: string) {
         content: content,
         encoding: "utf-8"
     }
-    
+
     const url = "https://api.github.com/repos/Kurabu-chan/Kurabu/git/blobs";
     const res = await fetch(url, {
         method: "POST",
@@ -247,7 +253,7 @@ async function createBlob(content: string, access_token: string) {
         },
         body: JSON.stringify(body)
     });
-    
+
     const json = await res.json();
     if (!("sha" in (json as any))) {
         throw new Error("Invalid blob");
