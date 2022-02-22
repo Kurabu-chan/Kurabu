@@ -245,8 +245,8 @@ async function findChangedWorkspaces(base: string, head: string) {
     return changedWorkspaces;
 }
 
-async function listChangedFiles(base: string, head: string) {
-    const perPage = 100;
+async function listChangedFiles(base: string, head: string, page: number = 1) {
+    const perPage = 100;    
 
     const diffUrl = `https://api.github.com/repos/Kurabu-chan/Kurabu/compare/${base}...${head}?page=1&per_page=${perPage}`;
 
@@ -257,7 +257,13 @@ async function listChangedFiles(base: string, head: string) {
         throw new Error("Invalid diff");
     }
 
-    return (json as any).files.map((file: any) => file.filename)
+    const files: string[] = (json as any).files.map((file: any) => file.filename);
+
+    if (files.length === perPage) {
+        files.push(...(await listChangedFiles(base, head, page + 1)));
+    }
+
+    return files;
 }
 
 async function getRootPackageJson(ref?: string) {
