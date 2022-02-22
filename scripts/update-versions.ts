@@ -21,14 +21,16 @@ if (isEmptyOrUndefined(head)) {
 }
 
 if (process.argv.includes("--help")) { 
-    const help = `Usage: ts-node update-versions.ts [--local]
+    const help = `Usage: ts-node update-versions.ts [--local|--list-changes|--env-changes] 
     
-    --local: Update versions on file system instead of in the gihub repository`
+    --local: Update versions on file system instead of in the gihub repository.
+    --list-changes: List all changed workspaces without editing files or pushing to github. single quoted, comma space seperated.
+    --output-changes: Output changed workspaces using the github output format. single quoted, space seperated.`
 }
 
 let local = false;
 
-if (process.argv.includes("--local")) {
+if (process.argv.includes("--local") || process.argv.includes("--list-changes") || process.argv.includes("--output-changes")) {
     local = true;
 }
 
@@ -40,6 +42,16 @@ if (process.argv.includes("--local")) {
     }
 
     const changedWorkspaces = await findChangedWorkspaces(base as string, head as string);
+
+    if (process.argv.includes("--list-changes")) {
+        console.log(changedWorkspaces.map(file => `'${file}'`).join(", "));
+        return;
+    }
+    else if (process.argv.includes("--output-changes")) {
+        console.log(changedWorkspaces.map(file => `'${file}'`).join(" "));
+        return;
+    }
+
     const blobs = [];
 
     //find package.json's for changed workspaces
