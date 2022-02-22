@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { match } from "minimatch";
 import { join } from "path";
 import { parse } from "semver";
+import { copyFileSync, existsSync, fstat, readFileSync, writeFileSync } from "fs";
 
 const access_token = process.env.GHAPI_ACCESS_TOKEN;
 const base = process.env.GHAPI_base;
@@ -19,39 +20,62 @@ if (isEmptyOrUndefined(head)) {
     throw new Error("head is not defined");
 }
 
+if (process.argv.includes("--help")) { 
+    const help = `Usage: ts-node update-versions.ts [--local]
+    
+    --local: Update versions on file system instead of in the gihub repository`
+}
+
+let local = false;
+
+if (process.argv.includes("--local")) {
+    local = true;
+}
+
 (async () => {
     // disable protection
-    const contexts = await disableBranchProtection(access_token as string);
+    let contexts: string[] = [];
+    if (!local) {
+        contexts = await disableBranchProtection(access_token as string);
+    }
 
     const changedWorkspaces = await findChangedWorkspaces(base as string, head as string);
     const blobs = [];
 
     //find package.json's for changed workspaces
     for (const workspace of changedWorkspaces) {
-        const packJson = await findSubPackageJson(workspace, head as string);
-        if (packJson === undefined) {
-            continue;
-        }
-        // construct package'jsons with updated versions
-        const version = parse(packJson.json.version);
-
-        if (version === null) {
-            throw new Error("Invalid version");
-        }
-        const newVersion = version?.inc("patch");
-
-        packJson.content = packJson.content.replace(`"version": "${packJson.json.version}"`, `"version": "${newVersion.format()}"`);
-
         const path = join(workspace, "package.json").replace(/\\/g, "/");
-        const blobOut = await createBlob(packJson.content, access_token as string);
-        blobs.push({
-            sha: blobOut,
-            path
-        });
+
+        if (!local) {
+            let packJson = await findSubPackageJson(workspace, head as string);
+            if (packJson === undefined) {
+                continue;
+            }
+            // construct package'jsons with updated versions
+            packJson = bumpPackageJson(packJson);
+            const blobOut = await createBlob(packJson, access_token as string);
+            blobs.push({
+                sha: blobOut,
+                path
+            });
+        } else {
+            if (existsSync(path)) {
+                const data = readFileSync(path, {
+                    encoding: "utf8"
+                });
+
+                const packJson = bumpPackageJson(data);
+                writeFileSync(path, packJson);
+            }
+        }
     }
 
     if (blobs.length === 0) {
         console.log("All workspaces are up to date");
+        return;
+    }
+
+    if (local) {
         return;
     }
 
@@ -69,6 +93,20 @@ if (isEmptyOrUndefined(head)) {
     await enableBranchProtection(access_token as string, contexts);
 
 })();
+
+function bumpPackageJson(pack: string): string {
+    const packJson = JSON.parse(pack);
+
+    const version = parse(packJson.version);
+
+    if (version === null) {
+        throw new Error("Invalid version");
+    }
+    const newVersion = version?.inc("patch");
+
+    pack = pack.replace(`"version": "${packJson.version}"`, `"version": "${newVersion.format()}"`);
+    return pack;
+}
 
 async function getBranchProtection(access_token: string) {
     const url = `https://api.github.com/repos/Kurabu-chan/Kurabu/branches/main/protection/required_status_checks/contexts`;
@@ -297,10 +335,7 @@ async function findSubPackageJson(subDirectory: string, ref?: string) {
     }
 
     const content = await (await fetch((jsonRes as any).download_url)).text();
-    return {
-        content: content,
-        json: JSON.parse(content),
-    };
+    return content;
 }
 
 async function getBranchHead(branch: string = "main") {
