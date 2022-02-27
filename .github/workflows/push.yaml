@@ -5,9 +5,60 @@ on:
     branches: [main]
 
 jobs:
+  check-is-kurabu-bot:
+    name: Check if this push is a version bump
+    runs-on: ubuntu-latest
+    outputs:
+      is-kurabu-bot: ${{ steps.is-kurabu-bot.outputs.is-kurabu-bot }}
+    steps:
+      - name: Check is 'kurabu-bot'
+        id: is-kurabu-bot
+        env:
+          ACTOR: ${{ github.actor }}
+        with:
+          run: |
+            if echo "$ACTOR" | grep -q 'kurabu-bot' ; then
+              echo "::set-output name=is-kurabu-bot::kurabu-bot"
+            else
+              echo "::set-output name=is-kurabu-bot::not-kurabu-bot"
+            fi    
+  bump-versions:
+    name: Bump version numbers
+    runs-on: ubuntu-latest
+    needs: [check-is-kurabu-bot]
+    outputs:
+      commit_sha: ${{ steps.update-versions.outputs.commit_sha }}
+    if: ${{ needs.check-is-kurabu-bot.outputs.is-kurabu-bot == 'not-kurabu-bot' }}
+    steps:
+      - name: Print output
+        run: echo "${{ toJson(needs.check-build) }}"
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.after }}
+          fetch-depth: 0 
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Remove yarnrc
+        run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
+      - name: Add ts-node globally
+        run: yarn global add ts-node
+      - name: Install script dependencies
+        run: cd scripts && npm install && cd ..
+
+      - name: Do version updates and push
+        id: update-versions
+        env:
+          GHAPI_ACCESS_TOKEN: ${{ secrets.GHAPI_ACCESS_TOKEN }}
+          GHAPI_base: ${{ github.event.before }}
+          GHAPI_head: ${{ github.event.after }}
+        run: ts-node scripts/update-versions.ts
   check-build:
     name: Check if a build is necessary
     runs-on: ubuntu-latest
+    needs: bump-versions
     outputs:
       full_turbo_check: ${{ steps.check-full-turbo.outputs.full_turbo_check }}
     steps:  
@@ -48,43 +99,11 @@ jobs:
           fi
       - name: Display output
         run: echo "${{ toJson(steps.check-full-turbo.outputs) }}"
-  bump-versions:
-    name: Bump version numbers
-    runs-on: ubuntu-latest
-    needs: check-build
-    outputs:
-      commit_sha: ${{ steps.update-versions.outputs.commit_sha }}
-    if: ${{ needs.check-build.outputs.full_turbo_check == 'nofullturbo' }}
-    steps:
-      - name: Print output
-        run: echo "${{ toJson(needs.check-build) }}"
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.after }}
-          fetch-depth: 0 
-      - name: Use Node.js 16
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-      - name: Remove yarnrc
-        run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
-      - name: Add ts-node globally
-        run: yarn global add ts-node
-      - name: Install script dependencies
-        run: cd scripts && npm install && cd ..
-
-      - name: Do version updates and push
-        id: update-versions
-        env:
-          GHAPI_ACCESS_TOKEN: ${{ secrets.GHAPI_ACCESS_TOKEN }}
-          GHAPI_base: ${{ github.event.before }}
-          GHAPI_head: ${{ github.event.after }}
-        run: ts-node scripts/update-versions.ts
   build-docker-stage:
     name: Build and publish docker image for staging
     runs-on: ubuntu-latest
-    needs: bump-versions
+    needs: [bump-versions, check-build]
+    if: ${{ needs.check-build.outputs.full_turbo_check == 'nofullturbo' }}
     steps:
       - name: Set up QEMU
         id: qemu
@@ -109,10 +128,10 @@ jobs:
       - name: Remove yarnrc
         run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
 
-      - name: Add ts-node globally
-        run: yarn global add turbo
-      - name: Globally add ts-node
-        run: yarn global add ts-node
+      - name: Globally insall packages
+        run: yarn global add turbo ts-node   
+      - name: Install script dependencies
+        run: cd apps/api/scripts && npm install && cd ../../..
       - name: Build and publish docker
         run: yarn run build:docker --scope=@kurabu/api
   publish-stage:
