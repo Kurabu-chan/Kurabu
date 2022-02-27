@@ -106,7 +106,7 @@ if (process.argv.includes("--local") || process.argv.includes("--list-changes") 
 
     const commit = await createCommit(branchHead.sha, tree, access_token as string);
 
-    
+    console.log(`::set-output name=commit_sha::${commit.sha}`);
 
     await updateRef(access_token as string, commit);
 
