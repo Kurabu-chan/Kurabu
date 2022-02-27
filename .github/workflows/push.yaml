@@ -15,13 +15,12 @@ jobs:
         id: is-kurabu-bot
         env:
           ACTOR: ${{ github.actor }}
-        with:
-          run: |
-            if echo "$ACTOR" | grep -q 'kurabu-bot' ; then
-              echo "::set-output name=is-kurabu-bot::kurabu-bot"
-            else
-              echo "::set-output name=is-kurabu-bot::not-kurabu-bot"
-            fi    
+        run: |
+          if echo "$ACTOR" | grep -q 'kurabu-bot' ; then
+            echo "::set-output name=is-kurabu-bot::kurabu-bot"
+          else
+            echo "::set-output name=is-kurabu-bot::not-kurabu-bot"
+          fi    
   bump-versions:
     name: Bump version numbers
     runs-on: ubuntu-latest
