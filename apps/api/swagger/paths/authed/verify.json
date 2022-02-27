@@ -8,7 +8,7 @@
         "parameters": [{
                 "name": "redirect",
                 "in": "query",
-                "description": "The url to use for redirecting",
+                "description": "The url to make the server redirect the user to after verification",
                 "required": false,
                 "example": "http://localhost:15000",
                 "schema": {
