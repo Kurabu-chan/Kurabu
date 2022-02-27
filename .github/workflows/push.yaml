@@ -14,9 +14,9 @@ jobs:
       - name: Check is 'kurabu-bot'
         id: is-kurabu-bot
         env:
-          ACTOR: ${{ github.actor }}
+          REF: ${{ github.event.after }}
         run: |
-          if echo "$ACTOR" | grep -q 'kurabu-bot' ; then
+          if git log --format='%ae' $REF^! | grep -q 'kurabu-bot' ; then
             echo "::set-output name=is-kurabu-bot::kurabu-bot"
           else
             echo "::set-output name=is-kurabu-bot::not-kurabu-bot"
