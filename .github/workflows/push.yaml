@@ -53,8 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-build
     outputs:
-      changed_workspaces: ${{ steps.get-changes.outputs.changes }}
-      api_version: ${{steps.retrieve-version.outputs.version}}
+      commit_sha: ${{ steps.update-versions.outputs.commit_sha }}
     if: ${{ needs.check-build.outputs.full_turbo_check == 'nofullturbo' }}
     steps:
       - name: Print output
@@ -75,35 +74,13 @@ jobs:
       - name: Install script dependencies
         run: cd scripts && npm install && cd ..
 
-      - name: Get changed packages
-        id: get-changes
+      - name: Do version updates and push
+        id: update-versions
         env:
-          BEFORE_SHA: ${{ github.event.before }}
-          AFTER_SHA: ${{ github.event.after }}
-        run: echo "::set-output name=changes::$(ts-node ./scripts/get-changes.ts)"
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Install script dependencies
-        run: cd scripts && npm install && cd ..
-      - name: Apply version changes
-        env: 
-          CHANGED_JSONS: ${{ steps.get-changes.outputs.changes }}
-        run: ts-node ./scripts/bump-versions.ts
-      - name: Get version from @kurabu/api
-        id: retrieve-version
-        run: |
-          VERSION=$(cat apps/api/package.json | grep '"version":\s*"[0-9]*\.[0-9]*\.[0-9]*",' | grep -o '[0-9]*\.[0-9]*\.[0-9]*')
-          echo "::set-output name=version::$VERSION"
-
-      - name: Configure git
-        run: |
-          git config --global user.email "${{ github.event.head_commit.committer.username }}@users.noreply.github.com"
-          git config --global user.name "${{ github.event.head_commit.committer.name }}"
-      - name: commit
-        run: git commit -am "Bump version numbers"
-      - name: push
-        run: git push
+          GHAPI_ACCESS_TOKEN: ${{ secrets.GHAPI_ACCESS_TOKEN }}
+          GHAPI_base: ${{ github.event.before }}
+          GHAPI_head: ${{ github.event.after }}
+        run: ts-node scripts/update-versions.ts
   build-docker-stage:
     name: Build and publish docker image for staging
     runs-on: ubuntu-latest
@@ -117,6 +94,9 @@ jobs:
           platforms: amd64,arm64/v8,arm64
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.bump-versions.outputs.bump-versions }}
+          fetch-depth: 0
       - name: Use Node.js 16
         uses: actions/setup-node@v2
         with:
@@ -128,19 +108,11 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Remove yarnrc
         run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
+
       - name: Add ts-node globally
         run: yarn global add turbo
-      
       - name: Globally add ts-node
         run: yarn global add ts-node
-      - name: Install script dependencies
-        run: cd scripts && npm install && cd ..
-      - name: Apply version changes
-        env: 
-          CHANGED_JSONS: ${{ needs.bump-versions.outputs.changed_workspaces }}
-        run: ts-node ./scripts/bump-versions.ts
-      - name: Install script dependencies
-        run: cd apps/api/scripts && npm install && cd ../../..
       - name: Build and publish docker
         run: yarn run build:docker --scope=@kurabu/api
   publish-stage:
