@@ -2,7 +2,6 @@
     "post": {
         "description": "Update the list status for an anime",
         "tags": [
-            "Anime",
             "List"
         ],
         "security": [{
@@ -148,7 +147,6 @@
     "delete": {
         "description": "Remove an anime from your list",
         "tags": [
-            "Anime",
             "List"
         ],
         "security": [{

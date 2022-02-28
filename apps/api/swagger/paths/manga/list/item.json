@@ -2,7 +2,6 @@
     "post": {
         "description": "Update the list status for an manga",
         "tags": [
-            "Manga",
             "List"
         ],
         "security": [{
@@ -158,7 +157,6 @@
     "delete": {
         "description": "Remove a manga from your list",
         "tags": [
-            "Manga",
             "List"
         ],
         "security": [{
