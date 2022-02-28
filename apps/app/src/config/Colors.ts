@@ -1,6 +1,7 @@
 export class Colors {
     public static BLUE = "#2e51a2";
     public static CYAN = "#2893E7";
+    public static CYAN_SELECTED = "#115d97";
     public static KURABUPINK = "#b23ab1";
     public static KURABUPURPLE = "#661c7a";
     public static TEXT = "#ffffff";
