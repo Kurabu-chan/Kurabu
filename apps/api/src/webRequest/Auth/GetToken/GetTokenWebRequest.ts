@@ -3,5 +3,5 @@ import { IWebRequest } from "#webreq/IWebRequest";
 export class GetTokenWebRequest extends IWebRequest {
     code!: string;
     verifier!: string;
-    redirect!: string;
+    ourdomain!: string;
 }
