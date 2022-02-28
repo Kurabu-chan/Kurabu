@@ -68,7 +68,34 @@
                 "description": "Media not found. More info disclosed in error message"
             },
             "422": {
-                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "../../../errors/malformedParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/missingParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/mistypedParameterError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": [
+                            {
+                                "$ref": "../../../errors/malformedParameterError.example.json"
+                            },
+                            {
+                                "$ref": "../../../errors/missingParameterError.example.json"
+                            },
+                            {
+                                "$ref": "../../../errors/mistypedParameterError.example.json"
+                            }
+                        ]
+                    }
+                }
             },
             "500": {
                 "content": {
@@ -77,12 +104,18 @@
                             "oneOf": [
                                 {
                                     "$ref": "../../errors/mALConnectionError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/generalError.schema.json"
                                 }
                             ]
                         },
                         "examples": [
                             {
                                 "$ref": "../../errors/mALConnectionError.example.json"
+                            },
+                            {
+                                "$ref": "../../../errors/generalError.example.json"
                             }
                         ]
                     }
