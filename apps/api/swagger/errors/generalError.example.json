@@ -4,5 +4,6 @@
         "message": "some error message",
         "status": "error"
     },
-    "summary": "Something happened"
+    "summary": "generalError",
+    "description": "Some error occurred"
 }
