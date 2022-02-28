@@ -4,13 +4,10 @@
         "tags": [
             "List"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
                 "name": "mangaId",
                 "description": "The id of the manga whose list status you want to update",
                 "in": "query",
@@ -147,8 +144,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -162,8 +158,7 @@
                                 }
                             ]
                         },
-                        "examples": [
-                            {
+                        "examples": [{
                                 "$ref": "../../../errors/authenticationError.example.json"
                             },
                             {
@@ -179,34 +174,30 @@
                     }
                 }
             },
-            "404": {
-                "description": "Media not found. More info disclosed in error message"
-            },
+
             "422": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../../../errors/malformedParameterError.schema.json"
+                            "oneOf": [{
+                                    "$ref": "../../../errors/malformedParameterError.schema.json"
                                 },
                                 {
-                                    "$ref": "../../../../errors/missingParameterError.schema.json"
+                                    "$ref": "../../../errors/missingParameterError.schema.json"
                                 },
                                 {
-                                    "$ref": "../../../../errors/mistypedParameterError.schema.json"
+                                    "$ref": "../../../errors/mistypedParameterError.schema.json"
                                 }
                             ]
                         },
-                        "examples": [
-                            {
-                                "$ref": "../../../../errors/malformedParameterError.example.json"
+                        "examples": [{
+                                "$ref": "../../../errors/malformedParameterError.example.json"
                             },
                             {
-                                "$ref": "../../../../errors/missingParameterError.example.json"
+                                "$ref": "../../../errors/missingParameterError.example.json"
                             },
                             {
-                                "$ref": "../../../../errors/mistypedParameterError.example.json"
+                                "$ref": "../../../errors/mistypedParameterError.example.json"
                             }
                         ]
                     }
@@ -216,21 +207,19 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/mALConnectionError.schema.json"
                                 },
                                 {
-                                    "$ref": "../../../../errors/generalError.schema.json"
+                                    "$ref": "../../../errors/generalError.schema.json"
                                 }
                             ]
                         },
-                        "examples": [
-                            {
+                        "examples": [{
                                 "$ref": "../../../errors/mALConnectionError.example.json"
                             },
                             {
-                                "$ref": "../../../../errors/generalError.example.json"
+                                "$ref": "../../../errors/generalError.example.json"
                             }
                         ]
                     }
@@ -243,13 +232,10 @@
         "tags": [
             "List"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
                 "name": "mangaid",
                 "in": "query",
                 "description": "The id of the manga you want to remove from your list",
@@ -276,24 +262,17 @@
             "200": {
                 "description": "Success"
             },
-            "403": {
-                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
-            },
             "404": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../../errors/mALMediaNotFound.schema.json"
-                                }
-                            ]
+                            "oneOf": [{
+                                "$ref": "../../../errors/mALMediaNotFound.schema.json"
+                            }]
                         },
-                        "examples": [
-                            {
-                                "$ref": "../../../errors/mALMediaNotFound.example.json"
-                            }
-                        ]
+                        "examples": [{
+                            "$ref": "../../../errors/mALMediaNotFound.example.json"
+                        }]
                     }
                 }
             },
@@ -301,27 +280,25 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../../../errors/malformedParameterError.schema.json"
+                            "oneOf": [{
+                                    "$ref": "../../../errors/malformedParameterError.schema.json"
                                 },
                                 {
-                                    "$ref": "../../../../errors/missingParameterError.schema.json"
+                                    "$ref": "../../../errors/missingParameterError.schema.json"
                                 },
                                 {
-                                    "$ref": "../../../../errors/mistypedParameterError.schema.json"
+                                    "$ref": "../../../errors/mistypedParameterError.schema.json"
                                 }
                             ]
                         },
-                        "examples": [
-                            {
-                                "$ref": "../../../../errors/malformedParameterError.example.json"
+                        "examples": [{
+                                "$ref": "../../../errors/malformedParameterError.example.json"
                             },
                             {
-                                "$ref": "../../../../errors/missingParameterError.example.json"
+                                "$ref": "../../../errors/missingParameterError.example.json"
                             },
                             {
-                                "$ref": "../../../../errors/mistypedParameterError.example.json"
+                                "$ref": "../../../errors/mistypedParameterError.example.json"
                             }
                         ]
                     }
@@ -331,21 +308,19 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/mALConnectionError.schema.json"
                                 },
                                 {
-                                    "$ref": "../../../../errors/generalError.schema.json"
+                                    "$ref": "../../../errors/generalError.schema.json"
                                 }
                             ]
                         },
-                        "examples": [
-                            {
+                        "examples": [{
                                 "$ref": "../../../errors/mALConnectionError.example.json"
                             },
                             {
-                                "$ref": "../../../../errors/generalError.example.json"
+                                "$ref": "../../../errors/generalError.example.json"
                             }
                         ]
                     }
