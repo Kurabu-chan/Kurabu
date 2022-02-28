@@ -1,0 +1,9 @@
+{
+    "extends": "@kurabu/tsconfig/base.json",
+    "include": [
+        "lib/**/*.ts"
+    ],
+    "compilerOptions": {
+        "outDir": "build"
+    }
+}

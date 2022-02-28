@@ -7,7 +7,8 @@
             "outputs": [
                 "dist/**",
                 "build/**"
-            ]
+            ],
+            "cache": false
         },
         "build:docker": {
 
