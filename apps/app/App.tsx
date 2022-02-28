@@ -39,8 +39,8 @@ export default class Application extends React.Component<any, StateType> {
         this._checkInitialUrl();
 
         AppState.addEventListener("change", this._handleAppStateChange);
-        Linking.addEventListener("url", (ss) => {
-            this._handleUrl(ss.url);
+        Linking.addEventListener("url", async (ss) => {
+            await this._handleUrl(ss.url);
         });
     }
 
@@ -68,28 +68,31 @@ export default class Application extends React.Component<any, StateType> {
     private _checkInitialUrl = async () => {
         const url = await Linking.getInitialURL();
         if (url?.includes("auth")) {
-            this._handleUrl(url);
+            await this._handleUrl(url);
         }
     };
 
-    private _handleUrl = (url: string | null) => {
+    private async _handleUrl(url: string | null) {
         if (url != null) {
             if (url.includes("auth")) {
                 let token = url.split("auth/")[1];
                 console.log(token);
-                Authentication.getInstance()
-                    .then((auth) => {
-                        auth.setToken(token);
-                        try {
-                            DoSwitch("Drawer");
-                        } catch (e) {
-                            console.log(e);
-                        }
-                    })
-                    .catch((e) => {});
+                const auth = await Authentication.getInstance()
+                    
+                const currentToken = await auth.GetToken();
+
+                if (currentToken == undefined || currentToken == "" || currentToken == null) {
+                    throw new Error("No token after redirect to auth");   
+                }
+
+                try {
+                    DoSwitch("Drawer");
+                } catch (e) {
+                    console.log(e);
+                }
             }
         }
-    };
+    }
 
     render() {
         const setFontsLoaded = (yes: boolean) => {
