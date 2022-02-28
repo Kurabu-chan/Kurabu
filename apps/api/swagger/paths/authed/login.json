@@ -5,7 +5,8 @@
             "Auth"
         ],
         "deprecated": true,
-        "parameters": [{
+        "parameters": [
+            {
                 "name": "email",
                 "in": "query",
                 "description": "The email of the user",
@@ -32,7 +33,28 @@
                 "description": "Success"
             },
             "403": {
-                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "../../errors/badLoginError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/tokensNotPresentError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": [
+                            {
+                                "$ref": "../../errors/badLoginError.example.json"
+                            },
+                            {
+                                "$ref": "../../errors/tokensNotPresentError.example.json"
+                            }
+                        ]
+                    }
+                }
             },
             "404": {
                 "description": "Media not found. More info disclosed in error message"

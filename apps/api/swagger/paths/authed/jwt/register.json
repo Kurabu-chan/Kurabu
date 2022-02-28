@@ -4,7 +4,8 @@
         "tags": [
             "JWT"
         ],
-        "parameters": [{
+        "parameters": [
+            {
                 "name": "email",
                 "in": "query",
                 "description": "The email of the new user",
@@ -31,13 +32,43 @@
                 "description": "Success"
             },
             "403": {
-                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "../../../errors/mailUsedError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": [
+                            {
+                                "$ref": "../../../errors/mailUsedError.example.json"
+                            }
+                        ]
+                    }
+                }
             },
             "404": {
                 "description": "Media not found. More info disclosed in error message"
             },
             "422": {
-                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "../../../errors/passwordStrengthError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": [
+                            {
+                                "$ref": "../../../errors/passwordStrengthError.example.json"
+                            }
+                        ]
+                    }
+                }
             },
             "500": {
                 "description": "Undocumented and unexpected error"

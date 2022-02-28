@@ -4,10 +4,13 @@
         "tags": [
             "List"
         ],
-        "security": [{
-            "bearerAuth": []
-        }],
-        "parameters": [{
+        "security": [
+            {
+                "bearerAuth": []
+            }
+        ],
+        "parameters": [
+            {
                 "name": "fields",
                 "in": "query",
                 "description": "The fields that should be included in the individual mangas retrieved.",
@@ -75,7 +78,40 @@
                 "description": "Success"
             },
             "403": {
-                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "../../errors/authenticationError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/missingStateError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/refreshError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/tokensNotPresentError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": [
+                            {
+                                "$ref": "../../errors/authenticationError.example.json"
+                            },
+                            {
+                                "$ref": "../../errors/missingStateError.example.json"
+                            },
+                            {
+                                "$ref": "../../errors/refreshError.example.json"
+                            },
+                            {
+                                "$ref": "../../errors/tokensNotPresentError.example.json"
+                            }
+                        ]
+                    }
+                }
             },
             "404": {
                 "description": "Media not found. More info disclosed in error message"
@@ -84,7 +120,22 @@
                 "description": "Missing or malformed required parameter state. More info disclosed in error message"
             },
             "500": {
-                "description": "Undocumented and unexpected error"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "../../errors/mALConnectionError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": [
+                            {
+                                "$ref": "../../errors/mALConnectionError.example.json"
+                            }
+                        ]
+                    }
+                }
             }
         }
     }

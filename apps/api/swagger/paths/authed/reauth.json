@@ -4,10 +4,13 @@
         "tags": [
             "Auth"
         ],
-        "security": [{
-            "bearerAuth": []
-        }],
-        "parameters": [{
+        "security": [
+            {
+                "bearerAuth": []
+            }
+        ],
+        "parameters": [
+            {
                 "name": "redirect",
                 "in": "query",
                 "description": "The url to use for redirecting",
@@ -35,7 +38,22 @@
                 "description": "Success"
             },
             "403": {
-                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "../../errors/tokensNotPresentError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": [
+                            {
+                                "$ref": "../../errors/tokensNotPresentError.example.json"
+                            }
+                        ]
+                    }
+                }
             },
             "404": {
                 "description": "Media not found. More info disclosed in error message"

@@ -4,10 +4,13 @@
         "tags": [
             "JWT"
         ],
-        "security": [{
-            "bearerAuth": []
-        }],
-        "parameters": [{
+        "security": [
+            {
+                "bearerAuth": []
+            }
+        ],
+        "parameters": [
+            {
                 "name": "redirect",
                 "in": "query",
                 "description": "The url to make the server redirect the user to after verification",
@@ -46,7 +49,40 @@
                 "description": "Success"
             },
             "403": {
-                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "../../../errors/attemptError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/incorrectCodeError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/stateStatusError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/tokensNotPresentError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": [
+                            {
+                                "$ref": "../../../errors/attemptError.example.json"
+                            },
+                            {
+                                "$ref": "../../../errors/incorrectCodeError.example.json"
+                            },
+                            {
+                                "$ref": "../../../errors/stateStatusError.example.json"
+                            },
+                            {
+                                "$ref": "../../../errors/tokensNotPresentError.example.json"
+                            }
+                        ]
+                    }
+                }
             },
             "404": {
                 "description": "Media not found. More info disclosed in error message"
