@@ -52,7 +52,13 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "./list.schema.json"
+                        }
+                    }
+                }
             },
             "403": {
                 "content": {

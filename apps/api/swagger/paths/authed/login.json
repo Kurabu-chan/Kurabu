@@ -29,7 +29,31 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string"
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "const": "success"
+                                },
+                                "userStatus": {
+                                    "type": "string",
+                                    "enum": [
+                                        "done",
+                                        "verif",
+                                        "authing",
+                                        "tokens"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "403": {
                 "content": {

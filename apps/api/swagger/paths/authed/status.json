@@ -11,7 +11,7 @@
             "name": "state",
             "in": "query",
             "description": "The code used for authentication",
-            "required": true,
+            "required": false,
             "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
             "schema": {
                 "type": "string",
@@ -20,7 +20,27 @@
         }],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "enum": [
+                                        "done",
+                                        "verif",
+                                        "authing",
+                                        "tokens"
+                                    ]
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "const": "success"
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "422": {
                 "content": {
