@@ -2,7 +2,6 @@
     "post": {
         "description": "Verify the email of your account using the jwt flow",
         "tags": [
-            "Auth",
             "JWT"
         ],
         "security": [{

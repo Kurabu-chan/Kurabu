@@ -44,13 +44,6 @@
         "/manga/search": {
             "$ref": "./paths/manga/search.json"
         },
-        "/manga/seasonal": {
-            "$ref": "./paths/manga/seasonal.json"
-        },
-        "/manga/suggestions": {
-            "$ref": "./paths/manga/suggestions.json"
-        },
-
         "/authed/cancelRegister": {
             "$ref": "./paths/authed/cancelRegister.json"
         },

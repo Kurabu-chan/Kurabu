@@ -2,7 +2,6 @@
     "post": {
         "description": "Cancel the registration for a user using the jwt flow",
         "tags": [
-            "Auth",
             "JWT"
         ],
         "security": [{

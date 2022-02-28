@@ -2,7 +2,6 @@
     "get": {
         "description": "Get your manga list",
         "tags": [
-            "Manga",
             "List"
         ],
         "security": [{
