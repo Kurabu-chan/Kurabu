@@ -19,9 +19,9 @@ export class GetTokenWebRequestHandler
 {
     async handle(query: GetTokenWebRequest): Promise<GetTokenWebRequestResult> {
         try {
-            let redirect: string = "http://localhost:15000/authed";
+            let redirect = "http://localhost:15000/authed";
             if (!process.env.LOCALMODE) {
-                redirect = new URL('authed', query.redirect).href;
+                redirect = new URL("authed", query.ourdomain).href;
             }
 
             const request = new RequestBuilder("https", "myanimelist.net")
