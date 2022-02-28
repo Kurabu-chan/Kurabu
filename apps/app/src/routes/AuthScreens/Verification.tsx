@@ -9,6 +9,7 @@ import Authentication from "#api/Authenticate";
 import { Colors } from "#config/Colors";
 import { AuthStackParamList } from "../AuthStack";
 import * as RootNavigator from "../RootNavigator";
+import Kurabu from "../../../assets/pinklogin.svg";
 
 type RegisterProps = {
     navigation: StackNavigationProp<AuthStackParamList, "Verify">;
@@ -103,9 +104,17 @@ export default class Verif extends React.Component<RegisterProps, State> {
 
         return (
             <View style={styles.appContainer}>
+                <Kurabu
+                    height={Dimensions.get("window").height * 1.5}
+                    width={Dimensions.get("window").width * 3}
+                    preserveAspectRatio="xMinYMin slice"
+                    style={{
+                        position: "absolute",
+                    }}
+                />
                 <SafeAreaView style={styles.safeContainer} />
                 <View style={styles.content}>
-                    <Text style={styles.head}>iMAL</Text>
+                    {/* <Text style={styles.head}>Kurabu</Text> */}
                     <Text style={styles.sentMailText}>
                         We've sent you an email with a verification code, please enter it below.
                     </Text>
@@ -139,10 +148,10 @@ export default class Verif extends React.Component<RegisterProps, State> {
 
 const styles = StyleSheet.create({
     root: { flex: 1, padding: 20 },
-    title: {
-        textAlign: "center",
-        fontSize: 30,
-    },
+    // title: {
+    //     textAlign: "center",
+    //     fontSize: 30,
+    // },
     codeFieldRoot: { marginTop: 20 },
     cell: {
         width: 40,
@@ -151,20 +160,20 @@ const styles = StyleSheet.create({
         fontSize: 24,
         margin: 5,
         borderWidth: 2,
-        borderColor: Colors.ORANGE,
+        borderColor: Colors.CYAN,
         textAlign: "center",
-        color: Colors.ORANGE,
+        color: Colors.CYAN,
     },
     focusCell: {
-        borderColor: Colors.ORANGE_SELECTED,
+        borderColor: Colors.CYAN_SELECTED,
     },
     appContainer: {
-        backgroundColor: Colors.BLUE,
-        alignItems: "center",
-        justifyContent: "center",
+        // backgroundColor: Colors.BLUE,
+        // alignItems: "center",
+        // justifyContent: "center",
     },
     safeContainer: {
-        backgroundColor: Colors.BLUE,
+        // backgroundColor: Colors.BLUE,
     },
     VerifInput: {
         width: 240,
@@ -195,8 +204,10 @@ const styles = StyleSheet.create({
     sentMailText: {
         color: Colors.TEXT,
         width: Dimensions.get("window").width * 0.8,
-        fontSize: 14,
+        paddingRight: Dimensions.get("window").width * 0.3,
+        fontSize: 16,
         fontFamily: "AGRevueCyr",
+        paddingTop: 100,
     },
     head: {
         color: Colors.TEXT,
@@ -206,11 +217,11 @@ const styles = StyleSheet.create({
     },
     cancel: {
         marginTop: 30,
-        backgroundColor: Colors.ORANGE,
+        backgroundColor: Colors.CYAN,
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 3,
-        borderColor: Colors.ORANGE_SELECTED,
+        borderColor: Colors.CYAN_SELECTED,
         borderWidth: 1,
     },
 });
