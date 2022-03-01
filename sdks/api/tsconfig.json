@@ -4,6 +4,8 @@
         "lib/**/*.ts"
     ],
     "compilerOptions": {
-        "outDir": "build"
+        "outDir": "build",
+        "noImplicitAny": false,
+        "isolatedModules": false
     }
 }
