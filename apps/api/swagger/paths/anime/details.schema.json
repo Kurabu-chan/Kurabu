@@ -1,5 +1,4 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
     "properties": {
         "id": {
             "type": "integer"
@@ -134,14 +133,30 @@
             "minimum": 0
         },
         "rating": {
-            "type": "string",
-            "enum": [
-                "g",
-                "pg",
-                "pg_13",
-                "r",
-                "r+",
-                "rx"
+            "oneOf": [{
+                    "type": "string",
+                    "const": "g"
+                },
+                {
+                    "type": "string",
+                    "const": "pg"
+                },
+                {
+                    "type": "string",
+                    "const": "pg_13"
+                },
+                {
+                    "type": "string",
+                    "const": "r"
+                },
+                {
+                    "type": "string",
+                    "const": "r+"
+                },
+                {
+                    "type": "string",
+                    "const": "rx"
+                }
             ]
         },
         "recommendations": {
@@ -150,7 +165,7 @@
                 "type": "object",
                 "properties": {
                     "node": {
-                        "$ref": "#"
+                        "$ref": "#/"
                     },
                     "num_recommendations": {
                         "type": "integer"
@@ -175,7 +190,7 @@
                 "type": "object",
                 "properties": {
                     "node": {
-                        "$ref": "#"
+                        "$ref": "#/"
                     },
                     "relation_type": {
                         "type": "string",
@@ -224,7 +239,7 @@
                 "type": "object",
                 "properties": {
                     "node": {
-                        "$ref": "#"
+                        "$ref": "#/"
                     },
                     "relation_type": {
                         "type": "string",

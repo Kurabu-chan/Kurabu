@@ -4,10 +4,13 @@
         "tags": [
             "List"
         ],
-        "security": [{
-            "bearerAuth": []
-        }],
-        "parameters": [{
+        "security": [
+            {
+                "bearerAuth": []
+            }
+        ],
+        "parameters": [
+            {
                 "name": "mangaId",
                 "description": "The id of the manga whose list status you want to update",
                 "in": "query",
@@ -144,7 +147,8 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -158,28 +162,29 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../../errors/authenticationError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../../errors/missingStateError.example.json"
                             },
-                            {
+                            "2": {
                                 "$ref": "../../../errors/refreshError.example.json"
                             },
-                            {
+                            "3": {
                                 "$ref": "../../../errors/tokensNotPresentError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             },
-
             "422": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -190,16 +195,17 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../../errors/malformedParameterError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../../errors/missingParameterError.example.json"
                             },
-                            {
+                            "2": {
                                 "$ref": "../../../errors/mistypedParameterError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             },
@@ -207,7 +213,8 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../../errors/mALConnectionError.schema.json"
                                 },
                                 {
@@ -215,13 +222,14 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../../errors/mALConnectionError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../../errors/generalError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             }
@@ -232,10 +240,13 @@
         "tags": [
             "List"
         ],
-        "security": [{
-            "bearerAuth": []
-        }],
-        "parameters": [{
+        "security": [
+            {
+                "bearerAuth": []
+            }
+        ],
+        "parameters": [
+            {
                 "name": "mangaid",
                 "in": "query",
                 "description": "The id of the manga you want to remove from your list",
@@ -266,13 +277,17 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
-                                "$ref": "../../../errors/mALMediaNotFound.schema.json"
-                            }]
+                            "oneOf": [
+                                {
+                                    "$ref": "../../../errors/mALMediaNotFound.schema.json"
+                                }
+                            ]
                         },
-                        "examples": [{
-                            "$ref": "../../../errors/mALMediaNotFound.example.json"
-                        }]
+                        "examples": {
+                            "0": {
+                                "$ref": "../../../errors/mALMediaNotFound.example.json"
+                            }
+                        }
                     }
                 }
             },
@@ -280,7 +295,8 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -291,16 +307,17 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../../errors/malformedParameterError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../../errors/missingParameterError.example.json"
                             },
-                            {
+                            "2": {
                                 "$ref": "../../../errors/mistypedParameterError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             },
@@ -308,7 +325,8 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../../errors/mALConnectionError.schema.json"
                                 },
                                 {
@@ -316,13 +334,14 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../../errors/mALConnectionError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../../errors/generalError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             }

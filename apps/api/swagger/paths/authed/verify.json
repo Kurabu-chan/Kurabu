@@ -5,7 +5,8 @@
             "Auth"
         ],
         "deprecated": true,
-        "parameters": [{
+        "parameters": [
+            {
                 "name": "redirect",
                 "in": "query",
                 "description": "The url to make the server redirect the user to after verification",
@@ -46,7 +47,8 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../errors/attemptError.schema.json"
                                 },
                                 {
@@ -60,28 +62,29 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../errors/attemptError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../errors/incorrectCodeError.example.json"
                             },
-                            {
+                            "2": {
                                 "$ref": "../../errors/stateStatusError.example.json"
                             },
-                            {
+                            "3": {
                                 "$ref": "../../errors/tokensNotPresentError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             },
-
             "422": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -92,16 +95,17 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../errors/malformedParameterError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../errors/missingParameterError.example.json"
                             },
-                            {
+                            "2": {
                                 "$ref": "../../errors/mistypedParameterError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             },
@@ -109,13 +113,17 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
-                                "$ref": "../../errors/generalError.schema.json"
-                            }]
+                            "oneOf": [
+                                {
+                                    "$ref": "../../errors/generalError.schema.json"
+                                }
+                            ]
                         },
-                        "examples": [{
-                            "$ref": "../../errors/generalError.example.json"
-                        }]
+                        "examples": {
+                            "0": {
+                                "$ref": "../../errors/generalError.example.json"
+                            }
+                        }
                     }
                 }
             }

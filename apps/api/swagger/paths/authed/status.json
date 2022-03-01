@@ -4,20 +4,24 @@
         "tags": [
             "Auth"
         ],
-        "security": [{
-            "bearerAuth": []
-        }],
-        "parameters": [{
-            "name": "state",
-            "in": "query",
-            "description": "The code used for authentication",
-            "required": false,
-            "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
-            "schema": {
-                "type": "string",
-                "format": "uuid"
+        "security": [
+            {
+                "bearerAuth": []
             }
-        }],
+        ],
+        "parameters": [
+            {
+                "name": "state",
+                "in": "query",
+                "description": "The code used for authentication",
+                "required": false,
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        ],
         "responses": {
             "200": {
                 "content": {
@@ -46,7 +50,8 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -57,16 +62,17 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../errors/malformedParameterError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../errors/missingParameterError.example.json"
                             },
-                            {
+                            "2": {
                                 "$ref": "../../errors/mistypedParameterError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             },
@@ -74,13 +80,17 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
-                                "$ref": "../../errors/generalError.schema.json"
-                            }]
+                            "oneOf": [
+                                {
+                                    "$ref": "../../errors/generalError.schema.json"
+                                }
+                            ]
                         },
-                        "examples": [{
-                            "$ref": "../../errors/generalError.example.json"
-                        }]
+                        "examples": {
+                            "0": {
+                                "$ref": "../../errors/generalError.example.json"
+                            }
+                        }
                     }
                 }
             }

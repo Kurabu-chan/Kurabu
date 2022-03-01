@@ -5,17 +5,19 @@
             "Auth"
         ],
         "deprecated": true,
-        "parameters": [{
-            "name": "uuid",
-            "in": "query",
-            "description": "The state code for the user to cancel registration for",
-            "required": true,
-            "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
-            "schema": {
-                "type": "string",
-                "format": "uuid"
+        "parameters": [
+            {
+                "name": "uuid",
+                "in": "query",
+                "description": "The state code for the user to cancel registration for",
+                "required": true,
+                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
             }
-        }],
+        ],
         "responses": {
             "200": {
                 "description": "Success"
@@ -24,7 +26,8 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -41,31 +44,32 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../errors/authenticationError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../errors/missingStateError.example.json"
                             },
-                            {
+                            "2": {
                                 "$ref": "../../errors/refreshError.example.json"
                             },
-                            {
+                            "3": {
                                 "$ref": "../../errors/stateStatusError.example.json"
                             },
-                            {
+                            "4": {
                                 "$ref": "../../errors/tokensNotPresentError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             },
-
             "422": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -76,16 +80,17 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../errors/malformedParameterError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../errors/missingParameterError.example.json"
                             },
-                            {
+                            "2": {
                                 "$ref": "../../errors/mistypedParameterError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             },
@@ -93,7 +98,8 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../errors/mALConnectionError.schema.json"
                                 },
                                 {
@@ -101,13 +107,14 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../errors/mALConnectionError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../errors/generalError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             }

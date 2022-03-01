@@ -5,7 +5,8 @@
             "Auth"
         ],
         "deprecated": true,
-        "parameters": [{
+        "parameters": [
+            {
                 "name": "email",
                 "in": "query",
                 "description": "The email of the user",
@@ -59,7 +60,8 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../errors/badLoginError.schema.json"
                                 },
                                 {
@@ -67,22 +69,23 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../errors/badLoginError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../errors/tokensNotPresentError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             },
-
             "422": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -93,16 +96,17 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../errors/malformedParameterError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../errors/missingParameterError.example.json"
                             },
-                            {
+                            "2": {
                                 "$ref": "../../errors/mistypedParameterError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             },
@@ -110,13 +114,17 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
-                                "$ref": "../../errors/generalError.schema.json"
-                            }]
+                            "oneOf": [
+                                {
+                                    "$ref": "../../errors/generalError.schema.json"
+                                }
+                            ]
                         },
-                        "examples": [{
-                            "$ref": "../../errors/generalError.example.json"
-                        }]
+                        "examples": {
+                            "0": {
+                                "$ref": "../../errors/generalError.example.json"
+                            }
+                        }
                     }
                 }
             }

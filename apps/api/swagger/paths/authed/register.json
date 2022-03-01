@@ -5,7 +5,8 @@
             "Auth"
         ],
         "deprecated": true,
-        "parameters": [{
+        "parameters": [
+            {
                 "name": "email",
                 "in": "query",
                 "description": "The email of the new user",
@@ -35,22 +36,26 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
-                                "$ref": "../../errors/mailUsedError.schema.json"
-                            }]
+                            "oneOf": [
+                                {
+                                    "$ref": "../../errors/mailUsedError.schema.json"
+                                }
+                            ]
                         },
-                        "examples": [{
-                            "$ref": "../../errors/mailUsedError.example.json"
-                        }]
+                        "examples": {
+                            "0": {
+                                "$ref": "../../errors/mailUsedError.example.json"
+                            }
+                        }
                     }
                 }
             },
-
             "422": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
+                            "oneOf": [
+                                {
                                     "$ref": "../../errors/passwordStrengthError.schema.json"
                                 },
                                 {
@@ -64,19 +69,20 @@
                                 }
                             ]
                         },
-                        "examples": [{
+                        "examples": {
+                            "0": {
                                 "$ref": "../../errors/passwordStrengthError.example.json"
                             },
-                            {
+                            "1": {
                                 "$ref": "../../errors/malformedParameterError.example.json"
                             },
-                            {
+                            "2": {
                                 "$ref": "../../errors/missingParameterError.example.json"
                             },
-                            {
+                            "3": {
                                 "$ref": "../../errors/mistypedParameterError.example.json"
                             }
-                        ]
+                        }
                     }
                 }
             },
@@ -84,13 +90,17 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [{
-                                "$ref": "../../errors/generalError.schema.json"
-                            }]
+                            "oneOf": [
+                                {
+                                    "$ref": "../../errors/generalError.schema.json"
+                                }
+                            ]
                         },
-                        "examples": [{
-                            "$ref": "../../errors/generalError.example.json"
-                        }]
+                        "examples": {
+                            "0": {
+                                "$ref": "../../errors/generalError.example.json"
+                            }
+                        }
                     }
                 }
             }
