@@ -4,13 +4,10 @@
         "tags": [
             "List"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
                 "name": "animeId",
                 "description": "The id of the anime whose list status you want to update",
                 "in": "query",
@@ -137,8 +134,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -173,8 +169,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -203,8 +198,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/mALConnectionError.schema.json"
                                 },
                                 {
@@ -230,14 +224,11 @@
         "tags": [
             "List"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
-                "name": "animeid",
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
+                "name": "animeId",
                 "in": "query",
                 "description": "The id of the anime you want to delete",
                 "required": true,
@@ -261,17 +252,28 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "description": "The fact that it says success 0 does not mean it did not work, this is just the response from MAL",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "integer",
+                                    "const": 0
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "404": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../../errors/mALMediaNotFound.schema.json"
-                                }
-                            ]
+                            "oneOf": [{
+                                "$ref": "../../../errors/mALMediaNotFound.schema.json"
+                            }]
                         },
                         "examples": {
                             "0": {
@@ -285,8 +287,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -315,8 +316,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/mALConnectionError.schema.json"
                                 },
                                 {
