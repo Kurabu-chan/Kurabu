@@ -4,35 +4,36 @@
         "tags": [
             "JWT"
         ],
-        "security": [
-            {
-                "bearerAuth": []
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
+            "name": "uuid",
+            "in": "query",
+            "description": "The JWT token for the user to cancel registration for",
+            "required": false,
+            "deprecated": true,
+            "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
+            "schema": {
+                "type": "string",
+                "format": "jwt"
             }
-        ],
-        "parameters": [
-            {
-                "name": "uuid",
-                "in": "query",
-                "description": "The JWT token for the user to cancel registration for",
-                "required": false,
-                "deprecated": true,
-                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
-                "schema": {
-                    "type": "string",
-                    "format": "jwt"
-                }
-            }
-        ],
+        }],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "../authschemas.json#/schemas/cancelRegister"
+                        }
+                    }
+                }
             },
             "403": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -73,8 +74,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -103,8 +103,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/mALConnectionError.schema.json"
                                 },
                                 {

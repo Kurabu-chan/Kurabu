@@ -4,13 +4,10 @@
         "tags": [
             "Auth"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
                 "name": "redirect",
                 "in": "query",
                 "description": "The url to use for redirecting",
@@ -25,7 +22,7 @@
                 "name": "state",
                 "in": "query",
                 "description": "The code used for authentication",
-                "required": true,
+                "required": false,
                 "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
                 "schema": {
                     "type": "string",
@@ -35,17 +32,21 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "./authschemas.json#/schemas/verif"
+                        }
+                    }
+                }
             },
             "403": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../errors/tokensNotPresentError.schema.json"
-                                }
-                            ]
+                            "oneOf": [{
+                                "$ref": "../../errors/tokensNotPresentError.schema.json"
+                            }]
                         },
                         "examples": {
                             "0": {
@@ -59,8 +60,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -89,11 +89,9 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../errors/generalError.schema.json"
-                                }
-                            ]
+                            "oneOf": [{
+                                "$ref": "../../errors/generalError.schema.json"
+                            }]
                         },
                         "examples": {
                             "0": {

@@ -4,13 +4,10 @@
         "tags": [
             "JWT"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
                 "name": "redirect",
                 "in": "query",
                 "description": "The url to make the server redirect the user to after verification",
@@ -46,14 +43,19 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "../authschemas.json#/schemas/verif"
+                        }
+                    }
+                }
             },
             "403": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/attemptError.schema.json"
                                 },
                                 {
@@ -88,8 +90,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -118,11 +119,9 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../../errors/generalError.schema.json"
-                                }
-                            ]
+                            "oneOf": [{
+                                "$ref": "../../../errors/generalError.schema.json"
+                            }]
                         },
                         "examples": {
                             "0": {

@@ -4,44 +4,26 @@
         "tags": [
             "Auth"
         ],
-        "security": [
-            {
-                "bearerAuth": []
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
+            "name": "state",
+            "in": "query",
+            "description": "The code used for authentication",
+            "required": false,
+            "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
+            "schema": {
+                "type": "string",
+                "format": "uuid"
             }
-        ],
-        "parameters": [
-            {
-                "name": "state",
-                "in": "query",
-                "description": "The code used for authentication",
-                "required": false,
-                "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
-                "schema": {
-                    "type": "string",
-                    "format": "uuid"
-                }
-            }
-        ],
+        }],
         "responses": {
             "200": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "properties": {
-                                "message": {
-                                    "type": "string",
-                                    "enum": [
-                                        "done",
-                                        "verif",
-                                        "authing",
-                                        "tokens"
-                                    ]
-                                },
-                                "status": {
-                                    "type": "string",
-                                    "const": "success"
-                                }
-                            }
+                            "$ref": "./authschemas.json#/schemas/status"
                         }
                     }
                 }
@@ -50,8 +32,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -80,11 +61,9 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../errors/generalError.schema.json"
-                                }
-                            ]
+                            "oneOf": [{
+                                "$ref": "../../errors/generalError.schema.json"
+                            }]
                         },
                         "examples": {
                             "0": {

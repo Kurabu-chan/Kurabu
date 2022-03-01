@@ -4,8 +4,7 @@
         "tags": [
             "JWT"
         ],
-        "parameters": [
-            {
+        "parameters": [{
                 "name": "email",
                 "in": "query",
                 "description": "The email of the user",
@@ -32,25 +31,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "type": "object",
-                            "properties": {
-                                "message": {
-                                    "type": "string"
-                                },
-                                "status": {
-                                    "type": "string",
-                                    "const": "success"
-                                },
-                                "userStatus": {
-                                    "type": "string",
-                                    "enum": [
-                                        "done",
-                                        "verif",
-                                        "authing",
-                                        "tokens"
-                                    ]
-                                }
-                            }
+                            "$ref": "../authschemas.json#/schemas/login"
                         }
                     }
                 }
@@ -59,8 +40,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/badLoginError.schema.json"
                                 },
                                 {
@@ -83,8 +63,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -113,11 +92,9 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../../errors/generalError.schema.json"
-                                }
-                            ]
+                            "oneOf": [{
+                                "$ref": "../../../errors/generalError.schema.json"
+                            }]
                         },
                         "examples": {
                             "0": {

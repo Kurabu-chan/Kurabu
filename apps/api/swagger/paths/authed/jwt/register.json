@@ -4,8 +4,7 @@
         "tags": [
             "JWT"
         ],
-        "parameters": [
-            {
+        "parameters": [{
                 "name": "email",
                 "in": "query",
                 "description": "The email of the new user",
@@ -29,17 +28,21 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "../authschemas.json#/schemas/register"
+                        }
+                    }
+                }
             },
             "403": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../../errors/mailUsedError.schema.json"
-                                }
-                            ]
+                            "oneOf": [{
+                                "$ref": "../../../errors/mailUsedError.schema.json"
+                            }]
                         },
                         "examples": {
                             "0": {
@@ -53,8 +56,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/passwordStrengthError.schema.json"
                                 },
                                 {
@@ -89,11 +91,9 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../../errors/generalError.schema.json"
-                                }
-                            ]
+                            "oneOf": [{
+                                "$ref": "../../../errors/generalError.schema.json"
+                            }]
                         },
                         "examples": {
                             "0": {
