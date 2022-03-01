@@ -128,7 +128,72 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "enum": [
+                                                "watching",
+                                                "completed",
+                                                "on_hold",
+                                                "dropped",
+                                                "plan_to_watch"
+                                            ]
+                                        },
+                                        "score": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 10
+                                        },
+                                        "num_episodes_watched": {
+                                            "type": "integer"
+                                        },
+                                        "is_rewatching": {
+                                            "type": "boolean"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "priority": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 2
+                                        },
+                                        "num_times_rewatched": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                        },
+                                        "rewatch_value": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 5
+                                        },
+                                        "tags": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "comments": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "success": {
+                                    "type": "integer",
+                                    "const": 0
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "403": {
                 "content": {
