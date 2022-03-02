@@ -1,0 +1,9 @@
+{
+    "value": {
+        "code": "040",
+        "message": "some error message",
+        "status": "error"
+    },
+    "summary": "mALError",
+    "description": "Some error occurred"
+}

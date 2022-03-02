@@ -128,19 +128,159 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "enum": [
+                                                "watching",
+                                                "completed",
+                                                "on_hold",
+                                                "dropped",
+                                                "plan_to_watch"
+                                            ]
+                                        },
+                                        "score": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 10
+                                        },
+                                        "num_episodes_watched": {
+                                            "type": "integer"
+                                        },
+                                        "is_rewatching": {
+                                            "type": "boolean"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "priority": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 2
+                                        },
+                                        "num_times_rewatched": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                        },
+                                        "rewatch_value": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 5
+                                        },
+                                        "tags": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "comments": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "success": {
+                                    "type": "integer",
+                                    "const": 0
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "403": {
-                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
-            },
-            "404": {
-                "description": "Media not found. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                    "$ref": "../../../errors/authenticationError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/missingStateError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/refreshError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/tokensNotPresentError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../../errors/authenticationError.example.json"
+                            },
+                            "1": {
+                                "$ref": "../../../errors/missingStateError.example.json"
+                            },
+                            "2": {
+                                "$ref": "../../../errors/refreshError.example.json"
+                            },
+                            "3": {
+                                "$ref": "../../../errors/tokensNotPresentError.example.json"
+                            }
+                        }
+                    }
+                }
             },
             "422": {
-                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                    "$ref": "../../../errors/malformedParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/missingParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/mistypedParameterError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../../errors/malformedParameterError.example.json"
+                            },
+                            "1": {
+                                "$ref": "../../../errors/missingParameterError.example.json"
+                            },
+                            "2": {
+                                "$ref": "../../../errors/mistypedParameterError.example.json"
+                            }
+                        }
+                    }
+                }
             },
             "500": {
-                "description": "Undocumented and unexpected error"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                    "$ref": "../../../errors/mALConnectionError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/generalError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../../errors/mALConnectionError.example.json"
+                            },
+                            "1": {
+                                "$ref": "../../../errors/generalError.example.json"
+                            }
+                        }
+                    }
+                }
             }
         }
     },
@@ -153,7 +293,7 @@
             "bearerAuth": []
         }],
         "parameters": [{
-                "name": "animeid",
+                "name": "animeId",
                 "in": "query",
                 "description": "The id of the anime you want to delete",
                 "required": true,
@@ -177,19 +317,88 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
-            },
-            "403": {
-                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
+                "description": "The fact that it says success 0 does not mean it did not work, this is just the response from MAL",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "integer",
+                                    "const": 0
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "404": {
-                "description": "Media not found. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                "$ref": "../../../errors/mALMediaNotFound.schema.json"
+                            }]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../../errors/mALMediaNotFound.example.json"
+                            }
+                        }
+                    }
+                }
             },
             "422": {
-                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                    "$ref": "../../../errors/malformedParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/missingParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/mistypedParameterError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../../errors/malformedParameterError.example.json"
+                            },
+                            "1": {
+                                "$ref": "../../../errors/missingParameterError.example.json"
+                            },
+                            "2": {
+                                "$ref": "../../../errors/mistypedParameterError.example.json"
+                            }
+                        }
+                    }
+                }
             },
             "500": {
-                "description": "Undocumented and unexpected error"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                    "$ref": "../../../errors/mALConnectionError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/generalError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../../errors/mALConnectionError.example.json"
+                            },
+                            "1": {
+                                "$ref": "../../../errors/generalError.example.json"
+                            }
+                        }
+                    }
+                }
             }
         }
     }

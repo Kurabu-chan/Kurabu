@@ -1,0 +1,21 @@
+{
+    "type": "object",
+    "properties": {
+        "code": {
+            "type": "string",
+            "const": "021"
+        },
+        "message": {
+            "type": "string"
+        },
+        "status": {
+            "type": "string",
+            "const": "error"
+        }
+    },
+    "required": [
+        "code",
+        "message",
+        "status"
+    ]
+}

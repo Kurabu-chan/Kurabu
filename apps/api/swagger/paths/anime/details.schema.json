@@ -1,0 +1,453 @@
+{
+    "properties": {
+        "id": {
+            "type": "integer"
+        },
+        "title": {
+            "type": "string"
+        },
+        "main_picture": {
+            "type": "object",
+            "properties": {
+                "large": {
+                    "type": "string"
+                },
+                "medium": {
+                    "type": "string"
+                }
+            }
+        },
+        "alternative_titles": {
+            "type": "object",
+            "properties": {
+                "synonyms": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "en": {
+                    "type": "string"
+                },
+                "ja": {
+                    "type": "string"
+                }
+            }
+        },
+        "average_episode_duration": {
+            "type": "integer"
+        },
+        "background": {
+            "type": "string"
+        },
+        "broadcast": {
+            "type": "object",
+            "properties": {
+                "day_of_the_week": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string"
+                }
+            }
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "end-date": {
+            "type": "string",
+            "format": "date"
+        },
+        "genres": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "mean": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+        },
+        "media_type": {
+            "type": "string",
+            "enum": [
+                "unknown",
+                "tv",
+                "ova",
+                "movie",
+                "special",
+                "ona",
+                "music"
+            ]
+        },
+        "nsfw": {
+            "type": "string",
+            "enum": [
+                "white",
+                "gray",
+                "black"
+            ]
+        },
+        "num_episodes": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "num_list_users": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "num_scoring_users": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "pictures": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "large": {
+                        "type": "string"
+                    },
+                    "medium": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "popularity": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "rank": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "rating": {
+            "oneOf": [{
+                    "type": "string",
+                    "const": "g"
+                },
+                {
+                    "type": "string",
+                    "const": "pg"
+                },
+                {
+                    "type": "string",
+                    "const": "pg_13"
+                },
+                {
+                    "type": "string",
+                    "const": "r"
+                },
+                {
+                    "type": "string",
+                    "const": "r+"
+                },
+                {
+                    "type": "string",
+                    "const": "rx"
+                }
+            ]
+        },
+        "recommendations": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "node": {
+                        "$ref": "#/"
+                    },
+                    "num_recommendations": {
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "node": {
+                        "id": 205,
+                        "title": "Samurai Champloo",
+                        "main_picture": {
+                            "medium": "https://api-cdn.myanimelist.net/images/anime/11/29134.jpg",
+                            "large": "https://api-cdn.myanimelist.net/images/anime/11/29134l.jpg"
+                        }
+                    },
+                    "num_recommendations": 111
+                }
+            }
+        },
+        "related_anime": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "node": {
+                        "$ref": "#/"
+                    },
+                    "relation_type": {
+                        "type": "string",
+                        "enum": [
+                            "sequel",
+                            "prequel",
+                            "alternative_setting",
+                            "alternative_version",
+                            "side_story",
+                            "parent_story",
+                            "summary",
+                            "full_story"
+                        ]
+                    },
+                    "relation_type_formatted": {
+                        "type": "string",
+                        "enum": [
+                            "Sequel",
+                            "Prequel",
+                            "Alternative Setting",
+                            "Alternative Version",
+                            "Side Story",
+                            "Parent Story",
+                            "Summary",
+                            "Full Story"
+                        ]
+                    }
+                },
+                "example": {
+                    "node": {
+                        "id": 5,
+                        "title": "Cowboy Bebop: Tengoku no Tobira",
+                        "main_picture": {
+                            "medium": "https://api-cdn.myanimelist.net/images/anime/1439/93480.jpg",
+                            "large": "https://api-cdn.myanimelist.net/images/anime/1439/93480l.jpg"
+                        }
+                    },
+                    "relation_type": "side_story",
+                    "relation_type_formatted": "Side story"
+                }
+            }
+        },
+        "related_manga": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "node": {
+                        "$ref": "#/"
+                    },
+                    "relation_type": {
+                        "type": "string",
+                        "enum": [
+                            "sequel",
+                            "prequel",
+                            "alternative_setting",
+                            "alternative_version",
+                            "side_story",
+                            "parent_story",
+                            "summary",
+                            "full_story"
+                        ]
+                    },
+                    "relation_type_formatted": {
+                        "type": "string",
+                        "enum": [
+                            "Sequel",
+                            "Prequel",
+                            "Alternative Setting",
+                            "Alternative Version",
+                            "Side Story",
+                            "Parent Story",
+                            "Summary",
+                            "Full Story"
+                        ]
+                    }
+                },
+                "example": {
+                    "node": {
+                        "id": 5,
+                        "title": "Cowboy Bebop: Tengoku no Tobira",
+                        "main_picture": {
+                            "medium": "https://api-cdn.myanimelist.net/images/anime/1439/93480.jpg",
+                            "large": "https://api-cdn.myanimelist.net/images/anime/1439/93480l.jpg"
+                        }
+                    },
+                    "relation_type": "side_story",
+                    "relation_type_formatted": "Side story"
+                }
+            }
+        },
+        "source": {
+            "type": "string",
+            "enum": [
+                "other",
+                "original",
+                "manga",
+                "4_koma_manga",
+                "web_manga",
+                "digital_manga",
+                "novel",
+                "light_novel",
+                "visual_novel",
+                "game",
+                "card_game",
+                "book",
+                "picture_book",
+                "radio",
+                "music"
+            ]
+        },
+        "start_date": {
+            "type": "string",
+            "format": "date"
+        },
+        "start_season": {
+            "type": "object",
+            "properties": {
+                "year": {
+                    "type": "integer"
+                },
+                "season": {
+                    "type": "string",
+                    "enum": [
+                        "spring",
+                        "summer",
+                        "fall",
+                        "winter"
+                    ]
+                }
+            }
+        },
+        "statistics": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "object",
+                    "properties": {
+                        "watching": {
+                            "type": "integer"
+                        },
+                        "completed": {
+                            "type": "integer"
+                        },
+                        "on_hold": {
+                            "type": "integer"
+                        },
+                        "dropped": {
+                            "type": "integer"
+                        },
+                        "plan_to_watch": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "num_list_users": {
+                    "type": "integer"
+                }
+            }
+        },
+        "status": {
+            "type": "string",
+            "enum": [
+                "finished_airing",
+                "currently_airing",
+                "not_yet_aired"
+            ]
+        },
+        "studios": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "synopsis": {
+            "type": "string"
+        },
+        "updated_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "my_list_status": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "watching",
+                        "completed",
+                        "on_hold",
+                        "dropped",
+                        "plan_to_watch"
+                    ]
+                },
+                "score": {
+                    "type": "integer"
+                },
+                "num_episodes_watched": {
+                    "type": "integer"
+                },
+                "is_rewatching": {
+                    "type": "boolean"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "start_date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "finish_date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "priority": {
+                    "type": "integer"
+                },
+                "num_times_rewatched": {
+                    "type": "integer"
+                },
+                "rewatch_value": {
+                    "type": "integer"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "comments": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "example": {
+        "id": 0,
+        "title": "string",
+        "main_picture": {
+            "large": "string",
+            "medium": "string"
+        },
+        "alternative_titles": {
+            "synonyms": [
+                "string"
+            ],
+            "en": "string",
+            "ja": "string"
+        }
+    }
+}

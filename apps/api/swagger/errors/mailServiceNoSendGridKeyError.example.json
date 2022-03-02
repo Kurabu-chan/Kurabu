@@ -1,0 +1,9 @@
+{
+    "value": {
+        "code": "031",
+        "message": "some error message",
+        "status": "error"
+    },
+    "summary": "mailServiceNoSendGridKeyError",
+    "description": "Some error occurred"
+}

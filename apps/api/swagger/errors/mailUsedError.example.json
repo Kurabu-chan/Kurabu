@@ -1,0 +1,9 @@
+{
+    "value": {
+        "code": "025",
+        "message": "some error message",
+        "status": "error"
+    },
+    "summary": "mailUsedError",
+    "description": "Some error occurred"
+}

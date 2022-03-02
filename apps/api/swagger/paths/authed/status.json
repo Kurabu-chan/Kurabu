@@ -11,7 +11,7 @@
             "name": "state",
             "in": "query",
             "description": "The code used for authentication",
-            "required": true,
+            "required": false,
             "example": "456c17be-29e9-4b38-afde-8e67110d0bcb",
             "schema": {
                 "type": "string",
@@ -20,19 +20,58 @@
         }],
         "responses": {
             "200": {
-                "description": "Success"
-            },
-            "403": {
-                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
-            },
-            "404": {
-                "description": "Media not found. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "./schemas/status.schema.json"
+                        }
+                    }
+                }
             },
             "422": {
-                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                    "$ref": "../../errors/malformedParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/missingParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/mistypedParameterError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../errors/malformedParameterError.example.json"
+                            },
+                            "1": {
+                                "$ref": "../../errors/missingParameterError.example.json"
+                            },
+                            "2": {
+                                "$ref": "../../errors/mistypedParameterError.example.json"
+                            }
+                        }
+                    }
+                }
             },
             "500": {
-                "description": "Undocumented and unexpected error"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                "$ref": "../../errors/generalError.schema.json"
+                            }]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../errors/generalError.example.json"
+                            }
+                        }
+                    }
+                }
             }
         }
     }

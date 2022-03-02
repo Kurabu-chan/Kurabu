@@ -1,0 +1,9 @@
+{
+    "value": {
+        "code": "021",
+        "message": "some error message",
+        "status": "error"
+    },
+    "summary": "badLoginError",
+    "description": "Some error occurred"
+}

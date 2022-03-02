@@ -5,13 +5,16 @@
     "types": "./build/index.d.ts",
     "license": "MIT",
     "scripts": {
-        "prebuild": "shx rm -rf ./swagger/* && shx mkdir -p swagger && shx cp -r ../../apps/api/swagger/* ./swagger && openapi-generator-cli generate -i swagger/swagger.json -o lib -g typescript-fetch --skip-validate-spec",
+        "prebuild": "shx rm -rf ./swagger/* && shx mkdir -p swagger && shx cp -r ../../apps/api/swagger/* ./swagger && openapi-generator-cli generate -i swagger/swagger.json -o lib -g typescript-node --strict-spec false",
         "build": "tsc -p ./tsconfig.json"
     },
-    "dependencies": {},
+    "dependencies": {
+        "request": "^2.88.2"
+    },
     "devDependencies": {
         "@kurabu/tsconfig": "*",
         "@openapitools/openapi-generator-cli": "^2.4.26",
+        "@types/node": "^17.0.21",
         "shx": "^0.3.4"
     }
 }

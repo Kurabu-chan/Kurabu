@@ -28,19 +28,80 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "../schemas/register.schema.json"
+                        }
+                    }
+                }
             },
             "403": {
-                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
-            },
-            "404": {
-                "description": "Media not found. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                "$ref": "../../../errors/mailUsedError.schema.json"
+                            }]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../../errors/mailUsedError.example.json"
+                            }
+                        }
+                    }
+                }
             },
             "422": {
-                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                    "$ref": "../../../errors/passwordStrengthError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/malformedParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/missingParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../../errors/mistypedParameterError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../../errors/passwordStrengthError.example.json"
+                            },
+                            "1": {
+                                "$ref": "../../../errors/malformedParameterError.example.json"
+                            },
+                            "2": {
+                                "$ref": "../../../errors/missingParameterError.example.json"
+                            },
+                            "3": {
+                                "$ref": "../../../errors/mistypedParameterError.example.json"
+                            }
+                        }
+                    }
+                }
             },
             "500": {
-                "description": "Undocumented and unexpected error"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                "$ref": "../../../errors/generalError.schema.json"
+                            }]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../../errors/generalError.example.json"
+                            }
+                        }
+                    }
+                }
             }
         }
     }

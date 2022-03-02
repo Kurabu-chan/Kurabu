@@ -1,0 +1,9 @@
+{
+    "value": {
+        "code": "041",
+        "message": "some error message",
+        "status": "error"
+    },
+    "summary": "mALConnectionError",
+    "description": "Some error occurred"
+}

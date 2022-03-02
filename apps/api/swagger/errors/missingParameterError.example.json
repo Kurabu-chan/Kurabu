@@ -1,0 +1,9 @@
+{
+    "value": {
+        "code": "011",
+        "message": "some error message",
+        "status": "error"
+    },
+    "summary": "missingParameterError",
+    "description": "Some error occurred"
+}

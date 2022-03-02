@@ -1,0 +1,9 @@
+{
+    "value": {
+        "code": "042",
+        "message": "some error message",
+        "status": "error"
+    },
+    "summary": "mALMediaNotFound",
+    "description": "Some error occurred"
+}

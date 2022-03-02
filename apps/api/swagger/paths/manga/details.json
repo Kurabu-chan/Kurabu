@@ -7,9 +7,7 @@
         "security": [{
             "bearerAuth": []
         }],
-        "parameters": [
-
-            {
+        "parameters": [{
                 "name": "mangaid",
                 "in": "query",
                 "description": "The id of the manga you want the details of",
@@ -44,19 +42,100 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "./details.schema.json"
+                        }
+                    }
+                }
             },
             "403": {
-                "description": "Any authentication error. Error with parameter. e.g. missing required parameter. More info disclosed in error message"
-            },
-            "404": {
-                "description": "Media not found. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                    "$ref": "../../errors/authenticationError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/missingStateError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/refreshError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/tokensNotPresentError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../errors/authenticationError.example.json"
+                            },
+                            "1": {
+                                "$ref": "../../errors/missingStateError.example.json"
+                            },
+                            "2": {
+                                "$ref": "../../errors/refreshError.example.json"
+                            },
+                            "3": {
+                                "$ref": "../../errors/tokensNotPresentError.example.json"
+                            }
+                        }
+                    }
+                }
             },
             "422": {
-                "description": "Missing or malformed required parameter state. More info disclosed in error message"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                    "$ref": "../../errors/malformedParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/missingParameterError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/mistypedParameterError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../errors/malformedParameterError.example.json"
+                            },
+                            "1": {
+                                "$ref": "../../errors/missingParameterError.example.json"
+                            },
+                            "2": {
+                                "$ref": "../../errors/mistypedParameterError.example.json"
+                            }
+                        }
+                    }
+                }
             },
             "500": {
-                "description": "Undocumented and unexpected error"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [{
+                                    "$ref": "../../errors/mALConnectionError.schema.json"
+                                },
+                                {
+                                    "$ref": "../../errors/generalError.schema.json"
+                                }
+                            ]
+                        },
+                        "examples": {
+                            "0": {
+                                "$ref": "../../errors/mALConnectionError.example.json"
+                            },
+                            "1": {
+                                "$ref": "../../errors/generalError.example.json"
+                            }
+                        }
+                    }
+                }
             }
         }
     }

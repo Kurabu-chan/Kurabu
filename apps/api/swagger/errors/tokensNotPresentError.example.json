@@ -1,0 +1,9 @@
+{
+    "value": {
+        "code": "028",
+        "message": "some error message",
+        "status": "error"
+    },
+    "summary": "tokensNotPresentError",
+    "description": "Some error occurred"
+}
