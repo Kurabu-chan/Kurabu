@@ -1,31 +1,18 @@
 {
     "get": {
-        "description": "Get a list of suggested animes",
+        "description": "Get the details for an anime",
         "tags": [
             "Anime"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
-                "name": "limit",
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
+                "name": "animeid",
                 "in": "query",
-                "description": "The maximum amount of animes you want to retrieve",
-                "example": "5",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            {
-                "name": "offset",
-                "in": "query",
-                "description": "The index at which you want to start gettign animes, used for pagination",
-                "example": "5",
-                "required": false,
+                "description": "The id of the anime you want the details of",
+                "required": true,
+                "example": "0",
                 "schema": {
                     "type": "integer"
                 }
@@ -58,7 +45,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./list.schema.json"
+                            "$ref": "./animeDetails.schema.json"
                         }
                     }
                 }
@@ -67,8 +54,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -103,8 +89,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -133,8 +118,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/mALConnectionError.schema.json"
                                 },
                                 {

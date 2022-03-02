@@ -7,11 +7,20 @@
                 "type": "object",
                 "properties": {
                     "node": {
-                        "$ref": "./details.schema.json"
+                        "$ref": "./mangaDetails.schema.json"
+                    },
+                    "ranking": {
+                        "type": "object",
+                        "properties": {
+                            "rank": {
+                                "type": "integer"
+                            }
+                        }
                     }
                 },
                 "required": [
-                    "node"
+                    "node",
+                    "ranking"
                 ]
             }
         },

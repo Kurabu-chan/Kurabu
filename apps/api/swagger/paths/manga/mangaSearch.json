@@ -1,19 +1,16 @@
 {
     "get": {
-        "description": "Get the top rankings for anime",
+        "description": "Search for mangas using a query",
         "tags": [
-            "Anime"
+            "Manga"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
                 "name": "limit",
                 "in": "query",
-                "description": "The maximum amount of animes you want to retrieve",
+                "description": "The maximum amount of mangas you want to retrieve",
                 "example": "5",
                 "required": false,
                 "schema": {
@@ -23,7 +20,7 @@
             {
                 "name": "offset",
                 "in": "query",
-                "description": "The index at which you want to start gettign animes, used for pagination",
+                "description": "The index at which you want to start gettign mangas, used for pagination",
                 "example": "5",
                 "required": false,
                 "schema": {
@@ -33,7 +30,7 @@
             {
                 "name": "fields",
                 "in": "query",
-                "description": "The fields you want to get from the anime.",
+                "description": "The fields you want to get from the manga.",
                 "required": false,
                 "example": "id, title, main_picture, alternative_titles",
                 "schema": {
@@ -53,11 +50,11 @@
                 }
             },
             {
-                "name": "rankingType",
+                "name": "query",
                 "in": "query",
                 "descritpion": "The type of ranking to get.",
-                "required": false,
-                "example": "all",
+                "required": true,
+                "example": "sword art",
                 "schema": {
                     "type": "string"
                 }
@@ -68,7 +65,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./ranking.schema.json"
+                            "$ref": "./mangaList.schema.json"
                         }
                     }
                 }
@@ -77,8 +74,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -113,8 +109,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -143,8 +138,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/mALConnectionError.schema.json"
                                 },
                                 {

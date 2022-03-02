@@ -1,8 +1,8 @@
 {
     "get": {
-        "description": "Search for mangas using a query",
+        "description": "Get a list of suggested animes",
         "tags": [
-            "Manga"
+            "Anime"
         ],
         "security": [{
             "bearerAuth": []
@@ -10,7 +10,7 @@
         "parameters": [{
                 "name": "limit",
                 "in": "query",
-                "description": "The maximum amount of mangas you want to retrieve",
+                "description": "The maximum amount of animes you want to retrieve",
                 "example": "5",
                 "required": false,
                 "schema": {
@@ -20,7 +20,7 @@
             {
                 "name": "offset",
                 "in": "query",
-                "description": "The index at which you want to start gettign mangas, used for pagination",
+                "description": "The index at which you want to start gettign animes, used for pagination",
                 "example": "5",
                 "required": false,
                 "schema": {
@@ -30,7 +30,7 @@
             {
                 "name": "fields",
                 "in": "query",
-                "description": "The fields you want to get from the manga.",
+                "description": "The fields you want to get from the anime.",
                 "required": false,
                 "example": "id, title, main_picture, alternative_titles",
                 "schema": {
@@ -48,16 +48,6 @@
                     "type": "string",
                     "format": "uuid"
                 }
-            },
-            {
-                "name": "query",
-                "in": "query",
-                "descritpion": "The type of ranking to get.",
-                "required": true,
-                "example": "sword art",
-                "schema": {
-                    "type": "string"
-                }
             }
         ],
         "responses": {
@@ -65,7 +55,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./list.schema.json"
+                            "$ref": "./animeList.schema.json"
                         }
                     }
                 }

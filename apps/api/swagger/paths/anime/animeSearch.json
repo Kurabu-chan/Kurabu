@@ -1,18 +1,28 @@
 {
     "get": {
-        "description": "Get the details for a manga",
+        "description": "Search for animes using a query",
         "tags": [
-            "Manga"
+            "Anime"
         ],
         "security": [{
             "bearerAuth": []
         }],
         "parameters": [{
-                "name": "mangaid",
+                "name": "limit",
                 "in": "query",
-                "description": "The id of the manga you want the details of",
-                "required": true,
-                "example": "0",
+                "description": "The maximum amount of animes you want to retrieve",
+                "example": "5",
+                "required": false,
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            {
+                "name": "offset",
+                "in": "query",
+                "description": "The index at which you want to start gettign animes, used for pagination",
+                "example": "5",
+                "required": false,
                 "schema": {
                     "type": "integer"
                 }
@@ -20,7 +30,7 @@
             {
                 "name": "fields",
                 "in": "query",
-                "description": "The fields you want to get from the manga.",
+                "description": "The fields you want to get from the anime.",
                 "required": false,
                 "example": "id, title, main_picture, alternative_titles",
                 "schema": {
@@ -38,6 +48,16 @@
                     "type": "string",
                     "format": "uuid"
                 }
+            },
+            {
+                "name": "query",
+                "in": "query",
+                "descritpion": "The type of ranking to get.",
+                "required": true,
+                "example": "sword art",
+                "schema": {
+                    "type": "string"
+                }
             }
         ],
         "responses": {
@@ -45,7 +65,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./details.schema.json"
+                            "$ref": "./animeList.schema.json"
                         }
                     }
                 }

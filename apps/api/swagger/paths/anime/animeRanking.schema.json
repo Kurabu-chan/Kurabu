@@ -7,7 +7,7 @@
                 "type": "object",
                 "properties": {
                     "node": {
-                        "$ref": "./details.schema.json"
+                        "$ref": "./animeDetails.schema.json"
                     },
                     "ranking": {
                         "type": "object",

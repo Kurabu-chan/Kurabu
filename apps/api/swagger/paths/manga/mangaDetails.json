@@ -1,6 +1,6 @@
 {
     "get": {
-        "description": "Get the top rankings for manga",
+        "description": "Get the details for a manga",
         "tags": [
             "Manga"
         ],
@@ -8,21 +8,11 @@
             "bearerAuth": []
         }],
         "parameters": [{
-                "name": "limit",
+                "name": "mangaid",
                 "in": "query",
-                "description": "The maximum amount of mangas you want to retrieve",
-                "example": "5",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            {
-                "name": "offset",
-                "in": "query",
-                "description": "The index at which you want to start gettign mangas, used for pagination",
-                "example": "5",
-                "required": false,
+                "description": "The id of the manga you want the details of",
+                "required": true,
+                "example": "0",
                 "schema": {
                     "type": "integer"
                 }
@@ -48,16 +38,6 @@
                     "type": "string",
                     "format": "uuid"
                 }
-            },
-            {
-                "name": "rankingType",
-                "in": "query",
-                "descritpion": "The type of ranking to get.",
-                "required": false,
-                "example": "all",
-                "schema": {
-                    "type": "string"
-                }
             }
         ],
         "responses": {
@@ -65,7 +45,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./ranking.schema.json"
+                            "$ref": "./mangaDetails.schema.json"
                         }
                     }
                 }
