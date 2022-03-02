@@ -53,6 +53,7 @@
         "node-fetch": "^2.6.7",
         "path": "^0.12.7",
         "pg": "^8.5.1",
+        "redoc-express": "^1.0.0",
         "reflect-metadata": "^0.1.13",
         "sequelize": "^6.9.0",
         "sequelize-typescript": "^2.1.1",
