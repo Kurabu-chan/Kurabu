@@ -7,6 +7,7 @@
         "security": [{
             "bearerAuth": []
         }],
+        "operationId": "reauthenticateUser",
         "parameters": [{
                 "name": "redirect",
                 "in": "query",

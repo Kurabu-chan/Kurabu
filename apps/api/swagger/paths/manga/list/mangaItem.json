@@ -7,6 +7,7 @@
         "security": [{
             "bearerAuth": []
         }],
+        "operationId": "updateMangaListItem",
         "parameters": [{
                 "name": "mangaId",
                 "description": "The id of the manga whose list status you want to update",
@@ -312,6 +313,7 @@
         "security": [{
             "bearerAuth": []
         }],
+        "operationId": "deleteMangaListItem",
         "parameters": [{
                 "name": "mangaid",
                 "in": "query",

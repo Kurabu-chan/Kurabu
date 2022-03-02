@@ -7,6 +7,7 @@
         "security": [{
             "bearerAuth": []
         }],
+        "operationId": "getAnimeDetails",
         "parameters": [{
                 "name": "animeid",
                 "in": "query",

@@ -7,6 +7,7 @@
         "security": [{
             "bearerAuth": []
         }],
+        "operationId": "updateAnimeListItem",
         "parameters": [{
                 "name": "animeId",
                 "description": "The id of the anime whose list status you want to update",
@@ -289,6 +290,7 @@
         "tags": [
             "List"
         ],
+        "operationId": "deleteAnimeListItem",
         "security": [{
             "bearerAuth": []
         }],

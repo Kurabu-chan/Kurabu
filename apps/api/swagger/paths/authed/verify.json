@@ -5,6 +5,7 @@
             "Auth"
         ],
         "deprecated": true,
+        "operationId": "verifyEmailAddress",
         "parameters": [{
                 "name": "redirect",
                 "in": "query",

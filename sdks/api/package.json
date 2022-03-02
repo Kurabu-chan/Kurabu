@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/api-sdk",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "main": "./build/api.js",
     "types": "./build/api.d.ts",
     "license": "MIT",
