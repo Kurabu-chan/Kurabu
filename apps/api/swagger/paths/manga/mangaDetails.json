@@ -1,31 +1,19 @@
 {
     "get": {
-        "description": "Search for animes using a query",
+        "description": "Get the details for a manga",
         "tags": [
-            "Anime"
+            "Manga"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
-                "name": "limit",
+        "security": [{
+            "bearerAuth": []
+        }],
+        "operationId": "getMangaDetails",
+        "parameters": [{
+                "name": "mangaid",
                 "in": "query",
-                "description": "The maximum amount of animes you want to retrieve",
-                "example": "5",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            {
-                "name": "offset",
-                "in": "query",
-                "description": "The index at which you want to start gettign animes, used for pagination",
-                "example": "5",
-                "required": false,
+                "description": "The id of the manga you want the details of",
+                "required": true,
+                "example": "0",
                 "schema": {
                     "type": "integer"
                 }
@@ -33,7 +21,7 @@
             {
                 "name": "fields",
                 "in": "query",
-                "description": "The fields you want to get from the anime.",
+                "description": "The fields you want to get from the manga.",
                 "required": false,
                 "example": "id, title, main_picture, alternative_titles",
                 "schema": {
@@ -51,16 +39,6 @@
                     "type": "string",
                     "format": "uuid"
                 }
-            },
-            {
-                "name": "query",
-                "in": "query",
-                "descritpion": "The type of ranking to get.",
-                "required": true,
-                "example": "sword art",
-                "schema": {
-                    "type": "string"
-                }
             }
         ],
         "responses": {
@@ -68,7 +46,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./list.schema.json"
+                            "$ref": "./mangaDetails.schema.json"
                         }
                     }
                 }
@@ -77,8 +55,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -113,8 +90,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -143,8 +119,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/mALConnectionError.schema.json"
                                 },
                                 {

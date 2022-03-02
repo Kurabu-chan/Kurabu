@@ -1,16 +1,14 @@
 {
     "get": {
-        "description": "Get the animes airing in a given season",
+        "description": "Search for animes using a query",
         "tags": [
             "Anime"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
+        "security": [{
+            "bearerAuth": []
+        }],
+        "operationId": "searchAnimes",
+        "parameters": [{
                 "name": "limit",
                 "in": "query",
                 "description": "The maximum amount of animes you want to retrieve",
@@ -53,45 +51,13 @@
                 }
             },
             {
-                "name": "year",
+                "name": "query",
                 "in": "query",
-                "descritpion": "The year to get the season from",
-                "required": false,
-                "example": 2021,
+                "descritpion": "The type of ranking to get.",
+                "required": true,
+                "example": "sword art",
                 "schema": {
-                    "type": "integer",
-                    "minimum": 1917,
-                    "maximum": 2022
-                }
-            },
-            {
-                "name": "season",
-                "in": "query",
-                "descritpion": "The season to get",
-                "required": false,
-                "example": "winter",
-                "schema": {
-                    "type": "string",
-                    "enum": [
-                        "winter",
-                        "summer",
-                        "fall",
-                        "spring"
-                    ]
-                }
-            },
-            {
-                "name": "sort",
-                "in": "query",
-                "descritpion": "The field to sort by",
-                "required": false,
-                "example": "anime_score",
-                "schema": {
-                    "type": "string",
-                    "enum": [
-                        "anime_score",
-                        "anime_num_list_users"
-                    ]
+                    "type": "string"
                 }
             }
         ],
@@ -100,7 +66,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./list.schema.json"
+                            "$ref": "./animeList.schema.json"
                         }
                     }
                 }
@@ -109,8 +75,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -145,8 +110,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -175,8 +139,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/mALConnectionError.schema.json"
                                 },
                                 {

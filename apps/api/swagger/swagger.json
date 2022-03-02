@@ -6,40 +6,40 @@
     },
     "paths": {
         "/anime/details": {
-            "$ref": "./paths/anime/details.json"
+            "$ref": "./paths/anime/animeDetails.json"
         },
         "/anime/list": {
-            "$ref": "./paths/anime/list.json"
+            "$ref": "./paths/anime/animeList.json"
         },
         "/anime/list/item": {
-            "$ref": "./paths/anime/list/item.json"
+            "$ref": "./paths/anime/list/animeItem.json"
         },
         "/anime/ranking": {
-            "$ref": "./paths/anime/ranking.json"
+            "$ref": "./paths/anime/animeRanking.json"
         },
         "/anime/search": {
-            "$ref": "./paths/anime/search.json"
+            "$ref": "./paths/anime/animeSearch.json"
         },
         "/anime/seasonal": {
-            "$ref": "./paths/anime/seasonal.json"
+            "$ref": "./paths/anime/animeSeasonal.json"
         },
         "/anime/suggestions": {
-            "$ref": "./paths/anime/suggestions.json"
+            "$ref": "./paths/anime/animeSuggestions.json"
         },
         "/manga/details": {
-            "$ref": "./paths/manga/details.json"
+            "$ref": "./paths/manga/mangaDetails.json"
         },
         "/manga/list": {
-            "$ref": "./paths/manga/list.json"
+            "$ref": "./paths/manga/mangaList.json"
         },
         "/manga/list/item": {
-            "$ref": "./paths/manga/list/item.json"
+            "$ref": "./paths/manga/list/mangaItem.json"
         },
         "/manga/ranking": {
-            "$ref": "./paths/manga/ranking.json"
+            "$ref": "./paths/manga/mangaRanking.json"
         },
         "/manga/search": {
-            "$ref": "./paths/manga/search.json"
+            "$ref": "./paths/manga/mangaSearch.json"
         },
         "/authed/cancelRegister": {
             "$ref": "./paths/authed/cancelRegister.json"

@@ -1,15 +1,23 @@
 {
     "get": {
-        "description": "Get a list of suggested animes",
+        "description": "Get your anime list",
         "tags": [
-            "Anime"
+            "List"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
+        "security": [{
+            "bearerAuth": []
+        }],
+        "operationId": "getAnimeList",
+        "parameters": [{
+                "name": "fields",
+                "in": "query",
+                "description": "The fields that should be included in the individual animes retrieved.",
+                "example": "id, title, main_picture, alternative_titles",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
             {
                 "name": "limit",
                 "in": "query",
@@ -31,11 +39,11 @@
                 }
             },
             {
-                "name": "fields",
+                "name": "sort",
                 "in": "query",
-                "description": "The fields you want to get from the anime.",
+                "description": "The thing you want to sort by",
+                "example": "list_score",
                 "required": false,
-                "example": "id, title, main_picture, alternative_titles",
                 "schema": {
                     "type": "string"
                 }
@@ -51,6 +59,16 @@
                     "type": "string",
                     "format": "uuid"
                 }
+            },
+            {
+                "name": "status",
+                "in": "query",
+                "description": "",
+                "example": "watching",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
             }
         ],
         "responses": {
@@ -58,7 +76,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./list.schema.json"
+                            "$ref": "./animeList.schema.json"
                         }
                     }
                 }
@@ -67,8 +85,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -103,8 +120,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -133,8 +149,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/mALConnectionError.schema.json"
                                 },
                                 {
