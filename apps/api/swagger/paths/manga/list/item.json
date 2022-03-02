@@ -4,13 +4,10 @@
         "tags": [
             "List"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
                 "name": "mangaId",
                 "description": "The id of the manga whose list status you want to update",
                 "in": "query",
@@ -124,7 +121,14 @@
                 "in": "query",
                 "required": null,
                 "schema": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "reading",
+                        "completed",
+                        "on_hold",
+                        "dropped",
+                        "plan_to_read"
+                    ]
                 },
                 "example": "watching"
             },
@@ -141,14 +145,81 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "enum": [
+                                                "reading",
+                                                "completed",
+                                                "on_hold",
+                                                "dropped",
+                                                "plan_to_read"
+                                            ]
+                                        },
+                                        "score": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 10
+                                        },
+                                        "num_volumes_read": {
+                                            "type": "integer"
+                                        },
+                                        "num_chapters_read": {
+                                            "type": "integer"
+                                        },
+                                        "is_rereading": {
+                                            "type": "boolean"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "priority": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 2
+                                        },
+                                        "num_times_reread": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                        },
+                                        "reread_value": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "maximum": 5
+                                        },
+                                        "tags": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "comments": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "success": {
+                                    "type": "integer",
+                                    "const": 0
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "403": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -183,8 +254,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -213,8 +283,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/mALConnectionError.schema.json"
                                 },
                                 {
@@ -240,13 +309,10 @@
         "tags": [
             "List"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
-            {
+        "security": [{
+            "bearerAuth": []
+        }],
+        "parameters": [{
                 "name": "mangaid",
                 "in": "query",
                 "description": "The id of the manga you want to remove from your list",
@@ -271,17 +337,28 @@
         ],
         "responses": {
             "200": {
-                "description": "Success"
+                "description": "The fact that it says success 0 does not mean it did not work, this is just the response from MAL",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "integer",
+                                    "const": 0
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "404": {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "../../../errors/mALMediaNotFound.schema.json"
-                                }
-                            ]
+                            "oneOf": [{
+                                "$ref": "../../../errors/mALMediaNotFound.schema.json"
+                            }]
                         },
                         "examples": {
                             "0": {
@@ -295,8 +372,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -325,8 +401,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../../errors/mALConnectionError.schema.json"
                                 },
                                 {

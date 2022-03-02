@@ -34,22 +34,8 @@
                 }
             }
         },
-        "average_episode_duration": {
-            "type": "integer"
-        },
         "background": {
             "type": "string"
-        },
-        "broadcast": {
-            "type": "object",
-            "properties": {
-                "day_of_the_week": {
-                    "type": "string"
-                },
-                "start_time": {
-                    "type": "string"
-                }
-            }
         },
         "created_at": {
             "type": "string",
@@ -82,12 +68,13 @@
             "type": "string",
             "enum": [
                 "unknown",
-                "tv",
-                "ova",
-                "movie",
-                "special",
-                "ona",
-                "music"
+                "manga",
+                "novel",
+                "one_shot",
+                "doujinshi",
+                "manhwa",
+                "manhua",
+                "oel"
             ]
         },
         "nsfw": {
@@ -98,7 +85,11 @@
                 "black"
             ]
         },
-        "num_episodes": {
+        "num_chapters": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "num_volumes": {
             "type": "integer",
             "minimum": 0
         },
@@ -132,33 +123,6 @@
             "type": "integer",
             "minimum": 0
         },
-        "rating": {
-            "oneOf": [{
-                    "type": "string",
-                    "const": "g"
-                },
-                {
-                    "type": "string",
-                    "const": "pg"
-                },
-                {
-                    "type": "string",
-                    "const": "pg_13"
-                },
-                {
-                    "type": "string",
-                    "const": "r"
-                },
-                {
-                    "type": "string",
-                    "const": "r+"
-                },
-                {
-                    "type": "string",
-                    "const": "rx"
-                }
-            ]
-        },
         "recommendations": {
             "type": "array",
             "items": {
@@ -176,8 +140,8 @@
                         "id": 205,
                         "title": "Samurai Champloo",
                         "main_picture": {
-                            "medium": "https://api-cdn.myanimelist.net/images/anime/11/29134.jpg",
-                            "large": "https://api-cdn.myanimelist.net/images/anime/11/29134l.jpg"
+                            "medium": "https://api-cdn.myanimelist.net/images/manga/11/29134.jpg",
+                            "large": "https://api-cdn.myanimelist.net/images/manga/11/29134l.jpg"
                         }
                     },
                     "num_recommendations": 111
@@ -282,46 +246,9 @@
                 }
             }
         },
-        "source": {
-            "type": "string",
-            "enum": [
-                "other",
-                "original",
-                "manga",
-                "4_koma_manga",
-                "web_manga",
-                "digital_manga",
-                "novel",
-                "light_novel",
-                "visual_novel",
-                "game",
-                "card_game",
-                "book",
-                "picture_book",
-                "radio",
-                "music"
-            ]
-        },
         "start_date": {
             "type": "string",
             "format": "date"
-        },
-        "start_season": {
-            "type": "object",
-            "properties": {
-                "year": {
-                    "type": "integer"
-                },
-                "season": {
-                    "type": "string",
-                    "enum": [
-                        "spring",
-                        "summer",
-                        "fall",
-                        "winter"
-                    ]
-                }
-            }
         },
         "statistics": {
             "type": "object",
@@ -329,7 +256,7 @@
                 "status": {
                     "type": "object",
                     "properties": {
-                        "watching": {
+                        "reading": {
                             "type": "integer"
                         },
                         "completed": {
@@ -341,7 +268,7 @@
                         "dropped": {
                             "type": "integer"
                         },
-                        "plan_to_watch": {
+                        "plan_to_read": {
                             "type": "integer"
                         }
                     }
@@ -354,24 +281,10 @@
         "status": {
             "type": "string",
             "enum": [
-                "finished_airing",
-                "currently_airing",
-                "not_yet_aired"
+                "finished",
+                "currently_publishing",
+                "not_yet_published"
             ]
-        },
-        "studios": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            }
         },
         "synopsis": {
             "type": "string"
@@ -386,20 +299,23 @@
                 "status": {
                     "type": "string",
                     "enum": [
-                        "watching",
+                        "reading",
                         "completed",
                         "on_hold",
                         "dropped",
-                        "plan_to_watch"
+                        "plan_to_read"
                     ]
                 },
                 "score": {
                     "type": "integer"
                 },
-                "num_episodes_watched": {
+                "num_volumes_read": {
                     "type": "integer"
                 },
-                "is_rewatching": {
+                "num_chapters_read": {
+                    "type": "integer"
+                },
+                "is_rereading": {
                     "type": "boolean"
                 },
                 "updated_at": {
@@ -417,10 +333,10 @@
                 "priority": {
                     "type": "integer"
                 },
-                "num_times_rewatched": {
+                "num_times_reread": {
                     "type": "integer"
                 },
-                "rewatch_value": {
+                "reread_value": {
                     "type": "integer"
                 },
                 "tags": {
@@ -431,6 +347,28 @@
                 },
                 "comments": {
                     "type": "string"
+                }
+            }
+        },
+        "serialization": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "node": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "role": {
+                        "type": "string"
+                    }
                 }
             }
         }
