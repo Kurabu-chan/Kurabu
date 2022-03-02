@@ -33,5 +33,8 @@
     "engines": {
         "yarn": ">=1.22.17",
         "node": ">=14.0.0"
+    },
+    "resolutions": {
+        "swagger-ui-dist": "4.6.0"
     }
 }
