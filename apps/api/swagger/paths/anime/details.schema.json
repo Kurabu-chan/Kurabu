@@ -165,7 +165,7 @@
                 "type": "object",
                 "properties": {
                     "node": {
-                        "$ref": "#"
+                        "$ref": "#/"
                     },
                     "num_recommendations": {
                         "type": "integer"
@@ -190,7 +190,7 @@
                 "type": "object",
                 "properties": {
                     "node": {
-                        "$ref": "#"
+                        "$ref": "#/"
                     },
                     "relation_type": {
                         "type": "string",
@@ -239,7 +239,7 @@
                 "type": "object",
                 "properties": {
                     "node": {
-                        "$ref": "#"
+                        "$ref": "#/"
                     },
                     "relation_type": {
                         "type": "string",
