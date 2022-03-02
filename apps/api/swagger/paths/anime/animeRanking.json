@@ -1,26 +1,17 @@
 {
     "get": {
-        "description": "Get your manga list",
+        "description": "Get the top rankings for anime",
         "tags": [
-            "List"
+            "Anime"
         ],
         "security": [{
             "bearerAuth": []
         }],
+        "operationId": "getAnimeRankings",
         "parameters": [{
-                "name": "fields",
-                "in": "query",
-                "description": "The fields that should be included in the individual mangas retrieved.",
-                "example": "id, title, main_picture, alternative_titles",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            {
                 "name": "limit",
                 "in": "query",
-                "description": "The maximum amount of mangas you want to retrieve",
+                "description": "The maximum amount of animes you want to retrieve",
                 "example": "5",
                 "required": false,
                 "schema": {
@@ -30,7 +21,7 @@
             {
                 "name": "offset",
                 "in": "query",
-                "description": "The index at which you want to start gettign mangas, used for pagination",
+                "description": "The index at which you want to start gettign animes, used for pagination",
                 "example": "5",
                 "required": false,
                 "schema": {
@@ -38,11 +29,11 @@
                 }
             },
             {
-                "name": "sort",
+                "name": "fields",
                 "in": "query",
-                "description": "The thing you want to sort by",
-                "example": "list_score",
+                "description": "The fields you want to get from the anime.",
                 "required": false,
+                "example": "id, title, main_picture, alternative_titles",
                 "schema": {
                     "type": "string"
                 }
@@ -60,11 +51,11 @@
                 }
             },
             {
-                "name": "status",
+                "name": "rankingType",
                 "in": "query",
-                "description": "",
-                "example": "watching",
+                "descritpion": "The type of ranking to get.",
                 "required": false,
+                "example": "all",
                 "schema": {
                     "type": "string"
                 }
@@ -75,7 +66,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./list.schema.json"
+                            "$ref": "./animeRanking.schema.json"
                         }
                     }
                 }

@@ -1,51 +1,29 @@
 {
     "get": {
-        "description": "Get your anime list",
+        "description": "Get the details for an anime",
         "tags": [
-            "List"
+            "Anime"
         ],
-        "security": [
-            {
-                "bearerAuth": []
-            }
-        ],
-        "parameters": [
+        "security": [{
+            "bearerAuth": []
+        }],
+        "operationId": "getAnimeDetails",
+        "parameters": [{
+                "name": "animeid",
+                "in": "query",
+                "description": "The id of the anime you want the details of",
+                "required": true,
+                "example": "0",
+                "schema": {
+                    "type": "integer"
+                }
+            },
             {
                 "name": "fields",
                 "in": "query",
-                "description": "The fields that should be included in the individual animes retrieved.",
+                "description": "The fields you want to get from the anime.",
+                "required": false,
                 "example": "id, title, main_picture, alternative_titles",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
-            },
-            {
-                "name": "limit",
-                "in": "query",
-                "description": "The maximum amount of animes you want to retrieve",
-                "example": "5",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            {
-                "name": "offset",
-                "in": "query",
-                "description": "The index at which you want to start gettign animes, used for pagination",
-                "example": "5",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                }
-            },
-            {
-                "name": "sort",
-                "in": "query",
-                "description": "The thing you want to sort by",
-                "example": "list_score",
-                "required": false,
                 "schema": {
                     "type": "string"
                 }
@@ -61,16 +39,6 @@
                     "type": "string",
                     "format": "uuid"
                 }
-            },
-            {
-                "name": "status",
-                "in": "query",
-                "description": "",
-                "example": "watching",
-                "required": false,
-                "schema": {
-                    "type": "string"
-                }
             }
         ],
         "responses": {
@@ -78,7 +46,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./list.schema.json"
+                            "$ref": "./animeDetails.schema.json"
                         }
                     }
                 }
@@ -87,8 +55,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/authenticationError.schema.json"
                                 },
                                 {
@@ -123,8 +90,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/malformedParameterError.schema.json"
                                 },
                                 {
@@ -153,8 +119,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "oneOf": [
-                                {
+                            "oneOf": [{
                                     "$ref": "../../errors/mALConnectionError.schema.json"
                                 },
                                 {

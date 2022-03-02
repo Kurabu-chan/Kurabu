@@ -1,15 +1,16 @@
 {
     "post": {
-        "description": "Update the list status for an manga",
+        "description": "Update the list status for an anime",
         "tags": [
             "List"
         ],
         "security": [{
             "bearerAuth": []
         }],
+        "operationId": "updateAnimeListItem",
         "parameters": [{
-                "name": "mangaId",
-                "description": "The id of the manga whose list status you want to update",
+                "name": "animeId",
+                "description": "The id of the anime whose list status you want to update",
                 "in": "query",
                 "required": true,
                 "schema": {
@@ -28,8 +29,8 @@
                 "example": "we need more seasons"
             },
             {
-                "name": "isRereading",
-                "description": "Whether the manga is being reread right now",
+                "name": "isRewatching",
+                "description": "Whether the anime is being rewatched right now",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -38,8 +39,8 @@
                 "example": "true"
             },
             {
-                "name": "numTimesReread",
-                "description": "The amount of times reread",
+                "name": "numTimesRewatched",
+                "description": "The amount of times rewatched",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -48,18 +49,8 @@
                 "example": "100"
             },
             {
-                "name": "numVolumesRead",
-                "description": "The amount of volumes read",
-                "in": "query",
-                "required": false,
-                "schema": {
-                    "type": "integer"
-                },
-                "example": "24"
-            },
-            {
-                "name": "numChaptersRead",
-                "description": "The amount of chapters read",
+                "name": "numWatchedEpisodes",
+                "description": "The amount of episodes watched",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -69,7 +60,7 @@
             },
             {
                 "name": "priority",
-                "description": "The priority to give the manga",
+                "description": "The priority to give the anime",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -80,7 +71,7 @@
                 "example": "1"
             },
             {
-                "name": "rereadValue",
+                "name": "rewatchValue",
                 "description": "No clue what this does, but we give it to MAL and it works",
                 "in": "query",
                 "required": false,
@@ -93,7 +84,7 @@
             },
             {
                 "name": "score",
-                "description": "The score to give to the manga",
+                "description": "The score to give to the anime",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -117,24 +108,17 @@
             },
             {
                 "name": "status",
-                "description": "The status to give the manga",
+                "description": "The status to give the anime",
                 "in": "query",
                 "required": null,
                 "schema": {
-                    "type": "string",
-                    "enum": [
-                        "reading",
-                        "completed",
-                        "on_hold",
-                        "dropped",
-                        "plan_to_read"
-                    ]
+                    "type": "string"
                 },
                 "example": "watching"
             },
             {
                 "name": "tags",
-                "description": "Some tags to add to the manga",
+                "description": "Some tags to add to the anime",
                 "in": "query",
                 "required": false,
                 "schema": {
@@ -156,11 +140,11 @@
                                         "status": {
                                             "type": "string",
                                             "enum": [
-                                                "reading",
+                                                "watching",
                                                 "completed",
                                                 "on_hold",
                                                 "dropped",
-                                                "plan_to_read"
+                                                "plan_to_watch"
                                             ]
                                         },
                                         "score": {
@@ -168,13 +152,10 @@
                                             "minimum": 0,
                                             "maximum": 10
                                         },
-                                        "num_volumes_read": {
+                                        "num_episodes_watched": {
                                             "type": "integer"
                                         },
-                                        "num_chapters_read": {
-                                            "type": "integer"
-                                        },
-                                        "is_rereading": {
+                                        "is_rewatching": {
                                             "type": "boolean"
                                         },
                                         "updated_at": {
@@ -186,11 +167,11 @@
                                             "minimum": 0,
                                             "maximum": 2
                                         },
-                                        "num_times_reread": {
+                                        "num_times_rewatched": {
                                             "type": "integer",
                                             "minimum": 0
                                         },
-                                        "reread_value": {
+                                        "rewatch_value": {
                                             "type": "integer",
                                             "minimum": 0,
                                             "maximum": 5
@@ -305,17 +286,18 @@
         }
     },
     "delete": {
-        "description": "Remove a manga from your list",
+        "description": "Remove an anime from your list",
         "tags": [
             "List"
         ],
+        "operationId": "deleteAnimeListItem",
         "security": [{
             "bearerAuth": []
         }],
         "parameters": [{
-                "name": "mangaid",
+                "name": "animeId",
                 "in": "query",
-                "description": "The id of the manga you want to remove from your list",
+                "description": "The id of the anime you want to delete",
                 "required": true,
                 "example": "0",
                 "schema": {

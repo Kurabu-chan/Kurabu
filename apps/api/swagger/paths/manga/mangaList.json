@@ -1,13 +1,24 @@
 {
     "get": {
-        "description": "Get the top rankings for manga",
+        "description": "Get your manga list",
         "tags": [
-            "Manga"
+            "List"
         ],
         "security": [{
             "bearerAuth": []
         }],
+        "operationId": "getMangaList",
         "parameters": [{
+                "name": "fields",
+                "in": "query",
+                "description": "The fields that should be included in the individual mangas retrieved.",
+                "example": "id, title, main_picture, alternative_titles",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            {
                 "name": "limit",
                 "in": "query",
                 "description": "The maximum amount of mangas you want to retrieve",
@@ -28,11 +39,11 @@
                 }
             },
             {
-                "name": "fields",
+                "name": "sort",
                 "in": "query",
-                "description": "The fields you want to get from the manga.",
+                "description": "The thing you want to sort by",
+                "example": "list_score",
                 "required": false,
-                "example": "id, title, main_picture, alternative_titles",
                 "schema": {
                     "type": "string"
                 }
@@ -50,11 +61,11 @@
                 }
             },
             {
-                "name": "rankingType",
+                "name": "status",
                 "in": "query",
-                "descritpion": "The type of ranking to get.",
+                "description": "",
+                "example": "watching",
                 "required": false,
-                "example": "all",
                 "schema": {
                     "type": "string"
                 }
@@ -65,7 +76,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./ranking.schema.json"
+                            "$ref": "./mangaList.schema.json"
                         }
                     }
                 }

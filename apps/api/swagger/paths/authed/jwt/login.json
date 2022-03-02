@@ -4,6 +4,7 @@
         "tags": [
             "JWT"
         ],
+        "operationId": "loginJWT",
         "parameters": [{
                 "name": "email",
                 "in": "query",

@@ -7,6 +7,7 @@
         "security": [{
             "bearerAuth": []
         }],
+        "operationId": "verifyEmailAddressJWT",
         "parameters": [{
                 "name": "redirect",
                 "in": "query",
