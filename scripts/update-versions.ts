@@ -366,6 +366,7 @@ async function getBranchHead(branch: string = "main") {
     const json = await res.json();
 
     if (!("commit" in (json as any))) {
+        console.log(json);
         throw new Error("No commit in branch");
     }
 

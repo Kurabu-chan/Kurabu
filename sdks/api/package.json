@@ -1,8 +1,8 @@
 {
     "name": "@kurabu/api-sdk",
     "version": "1.0.1",
-    "main": "./build/index.js",
-    "types": "./build/index.d.ts",
+    "main": "./build/api.js",
+    "types": "./build/api.d.ts",
     "license": "MIT",
     "scripts": {
         "prebuild": "shx rm -rf ./swagger/* && shx mkdir -p swagger && shx cp -r ../../apps/api/swagger/* ./swagger && openapi-generator-cli generate -i swagger/swagger.json -o lib -g typescript-node --strict-spec false",
