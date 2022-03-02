@@ -1,0 +1,23 @@
+{
+    "type": "object",
+    "properties": {
+        "message": {
+            "type": "string"
+        },
+        "status": {
+            "type": "string",
+            "const": "success",
+            "example": "success"
+        },
+        "userStatus": {
+            "type": "string",
+            "enum": [
+                "done",
+                "verif",
+                "authing",
+                "tokens"
+            ],
+            "example": "done"
+        }
+    }
+}

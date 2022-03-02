@@ -32,7 +32,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./authschemas.json#/schemas/register"
+                            "$ref": "./schemas/register.schema.json"
                         }
                     }
                 }

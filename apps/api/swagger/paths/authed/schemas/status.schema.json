@@ -1,0 +1,20 @@
+{
+    "type": "object",
+    "properties": {
+        "message": {
+            "type": "string",
+            "enum": [
+                "done",
+                "verif",
+                "authing",
+                "tokens"
+            ],
+            "example": "done"
+        },
+        "status": {
+            "type": "string",
+            "const": "success",
+            "example": "success"
+        }
+    }
+}

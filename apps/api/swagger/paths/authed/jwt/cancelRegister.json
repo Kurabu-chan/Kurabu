@@ -24,7 +24,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "../authschemas.json#/schemas/cancelRegister"
+                            "$ref": "../schemas/cancelRegister.schema.json"
                         }
                     }
                 }

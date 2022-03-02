@@ -43,7 +43,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./authschemas.json#/schemas/verif"
+                            "$ref": "./schemas/verif.schema.json"
                         }
                     }
                 }

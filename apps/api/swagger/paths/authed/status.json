@@ -23,7 +23,7 @@
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "./authschemas.json#/schemas/status"
+                            "$ref": "./schemas/status.schema.json"
                         }
                     }
                 }

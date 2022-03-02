@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {
+        "message": {
+            "type": "string",
+            "format": "uri"
+        },
+        "status": {
+            "type": "string",
+            "const": "success",
+            "example": "success"
+        }
+    }
+}
