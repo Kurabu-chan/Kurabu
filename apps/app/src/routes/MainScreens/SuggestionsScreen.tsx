@@ -3,15 +3,15 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import AnimeSuggestionsSource from "#api/Anime/AnimeSuggestions";
-import MediaNodeSource from "#api/MediaNodeSource";
+import {AnimeSuggestionsSource} from "#data/anime/AnimeSuggestionsSource";
+import {MediaListSource} from "#data/MediaListSource";
 import MediaList from "#comps/MediaList";
 import { Colors } from "#config/Colors";
 
 type StateType = {
     node: {
         key: string;
-        nodeSource: MediaNodeSource;
+        nodeSource: MediaListSource;
     };
     listenerToUnMount: any;
 };

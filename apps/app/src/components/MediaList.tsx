@@ -1,22 +1,22 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { MediaNode } from "#api/ApiBasicTypes";
-import MediaNodeSource from "#api/MediaNodeSource";
 import { Colors } from "#config/Colors";
 import MediaItem from "./MediaItem";
+import { MediaListSource } from "#data/MediaListSource";
+import { AnimeListData, MangaListData } from "@kurabu/api-sdk";
 
 type MediaListState = {
     title: string;
-    data: MediaNode[];
-    mediaNodeSource: MediaNodeSource;
+    data: (AnimeListData | MangaListData)[];
+    mediaNodeSource: MediaListSource;
     navigator: StackNavigationProp<any, any>;
     offset: number;
 };
 
 type MediaListProps = {
     title: string;
-    mediaNodeSource: MediaNodeSource;
+    mediaNodeSource: MediaListSource;
     navigator: StackNavigationProp<any, any>;
     onCreate?: (media: MediaList) => void;
 };
@@ -39,7 +39,7 @@ class MediaList extends React.Component<MediaListProps, MediaListState> {
         this.refresh(this.state.mediaNodeSource);
     }
 
-    public refresh(nodeSource: MediaNodeSource) {
+    public refresh(nodeSource: MediaListSource) {
         nodeSource.MakeRequest(20).then((data) => {
             this.setState((prevState) => ({
                 ...prevState,

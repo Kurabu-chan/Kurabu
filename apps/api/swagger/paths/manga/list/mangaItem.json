@@ -14,9 +14,9 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "integer"
                 },
-                "example": "2"
+                "example": 2
             },
             {
                 "name": "comments",
@@ -122,14 +122,7 @@
                 "in": "query",
                 "required": null,
                 "schema": {
-                    "type": "string",
-                    "enum": [
-                        "reading",
-                        "completed",
-                        "on_hold",
-                        "dropped",
-                        "plan_to_read"
-                    ]
+                    "$ref": "../../../additional/mangaStatus.schema.json"
                 },
                 "example": "watching"
             },
@@ -155,14 +148,7 @@
                                     "type": "object",
                                     "properties": {
                                         "status": {
-                                            "type": "string",
-                                            "enum": [
-                                                "reading",
-                                                "completed",
-                                                "on_hold",
-                                                "dropped",
-                                                "plan_to_read"
-                                            ]
+                                            "$ref": "../../../additional/mangaStatus.schema.json"
                                         },
                                         "score": {
                                             "type": "integer",

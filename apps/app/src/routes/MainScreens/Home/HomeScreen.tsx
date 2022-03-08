@@ -6,8 +6,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import AnimeSeasonalSource from "#api/Anime/AnimeSeasonal";
-import MediaNodeSource from "#api/MediaNodeSource";
+import { AnimeSeasonalSource } from "#data/anime/AnimeSeasonalSource";
+import { MediaListSource } from "#data/MediaListSource";
 import MediaList from "#comps/MediaList";
 import { Colors } from "#config/Colors";
 import { getCurrentSeason } from "#helpers/seasonProvider";
@@ -20,7 +20,7 @@ type PropsType = {
 type StateType = {
     node: {
         key: string;
-        nodeSource: MediaNodeSource;
+        nodeSource: MediaListSource;
     };
     listenerToUnMount: any;
 };
@@ -31,7 +31,7 @@ export default class Home extends React.Component<any, StateType> {
         this.state = {
             node: {
                 key: "Currently Airing",
-                nodeSource: new AnimeSeasonalSource(new Date().getFullYear(), getCurrentSeason()),
+                nodeSource: new AnimeSeasonalSource(undefined, new Date().getFullYear(), getCurrentSeason()),
             },
             listenerToUnMount: undefined,
         };

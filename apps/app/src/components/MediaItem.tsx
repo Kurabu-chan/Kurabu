@@ -2,17 +2,17 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
-import { MediaNode } from "#api/ApiBasicTypes";
 import { Colors } from "#config/Colors";
+import { AnimeListData, MangaListData } from "@kurabu/api-sdk";
 
 type MediaItemProps = {
-    item: MediaNode;
+    item: AnimeListData | MangaListData;
     width?: number;
     navigator: StackNavigationProp<any, any>;
 };
 
 type MediaItemState = {
-    item: MediaNode;
+    item: AnimeListData | MangaListData;
     navigator: StackNavigationProp<any, any>;
 };
 
@@ -34,7 +34,7 @@ class MediaItem extends React.Component<MediaItemProps, MediaItemState> {
 
         this.state.navigator.push("DetailsScreen", {
             id: this.state.item.node.id,
-            media_type: this.state.item.node.media_type,
+            media_type: this.state.item.node.mediaType,
         });
     }
 
@@ -76,11 +76,11 @@ class MediaItem extends React.Component<MediaItemProps, MediaItemState> {
 
         return (
             <TouchableOpacity style={styles.mediaContainer} onPress={this.openDetails.bind(this)}>
-                {this.state.item.node.main_picture !== undefined ? (
+                {this.state.item.node.mainPicture !== undefined ? (
                     <Image
                         style={styles.image}
                         source={{
-                            uri: this.state.item.node.main_picture.medium,
+                            uri: this.state.item.node.mainPicture.medium,
                         }}
                     />
                 ) : (

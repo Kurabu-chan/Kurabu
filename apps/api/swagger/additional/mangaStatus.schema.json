@@ -1,0 +1,10 @@
+{
+    "type": "string",
+    "enum": [
+        "reading",
+        "completed",
+        "on_hold",
+        "dropped",
+        "plan_to_read"
+    ]
+}

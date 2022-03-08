@@ -97,7 +97,7 @@ class Authentication {
     /** make request to MAL, check status and save token */
     public async Trylogin(email: string, password: string): Promise<boolean> {
         //url to make request to
-        let url = `${Authentication.root}authed/jwt/login`;
+        let url = `${Authentication.root}/authed/jwt/login`;
         //the body of the request
         let body = {
             email: email.replace(" ", ""),
@@ -132,7 +132,7 @@ class Authentication {
 
     public async TryRegister(email: string, password: string): Promise<string> {
         //url to make request to
-        let url = `${Authentication.root}authed/jwt/register`;
+        let url = `${Authentication.root}/authed/jwt/register`;
         //the body of the request
 
         let body = {
@@ -159,7 +159,7 @@ class Authentication {
     }
 
     public async TryCancelRegister(token: string): Promise<boolean> {
-        let url = `${Authentication.root}authed/jwt/cancelRegister`;
+        let url = `${Authentication.root}/authed/jwt/cancelRegister`;
 
         let res = await fetch(url, {
             method: "POST",
@@ -180,7 +180,7 @@ class Authentication {
 
     public async TryVerif(token: string, code: string): Promise<JsonType> {
         //url to make request to
-        let url = `${Authentication.root}authed/jwt/verif`;
+        let url = `${Authentication.root}/authed/jwt/verif`;
         //the body of the request
 
         let body = {

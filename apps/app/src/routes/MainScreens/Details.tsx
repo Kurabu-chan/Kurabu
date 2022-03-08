@@ -1,6 +1,5 @@
 import React from "react";
-import TimeAgo from "react-native-timeago";
-import { GetMangaDetails } from "#api/Manga/MangaDetails";
+import { MangaDetailsSource } from "#data/manga/MangaDetailsSource";
 import { changeActivePage, changeBackButton, getActivePage } from "#helpers/backButton";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -12,22 +11,20 @@ import {
     StyleSheet,
     Text,
     View,
-    TouchableOpacity,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { GetAnimeDetails } from "#api/Anime/AnimeDetails";
-import { Media } from "#api/ApiBasicTypes";
+import { AnimeDetailsSource } from "#data/anime/AnimeDetailsSource";
 import { Divider } from "#comps/Divider";
 import { LargeText } from "#comps/LargeText";
 import MediaItem from "#comps/MediaItem";
 import { Colors } from "#config/Colors";
 import { HomeStackParamList } from "../MainStacks/HomeStack";
-import { niceTextFormat } from "#helpers/textFormatting";
 import { ListStatus } from "#comps/ListStatus";
+import { AnimeDetails, AnimeListData, MangaDetails, MangaListData } from "@kurabu/api-sdk";
 
 type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "DetailsScreen">;
@@ -36,10 +33,10 @@ type Props = {
 
 type State = {
     mediaId?: number;
-    anime?: Media;
+    media?: AnimeDetails | MangaDetails;
     listenerToUnMount: any;
     page: string;
-    mediaType: string;
+    mediaType: AnimeDetails.MediaTypeEnum | MangaDetails.MediaTypeEnum;
 };
 
 var sizer = Dimensions.get("window").width / 400;
@@ -48,7 +45,7 @@ export default class Details extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         let mediaId = props.route.params.id;
-        let mediaType = props.route.params.media_type;
+        let mediaType = props.route.params.mediaType;
         if (mediaId == undefined) {
             mediaId = 1;
         }
@@ -63,10 +60,10 @@ export default class Details extends React.Component<Props, State> {
         this.refresh();
     }
 
-    refresh() {
+    async refresh() {
         if (this.state.mediaId === undefined) return;
 
-        const mangaMediatTypes = [
+        const mangaMediaTypes = [
             "manga",
             "light_novel",
             "manhwa",
@@ -76,31 +73,21 @@ export default class Details extends React.Component<Props, State> {
             "novel",
         ];
 
-        if (mangaMediatTypes.includes(this.state.mediaType)) {
-            GetMangaDetails(this.state.mediaId)
-                .then((res) => {
-                    this.setState({
-                        mediaId: this.state.mediaId,
-                        anime: res,
-                    });
-                })
-                .catch((err) => {
-                    console.log("Manga details error weewooweewoo");
-                    console.log(err);
-                });
+        var detailsSource: MangaDetailsSource | AnimeDetailsSource;
+        if (mangaMediaTypes.includes(this.state.mediaType.toString())) {
+            detailsSource = new MangaDetailsSource(this.state.mediaId, []);
         } else {
-            GetAnimeDetails(this.state.mediaId)
-                .then((res) => {
-                    this.setState({
-                        mediaId: this.state.mediaId,
-                        anime: res,
-                    });
-                })
-                .catch((err) => {
-                    console.log("Anime details error weewooweewoo");
-                    console.log(err);
-                });
+            detailsSource = new AnimeDetailsSource(this.state.mediaId, []);
         }
+
+        const details = await detailsSource.MakeRequest();
+
+        this.setState({
+            mediaId: this.state.mediaId,
+            media: details,
+        })
+
+
     }
 
     componentDidMount() {
@@ -131,6 +118,44 @@ export default class Details extends React.Component<Props, State> {
         return text.slice(0, 1).toUpperCase() + text.slice(1, text.length);
     }
 
+    episodesLabel() {
+        if (this.state.media === undefined) {
+            return undefined;
+        }
+
+        if ("numEpisodes" in this.state.media) { 
+            return (<View>
+                <Text style={styles.TopAreaLabel}>Episodes:</Text>
+            </View>);
+        }
+
+        return (<View>
+            <Text style={styles.TopAreaLabel}>Chapters:</Text>
+            <Text style={styles.TopAreaLabel}>Volumes:</Text>
+        </View>);
+    }
+
+    episodesValue() {
+        if (this.state.media === undefined) {
+            return undefined;
+        }
+
+        if ("numEpisodes" in this.state.media) {
+            const media: AnimeDetails = this.state.media;
+
+            return (<View>
+                <Text style={styles.TopAreaLabel}>{valueOrND(media.numEpisodes)}</Text>
+            </View>);
+        }
+
+        const media: MangaDetails = this.state.media as MangaDetails;
+
+        return (<View>
+            <Text style={styles.TopAreaLabel}>{valueOrND(media.numChapters)}</Text>
+            <Text style={styles.TopAreaLabel}>{valueOrND(media.numVolumes)}</Text>
+        </View>);
+    }
+
     render() {
         return (
             <SafeAreaView style={styles.appContainer}>
@@ -147,7 +172,7 @@ export default class Details extends React.Component<Props, State> {
                         height: Dimensions.get("window").height,
                     }}
                 >
-                    {this.state.anime == undefined ? (
+                    {this.state.media == undefined ? (
                         <ActivityIndicator
                             style={styles.loading}
                             size="large"
@@ -159,19 +184,19 @@ export default class Details extends React.Component<Props, State> {
                                 <Image
                                     style={styles.image}
                                     source={{
-                                        uri: this.state.anime?.main_picture?.large,
+                                        uri: this.state.media?.mainPicture?.large,
                                     }}
                                 />
                                 <View style={styles.TitleArea}>
-                                    <Text style={styles.title}>{this.state.anime.title}</Text>
-                                    {this.state.anime.title !=
-                                    this.state.anime.alternative_titles?.en ? (
+                                    <Text style={styles.title}>{this.state.media.title}</Text>
+                                    {this.state.media.title !=
+                                    this.state.media.alternativeTitles?.en ? (
                                         <Text style={styles.alternateTitle}>
-                                            {this.state.anime.alternative_titles?.en}
+                                            {this.state.media.alternativeTitles?.en}
                                         </Text>
                                     ) : undefined}
                                     <Text style={styles.alternateTitle}>
-                                        {this.state.anime.alternative_titles?.ja}
+                                        {this.state.media.alternativeTitles?.ja}
                                     </Text>
                                     <Divider color={Colors.DIVIDER} widthPercentage={100} />
                                     <View style={styles.TopAreaData}>
@@ -182,13 +207,13 @@ export default class Details extends React.Component<Props, State> {
                                         </View>
                                         <View style={styles.TopAreaValues}>
                                             <Text style={styles.TopAreaValue}>
-                                                {this.state.anime.mean}
+                                                {this.state.media.mean}
                                             </Text>
                                             <Text style={styles.TopAreaValue}>
-                                                #{this.state.anime.rank}
+                                                #{this.state.media.rank}
                                             </Text>
                                             <Text style={styles.TopAreaValue}>
-                                                #{this.state.anime.popularity}
+                                                #{this.state.media.popularity}
                                             </Text>
                                         </View>
                                     </View>
@@ -197,23 +222,19 @@ export default class Details extends React.Component<Props, State> {
                                         <View style={styles.TopAreaLabels}>
                                             <Text style={styles.TopAreaLabel}>Status:</Text>
                                             <Text style={styles.TopAreaLabel}>Aired:</Text>
-                                            <Text style={styles.TopAreaLabel}>Episodes:</Text>
+                                            {this.episodesLabel()}
                                             <Text style={styles.TopAreaLabel}>Genres:</Text>
                                         </View>
                                         <View style={styles.TopAreaValues}>
                                             <Text style={styles.TopAreaValue}>
-                                                {this.niceString(this.state.anime.status)}
+                                                {this.niceString(this.state.media.status?.toString())}
                                             </Text>
                                             <Text style={styles.TopAreaValue}>
-                                                {this.state.anime.start_date}
+                                                {this.state.media.startDate}
                                             </Text>
+                                            {this.episodesValue()}
                                             <Text style={styles.TopAreaValue}>
-                                                {this.state.anime.num_episodes == 0
-                                                    ? "N/A"
-                                                    : this.state.anime.num_episodes}
-                                            </Text>
-                                            <Text style={styles.TopAreaValue}>
-                                                {this.state.anime.genres
+                                                {this.state.media.genres
                                                     ?.map((x) => x.name)
                                                     .join(", ")}
                                             </Text>
@@ -223,13 +244,13 @@ export default class Details extends React.Component<Props, State> {
                             </View>
                             <Text style={styles.head2}>Synopsis</Text>
                             <Divider color={Colors.DIVIDER} widthPercentage={100} />
-                            <LargeText text={this.state.anime.synopsis} />
-                            {this.state.anime.background != undefined &&
-                            this.state.anime.background != "" ? (
+                            <LargeText text={this.state.media.synopsis} />
+                            {this.state.media.background != undefined &&
+                            this.state.media.background != "" ? (
                                 <View>
                                     <Text style={styles.head2}>Background</Text>
                                     <Divider color={Colors.DIVIDER} widthPercentage={100} />
-                                    <LargeText text={this.state.anime.background} />
+                                    <LargeText text={this.state.media.background} />
                                 </View>
                             ) : undefined}
                             <Divider color={Colors.DIVIDER} widthPercentage={0} />
@@ -238,7 +259,7 @@ export default class Details extends React.Component<Props, State> {
                             <ListStatus
                                 parentRefresh={this.refresh.bind(this)}
                                 id={this.state.mediaId as number}
-                                props={this.state.anime.my_list_status}
+                                props={this.state.media.myListStatus}
                                 navigation={this.props.navigation}
                                 route={this.props.route}
                                 mediaType={this.state.mediaType}
@@ -248,13 +269,13 @@ export default class Details extends React.Component<Props, State> {
                             <Divider color={Colors.DIVIDER} widthPercentage={100} />
                             <FlatList
                                 horizontal={true}
-                                data={this.state.anime.recommendations?.map((x) => ({
+                                data={this.state.media.recommendations?.map((x) => ({
                                     ...x,
                                     node: {
                                         ...x.node,
-                                        media_type: this.state.mediaType,
+                                        mediaType: this.state.mediaType,
                                     },
-                                }))}
+                                } as (AnimeListData | MangaListData)))}
                                 renderItem={(item) => (
                                     <MediaItem
                                         item={item.item}
@@ -351,3 +372,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
 });
+
+function valueOrND(val: number | undefined) {
+    return val === 0 || val === undefined ? "N/A" : val;    
+}

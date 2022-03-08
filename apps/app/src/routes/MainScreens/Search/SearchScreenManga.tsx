@@ -1,11 +1,11 @@
-import { MangaSearchSource } from "#api/Manga/MangaSearch";
+import { MangaSearchSource } from "#data/manga/MangaSearchSource";
 import { changeActivePage } from "#helpers/backButton";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import MediaNodeSource from "#api/MediaNodeSource";
+import { MediaListSource } from "#data/MediaListSource";
 import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
 import SearchList from "#comps/DetailedUpdateList";
 import { Colors } from "#config/Colors";
@@ -19,7 +19,7 @@ type StateType = {
         searched: boolean;
         found: boolean;
     };
-    searchSource?: MediaNodeSource;
+    searchSource?: MediaListSource;
     animeList?: SearchList;
     listenerToUnMount: any;
 };

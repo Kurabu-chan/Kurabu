@@ -1,12 +1,7 @@
-import { GetAnimeListStatus } from "#api/Anime/List/AnimeListStatus";
-import { AnimeUpdateList } from "#api/Anime/List/AnimeUpdateList";
-import {
-    UpdateListStatusResult,
-    UpdateListStatusResultAnime,
-    UpdateListStatusResultManga,
-} from "#api/ApiBasicTypes";
-import { GetMangaListStatus } from "#api/Manga/List/MangaListStatus";
-import { MangaUpdateList } from "#api/Manga/List/MangaUpdateList";
+import { AnimeDetailsSource } from "#data/anime/AnimeDetailsSource";
+import { UpdateAnimeList } from "#actions/anime/UpdateAnimeList";
+import { MangaDetailsSource } from "#data/manga/MangaDetailsSource";
+import { UpdateMangaList } from "#actions/manga/UpdateMangaList";
 import { Colors } from "#config/Colors";
 import { changeActivePage, changeBackButton, getActivePage } from "#helpers/backButton";
 import { ListDetailsStateManager } from "#helpers/Screens/Main/ListDetails/StateManager";
@@ -29,6 +24,7 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import TimeAgo from "react-native-timeago";
+import { AnimeDetails, AnimeDetailsMyListStatus, MangaDetails, MangaDetailsMyListStatus } from "@kurabu/api-sdk";
 
 export type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "ListDetailsScreen">;
@@ -37,13 +33,13 @@ export type Props = {
 
 export type State = {
     mediaId: number;
-    listStatus?: Partial<UpdateListStatusResult>;
+    listStatus?: Partial<AnimeDetailsMyListStatus | MangaDetailsMyListStatus>;
     listenerToUnMount: any;
     page: string;
-    mediaType: string;
+    mediaType: AnimeDetails.MediaTypeEnum | MangaDetails.MediaTypeEnum;
     isAnime: boolean;
     isEditing: boolean;
-    before?: Partial<UpdateListStatusResult>;
+    before?: Partial<AnimeDetailsMyListStatus | MangaDetailsMyListStatus>;
 };
 
 var sizer = Dimensions.get("window").width / 400;
@@ -55,7 +51,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
         this.stateManager = new ListDetailsStateManager(this);
 
         let mediaId = props.route.params.id;
-        let mediaType = props.route.params.media_type;
+        let mediaType = props.route.params.mediaType;
         if (mediaId == undefined) {
             mediaId = 1;
         }
@@ -71,7 +67,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
             "doujinshi",
             "novel",
         ];
-        const isAnime = !mangaMediatTypes.includes(mediaType);
+        const isAnime = !mangaMediatTypes.includes(mediaType.toString());
         this.state = {
             mediaId: mediaId,
             listenerToUnMount: undefined,
@@ -84,44 +80,26 @@ export class ListDetails extends React.PureComponent<Props, State> {
         this.refresh();
     }
 
-    refresh() {
+    async refresh() {
+        const animeFields: string = "id, title, main_picture, alternative_titles, my_list_status{status, comments, is_rewatching, num_times_rewatched, num_watched_episodes, priority, rewatch_value, score, tags}";
+        const mangaFields: string = "id, title, main_picture, alternative_titles, my_list_status{status, score, num_volumes_read, num_chapters_read, is_rereading, updated_at, priority, num_times_reread, reread_value, tags, comments}";
+
+        let listSource: AnimeDetailsSource | MangaDetailsSource;
+
         if (!this.state.isAnime) {
-            GetMangaListStatus(this.state.mediaId)
-                .then((res) => {
-                    if (res === undefined) {
-                        this.props.navigation.pop();
-                        return;
-                    }
-                    this.setState({
-                        mediaId: this.state.mediaId,
-                        listStatus: res,
-                        isEditing: false,
-                        before: res,
-                    });
-                })
-                .catch((err) => {
-                    console.log("Manga list details error weewooweewoo");
-                    console.log(err);
-                });
+            listSource = new MangaDetailsSource(this.state.mediaId, mangaFields);
         } else {
-            GetAnimeListStatus(this.state.mediaId)
-                .then((res) => {
-                    if (res === undefined) {
-                        this.props.navigation.pop();
-                        return;
-                    }
-                    this.setState({
-                        mediaId: this.state.mediaId,
-                        listStatus: res,
-                        isEditing: false,
-                        before: res,
-                    });
-                })
-                .catch((err) => {
-                    console.log("Anime list details error weewooweewoo");
-                    console.log(err);
-                });
+            listSource = new AnimeDetailsSource(this.state.mediaId, animeFields);
         }
+
+        const listStatus = await listSource.MakeRequest();
+
+        this.setState({
+            mediaId: this.state.mediaId,
+            listStatus: listStatus.myListStatus,
+            isEditing: false,
+            before: listStatus.myListStatus,
+        });
     }
 
     componentDidMount() {
@@ -146,17 +124,17 @@ export class ListDetails extends React.PureComponent<Props, State> {
         if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
-    renderAnime(listStatus: UpdateListStatusResultAnime) {
+    renderAnime(listStatus: AnimeDetailsMyListStatus) {
         if (this.state.isEditing) return this.animeEditing(listStatus);
         else return this.animeDisplay(listStatus);
     }
 
-    renderManga(listStatus: UpdateListStatusResultManga) {
+    renderManga(listStatus: MangaDetailsMyListStatus) {
         if (this.state.isEditing) return this.mangaEditing(listStatus);
         else return this.mangaDisplay(listStatus);
     }
 
-    animeDisplay(listStatus: UpdateListStatusResultAnime) {
+    animeDisplay(listStatus: AnimeDetailsMyListStatus) {
         return (
             <View style={styles.Table}>
                 <View style={styles.Labels}>
@@ -181,18 +159,18 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.Label}>Updated:</Text>
                 </View>
                 <View style={styles.Values}>
-                    <Text style={styles.Value}>{niceTextFormat(listStatus.status)}</Text>
-                    <Text style={styles.Value}>{listStatus.num_episodes_watched}</Text>
+                    <Text style={styles.Value}>{niceTextFormat(listStatus.status?.toString())}</Text>
+                    <Text style={styles.Value}>{listStatus.numEpisodesWatched}</Text>
                     <Text style={styles.Value}># {listStatus.score}</Text>
                     <Text style={styles.Value}>{listStatus.priority}</Text>
 
                     <Text style={styles.Value}></Text>
 
                     <Text style={styles.Value}>
-                        {listStatus.is_rewatching == true ? "yes" : "no"}
+                        {listStatus.isRewatching == true ? "yes" : "no"}
                     </Text>
-                    <Text style={styles.Value}>{listStatus.num_times_rewatched}</Text>
-                    <Text style={styles.Value}>{listStatus.rewatch_value}</Text>
+                    <Text style={styles.Value}>{listStatus.numTimesRewatched}</Text>
+                    <Text style={styles.Value}>{listStatus.rewatchValue}</Text>
 
                     <Text style={styles.Value}></Text>
 
@@ -208,14 +186,14 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.Value}></Text>
 
                     <Text style={styles.Value}>
-                        <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
+                        <TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
                     </Text>
                 </View>
             </View>
         );
     }
 
-    animeEditing(listStatus: UpdateListStatusResultAnime) {
+    animeEditing(listStatus: AnimeDetailsMyListStatus) {
         return (
             <View style={styles.newTable}>
                 <View style={styles.newPair}></View>
@@ -243,7 +221,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.newLabel}>Watched episodes:</Text>
                     <TextInput
                         style={styles.newValue}
-                        value={listStatus.num_episodes_watched?.toString() ?? ""}
+                        value={listStatus.numEpisodesWatched?.toString() ?? ""}
                         onChangeText={this.stateManager.changeEpisodesWatched.bind(this)}
                         keyboardType={"numeric"}
                     />
@@ -272,7 +250,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                 <View style={styles.newPair}>
                     <Text style={styles.newLabel}>Rewatching:</Text>
                     <Picker
-                        selectedValue={listStatus.is_rewatching == true ? "true" : "false"}
+                        selectedValue={listStatus.isRewatching == true ? "true" : "false"}
                         style={styles.newValue}
                         onValueChange={this.stateManager.changeIsRewatching.bind(this)}
                     >
@@ -284,7 +262,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.newLabel}>Num times rewatched:</Text>
                     <TextInput
                         style={styles.newValue}
-                        value={listStatus.num_times_rewatched?.toString() ?? ""}
+                        value={listStatus.numTimesRewatched?.toString() ?? ""}
                         onChangeText={this.stateManager.changeNumTimesRewatched.bind(this)}
                         keyboardType={"numeric"}
                     />
@@ -293,7 +271,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.newLabel}>Rewatch value:</Text>
                     <TextInput
                         style={styles.newValue}
-                        value={listStatus.rewatch_value?.toString() ?? ""}
+                        value={listStatus.rewatchValue?.toString() ?? ""}
                         onChangeText={this.stateManager.changeRewatchValue.bind(this)}
                         keyboardType={"numeric"}
                     />
@@ -325,14 +303,14 @@ export class ListDetails extends React.PureComponent<Props, State> {
                 <View style={styles.newPair}>
                     <Text style={styles.newLabel}>Updated:</Text>
                     <Text style={styles.newValue}>
-                        <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
+                        <TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
                     </Text>
                 </View>
             </View>
         );
     }
 
-    mangaDisplay(listStatus: UpdateListStatusResultManga) {
+    mangaDisplay(listStatus: MangaDetailsMyListStatus) {
         return (
             <View style={styles.Table}>
                 <View style={styles.Labels}>
@@ -357,18 +335,18 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.Label}>Updated:</Text>
                 </View>
                 <View style={styles.Values}>
-                    <Text style={styles.Value}>{niceTextFormat(listStatus.status)}</Text>
-                    <Text style={styles.Value}>{listStatus.num_chapters_read}</Text>
-                    <Text style={styles.Value}>{listStatus.num_volumes_read}</Text>
+                    <Text style={styles.Value}>{niceTextFormat(listStatus.status?.toString())}</Text>
+                    <Text style={styles.Value}>{listStatus.numChaptersRead}</Text>
+                    <Text style={styles.Value}>{listStatus.numVolumesRead}</Text>
                     <Text style={styles.Value}># {listStatus.score}</Text>
 
                     <Text style={styles.Value}></Text>
 
                     <Text style={styles.Value}>
-                        {listStatus.is_rereading == true ? "yes" : "no"}
+                        {listStatus.isRereading == true ? "yes" : "no"}
                     </Text>
-                    <Text style={styles.Value}>{listStatus.num_times_reread}</Text>
-                    <Text style={styles.Value}>{listStatus.reread_value}</Text>
+                    <Text style={styles.Value}>{listStatus.numTimesReread}</Text>
+                    <Text style={styles.Value}>{listStatus.rereadValue}</Text>
 
                     <Text style={styles.Value}></Text>
 
@@ -384,13 +362,13 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.Value}></Text>
 
                     <Text style={styles.Value}>
-                        <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
+                        <TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
                     </Text>
                 </View>
             </View>
         );
     }
-    mangaEditing(listStatus: UpdateListStatusResultManga) {
+    mangaEditing(listStatus: MangaDetailsMyListStatus) {
         if (this.state.listStatus == undefined) return;
         return (
             <View style={styles.newTable}>
@@ -416,7 +394,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.newLabel}>Chapters read:</Text>
                     <TextInput
                         style={styles.newValue}
-                        value={listStatus.num_chapters_read?.toString() ?? ""}
+                        value={listStatus.numChaptersRead?.toString() ?? ""}
                         onChangeText={this.stateManager.changeChaptersRead.bind(this)}
                         keyboardType={"numeric"}
                     />
@@ -425,7 +403,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.newLabel}>Volumes read:</Text>
                     <TextInput
                         style={styles.newValue}
-                        value={listStatus.num_chapters_read?.toString() ?? ""}
+                        value={listStatus.numChaptersRead?.toString() ?? ""}
                         onChangeText={this.stateManager.changeVolumesRead.bind(this)}
                         keyboardType={"numeric"}
                     />
@@ -455,7 +433,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                 <View style={styles.newPair}>
                     <Text style={styles.newLabel}>Rereading:</Text>
                     <Picker
-                        selectedValue={listStatus.is_rereading == true ? "true" : "false"}
+                        selectedValue={listStatus.isRereading == true ? "true" : "false"}
                         style={styles.newValue}
                         onValueChange={this.stateManager.changeIsRereading.bind(this)}
                     >
@@ -467,7 +445,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.newLabel}>Num times rewatched:</Text>
                     <TextInput
                         style={styles.newValue}
-                        value={listStatus.num_times_reread?.toString() ?? ""}
+                        value={listStatus.numTimesReread?.toString() ?? ""}
                         onChangeText={this.stateManager.changeNumTimesReread.bind(this)}
                         keyboardType={"numeric"}
                     />
@@ -476,7 +454,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.newLabel}>Rewatch value:</Text>
                     <TextInput
                         style={styles.newValue}
-                        value={listStatus.reread_value?.toString() ?? ""}
+                        value={listStatus.rereadValue?.toString() ?? ""}
                         onChangeText={this.stateManager.changeRereadValue.bind(this)}
                         keyboardType={"numeric"}
                     />
@@ -508,28 +486,32 @@ export class ListDetails extends React.PureComponent<Props, State> {
                 <View style={styles.newPair}>
                     <Text style={styles.newLabel}>Updated:</Text>
                     <Text style={styles.newValue}>
-                        <TimeAgo time={listStatus.updated_at ?? ""} interval={5000} />
+                        <TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
                     </Text>
                 </View>
             </View>
         );
     }
 
-    saveEdit() {
+    async saveEdit() {
         if (this.state.listStatus == undefined) return;
 
         if (this.state.isAnime == true) {
-            AnimeUpdateList(
+            const updateRequest = new UpdateAnimeList();
+            await updateRequest.MakeRequest(
                 this.state.mediaId,
-                this.state.before as UpdateListStatusResultAnime,
-                this.state.listStatus as UpdateListStatusResultAnime
-            ).then(this.refresh.bind(this));
+                this.state.before as AnimeDetailsMyListStatus,
+                this.state.listStatus as AnimeDetailsMyListStatus
+            )
+            this.refresh();
         } else {
-            MangaUpdateList(
+            const updateRequest = new UpdateAnimeList();
+            await updateRequest.MakeRequest(
                 this.state.mediaId,
-                this.state.before as UpdateListStatusResultManga,
-                this.state.listStatus as UpdateListStatusResultManga
-            ).then(this.refresh.bind(this));
+                this.state.before as AnimeDetailsMyListStatus,
+                this.state.listStatus as AnimeDetailsMyListStatus
+            )
+            this.refresh();
         }
     }
 
@@ -559,10 +541,10 @@ export class ListDetails extends React.PureComponent<Props, State> {
                         <ScrollView style={styles.page}>
                             {this.state.isAnime
                                 ? this.renderAnime(
-                                      this.state.listStatus as UpdateListStatusResultAnime
+                                      this.state.listStatus as AnimeDetailsMyListStatus
                                   )
                                 : this.renderManga(
-                                      this.state.listStatus as UpdateListStatusResultManga
+                                      this.state.listStatus as MangaDetailsMyListStatus
                                   )}
                             {!this.state.isEditing ? (
                                 <TouchableOpacity

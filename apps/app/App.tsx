@@ -3,7 +3,7 @@ import * as Font from "expo-font";
 import React from "react";
 import AppLoading from "expo-app-loading";
 import * as Linking from "expo-linking";
-import { AppState, AppStateStatus } from "react-native";
+import { AppState, AppStateStatus, LogBox } from "react-native";
 import Authentication from "#api/Authenticate";
 import { Config } from "#config/Config";
 import { NavigationContainer } from "@react-navigation/native";
@@ -12,6 +12,8 @@ import Auth from "#routes/AuthStack";
 import { DoSwitch, navigationRef, navigationRefReady } from "#routes/RootNavigator";
 import { registerSwitchListener } from "#routes/RootNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+
+LogBox.ignoreLogs([/Require\scycles/]);
 
 type StateType = {
     fonts: boolean;
