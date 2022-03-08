@@ -332,7 +332,7 @@ async function getRootPackageJson(ref?: string) {
     }
     const jsonRes = await (await fetch(url, {
         headers: {
-            "Authorization": `token ${process.env.GITHUB_TOKEN}`,
+            "Authorization": `token ${access_token}`,
         }
     })).json();
 
@@ -372,7 +372,7 @@ async function getBranchHead(branch: string = "main") {
 
     const res = await fetch(url, {
         headers: {
-            "Authorization": `token ${process.env.GITHUB_TOKEN}`
+            "Authorization": `token ${access_token}`
         }
     });
     const json = await res.json();
