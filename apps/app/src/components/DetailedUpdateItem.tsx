@@ -153,7 +153,7 @@ export class DetailedUpdateItem extends React.PureComponent<
                             <Text style={TopArea.Label}>Status:</Text>
                         </View>
                         <View style={TopArea.Values}>
-                            <Text style={TopArea.Value}>{this.state.item.node.startDate}</Text>
+                            <Text style={TopArea.Value}>{dateOnly(this.state.item.node.startDate)}</Text>
                             <Text style={TopArea.Value}>
                                 {this.NiceString(this.state.item.node.status?.toString())}
                             </Text>
@@ -251,5 +251,19 @@ const styles = StyleSheet.create({
         height: (Dimensions.get("window").width / 3) * 1.5,
     },
 });
+
+function dateOnly(date: Date | undefined) {
+    if (date === undefined) return undefined;
+    
+    return `${padWithZero(date.getDate())}-${padWithZero(date.getMonth() + 1)}-${date.getFullYear()}`
+}
+
+function padWithZero(num: number) {
+    const str = num.toString();
+
+    if (str.length == 2) return str;
+    
+    return "0" + str;
+}
 
 export default DetailedUpdateItem;
