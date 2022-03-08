@@ -11,7 +11,10 @@ module.exports = function(api) {
                         "#routes": "./src/routes",
                         "#comps": "./src/components",
                         "#helpers": "./src/helpers",
-                        "#config": "./src/config"
+                        "#config": "./src/config",
+                        "#data": "./src/dataSources",
+                        "#actions": "./src/actions",
+                        "#decorators": "./src/decorators",
                     },
                 },
             ],

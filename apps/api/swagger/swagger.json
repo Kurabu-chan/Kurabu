@@ -96,6 +96,17 @@
                 "bearerFormat": "JWT",
                 "description": "Bearer authentication. Use the jwt endpoints to get a token."
             }
+        },
+        "schemas": {
+            "animeFields": {
+                "$ref": "./additional/animeFields.schema.json"
+            },
+            "mangaFields": {
+                "$ref": "./additional/mangaFields.schema.json"
+            },
+            "mediaFields": {
+                "$ref": "./additional/mediaFields.schema.json"
+            }
         }
     },
     "servers": [{

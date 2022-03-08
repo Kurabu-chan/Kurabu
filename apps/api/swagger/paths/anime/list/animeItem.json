@@ -14,9 +14,9 @@
                 "in": "query",
                 "required": true,
                 "schema": {
-                    "type": "string"
+                    "type": "integer"
                 },
-                "example": "2"
+                "example": 2
             },
             {
                 "name": "comments",
@@ -112,7 +112,7 @@
                 "in": "query",
                 "required": null,
                 "schema": {
-                    "type": "string"
+                    "$ref": "../../../additional/animeStatus.schema.json"
                 },
                 "example": "watching"
             },
@@ -138,14 +138,7 @@
                                     "type": "object",
                                     "properties": {
                                         "status": {
-                                            "type": "string",
-                                            "enum": [
-                                                "watching",
-                                                "completed",
-                                                "on_hold",
-                                                "dropped",
-                                                "plan_to_watch"
-                                            ]
+                                            "$ref": "../../../additional/animeStatus.schema.json"
                                         },
                                         "score": {
                                             "type": "integer",

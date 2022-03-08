@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "@babel/helper-builder-react-jsx": "^7.12.13",
+        "@kurabu/api-sdk": "*",
         "@react-native-community/picker": "^1.8.1",
         "@react-native-picker/picker": "2.2.1",
         "@react-navigation/bottom-tabs": "^6.0.9",

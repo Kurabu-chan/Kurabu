@@ -1,8 +1,3 @@
-import {
-    ListStatus as ListStatusProps,
-    ListStatusAnime,
-    ListStatusManga,
-} from "#api/ApiBasicTypes";
 import { Colors } from "#config/Colors";
 import { niceTextFormat } from "#helpers/textFormatting";
 import React from "react";
@@ -12,14 +7,15 @@ import TimeAgo from "react-native-timeago";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
-import { AnimeAddToList } from "#api/Anime/List/AnimeAddToList";
-import { MangaAddToList } from "#api/Manga/List/MangaAddToList";
+import { AddAnimeToList } from "#actions/anime/AddAnimeToList";
+import { AddMangaToList } from "#actions/manga/AddMangaToList";
+import { AnimeDetails, AnimeDetailsMyListStatus, MangaDetails, MangaDetailsMyListStatus } from "@kurabu/api-sdk";
 
 type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "DetailsScreen">;
     route: RouteProp<HomeStackParamList, "DetailsScreen">;
-    props?: ListStatusProps;
-    mediaType: string;
+    props?: AnimeDetailsMyListStatus | MangaDetailsMyListStatus;
+    mediaType: AnimeDetails.MediaTypeEnum | MangaDetails.MediaTypeEnum;
     id: number;
     parentRefresh: () => void;
 };
@@ -43,28 +39,33 @@ export class ListStatus extends React.PureComponent<Props, State> {
         ];
 
         this.state = {
-            isAnime: !mangaMediatTypes.includes(props.mediaType),
+            isAnime: !mangaMediatTypes.includes(props.mediaType.toString()),
         };
     }
 
     showListStatus() {
         this.props.navigation.push("ListDetailsScreen", {
             id: this.props.id,
-            media_type: this.props.mediaType,
+            mediaType: this.props.mediaType,
         });
     }
 
     async addToList() {
         let success = false;
+        var action: AddAnimeToList | AddMangaToList;
         if (this.state.isAnime == true) {
-            success = (await AnimeAddToList(this.props.id)) !== undefined;
+            action = new AddAnimeToList();
         } else {
-            success = (await MangaAddToList(this.props.id)) !== undefined;
+            action = new AddMangaToList();
         }
+
+        await action.MakeRequest(this.props.id)
+        success = true;
+
         if (success) this.props.parentRefresh();
     }
 
-    renderAnime(props: ListStatusAnime) {
+    renderAnime(props: AnimeDetailsMyListStatus) {
         return (
             <View style={styles.TopAreaData}>
                 <View style={styles.TopAreaLabels}>
@@ -73,18 +74,18 @@ export class ListStatus extends React.PureComponent<Props, State> {
                     <Text style={styles.TopAreaLabel}>Status updated:</Text>
                 </View>
                 <View style={styles.TopAreaValues}>
-                    <Text style={styles.TopAreaValue}>{niceTextFormat(props.status)}</Text>
-                    <Text style={styles.TopAreaValue}>{props.num_episodes_watched}</Text>
+                    <Text style={styles.TopAreaValue}>{niceTextFormat(props.status?.toString())}</Text>
+                    <Text style={styles.TopAreaValue}>{props.numEpisodesWatched}</Text>
 
                     <Text style={styles.TopAreaValue}>
-                        <TimeAgo time={props.updated_at ?? ""} interval={5000} />
+                        <TimeAgo time={props.updatedAt ?? ""} interval={5000} />
                     </Text>
                 </View>
             </View>
         );
     }
 
-    renderManga(props: ListStatusManga) {
+    renderManga(props: MangaDetailsMyListStatus) {
         return (
             <View style={styles.TopAreaData}>
                 <View style={styles.TopAreaLabels}>
@@ -94,12 +95,12 @@ export class ListStatus extends React.PureComponent<Props, State> {
                     <Text style={styles.TopAreaLabel}>Status updated:</Text>
                 </View>
                 <View style={styles.TopAreaValues}>
-                    <Text style={styles.TopAreaValue}>{niceTextFormat(props.status)}</Text>
-                    <Text style={styles.TopAreaValue}>{props.num_volumes_read}</Text>
-                    <Text style={styles.TopAreaValue}>{props.num_chapters_read}</Text>
+                    <Text style={styles.TopAreaValue}>{niceTextFormat(props.status?.toString())}</Text>
+                    <Text style={styles.TopAreaValue}>{props.numVolumesRead}</Text>
+                    <Text style={styles.TopAreaValue}>{props.numChaptersRead}</Text>
 
                     <Text style={styles.TopAreaValue}>
-                        <TimeAgo time={props.updated_at ?? ""} interval={5000} />
+                        <TimeAgo time={props.updatedAt ?? ""} interval={5000} />
                     </Text>
                 </View>
             </View>
@@ -131,8 +132,8 @@ export class ListStatus extends React.PureComponent<Props, State> {
         return (
             <View>
                 {this.state.isAnime
-                    ? this.renderAnime(this.props.props as ListStatusAnime)
-                    : this.renderManga(this.props.props as ListStatusManga)}
+                    ? this.renderAnime(this.props.props as AnimeDetailsMyListStatus)
+                    : this.renderManga(this.props.props as MangaDetailsMyListStatus)}
                 <Divider color={Colors.DIVIDER} widthPercentage={0} />
                 {this.showListStatusButton()}
             </View>

@@ -297,14 +297,7 @@
             "type": "object",
             "properties": {
                 "status": {
-                    "type": "string",
-                    "enum": [
-                        "reading",
-                        "completed",
-                        "on_hold",
-                        "dropped",
-                        "plan_to_read"
-                    ]
+                    "$ref": "../../additional/mangaStatus.schema.json"
                 },
                 "score": {
                     "type": "integer"

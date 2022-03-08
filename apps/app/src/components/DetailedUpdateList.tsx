@@ -1,17 +1,17 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
-import { MediaNode } from "#api/ApiBasicTypes";
-import MediaNodeSource from "#api/MediaNodeSource";
 import { Colors } from "#config/Colors";
 import DetailedUpdateItem from "./DetailedUpdateItem";
+import { MediaListSource } from "#data/MediaListSource";
+import { AnimeListData, MangaListData } from "@kurabu/api-sdk";
 
 const BatchSize = 20;
 
 type DetailedUpdateListState = {
     title: string;
-    data: MediaNode[];
-    mediaNodeSource?: MediaNodeSource;
+    data: (AnimeListData | MangaListData)[];
+    mediaNodeSource?: MediaListSource;
     navigator: StackNavigationProp<any, any>;
     offset: number;
     needmore: boolean;
@@ -20,7 +20,7 @@ type DetailedUpdateListState = {
 
 type DetailedUpdateListProps = {
     title: string;
-    mediaNodeSource: MediaNodeSource;
+    mediaNodeSource: MediaListSource;
     navigator: StackNavigationProp<any, any>;
     onCreate?: (media: DetailedUpdateList) => void;
     onDataGather?: () => void;
@@ -50,7 +50,7 @@ class DetailedUpdateList extends React.Component<DetailedUpdateListProps, Detail
         this.setState({});
     }
 
-    public changeSource(title: string, nodeSource: MediaNodeSource) {
+    public changeSource(title: string, nodeSource: MediaListSource) {
         this.setState(
             (prevState) => ({
                 ...prevState,

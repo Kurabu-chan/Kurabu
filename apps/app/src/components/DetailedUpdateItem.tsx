@@ -2,31 +2,33 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
-import { Fields, MediaNode } from "#api/ApiBasicTypes";
 import { Colors } from "#config/Colors";
 import { Divider } from "./Divider";
+import { MediaFields, AnimeDetails, MangaDetails, AnimeListData, MangaListData } from "@kurabu/api-sdk";
 
 type DetailedUpdateItemProps = {
-    item: MediaNode;
+    item: AnimeListData | MangaListData;
     navigator: StackNavigationProp<any, any>;
 };
 
 type DetailedUpdateItemState = {
-    item: MediaNode;
+    item: AnimeListData | MangaListData;
     navigator: StackNavigationProp<any, any>;
 };
-
-export const DetailedUpdateItemFields = [
-    Fields.id,
-    Fields.genres,
-    Fields.main_picture,
-    Fields.title,
-    Fields.mean,
-    Fields.rank,
-    Fields.popularity,
-    Fields.num_episodes,
-    Fields.status,
-    Fields.start_date,
+// Add manga fields
+export const DetailedUpdateItemFields: MediaFields[] = [
+    MediaFields.Id,
+    MediaFields.Genres,
+    MediaFields.MainPicture,
+    MediaFields.Title,
+    MediaFields.Mean,
+    MediaFields.Rank,
+    MediaFields.Popularity,
+    MediaFields.NumEpisodes,
+    MediaFields.NumVolumes,
+    MediaFields.NumChapters,
+    MediaFields.Status,
+    MediaFields.StartDate,
 ];
 
 export class DetailedUpdateItem extends React.PureComponent<
@@ -41,7 +43,7 @@ export class DetailedUpdateItem extends React.PureComponent<
                 node: {
                     id: 1,
                     title: "failure",
-                    main_picture: {
+                    mainPicture: {
                         medium: "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
                         large: "https://image.shutterstock.com/image-photo/portrait-surprised-cat-scottish-straight-260nw-499196506.jpg",
                     },
@@ -58,7 +60,7 @@ export class DetailedUpdateItem extends React.PureComponent<
     public openDetails() {
         this.state.navigator.push("DetailsScreen", {
             id: this.state.item.node.id,
-            media_type: this.state.item.node.media_type,
+            media_type: this.state.item.node.mediaType,
         });
     }
 
@@ -68,14 +70,33 @@ export class DetailedUpdateItem extends React.PureComponent<
         return text.slice(0, 1).toUpperCase() + text.slice(1, text.length);
     }
 
+    getMangaNode(): MangaDetails | undefined {
+        if ("numEpisodes" in this.state.item.node) { 
+            return undefined;
+        }
+
+        return this.state.item.node as MangaDetails;
+    }
+
+    getAnimeNode(): AnimeDetails | undefined {
+        if ("numChapters" in this.state.item.node) {
+            return undefined;
+        }
+
+        return this.state.item.node as AnimeDetails;
+    }
+
     render() {
+        const manga = this.getMangaNode();
+        const anime = this.getAnimeNode();
+
         return (
             <TouchableOpacity style={styles.mediaContainer} onPress={this.openDetails.bind(this)}>
-                {this.state.item.node.main_picture !== undefined ? (
+                {this.state.item.node.mainPicture !== undefined ? (
                     <Image
                         style={styles.image}
                         source={{
-                            uri: this.state.item.node.main_picture.medium,
+                            uri: this.state.item.node.mainPicture.medium,
                         }}
                     />
                 ) : (
@@ -98,15 +119,30 @@ export class DetailedUpdateItem extends React.PureComponent<
                             </Text>
                         </View>
                         <View style={TopArea.TopRightLabels}>
-                            <Text style={TopArea.Label}>Episodes:</Text>
+                            {anime === undefined ? undefined : <Text style={TopArea.Label}>Episodes:</Text>}
+                            {manga === undefined ? undefined : (<View>
+                                <Text style={TopArea.Label}>Chapters:</Text>
+                                <Text style={TopArea.Label}>Volumes:</Text>
+                            </View>)}
                             <Text style={TopArea.Label}>Popularity:</Text>
                         </View>
                         <View style={TopArea.TopRightValues}>
-                            <Text style={TopArea.Value}>
-                                {this.state.item.node.num_episodes == 0
+                            {anime === undefined ? undefined : (
+                                <Text style={TopArea.Value}>
+                                    {anime.numEpisodes == 0
+                                        ? "N/A"
+                                        : anime.numEpisodes}
+                                </Text>
+                            )}
+                            {manga === undefined ? undefined : (<View>
+                                <Text style={TopArea.Value}>{manga.numChapters == 0
                                     ? "N/A"
-                                    : this.state.item.node.num_episodes}
-                            </Text>
+                                    : manga.numChapters}</Text>
+                                <Text style={TopArea.Value}>{manga.numVolumes == 0
+                                    ? "N/A"
+                                    : manga.numVolumes}</Text>
+                            </View>)}
+                            
                             <Text style={TopArea.Value}>#{this.state.item.node.popularity}</Text>
                         </View>
                     </View>
@@ -117,9 +153,9 @@ export class DetailedUpdateItem extends React.PureComponent<
                             <Text style={TopArea.Label}>Status:</Text>
                         </View>
                         <View style={TopArea.Values}>
-                            <Text style={TopArea.Value}>{this.state.item.node.start_date}</Text>
+                            <Text style={TopArea.Value}>{dateOnly(this.state.item.node.startDate)}</Text>
                             <Text style={TopArea.Value}>
-                                {this.NiceString(this.state.item.node.status)}
+                                {this.NiceString(this.state.item.node.status?.toString())}
                             </Text>
                         </View>
                     </View>
@@ -215,5 +251,19 @@ const styles = StyleSheet.create({
         height: (Dimensions.get("window").width / 3) * 1.5,
     },
 });
+
+function dateOnly(date: Date | undefined) {
+    if (date === undefined) return undefined;
+    
+    return `${padWithZero(date.getDate())}-${padWithZero(date.getMonth() + 1)}-${date.getFullYear()}`
+}
+
+function padWithZero(num: number) {
+    const str = num.toString();
+
+    if (str.length == 2) return str;
+    
+    return "0" + str;
+}
 
 export default DetailedUpdateItem;

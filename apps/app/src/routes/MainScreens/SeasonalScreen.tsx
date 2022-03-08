@@ -1,4 +1,4 @@
-import AnimeSeasonalSource from "#api/Anime/AnimeSeasonal";
+import {AnimeSeasonalSource} from "#data/anime/AnimeSeasonalSource";
 import { changeActivePage } from "#helpers/backButton";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
@@ -6,7 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import MediaNodeSource from "#api/MediaNodeSource";
+import { MediaListSource  } from "#data/MediaListSource";
 import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
 import DetailedUpdateList from "#comps/DetailedUpdateList";
 import { Colors } from "#config/Colors";
@@ -20,7 +20,7 @@ type StateType = {
         searched: boolean;
         found: boolean;
     };
-    rankingSource?: MediaNodeSource;
+    rankingSource?: MediaListSource;
     animeList?: DetailedUpdateList;
     listenerToUnMount: any;
 };
@@ -68,9 +68,9 @@ export default class Seasonal extends React.Component<any, StateType> {
         const fields = DetailedUpdateItemFields;
 
         var nodeSource = new AnimeSeasonalSource(
+            fields,
             this.state.seasonal.yearValue,
             this.state.seasonal.seasonValue,
-            fields
         );
         this.setState((prevState) => ({
             ...prevState,

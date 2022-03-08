@@ -1,4 +1,4 @@
-import { MangaRankingSource } from "#api/Manga/MangaRanking";
+import { MangaRankingSource } from "#data/manga/MangaRankingSource";
 import { changeActivePage } from "#helpers/backButton";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
 import { RouteProp } from "@react-navigation/native";
@@ -7,7 +7,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import MediaNodeSource from "#api/MediaNodeSource";
+import { MediaListSource } from "#data/MediaListSource";
 import MediaList from "../../../components/MediaList";
 import { Colors } from "../../../config/Colors";
 
@@ -19,7 +19,7 @@ type PropsType = {
 type StateType = {
     node: {
         key: string;
-        nodeSource: MediaNodeSource;
+        nodeSource: MediaListSource;
     };
     listenerToUnMount: any;
 };
@@ -30,7 +30,7 @@ export default class Home extends React.Component<PropsType, StateType> {
         this.state = {
             node: {
                 key: "Most popular Manga",
-                nodeSource: new MangaRankingSource("bypopularity"),
+                nodeSource: new MangaRankingSource(undefined, "bypopularity"),
             },
             listenerToUnMount: undefined,
         };

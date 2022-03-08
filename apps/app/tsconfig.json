@@ -1,22 +1,26 @@
 {
-    "$schema": "https://json.schemastore.org/tsconfig",
-    "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "baseUrl": ".",
-        "allowJs": true,
-        "esModuleInterop": true,
-        "jsx": "react-native",
-        "lib": ["DOM", "ESNext"],
-        "moduleResolution": "node",
-        "noEmit": true,
-        "paths": {
-            "#api/*": ["./src/APIManager/*"],
-            "#routes/*": ["./src/routes/*"],
-            "#comps/*": ["./src/components/*"],
-            "#helpers/*": ["./src/helpers/*"],
-            "#config/*": ["./src/config/*"]
-        }
-    },
-    "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"],
-    "extends": "@kurabu/tsconfig/base.json"
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "jsx": "react-native",
+    "lib": ["DOM", "ESNext"],
+    "moduleResolution": "node",
+    "noEmit": true,
+    "paths": {
+      "#api/*": ["./src/APIManager/*"],
+      "#routes/*": ["./src/routes/*"],
+      "#comps/*": ["./src/components/*"],
+      "#helpers/*": ["./src/helpers/*"],
+      "#config/*": ["./src/config/*"],
+      "#data/*": ["./src/dataSources/*"],
+      "#actions/*": ["./src/actions/*"],
+      "#decorators/*": ["./src/decorators/*"]
+    }
+  },
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"],
+  "extends": "@kurabu/tsconfig/base.json"
 }
