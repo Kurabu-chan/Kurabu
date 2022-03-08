@@ -1,6 +1,6 @@
 {
     "api": {
-        "domain": "api.kurabu.moe",
+        "domain": "prod.kurabu.moe",
         "scheme": "http",
         "root": ""
     }
