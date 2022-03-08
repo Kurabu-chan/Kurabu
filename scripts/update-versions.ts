@@ -330,7 +330,11 @@ async function getRootPackageJson(ref?: string) {
     if (ref !== undefined) {
         url += "?ref=" + ref;
     }
-    const jsonRes = await (await fetch(url)).json();
+    const jsonRes = await (await fetch(url, {
+        headers: {
+            "Authorization": `token ${process.env.GITHUB_TOKEN}`,
+        }
+    })).json();
 
     if (!("download_url" in (jsonRes as any))) {
         throw new Error("No download_url for package.json");
@@ -347,7 +351,11 @@ async function findSubPackageJson(subDirectory: string, ref?: string) {
         url += "?ref=" + ref;
     }
 
-    const res = await fetch(url);
+    const res = await fetch(url, {
+        headers: {
+            "Authorization": `token ${access_token}`
+        }
+    });
     if (res.status !== 200) return undefined;
     const jsonRes = await res.json();
 
@@ -362,7 +370,11 @@ async function findSubPackageJson(subDirectory: string, ref?: string) {
 async function getBranchHead(branch: string = "main") {
     let url = `https://api.github.com/repos/Kurabu-chan/Kurabu/branches/${branch}`;
 
-    const res = await fetch(url);
+    const res = await fetch(url, {
+        headers: {
+            "Authorization": `token ${process.env.GITHUB_TOKEN}`
+        }
+    });
     const json = await res.json();
 
     if (!("commit" in (json as any))) {
