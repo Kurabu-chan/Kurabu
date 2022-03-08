@@ -78,7 +78,7 @@ jobs:
       - name: Add turbo globally
         run: yarn global add turbo
       - name: Run the yarn run check-build-required
-        run: yarn run check-build-required --cache-dir=/tmp/turbocache
+        run: yarn run check-build-required --cache-dir=./tmp/turbocache
       - run: ls -la /tmp/turbocache
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -86,7 +86,7 @@ jobs:
           ref: ${{ github.event.after }}
       - name: Run the yarn run check-build-required
         run: |
-          yarn run check-build-required --cache-dir=/tmp/turbocache > ./check-build-required.txt
+          yarn run check-build-required --cache-dir=./tmp/turbocache > ./check-build-required.txt
           cat ./check-build-required.txt
       - name: Check if it is full turbo
         id: check-full-turbo
