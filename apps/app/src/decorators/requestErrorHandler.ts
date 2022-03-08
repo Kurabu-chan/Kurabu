@@ -4,7 +4,7 @@ export function requestErrorHandler(target: any, propertyKey: string, descriptor
     const original = descriptor.value;
     descriptor.value = function (...args: any) {
         try {
-            const res = original.apply(target, args);
+            const res = original.apply(this, args);
             if (res instanceof Promise) {
                 return new Promise((resolve, reject) => {
                     res.then(resolve).catch(caught);
