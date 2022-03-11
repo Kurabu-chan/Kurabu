@@ -92,7 +92,7 @@ jobs:
       - name: Run the yarn run check-build-required
         run: |
           yarn run check-build-required --cache-dir=$RUNNER_TEMP/turbocache > $RUNNER_TEMP/check-build-required.txt
-          cat ./check-build-required.txt
+          cat $RUNNER_TEMP/check-build-required.txt
       - name: Check if it is full turbo
         id: check-full-turbo
         run: |
