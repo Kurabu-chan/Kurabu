@@ -84,6 +84,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.after }}
+      - run: ls -la ./tmp/turbocache
       - name: Run the yarn run check-build-required
         run: |
           yarn run check-build-required --cache-dir=./tmp/turbocache > ./check-build-required.txt
