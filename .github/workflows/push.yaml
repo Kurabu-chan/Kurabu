@@ -77,7 +77,10 @@ jobs:
 
       - name: Add turbo globally
         run: yarn global add turbo
-      - run: echo $RUNNER_TEMP/turbocache
+      - run: |
+          mkdir $RUNNER_TEMP/turbocache
+          touch $RUNNER_TEMP/turbocache/tessssssssssst.txt
+        
       - name: Run the yarn run check-build-required
         run: yarn run check-build-required --cache-dir=$RUNNER_TEMP/turbocache
       - run: ls -la $RUNNER_TEMP/turbocache
