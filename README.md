@@ -11,8 +11,10 @@ This is a monorepo containing all source for the kurabu project.
 
 ## Root commands
 
--   `npm run build` used for building all apps (currently excluding app)
--   `npm run dev` used for running all apps in dev mode (currently excluding app)
--   `npm run lint` used for linting all projects (currently excluding app, config and tsconfig)
--   `npm run format` used for formatting all ts, tsx and md files
--   `npm run lint:fix` used for fixing lint in all projects (currently excluding app, config and tsconfig)
+The repo uses yarn for package management.
+
+-   `yarn run build` used for building all apps (currently excluding app)
+-   `yarn run dev` used for running all apps in dev mode (currently excluding app)
+-   `yarn run lint` used for linting all projects (currently excluding app, config and tsconfig)
+-   `yarn run format` used for formatting all ts, tsx and md files
+-   `yarn run lint:fix` used for fixing lint in all projects (currently excluding app, config and tsconfig)
