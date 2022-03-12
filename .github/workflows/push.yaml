@@ -84,7 +84,7 @@ jobs:
       - name: Run the yarn run check-build-required
         run: |
           yarn run check-build-required --cache-dir=./tmp/turbocache
-          cp ./tmp/turbocache $RUNNER_TEMP/turbocache
+          cp -r ./tmp/turbocache $RUNNER_TEMP/turbocache
       - run: ls -la $RUNNER_TEMP/turbocache
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -93,7 +93,7 @@ jobs:
       - run: ls -la $RUNNER_TEMP/turbocache
       - name: Run the yarn run check-build-required
         run: |
-          cp $RUNNER_TEMP/turbocache ./tmp/turbocache
+          cp -r $RUNNER_TEMP/turbocache ./tmp/turbocache
           yarn run check-build-required --cache-dir=./tmp/turbocache > ./check-build-required.txt
           cat ./check-build-required.txt
       - name: Check if it is full turbo
