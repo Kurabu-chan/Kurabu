@@ -93,7 +93,7 @@ jobs:
           mkdir ./tmp
           cp -r $RUNNER_TEMP/turbocache ./tmp/turbocache
           ls -la ./tmp/turbocache
-          yarn run check-build-required --cache-dir=./tmp/turbocache > ./check-build-required.txt
+          yarn run check-build-required --scope=@kurabu/api --cache-dir=./tmp/turbocache > ./check-build-required.txt
           cat ./check-build-required.txt
       - name: Check if it is full turbo
         id: check-full-turbo
