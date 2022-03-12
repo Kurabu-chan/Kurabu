@@ -9,6 +9,12 @@ RUN apk add git
 RUN apk update
 # Set working directory
 WORKDIR /app
+
+
+# Copy the entire monorepo to the container
+# An alternative would be copying only the desired app, and depended upon packages from the get go and not running turbo prune.
+# This would be faster, but is less modular and requires editing the Dockerfile for each app.
+# Simply personal preference here.
 COPY . .
 RUN yarn global add turbo
 RUN turbo prune --scope=@kurabu/api --docker
