@@ -82,7 +82,9 @@ jobs:
           touch $RUNNER_TEMP/turbocache/tessssssssssst.txt
         
       - name: Run the yarn run check-build-required
-        run: yarn run check-build-required --cache-dir=$RUNNER_TEMP/turbocache
+        run: |
+          yarn run check-build-required --cache-dir=./tmp/turbocache
+          cp ./tmp/turbocache $RUNNER_TEMP/turbocache
       - run: ls -la $RUNNER_TEMP/turbocache
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -91,12 +93,13 @@ jobs:
       - run: ls -la $RUNNER_TEMP/turbocache
       - name: Run the yarn run check-build-required
         run: |
-          yarn run check-build-required --cache-dir=$RUNNER_TEMP/turbocache > $RUNNER_TEMP/check-build-required.txt
-          cat $RUNNER_TEMP/check-build-required.txt
+          cp $RUNNER_TEMP/turbocache ./tmp/turbocache
+          yarn run check-build-required --cache-dir=./tmp/turbocache > ./check-build-required.txt
+          cat ./check-build-required.txt
       - name: Check if it is full turbo
         id: check-full-turbo
         run: |
-          if grep -q "FULL TURBO" $RUNNER_TEMP/check-build-required.txt; then
+          if grep -q "FULL TURBO" ./check-build-required.txt; then
             echo "::set-output name=full_turbo_check::fullturbo"
             echo "fullturbo"
           else
