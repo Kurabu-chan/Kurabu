@@ -9,6 +9,7 @@ import RankingStack from "./MainStacks/RankingStack";
 import SearchStack from "./MainStacks/SearchStack";
 import SeasonalStack from "./MainStacks/SeasonalStack";
 import SuggestionsStack from "./MainStacks/SuggestionsStack";
+import ListStack from "./MainStacks/ListStack";
 
 export const Drawer = createDrawerNavigator();
 
@@ -82,6 +83,7 @@ export default class DrawerComp extends React.Component {
                 <Drawer.Screen name="Suggestions" component={SuggestionsStack} />
                 <Drawer.Screen name="Ranking" component={RankingStack} />
                 <Drawer.Screen name="Seasonal" component={SeasonalStack} />
+                <Drawer.Screen name="List" component={ListStack} />
             </Drawer.Navigator>
         );
     }
