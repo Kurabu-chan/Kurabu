@@ -11,6 +11,7 @@ namespace: production
 
 resources:
 - namespace.yaml
+- certificate.yaml
 - path-ingress.yaml
 - host-ingress.yaml
 - secret.yaml

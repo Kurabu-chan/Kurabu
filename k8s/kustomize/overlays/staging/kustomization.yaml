@@ -11,6 +11,7 @@ namespace: staging
 
 resources:
 - namespace.yaml
+- certificate.yaml
 - host-ingress.yaml
 - path-ingress.yaml
 - secret.yaml

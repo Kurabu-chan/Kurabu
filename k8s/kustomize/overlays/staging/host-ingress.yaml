@@ -13,6 +13,10 @@ spec:
   #     name: api-service
   #     port:
   #       number: 15000
+  tls:
+  - hosts:
+    - stage.kurabu.moe
+    secretName: kurabu-stage-tls
   ingressClassName: nginx
   rules:
   - host: stage.kurabu.moe
