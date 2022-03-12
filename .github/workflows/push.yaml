@@ -76,14 +76,11 @@ jobs:
         run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
 
       - name: Add turbo globally
-        run: yarn global add turbo
-      - run: |
-          mkdir $RUNNER_TEMP/turbocache
-          touch $RUNNER_TEMP/turbocache/tessssssssssst.txt
-        
+        run: yarn global add turbo        
       - name: Run the yarn run check-build-required
         run: |
           yarn run check-build-required --cache-dir=./tmp/turbocache
+          ls -la ./tmp/turbocache
           cp -r ./tmp/turbocache $RUNNER_TEMP/turbocache
       - run: ls -la $RUNNER_TEMP/turbocache
       - name: Checkout repository
@@ -94,6 +91,7 @@ jobs:
       - name: Run the yarn run check-build-required
         run: |
           cp -r $RUNNER_TEMP/turbocache ./tmp/turbocache
+          ls -la ./tmp/turbocache
           yarn run check-build-required --cache-dir=./tmp/turbocache > ./check-build-required.txt
           cat ./check-build-required.txt
       - name: Check if it is full turbo
