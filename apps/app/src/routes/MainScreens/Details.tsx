@@ -24,7 +24,8 @@ import MediaItem from "#comps/MediaItem";
 import { Colors } from "#config/Colors";
 import { HomeStackParamList } from "../MainStacks/HomeStack";
 import { ListStatus } from "#comps/ListStatus";
-import { AnimeDetails, AnimeListData, MangaDetails, MangaListData } from "@kurabu/api-sdk";
+import { AnimeDetails, AnimeDetailsMediaTypeEnum, AnimeListData, MangaDetails, MangaDetailsMediaTypeEnum, MangaListData } from "@kurabu/api-sdk";
+import { niceDateFormat } from "#helpers/textFormatting";
 
 type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "DetailsScreen">;
@@ -36,7 +37,7 @@ type State = {
     media?: AnimeDetails | MangaDetails;
     listenerToUnMount: any;
     page: string;
-    mediaType: AnimeDetails.MediaTypeEnum | MangaDetails.MediaTypeEnum;
+    mediaType: AnimeDetailsMediaTypeEnum | MangaDetailsMediaTypeEnum;
 };
 
 var sizer = Dimensions.get("window").width / 400;
@@ -49,7 +50,7 @@ export default class Details extends React.Component<Props, State> {
         if (mediaId == undefined) {
             mediaId = 1;
         }
-        console.log(`${mediaType} ${mediaId}`);
+        console.log(`Showing details for: ${mediaType} ${mediaId}`);
         this.state = {
             mediaId: mediaId,
             listenerToUnMount: undefined,
@@ -63,18 +64,19 @@ export default class Details extends React.Component<Props, State> {
     async refresh() {
         if (this.state.mediaId === undefined) return;
 
-        const mangaMediaTypes = [
-            "manga",
-            "light_novel",
-            "manhwa",
-            "one_shot",
-            "manhua",
-            "doujinshi",
-            "novel",
+        const mangaMediaTypes: (AnimeDetailsMediaTypeEnum | MangaDetailsMediaTypeEnum)[] = [
+            MangaDetailsMediaTypeEnum.Manga,
+            MangaDetailsMediaTypeEnum.Doujinshi,
+            MangaDetailsMediaTypeEnum.Manhwa,
+            MangaDetailsMediaTypeEnum.Manhua,
+            MangaDetailsMediaTypeEnum.Oel,
+            MangaDetailsMediaTypeEnum.OneShot,
+            MangaDetailsMediaTypeEnum.Novel,
+            MangaDetailsMediaTypeEnum.OneShot
         ];
 
         var detailsSource: MangaDetailsSource | AnimeDetailsSource;
-        if (mangaMediaTypes.includes(this.state.mediaType.toString())) {
+        if (mangaMediaTypes.includes(this.state.mediaType)) {
             detailsSource = new MangaDetailsSource(this.state.mediaId, []);
         } else {
             detailsSource = new AnimeDetailsSource(this.state.mediaId, []);
@@ -230,7 +232,7 @@ export default class Details extends React.Component<Props, State> {
                                                 {this.niceString(this.state.media.status?.toString())}
                                             </Text>
                                             <Text style={styles.TopAreaValue}>
-                                                {this.state.media.startDate}
+                                                {niceDateFormat(this.state.media.startDate)}
                                             </Text>
                                             {this.episodesValue()}
                                             <Text style={styles.TopAreaValue}>

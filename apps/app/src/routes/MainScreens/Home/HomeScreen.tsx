@@ -8,9 +8,10 @@ import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AnimeSeasonalSource } from "#data/anime/AnimeSeasonalSource";
 import { MediaListSource } from "#data/MediaListSource";
-import MediaList from "#comps/MediaList";
+import MediaList, { mediaListFields } from "#comps/MediaList";
 import { Colors } from "#config/Colors";
 import { getCurrentSeason } from "#helpers/seasonProvider";
+import { AnimeFields, GetSeasonalAnimesSeasonEnum, MediaFields } from "@kurabu/api-sdk";
 
 type PropsType = {
     navigation: StackNavigationProp<HomeStackParamList, "Home">;
@@ -28,10 +29,11 @@ type StateType = {
 export default class Home extends React.Component<any, StateType> {
     constructor(props: any) {
         super(props);
+
         this.state = {
             node: {
                 key: "Currently Airing",
-                nodeSource: new AnimeSeasonalSource(undefined, new Date().getFullYear(), getCurrentSeason()),
+                nodeSource: new AnimeSeasonalSource(mediaListFields, new Date().getFullYear(), getCurrentSeason() as GetSeasonalAnimesSeasonEnum),
             },
             listenerToUnMount: undefined,
         };

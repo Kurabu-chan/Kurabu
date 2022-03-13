@@ -10,10 +10,11 @@ import { MediaListSource  } from "#data/MediaListSource";
 import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
 import DetailedUpdateList from "#comps/DetailedUpdateList";
 import { Colors } from "#config/Colors";
+import { GetSeasonalAnimesSeasonEnum } from "@kurabu/api-sdk";
 
 type StateType = {
     seasonal: {
-        seasonValue: seasons;
+        seasonValue: GetSeasonalAnimesSeasonEnum;
         yearValue: number;
         limit?: number;
         offset?: number;
@@ -250,27 +251,27 @@ function capitalizeFirstLetter(str: string) {
 }
 
 type seasons = "winter" | "summer" | "spring" | "fall";
-function getSeason(): seasons {
+function getSeason(): GetSeasonalAnimesSeasonEnum {
     var month = new Date().getMonth();
     switch (month) {
         case 12:
         case 1:
         case 2:
-            return "winter";
+            return GetSeasonalAnimesSeasonEnum.Winter;
         case 3:
         case 4:
         case 5:
-            return "spring";
+            return GetSeasonalAnimesSeasonEnum.Spring;
         case 6:
         case 7:
         case 8:
-            return "summer";
+            return GetSeasonalAnimesSeasonEnum.Summer;
         case 9:
         case 10:
         case 11:
-            return "fall";
+            return GetSeasonalAnimesSeasonEnum.Fall;
         default:
-            return "fall";
+            return GetSeasonalAnimesSeasonEnum.Fall;
     }
 }
 

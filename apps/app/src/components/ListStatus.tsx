@@ -9,13 +9,13 @@ import { RouteProp } from "@react-navigation/native";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
 import { AddAnimeToList } from "#actions/anime/AddAnimeToList";
 import { AddMangaToList } from "#actions/manga/AddMangaToList";
-import { AnimeDetails, AnimeDetailsMyListStatus, MangaDetails, MangaDetailsMyListStatus } from "@kurabu/api-sdk";
+import { AnimeDetailsMediaTypeEnum, AnimeDetailsMyListStatus, MangaDetailsMediaTypeEnum, MangaDetailsMyListStatus } from "@kurabu/api-sdk";
 
 type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "DetailsScreen">;
     route: RouteProp<HomeStackParamList, "DetailsScreen">;
     props?: AnimeDetailsMyListStatus | MangaDetailsMyListStatus;
-    mediaType: AnimeDetails.MediaTypeEnum | MangaDetails.MediaTypeEnum;
+    mediaType: AnimeDetailsMediaTypeEnum | MangaDetailsMediaTypeEnum;
     id: number;
     parentRefresh: () => void;
 };
