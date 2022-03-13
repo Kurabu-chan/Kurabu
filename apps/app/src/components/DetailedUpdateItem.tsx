@@ -7,7 +7,7 @@ import { Divider } from "./Divider";
 import { MediaFields, AnimeDetails, MangaDetails, AnimeListData, MangaListData } from "@kurabu/api-sdk";
 import { fieldsToString } from "#helpers/fieldsHelper";
 import { niceDateFormat, niceTextFormat } from "#helpers/textFormatting";
-import { Progress } from "./Progress";
+import { Progress } from "./MediaListStatusProgressBar";
 
 type DetailedUpdateItemProps = {
     item: AnimeListData | MangaListData;
@@ -114,7 +114,7 @@ export class DetailedUpdateItem extends React.PureComponent<
     createMangaListStatus(node: MangaDetails) {
         return (
             <View style={styles.listContainer}>
-                <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                <Divider margin={ false } color={Colors.DIVIDER} widthPercentage={100} />
                 <View style={TopArea.Data}>
                     <View style={TopArea.TopLeftLabels}>
                         <Text style={TopArea.Label}>List status:</Text>
@@ -137,13 +137,13 @@ export class DetailedUpdateItem extends React.PureComponent<
                     <View style={TopArea.Data}>
                         <View style={{ ...TopArea.Labels, flex: 1.5 }}>
                             <Text style={{...TopArea.Label, marginBottom: 3, marginTop: 3}}>Chapter progress:</Text>
-                            <Text style={TopArea.Label}>Volume progress:</Text>
+                            <Text style={{ ...TopArea.Label, marginTop: 8 }}>Volume progress:</Text>
                         </View>
                         <View style={TopArea.Values}>
                             <View style={{ marginBottom: 3, marginTop: 3}}>
-                                <Progress color={Colors.KURABUPINK} height={20} min={0} max={node.numChapters ?? 0} current={node.myListStatus?.numChaptersRead ?? 0} />
+                                <Progress fieldToControl="numChaptersRead" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numChapters ?? 0} current={node.myListStatus?.numChaptersRead ?? 0} />
                             </View>
-                            <Progress color={Colors.KURABUPINK} height={20} min={0} max={node.numVolumes ?? 0} current={node.myListStatus?.numVolumesRead ?? 0} />
+                            <Progress fieldToControl="numVolumesRead" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numVolumes ?? 0} current={node.myListStatus?.numVolumesRead ?? 0} />
                         </View>
                     </View>
                 </View>
@@ -154,7 +154,7 @@ export class DetailedUpdateItem extends React.PureComponent<
     createAnimeListStatus(node: AnimeDetails) {
         return (
             <View style={styles.listContainer}>
-                <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                <Divider margin={ false} color={Colors.DIVIDER} widthPercentage={100} />
                 <View style={TopArea.Data}>
                     <View style={TopArea.TopLeftLabels}>
                         <Text style={TopArea.Label}>List status:</Text>
@@ -180,7 +180,7 @@ export class DetailedUpdateItem extends React.PureComponent<
                         </View>
                         <View style={TopArea.Values}>
                             <View style={{ marginBottom: 3, marginTop: 3}}>
-                                <Progress color={Colors.KURABUPINK} height={20} min={0} max={node.numEpisodes ?? 0} current={node.myListStatus?.numEpisodesWatched ?? 0} />
+                                <Progress fieldToControl="numEpisodesWatched" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numEpisodes ?? 0} current={node.myListStatus?.numEpisodesWatched ?? 0} />
                             </View>
                         </View>
                     </View>
@@ -193,9 +193,11 @@ export class DetailedUpdateItem extends React.PureComponent<
         const manga = this.getMangaNode();
         const anime = this.getAnimeNode();
 
+        const listStatusElement = this.createListStatus();
+
         return (
-            <TouchableOpacity style={styles.mediaContainer} onPress={this.openDetails.bind(this)}>
-                <View style={styles.mainContainer}>
+            <View style={styles.mediaContainer} >
+                <TouchableOpacity style={styles.mainContainer} onPress={this.openDetails.bind(this)}>
                     {this.state.item.node.mainPicture !== undefined ? (
                         <Image
                             style={styles.image}
@@ -275,10 +277,11 @@ export class DetailedUpdateItem extends React.PureComponent<
                             </View>
                         </View>
                     </View>
-                </View>
-                {this.createListStatus()}
+                </TouchableOpacity>
                 
-            </TouchableOpacity>
+                {listStatusElement}
+                
+            </View>
         );
     }
 }
@@ -347,7 +350,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     listContainer: {
-        padding: 5
+        padding: 5,
+        paddingTop: 0
     },
     title: {
         fontSize: fontSize * 1.2,
