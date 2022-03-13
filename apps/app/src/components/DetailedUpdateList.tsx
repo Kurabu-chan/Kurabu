@@ -24,6 +24,7 @@ type DetailedUpdateListProps = {
     navigator: StackNavigationProp<any, any>;
     onCreate?: (media: DetailedUpdateList) => void;
     onDataGather?: () => void;
+    showListStatus?: boolean;
 };
 
 class DetailedUpdateList extends React.Component<DetailedUpdateListProps, DetailedUpdateListState> {
@@ -116,7 +117,7 @@ class DetailedUpdateList extends React.Component<DetailedUpdateListProps, Detail
                         onEndReachedThreshold={0.5}
                         onEndReached={this.loadExtra.bind(this)}
                         renderItem={(item) => (
-                            <DetailedUpdateItem item={item.item} navigator={this.state.navigator} />
+                            <DetailedUpdateItem item={item.item} navigator={this.state.navigator} showListStatus={this.props.showListStatus}/>
                         )}
                         keyExtractor={(item, index) => index.toString()}
                     />
