@@ -1,25 +1,20 @@
-import { AnimeDetails, AnimeList, GetAnimeListRequest, MediaFields } from "@kurabu/api-sdk";
+import { AnimeList } from "@kurabu/api-sdk";
 import { MediaListSource } from "../MediaListSource";
-import { ListBase } from "../../apiBase/ListBase";
-import { fieldsToString } from "#helpers/fieldsHelper";
 import { requestErrorHandler } from "#decorators/requestErrorHandler";
+import { getListManager } from "#helpers/ListManager";
 
-export class AnimeListSource extends ListBase implements MediaListSource {
-    constructor(private fields?: MediaFields[] | string, private sort?: string | undefined, private status?: string) {
-        super();
+export class AnimeListSource implements MediaListSource {
+    private listManager = getListManager();
+
+    constructor() {
+        
     }
 
     @requestErrorHandler
     async MakeRequest(limit?: number, offset?: number): Promise<AnimeList> {
-        var api = await super.getApi();
-        const requestParams: GetAnimeListRequest = {
-            fields: fieldsToString(this.fields),
-            sort: this.sort,
-            status: this.status,
-            limit,
-            offset,
+        await this.listManager.loadList();
+        return {
+            data: this.listManager.AnimeList.slice((offset ?? 0), (offset ?? 0) + (limit ?? 20))
         }
-        const suggestions = await api.getAnimeList(requestParams);
-        return suggestions;
     }
 }
