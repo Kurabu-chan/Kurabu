@@ -8,8 +8,9 @@ import React from "react";
 import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { MediaListSource } from "#data/MediaListSource";
-import MediaList from "../../../components/MediaList";
+import MediaList, { mediaListFields } from "#comps/MediaList";
 import { Colors } from "../../../config/Colors";
+import { MediaFields } from "@kurabu/api-sdk";
 
 type PropsType = {
     navigation: StackNavigationProp<HomeStackParamList, "Home">;
@@ -27,10 +28,11 @@ type StateType = {
 export default class Home extends React.Component<PropsType, StateType> {
     constructor(props: PropsType) {
         super(props);
+        
         this.state = {
             node: {
                 key: "Most popular Manga",
-                nodeSource: new MangaRankingSource(undefined, "bypopularity"),
+                nodeSource: new MangaRankingSource(mediaListFields, "bypopularity"),
             },
             listenerToUnMount: undefined,
         };

@@ -1,4 +1,5 @@
-export function niceDateFormat(date: Date): string {
+export function niceDateFormat(date: Date | undefined): string {
+    if (date === undefined) return "N/A";
     const monthNames = [
         "January",
         "February",

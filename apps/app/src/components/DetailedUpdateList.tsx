@@ -4,7 +4,7 @@ import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, View } from 
 import { Colors } from "#config/Colors";
 import DetailedUpdateItem from "./DetailedUpdateItem";
 import { MediaListSource } from "#data/MediaListSource";
-import { AnimeListData, MangaListData } from "@kurabu/api-sdk";
+import { AnimeListData, MangaListData, MediaFields } from "@kurabu/api-sdk";
 
 const BatchSize = 20;
 
