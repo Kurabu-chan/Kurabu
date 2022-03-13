@@ -5,7 +5,7 @@ import { Dimensions, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import {AnimeSuggestionsSource} from "#data/anime/AnimeSuggestionsSource";
 import {MediaListSource} from "#data/MediaListSource";
-import MediaList from "#comps/MediaList";
+import MediaList, { mediaListFields } from "#comps/MediaList";
 import { Colors } from "#config/Colors";
 
 type StateType = {
@@ -22,7 +22,7 @@ export default class Suggestions extends React.Component<any, StateType> {
         this.state = {
             node: {
                 key: "Suggestions for you",
-                nodeSource: new AnimeSuggestionsSource(),
+                nodeSource: new AnimeSuggestionsSource(mediaListFields),
             },
             listenerToUnMount: undefined,
         };

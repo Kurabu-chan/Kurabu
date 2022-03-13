@@ -34,7 +34,7 @@ class MediaItem extends React.Component<MediaItemProps, MediaItemState> {
 
         this.state.navigator.push("DetailsScreen", {
             id: this.state.item.node.id,
-            media_type: this.state.item.node.mediaType,
+            mediaType: this.state.item.node.mediaType,
         });
     }
 

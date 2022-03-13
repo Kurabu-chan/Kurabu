@@ -4,7 +4,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Colors } from "#config/Colors";
 import MediaItem from "./MediaItem";
 import { MediaListSource } from "#data/MediaListSource";
-import { AnimeListData, MangaListData } from "@kurabu/api-sdk";
+import { AnimeListData, MangaListData, MediaFields } from "@kurabu/api-sdk";
 
 type MediaListState = {
     title: string;
@@ -20,6 +20,12 @@ type MediaListProps = {
     navigator: StackNavigationProp<any, any>;
     onCreate?: (media: MediaList) => void;
 };
+
+export const mediaListFields: MediaFields[] = [
+    MediaFields.Title,
+    MediaFields.MainPicture,
+    MediaFields.MediaType
+];
 
 class MediaList extends React.Component<MediaListProps, MediaListState> {
     constructor(props: MediaListProps) {
