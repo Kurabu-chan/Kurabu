@@ -1,4 +1,5 @@
 import { requestErrorHandler } from "#decorators/requestErrorHandler";
+import { getListManager } from "#helpers/ListManager";
 import { DeleteMangaListItemRequest } from "@kurabu/api-sdk";
 import { ListBase } from "../../apiBase/ListBase";
 
@@ -10,5 +11,6 @@ export class AddMangaToList extends ListBase {
             mangaid: mangaId,
         }
         await api.deleteMangaListItem(responseParams);
+        await getListManager().removeManga(mangaId);
     }
 }

@@ -3,10 +3,11 @@ import { AnimeDetailsSource } from "#data/anime/AnimeDetailsSource"
 import { MangaDetailsSource } from "#data/manga/MangaDetailsSource"
 import { fieldsToString } from "#helpers/fieldsHelper"
 import { ListApi, AnimeListData, MangaListData } from "@kurabu/api-sdk"
+import { arrayBuffer } from "stream/consumers"
 import { ListBase } from "../apiBase/ListBase"
 
 type IdIdentifyableSet<Media> = {
-    [id: string]: Media
+    [id: string]: Media | undefined
 }
 
 class ListManager extends ListBase { 
@@ -74,6 +75,14 @@ class ListManager extends ListBase {
         this.mangaList[mangaId] = {
             node: details
         };;
+    }
+
+    public removeAnime(animeId: number) {
+        this.animeList[animeId] = undefined;
+    }
+
+    public removeManga(mangaId: number) {
+        this.mangaList[mangaId] = undefined;
     }
 }
 
