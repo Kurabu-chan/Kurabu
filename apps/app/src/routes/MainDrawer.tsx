@@ -10,6 +10,7 @@ import SearchStack from "./MainStacks/SearchStack";
 import SeasonalStack from "./MainStacks/SeasonalStack";
 import SuggestionsStack from "./MainStacks/SuggestionsStack";
 import ListStack from "./MainStacks/ListStack";
+import { getListManager } from "#helpers/ListManager";
 
 export const Drawer = createDrawerNavigator();
 
@@ -21,6 +22,9 @@ export default class DrawerComp extends React.Component {
 
     render() {
         var fontSize = Dimensions.get("window").width / 36;
+
+        getListManager();
+
         return (
             <Drawer.Navigator
                 initialRouteName="Main"
