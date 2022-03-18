@@ -141,9 +141,9 @@ export class DetailedUpdateItem extends React.PureComponent<
                         </View>
                         <View style={TopArea.Values}>
                             <View style={{ marginBottom: 3, marginTop: 3}}>
-                                <Progress fieldToControl="numChaptersRead" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numChapters ?? 0} current={node.myListStatus?.numChaptersRead ?? 0} />
+                                <Progress fullList={this.state.item.node.myListStatus ?? {}} fieldToControl="numChaptersRead" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numChapters ?? 0} current={node.myListStatus?.numChaptersRead ?? 0} />
                             </View>
-                            <Progress fieldToControl="numVolumesRead" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numVolumes ?? 0} current={node.myListStatus?.numVolumesRead ?? 0} />
+                            <Progress fullList={this.state.item.node.myListStatus ?? {}} fieldToControl="numVolumesRead" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numVolumes ?? 0} current={node.myListStatus?.numVolumesRead ?? 0} />
                         </View>
                     </View>
                 </View>
@@ -180,7 +180,7 @@ export class DetailedUpdateItem extends React.PureComponent<
                         </View>
                         <View style={TopArea.Values}>
                             <View style={{ marginBottom: 3, marginTop: 3}}>
-                                <Progress fieldToControl="numEpisodesWatched" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numEpisodes ?? 0} current={node.myListStatus?.numEpisodesWatched ?? 0} />
+                                <Progress fullList={this.state.item.node.myListStatus ?? {}} fieldToControl="numEpisodesWatched" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numEpisodes ?? 0} current={node.myListStatus?.numEpisodesWatched ?? 0} />
                             </View>
                         </View>
                     </View>

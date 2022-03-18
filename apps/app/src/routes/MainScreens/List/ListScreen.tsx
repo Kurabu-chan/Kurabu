@@ -1,7 +1,4 @@
-import { AnimeRankingSource } from "#data/anime/AnimeRankingSource";
 import { changeActivePage } from "#helpers/backButton";
-import { Picker } from "@react-native-community/picker";
-import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions } from "react-native";
@@ -11,11 +8,13 @@ import { AnimeExpandedDetailedUpdateItemFields, DetailedUpdateItemFields } from 
 import SearchList from "#comps/DetailedUpdateList";
 import { Colors } from "#config/Colors";
 import { AnimeListSource } from "#data/anime/AnimeListSource";
+import { FieldSearchBar, FieldValue } from "#comps/FieldSearchBar";
 
 type StateType = {
-    ranking: {
-        rankingValue: string;
-        query: string;
+    filter: {
+        fields: FieldValue[];
+        search: string;
+        status: undefined | string;
         limit?: number;
         offset?: number;
         searched: boolean;
@@ -25,15 +24,31 @@ type StateType = {
     animeList?: SearchList;
     listenerToUnMount: any;
 };
+const statusRef = /status:(watching|plan( |_)to( |_)watch|completed|dropped|on( |_)hold)/i;
+
 
 export default class List extends React.Component<any, StateType> {
     constructor(props: any) {
         super(props);
         this.state = {
-            ranking: {
-                rankingValue: "all",
-                query: "",
-                limit: 10,
+            filter: {
+                fields: [
+                    {
+                        name: "status",
+                        negative: false,
+                        value: "watching",
+                        color: "lime"
+                    },
+                    {
+                        name: "sort",
+                        negative: false,
+                        value: "status",
+                        color: Colors.CYAN
+                    }
+                ],
+                search: "",
+                status: "watching",
+                limit: 1000000,
                 offset: 0,
                 searched: false,
                 found: false,
@@ -43,8 +58,7 @@ export default class List extends React.Component<any, StateType> {
     }
 
     componentDidMount() {
-        console.log("mount");
-        this.DoRanking();
+        this.doSearch();
 
         const unsubscribe = this.props.navigation.addListener("focus", () => {
             changeActivePage("Ranking");
@@ -62,83 +76,161 @@ export default class List extends React.Component<any, StateType> {
         if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
-    async DoRanking() {
-        if (this.state.ranking.rankingValue == "") {
-            return;
-        }
 
+    doSearch() {
+        // start searching
         const fields = AnimeExpandedDetailedUpdateItemFields;
 
-        var nodeSource = new AnimeListSource();
+        let status: string[] | undefined = [];
+        const statusFields = this.state.filter.fields.filter((field) => field.name === "status");
+        if (statusFields === undefined || statusFields.length == 0) {
+            status = undefined
+        } else { 
+            if (statusFields[0].negative) {
+                status = ["completed", "dropped", "on_hold", "plan_to_watch", "watching"];
+
+                const remove = statusFields.map(x => x.value)
+                status = status.filter(x => !remove.includes(x.replace(/\s/g, "_")));
+            } else { 
+                status = statusFields.map(x => x.value.replace(/\s/g, "_"))
+            }
+        }
+
+
+        var nodeSource = new AnimeListSource(status, "status");
         this.setState((prevState) => ({
             ...prevState,
             rankingSource: nodeSource,
-            ranking: {
-                ...prevState.ranking,
+            filter: {
+                ...prevState.filter,
                 searched: true,
             },
-        }));
-        if (this.state.animeList) {
-            var goodNamingMapping: {
-                [index: string]: string;
-            } = {
-                all: "Overall",
-                airing: "Airing anime",
-                upcoming: "Upcoming anime",
-                tv: "Tv",
-                ova: "Ova",
-                movie: "Movie",
-                special: "Special",
-                bypopularity: "Popularity",
-                favorite: "Favorites",
-            };
+        })); 
 
-            console.log(this.state.ranking.rankingValue);
-            this.state.animeList.changeSource(
-                `Top ${goodNamingMapping[this.state.ranking.rankingValue]} Rankings`,
-                nodeSource
-            );
-        }
+        this.state.animeList?.changeSource(`Your anime list`, nodeSource);
     }
 
-    changeRanking(val: ItemValue, index: number) {
-        this.setState(
-            (prevState) =>
-                ({
-                    ...prevState,
-                    ranking: {
-                        ...prevState.ranking,
-                        rankingValue: val.toString(),
-                    },
-                } as StateType),
-            this.DoRanking.bind(this)
-        );
-    }
+    // updateSearch(text: string) {
+    //     const extracted = extractSearch(text);
+
+    //     this.setState({
+    //         ...this.state,
+    //         filter: {
+    //             ...this.state.filter,
+    //             query: text,
+    //             search: extracted.search,
+    //             status: extracted.status,
+    //         }
+    //     });
+
+    //     this.doSearch();
+    // }
 
     createSearchBar() {
         return (
-            <Picker
-                selectedValue={this.state.ranking.rankingValue}
-                onValueChange={this.changeRanking.bind(this)}
-                style={{
-                    backgroundColor: Colors.KURABUPURPLE,
-                    marginTop: 5,
-                    marginLeft: 5,
-                    marginRight: 5,
-                    width: Dimensions.get("window").width - 10,
-                    color: Colors.TEXT,
+            // <SearchBar
+            //     placeholder="Search for an Anime Title.."
+            //     loadingProps={{}}
+            //     showLoading={false}
+            //     lightTheme={false}
+            //     round={true}
+            //     onFocus={() => { }}
+            //     onBlur={() => { }}
+            //     style={{
+            //         backgroundColor: Colors.KURABUPURPLE,
+            //         color: Colors.TEXT,
+            //         width: Dimensions.get("window").width - 10,
+            //     }}
+            //     inputStyle={{
+            //         color: Colors.TEXT,
+            //     }}
+            //     labelStyle={{
+            //         backgroundColor: Colors.KURABUPURPLE,
+            //     }}
+            //     searchIcon={{
+            //         name: "search",
+            //         color: Colors.TEXT,
+            //     }}
+            //     clearIcon={{
+            //         name: "close",
+            //         color: Colors.TEXT
+            //     }}
+            //     inputContainerStyle={{
+            //         backgroundColor: Colors.KURABUPURPLE,
+            //     }}
+            //     containerStyle={{
+            //         backgroundColor: "transparent",
+            //         borderTopWidth: 0,
+            //         borderBottomWidth: 0,
+            //     }}
+            //     leftIconContainerStyle={{
+            //         backgroundColor: Colors.KURABUPURPLE,
+            //     }}
+            //     onEndEditing={this.doSearch.bind(this)}
+            //     platform={"default"}
+            //     onChangeText={this.updateSearch.bind(this) as any}
+            //     onClear={() => {
+            //         this.updateSearch("");
+            //     }}
+            //     onCancel={this.doSearch.bind(this)}
+            //     value={this.state.filter?.query ?? ""}
+            //     cancelButtonTitle={"Cancel"}
+            //     cancelButtonProps={{}}
+            //     showCancel={this.state.filter?.query != undefined}
+            // />
+            <FieldSearchBar
+                fields={[
+                    {
+                        name: "status",
+                        possibleValues: [
+                            {
+                                val: "watching",
+                                color: "lime"
+                            },
+                            {
+                                val: "plan to watch",
+                                color: "gray"
+                            },
+                            {
+                                val: "completed",
+                                color: "darkblue"
+                            },
+                            {
+                                val: "dropped",
+                                color: "red"
+                            },
+                            {
+                                val: "on hold",
+                                color: "yellow"
+                            }
+                        ],
+                        subtractable: true
+                    },
+                    {
+                        name: "sort",
+                        possibleValues: [
+                            {
+                                val: "status",
+                                color: "lime"
+                            }
+                        ],
+                        subtractable: true
+                    }
+                ]}
+                onChange={(fields: FieldValue[], text: string) => {
+                    this.setState({
+                        ...this.state,
+                        filter: {
+                            ...this.state.filter,
+                            search: text,
+                            fields: fields,
+                        }
+                    })
                 }}
-            >
-                <Picker.Item label="All" value="all" />
-                <Picker.Item label="Airing" value="airing" />
-                <Picker.Item label="Upcoming" value="upcoming" />
-                <Picker.Item label="Tv" value="tv" />
-                <Picker.Item label="Ova" value="ova" />
-                <Picker.Item label="Movie" value="movie" />
-                <Picker.Item label="Special" value="special" />
-                <Picker.Item label="Popularity" value="bypopularity" />
-                <Picker.Item label="Favorite" value="favorite" />
-            </Picker>
+                verify={() => { return true; }}
+                search={this.state.filter.search}
+                currentFields={this.state.filter.fields}
+                onSearch={this.doSearch.bind(this)} />
         );
     }
 
@@ -148,12 +240,11 @@ export default class List extends React.Component<any, StateType> {
             animeList: list,
         }));
     }
-
     onSearchListDataGather() {
         this.setState((prevState) => ({
             ...prevState,
-            ranking: {
-                ...prevState.ranking,
+            filter: {
+                ...prevState.filter,
                 found: true,
             },
         }));
@@ -182,16 +273,37 @@ export default class List extends React.Component<any, StateType> {
                     {this.createSearchBar()}
                     {this.state.rankingSource !== undefined ? (
                         <SearchList
-                            title={`Top Overall Rankings`}
+                            title={`Your anime list`}
                             mediaNodeSource={this.state.rankingSource}
                             navigator={this.props.navigation}
                             onCreate={this.onSearchListCreate.bind(this)}
                             onDataGather={this.onSearchListDataGather.bind(this)}
                             showListStatus={true}
+                            limit={10000}
                         />
                     ) : undefined}
                 </LinearGradient>
             </SafeAreaProvider>
         );
+    }
+}
+
+function extractSearch(query: string) {
+    const matches = query.match(statusRef);
+
+    if (matches === null) {
+        return {
+            search: query.trim(),
+            status: undefined
+        }
+    }
+
+    const statusMatch = matches[0].toLowerCase();
+    const status = statusMatch.split(":")[1];
+
+    const formatted_status = status.replace(/ /g, "_").toLowerCase();
+    return {
+        search: query.replace(statusRef, "").trim(),
+        status: formatted_status
     }
 }

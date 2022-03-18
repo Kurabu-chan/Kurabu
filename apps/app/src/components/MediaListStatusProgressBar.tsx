@@ -105,7 +105,9 @@ export class Progress extends React.PureComponent<Props, State>{
     }
 
     render() {
-        const location = (this.state.current - this.props.min) / (this.props.max - this.props.min);
+        let location = (this.state.current - this.props.min) / (this.props.max - this.props.min);
+
+        if (isNaN(location)) location = 0;
 
         return (
             // <View style={{

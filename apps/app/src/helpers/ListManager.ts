@@ -22,10 +22,10 @@ class ListManager extends ListBase {
     }
 
     get AnimeList() {
-        return Object.values(this.animeList);
+        return Object.values(this.animeList) as AnimeListData[];
     }
     get MangaList() {
-        return Object.values(this.mangaList);
+        return Object.values(this.mangaList) as MangaListData[];
     }
 
     public async loadList() {

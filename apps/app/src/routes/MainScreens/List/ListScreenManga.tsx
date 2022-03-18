@@ -1,20 +1,20 @@
-import { MangaRankingSource } from "#data/manga/MangaRankingSource";
 import { changeActivePage } from "#helpers/backButton";
-import { Picker } from "@react-native-community/picker";
-import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { MediaListSource } from "#data/MediaListSource";
-import { DetailedUpdateItemFields, MangaExpandedDetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
+import { MangaExpandedDetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
 import SearchList from "#comps/DetailedUpdateList";
 import { Colors } from "#config/Colors";
+import { SearchBar } from "react-native-elements";
+import { MangaListSource } from "#data/manga/MangaListSource";
 
 type StateType = {
-    ranking: {
-        rankingValue: string;
+    filter: {
         query: string;
+        search: string;
+        status: undefined | string;
         limit?: number;
         offset?: number;
         searched: boolean;
@@ -24,15 +24,18 @@ type StateType = {
     animeList?: SearchList;
     listenerToUnMount: any;
 };
+const statusRef = /status:(completed|plan( |_)to( |_)read|dropped|reading|on( |_)hold)/i;
+
 
 export default class List extends React.Component<any, StateType> {
     constructor(props: any) {
         super(props);
         this.state = {
-            ranking: {
-                rankingValue: "all",
-                query: "",
-                limit: 10,
+            filter: {
+                query: "status:reading",
+                search: "",
+                status: "reading",
+                limit: 100,
                 offset: 0,
                 searched: false,
                 found: false,
@@ -42,8 +45,8 @@ export default class List extends React.Component<any, StateType> {
     }
 
     componentDidMount() {
-        console.log("mount");
-        this.DoRanking();
+        
+        this.doSearch();
 
         const unsubscribe = this.props.navigation.addListener("focus", () => {
             changeActivePage("Ranking");
@@ -61,85 +64,90 @@ export default class List extends React.Component<any, StateType> {
         if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
-    async DoRanking() {
-        if (this.state.ranking.rankingValue == "") {
-            return;
-        }
 
+    doSearch() {
+        // start searching
         const fields = MangaExpandedDetailedUpdateItemFields;
 
-        var nodeSource = new MangaRankingSource(fields, this.state.ranking.rankingValue);
+        var nodeSource = new MangaListSource();
         this.setState((prevState) => ({
             ...prevState,
             rankingSource: nodeSource,
-            ranking: {
-                ...prevState.ranking,
+            filter: {
+                ...prevState.filter,
                 searched: true,
             },
         }));
-        if (this.state.animeList) {
-            var goodNamingMapping: {
-                [index: string]: string;
-            } = {
-                all: "Overall",
-                manga: "Manga",
-                oneshots: "One-shots",
-                doujin: "Doujinshi",
-                lightnovels: "Light Novels",
-                novels: "Novels",
-                manhwa: "Manhwa",
-                manhua: "Manhua",
-                bypopularity: "Popularity",
-                favorite: "Favorites",
-            };
-
-            console.log(this.state.ranking.rankingValue);
-            this.state.animeList.changeSource(
-                `Top ${goodNamingMapping[this.state.ranking.rankingValue]} Rankings Manga`,
-                nodeSource
-            );
-        }
     }
 
-    changeRanking(val: ItemValue, index: number) {
-        this.setState(
-            (prevState) =>
-                ({
-                    ...prevState,
-                    ranking: {
-                        ...prevState.ranking,
-                        rankingValue: val.toString(),
-                    },
-                } as StateType),
-            this.DoRanking.bind(this)
-        );
+    updateSearch(text: string) {
+        const extracted = extractSearch(text);
+
+        this.setState({
+            ...this.state,
+            filter: {
+                ...this.state.filter,
+                query: text,
+                search: extracted.search,
+                status: extracted.status,
+            }
+        });
+
+        this.doSearch();
     }
 
     createSearchBar() {
         return (
-            <Picker
-                selectedValue={this.state.ranking.rankingValue}
-                onValueChange={this.changeRanking.bind(this)}
+            <SearchBar
+                placeholder="Search for an Manga Title.."
+                loadingProps={{}}
+                showLoading={false}
+                lightTheme={false}
+                round={true}
+                onFocus={() => { }}
+                onBlur={() => { }}
                 style={{
                     backgroundColor: Colors.KURABUPURPLE,
-                    marginTop: 5,
-                    marginLeft: 5,
-                    marginRight: 5,
+                    color: Colors.TEXT,
                     width: Dimensions.get("window").width - 10,
+                }}
+                inputStyle={{
                     color: Colors.TEXT,
                 }}
-            >
-                <Picker.Item key="all" label="All" value="all" />
-                <Picker.Item key="manga" label="Manga" value="manga" />
-                <Picker.Item key="oneshots" label="One-shots" value="oneshots" />
-                <Picker.Item key="doujin" label="Doujinshi" value="doujin" />
-                <Picker.Item key="lightnovels" label="Light Novels" value="lightnovels" />
-                <Picker.Item key="novels" label="Novels" value="novels" />
-                <Picker.Item key="manhwa" label="Manhwa" value="manhwa" />
-                <Picker.Item key="manhua" label="Manhua" value="manhua" />
-                <Picker.Item key="bypopularity" label="Popularity" value="bypopularity" />
-                <Picker.Item key="favorite" label="Favorites" value="favorite" />
-            </Picker>
+                labelStyle={{
+                    backgroundColor: Colors.KURABUPURPLE,
+                }}
+                searchIcon={{
+                    name: "search",
+                    color: Colors.TEXT,
+                }}
+                clearIcon={{
+                    name: "close",
+                    color: Colors.TEXT
+                }}
+                inputContainerStyle={{
+                    backgroundColor: Colors.KURABUPURPLE,
+                }}
+                containerStyle={{
+                    backgroundColor: "transparent",
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                }}
+                leftIconContainerStyle={{
+                    backgroundColor: Colors.KURABUPURPLE,
+                }}
+                onEndEditing={this.doSearch.bind(this)}
+                platform={"default"}
+                onChangeText={this.updateSearch.bind(this) as any}
+                onClear={() => {
+                    this.updateSearch("");
+                }}
+                onCancel={this.doSearch.bind(this)}
+                value={this.state.filter?.query ?? ""}
+                cancelButtonTitle={"Cancel"}
+                cancelButtonProps={{}}
+                showCancel={this.state.filter?.query != undefined}
+            />
         );
     }
 
@@ -153,8 +161,8 @@ export default class List extends React.Component<any, StateType> {
     onSearchListDataGather() {
         this.setState((prevState) => ({
             ...prevState,
-            ranking: {
-                ...prevState.ranking,
+            filter: {
+                ...prevState.filter,
                 found: true,
             },
         }));
@@ -183,7 +191,7 @@ export default class List extends React.Component<any, StateType> {
                     {this.createSearchBar()}
                     {this.state.rankingSource !== undefined ? (
                         <SearchList
-                            title={`Top Overall Rankings`}
+                            title={`Your manga list`}
                             mediaNodeSource={this.state.rankingSource}
                             navigator={this.props.navigation}
                             onCreate={this.onSearchListCreate.bind(this)}
@@ -194,5 +202,25 @@ export default class List extends React.Component<any, StateType> {
                 </LinearGradient>
             </SafeAreaProvider>
         );
+    }
+}
+
+function extractSearch(query: string) {
+    const matches = query.match(statusRef);
+
+    if (matches === null) {
+        return {
+            search: query.trim(),
+            status: undefined
+        }
+    }
+
+    const statusMatch = matches[0].toLowerCase();
+    const status = statusMatch.split(":")[1];
+
+    const formatted_status = status.replace(/ /g, "_").toLowerCase();
+    return {
+        search: query.replace(statusRef, "").trim(),
+        status: formatted_status
     }
 }

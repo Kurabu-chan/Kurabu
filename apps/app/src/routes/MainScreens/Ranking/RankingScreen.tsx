@@ -42,7 +42,7 @@ export default class Ranking extends React.Component<any, StateType> {
     }
 
     componentDidMount() {
-        console.log("mount");
+        
         this.DoRanking();
 
         const unsubscribe = this.props.navigation.addListener("focus", () => {

@@ -25,6 +25,7 @@ type DetailedUpdateListProps = {
     onCreate?: (media: DetailedUpdateList) => void;
     onDataGather?: () => void;
     showListStatus?: boolean;
+    limit?: number;
 };
 
 class DetailedUpdateList extends React.Component<DetailedUpdateListProps, DetailedUpdateListState> {
@@ -70,7 +71,7 @@ class DetailedUpdateList extends React.Component<DetailedUpdateListProps, Detail
         if (this.state.onDataGather != undefined) {
             this.state.onDataGather();
         }
-        this.state.mediaNodeSource?.MakeRequest(BatchSize, this.state.offset).then((data) => {
+        this.state.mediaNodeSource?.MakeRequest(this.props.limit ?? BatchSize, this.state.offset).then((data) => {
             this.setState((prevState) => ({
                 ...prevState,
                 data: data.data,
@@ -80,10 +81,10 @@ class DetailedUpdateList extends React.Component<DetailedUpdateListProps, Detail
     }
 
     public loadExtra() {
-        this.state.mediaNodeSource?.MakeRequest(BatchSize, this.state.offset).then((data) => {
+        this.state.mediaNodeSource?.MakeRequest(this.props.limit ?? BatchSize, this.state.offset).then((data) => {
             this.setState((old) => {
                 old.data.push(...data.data);
-                if (data.data.length < BatchSize) {
+                if (data.data.length < (this.props.limit ?? BatchSize)) {
                     return {
                         title: old.title,
                         data: old.data,
