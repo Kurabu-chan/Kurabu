@@ -1,4 +1,5 @@
 import { requestErrorHandler } from "#decorators/requestErrorHandler";
+import { getListManager } from "#helpers/ListManager";
 import { DeleteAnimeListItemRequest } from "@kurabu/api-sdk";
 import { ListBase } from "../../apiBase/ListBase";
 
@@ -11,5 +12,6 @@ export class AddAnimeToList extends ListBase {
         }
 
         await api.deleteAnimeListItem(requestParams);
+        await getListManager().removeAnime(animeId);
     }
 }

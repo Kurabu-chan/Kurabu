@@ -1,7 +1,7 @@
 {
     "api": {
         "domain": "prod.kurabu.moe",
-        "scheme": "http",
+        "scheme": "https",
         "root": ""
     }
 }

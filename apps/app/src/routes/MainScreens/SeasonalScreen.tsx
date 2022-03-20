@@ -46,7 +46,7 @@ export default class Seasonal extends React.Component<any, StateType> {
     }
 
     componentDidMount() {
-        console.log("mount");
+        
         this.DoSeasonal();
 
         const unsubscribe = this.props.navigation.addListener("focus", () => {

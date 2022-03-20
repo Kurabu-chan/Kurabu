@@ -1,6 +1,7 @@
 import { ListBase } from "../../apiBase/ListBase";
 import { MangaDetailsMyListStatus, UpdateMangaListItemRequest } from "@kurabu/api-sdk";
 import { requestErrorHandler } from "#decorators/requestErrorHandler";
+import { getListManager } from "#helpers/ListManager";
 
 export class UpdateMangaList extends ListBase {
     @requestErrorHandler
@@ -27,6 +28,7 @@ export class UpdateMangaList extends ListBase {
         }
 
         await api.updateMangaListItem(requestParams);
+        await getListManager().refreshManga(mangaId);
     }
 }
 

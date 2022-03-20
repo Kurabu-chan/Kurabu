@@ -5,11 +5,13 @@ import { Colors } from "#config/Colors";
 type Props = {
     color?: string;
     widthPercentage?: number;
+    margin?: boolean;
 };
 
 type State = {
     color: string;
     widthPercentage: number;
+    margin?: boolean;
 };
 
 export class Divider extends React.Component<Props, State> {
@@ -18,6 +20,7 @@ export class Divider extends React.Component<Props, State> {
         this.state = {
             color: props.color ?? Colors.DIVIDER,
             widthPercentage: props.widthPercentage ?? 90,
+            margin: props.margin ?? true,
         };
     }
 
@@ -28,8 +31,8 @@ export class Divider extends React.Component<Props, State> {
                 height: 1,
                 backgroundColor: this.state.color,
                 marginLeft: `${(100 - this.state.widthPercentage) / 2}%`,
-                marginTop: 5,
-                marginBottom: 5,
+                marginTop: this.state.margin ? 5 : 0,
+                marginBottom: this.state.margin ? 5 : 0,
             },
         });
 
