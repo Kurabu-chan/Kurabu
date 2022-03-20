@@ -14,7 +14,6 @@ type StateType = {
     filter: {
         fields: FieldValue[];
         search: string;
-        status: undefined | string;
         limit?: number;
         offset?: number;
         searched: boolean;
@@ -47,7 +46,6 @@ export default class List extends React.Component<any, StateType> {
                     }
                 ],
                 search: "",
-                status: "watching",
                 limit: 1000000,
                 offset: 0,
                 searched: false,

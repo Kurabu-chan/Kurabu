@@ -9,12 +9,12 @@ import SearchList from "#comps/DetailedUpdateList";
 import { Colors } from "#config/Colors";
 import { SearchBar } from "react-native-elements";
 import { MangaListSource } from "#data/manga/MangaListSource";
+import { FieldSearchBar, FieldValue } from "#comps/FieldSearchBar";
 
 type StateType = {
     filter: {
-        query: string;
+        fields: FieldValue[];
         search: string;
-        status: undefined | string;
         limit?: number;
         offset?: number;
         searched: boolean;
@@ -32,10 +32,22 @@ export default class List extends React.Component<any, StateType> {
         super(props);
         this.state = {
             filter: {
-                query: "status:reading",
+                fields: [
+                    {
+                        name: "status",
+                        negative: false,
+                        value: "reading",
+                        color: "lime"
+                    },
+                    {
+                        name: "sort",
+                        negative: false,
+                        value: "status",
+                        color: Colors.CYAN
+                    }
+                ],
                 search: "",
-                status: "reading",
-                limit: 100,
+                limit: 1000000,
                 offset: 0,
                 searched: false,
                 found: false,
@@ -69,7 +81,23 @@ export default class List extends React.Component<any, StateType> {
         // start searching
         const fields = MangaExpandedDetailedUpdateItemFields;
 
-        var nodeSource = new MangaListSource();
+        let status: string[] | undefined = [];
+        const statusFields = this.state.filter.fields.filter((field) => field.name === "status");
+        if (statusFields === undefined || statusFields.length == 0) {
+            status = undefined
+        } else {
+            if (statusFields[0].negative) {
+                status = ["completed", "dropped", "on_hold", "plan_to_read", "reading"];
+
+                const remove = statusFields.map(x => x.value)
+                status = status.filter(x => !remove.includes(x.replace(/\s/g, "_")));
+            } else {
+                status = statusFields.map(x => x.value.replace(/\s/g, "_"))
+            }
+        }
+
+
+        var nodeSource = new MangaListSource(this.state.filter.search, status, "status");
         this.setState((prevState) => ({
             ...prevState,
             rankingSource: nodeSource,
@@ -78,75 +106,97 @@ export default class List extends React.Component<any, StateType> {
                 searched: true,
             },
         }));
+
+        this.state.animeList?.changeSource(`Your anime list`, nodeSource);
     }
-
-    updateSearch(text: string) {
-        const extracted = extractSearch(text);
-
-        this.setState({
-            ...this.state,
-            filter: {
-                ...this.state.filter,
-                query: text,
-                search: extracted.search,
-                status: extracted.status,
-            }
-        });
-
-        this.doSearch();
-    }
-
     createSearchBar() {
         return (
-            <SearchBar
-                placeholder="Search for an Manga Title.."
-                loadingProps={{}}
-                showLoading={false}
-                lightTheme={false}
-                round={true}
-                onFocus={() => { }}
-                onBlur={() => { }}
-                style={{
-                    backgroundColor: Colors.KURABUPURPLE,
-                    color: Colors.TEXT,
-                    width: Dimensions.get("window").width - 10,
+            <FieldSearchBar
+                fields={[
+                    {
+                        name: "status",
+                        possibleValues: [
+                            {
+                                val: "reading",
+                                color: "lime"
+                            },
+                            {
+                                val: "plan to read",
+                                color: "gray"
+                            },
+                            {
+                                val: "completed",
+                                color: "darkblue"
+                            },
+                            {
+                                val: "dropped",
+                                color: "red"
+                            },
+                            {
+                                val: "on hold",
+                                color: "yellow"
+                            }
+                        ],
+                        subtractable: true
+                    },
+                    {
+                        name: "sort",
+                        possibleValues: [
+                            {
+                                val: "status",
+                                color: "lime"
+                            }
+                        ],
+                        subtractable: true
+                    }
+                ]}
+                onChange={(fields: FieldValue[], text: string) => {
+                    this.setState({
+                        ...this.state,
+                        filter: {
+                            ...this.state.filter,
+                            search: text,
+                            fields: fields,
+                        }
+                    })
                 }}
-                inputStyle={{
-                    color: Colors.TEXT,
+                verify={() => { return true; }}
+                search={this.state.filter.search}
+                currentFields={this.state.filter.fields}
+                onSearch={this.doSearch.bind(this)}
+
+                styles={{
+                    style: {
+                        backgroundColor: Colors.KURABUPURPLE,
+                        color: Colors.TEXT,
+                        width: Dimensions.get("window").width - 10,
+
+                    },
+                    inputStyle: {
+                        color: Colors.TEXT,
+                    },
+                    labelStyle: {
+                        backgroundColor: Colors.KURABUPURPLE,
+                    },
+                    inputContainerStyle: {
+                        backgroundColor: Colors.KURABUPURPLE,
+                    },
+                    containerStyle: {
+                        backgroundColor: "transparent",
+                        borderTopWidth: 0,
+                        borderBottomWidth: 0,
+                    },
+                    leftIconContainerStyle: {
+                        backgroundColor: Colors.KURABUPURPLE,
+                    },
+                    searchIconStyle: {
+                        color: Colors.TEXT
+                    },
+                    clearIconStyle: {
+                        color: Colors.TEXT
+                    }
                 }}
-                labelStyle={{
-                    backgroundColor: Colors.KURABUPURPLE,
-                }}
-                searchIcon={{
-                    name: "search",
-                    color: Colors.TEXT,
-                }}
-                clearIcon={{
-                    name: "close",
-                    color: Colors.TEXT
-                }}
-                inputContainerStyle={{
-                    backgroundColor: Colors.KURABUPURPLE,
-                }}
-                containerStyle={{
-                    backgroundColor: "transparent",
-                    borderTopWidth: 0,
-                    borderBottomWidth: 0,
-                }}
-                leftIconContainerStyle={{
-                    backgroundColor: Colors.KURABUPURPLE,
-                }}
-                onEndEditing={this.doSearch.bind(this)}
-                platform={"default"}
-                onChangeText={this.updateSearch.bind(this) as any}
-                onClear={() => {
-                    this.updateSearch("");
-                }}
-                onCancel={this.doSearch.bind(this)}
-                value={this.state.filter?.query ?? ""}
-                cancelButtonTitle={"Cancel"}
-                cancelButtonProps={{}}
-                showCancel={this.state.filter?.query != undefined}
+
             />
         );
     }
