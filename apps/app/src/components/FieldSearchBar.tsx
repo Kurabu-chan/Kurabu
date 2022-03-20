@@ -2,20 +2,20 @@ import { Colors } from "#config/Colors";
 import { createClearIcon, createSearchIcon } from "#helpers/DefaultIcons";
 import { throws } from "assert";
 import React from "react";
-import { View, Text, Dimensions, ColorValue } from "react-native";
+import { View, Text, Dimensions, ColorValue, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { Icon, SearchBar } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export type Field = {
     name: string,
-    possibleValues: {val: string, color?: ColorValue}[],
+    possibleValues: { val: string, color?: ColorValue }[],
     subtractable: boolean
 }
 
 export type FieldValue = {
     name: string,
     value: string,
-    negative: boolean,
+    negative?: boolean,
     color: ColorValue
 }
 
@@ -26,7 +26,17 @@ type Props = {
     onChange: (field: FieldValue[], text: string) => void,
     search: string,
     currentFields: FieldValue[],
-    onSearch: () => void
+    onSearch: () => void,
+    styles: {
+        style?: StyleProp<TextStyle>,
+        inputStyle?: StyleProp<TextStyle>,
+        labelStyle?: StyleProp<TextStyle>,
+        inputContainerStyle?: StyleProp<ViewStyle>,
+        containerStyle?: StyleProp<ViewStyle>,
+        leftIconContainerStyle?: StyleProp<ViewStyle>,
+        clearIconStyle?: TextStyle | ViewStyle,
+        searchIconStyle?: TextStyle | ViewStyle,
+    }
 }
 
 export class FieldSearchBar extends React.Component<Props> {
@@ -40,19 +50,17 @@ export class FieldSearchBar extends React.Component<Props> {
 
     changeText(search: string) {
         this.typing = true;
-        if(this.timeout) clearTimeout(this.timeout);
+        if (this.timeout) clearTimeout(this.timeout);
 
         this.timeout = setTimeout(() => {
             this.typing = false;
             this.props.onSearch();
         }, 1000);
 
-        
 
         this.props.onChange(this.props.currentFields, search);
         // extract the fields
-        
-            
+
         const [fields, text] = extractFields(search, this.props.fields, this.props.currentFields);
 
         const currentFields = [...this.props.currentFields, ...fields]
@@ -74,18 +82,17 @@ export class FieldSearchBar extends React.Component<Props> {
             search: text,
             currentFields: currentFields
         });
-                      
-        
-
-
     }
 
-    removeField(field: FieldValue) { 
-        let fields = this.props.currentFields; 
+    removeField(field: FieldValue) {
+        let fields = this.props.currentFields;
         let index = fields.findIndex(f => f.name === field.name && f.value === field.value);
         if (index === -1) return;
         fields.splice(index, 1);
-        this.setState({...this.state, currentFields: fields});
+        this.setState({ ...this.state, currentFields: fields }, () => {
+            this.props.onChange(fields, this.props.search);
+            this.props.onSearch();
+        });
     }
 
     render() {
@@ -98,28 +105,37 @@ export class FieldSearchBar extends React.Component<Props> {
                     value={this.props.search}
                     platform={"default"}
                     onBlur={() => { }}
-                    onChangeText={((text: string) => { 
+                    onChangeText={((text: string) => {
                         this.changeText(text);
                     }) as any}
                     onFocus={() => { }}
                     clearIcon={{
-                        ...createClearIcon(),
+                        ...createClearIcon(undefined, this.props.styles.clearIconStyle),
                         name: "search"
                     }}
                     searchIcon={{
-                        ...createSearchIcon(),
+                        ...createSearchIcon(undefined, this.props.styles.searchIconStyle),
                         name: "search"
                     }}
                     loadingProps={{}}
                     showLoading={false}
-                    onClear={() => {this.props.onChange([], "")}}
+                    onClear={() => { this.props.onChange([], "") }}
                     onCancel={() => { console.log("onCancel") }}
                     lightTheme={false}
                     round={false}
                     cancelButtonTitle={""}
                     cancelButtonProps={{}}
-                    onEndEditing={()=>{this.props.onSearch()}}
-                    showCancel={false} />
+                    onEndEditing={() => { this.props.onSearch() }}
+                    showCancel={false}
+
+                    style={this.props.styles.style}
+                    inputStyle={this.props.styles.inputStyle}
+                    labelStyle={this.props.styles.labelStyle}
+                    inputContainerStyle={this.props.styles.inputContainerStyle}
+                    containerStyle={this.props.styles.containerStyle}
+                    leftIconContainerStyle={this.props.styles.leftIconContainerStyle}
+                />
+
                 <View>
                     <View style={{
                         flexDirection: "row",
@@ -142,105 +158,188 @@ export class FieldSearchBar extends React.Component<Props> {
                                     }}>
                                         <Text style={{
                                             alignSelf: "flex-start",
-                                            fontSize: fontSize*1.1
-                                        }}>{field.negative ? "-" : "+"}{field.name}:"{field.value}"</Text>
+                                            fontSize: fontSize * 1.1
+                                        }}>{field.negative ? "-" : "+"}{field.name}: {field.value}</Text>
                                         <TouchableOpacity
-                                            onPress={() => { 
+                                            onPress={() => {
                                                 this.removeField(field);
                                             }}>
-                                            {createClearIcon(fontSize*1.6)}
+                                            {createClearIcon(fontSize * 1.6)}
                                         </TouchableOpacity>
                                     </View>
                                 );
                             })
                         }
                     </View>
-                    
+
                 </View>
             </View>
         );
     }
 }
 
-function extractFields(text: string, fields: Field[], allFields: readonly FieldValue[]): [FieldValue[], string] {
-    const find = /[+|-]?[a-zA-Z_-]*:"[a-zA-Z_-\s]*"/g;
-
-    const actualFields: FieldValue[] = []
-
-    const matches = text.match(find);
-
-    if (!matches) return [[], text];
-    console.log(matches)
-    for (let [_, match] of matches?.entries()) {
-        console.log(match);
-        let negative = false;
-        if (match.startsWith("-")) {
-            negative = true;
+function isValidField(field: Omit<FieldValue, "color">, allowedFields: Field[], currentFields: FieldValue[]): [boolean, FieldValue | undefined] {
+    for (const f of currentFields) {
+        if (f.name === field.name) {
+            if (f.negative !== field.negative && (f.negative == true || field.negative == false)) {
+                return [false, undefined];
+            }
+            if (f.value === field.value) {
+                return [false, undefined];
+            }
         }
+    }
 
-        if (match.startsWith("+") || match.startsWith("-")) {
-            match = match.substring(1);
+    for (const f of allowedFields) {
+        if (f.name === field.name) {
+            if (f.subtractable == false && field.negative == true) return [false, undefined];
+
+            if (f.possibleValues.length === 0) {
+                let color = Colors.CYAN;
+
+                const actualField: FieldValue = {
+                    color: color,
+                    name: field.name,
+                    value: field.value,
+                    negative: field.negative
+                }
+                return [true, actualField];
+            }
+
+            for (const fieldVal of f.possibleValues) {
+                if (fieldVal.val === field.value) {
+                    let color = fieldVal.color ? fieldVal.color : Colors.CYAN;
+
+                    const actualField: FieldValue = {
+                        color: color,
+                        name: field.name,
+                        value: field.value,
+                        negative: field.negative
+                    }
+                    return [true, actualField];
+                }
+            }
+            return [false, undefined];
         }
+    }
 
-        const split = match.split(":");
+    return [false, undefined];
+}
 
-        const fieldName = split[0];
-        const fieldValue = split[1].substring(1, split[1].length - 1);
+function extractFields(search: string, allowedFields: Field[], currentFields: FieldValue[]): [FieldValue[], string] {
+    let text = "";
+    let fields: FieldValue[] = []
 
-        const field = fields.find(f => f.name === fieldName);
-        let fieldValueObject = field?.possibleValues.find(v => v.val === fieldValue);
-        if (!fieldValueObject) {
+    type State = {
+        current: string,
+        foundColon: boolean,
+        foundOpeningQuote: boolean,
+        negative: undefined | boolean,
+        fieldName: string
+    }
+
+    let state: State = {
+        current: "",
+        foundColon: false,
+        foundOpeningQuote: false,
+        negative: undefined,
+        fieldName: ""
+    }
+
+    for (const c of search) {
+        if (c === "+") {
+            text += state.current;
+            state.current = "";
+            state.negative = false;
+            continue;
+        }
+        if (c === "-") {
+            text += state.current;
+            state.current = "";
+            state.negative = true;
             continue;
         }
 
-        let color = fieldValueObject.color;
-        //generate a random color
-        if (!color) {
-            const r = Math.floor(Math.random() * 255);
-            const g = Math.floor(Math.random() * 255);
-            const b = Math.floor(Math.random() * 255);
-            color = `rgb(${r}, ${g}, ${b})`;
-        }
-        
-        if (!field) {
+        if (c === ":") {
+            state.foundColon = true;
             continue;
         }
 
-        const newField = {
-            name: fieldName,
-            value: fieldValue,
-            negative: negative,
-            color: color
+        if (c === "\"") {
+            if (state.foundOpeningQuote === true) {
+                const currentField = {
+                    name: state.fieldName,
+                    value: state.current,
+                    negative: state.negative
+                }
+
+                const validField = isValidField(currentField, allowedFields, [...currentFields, ...fields]);
+
+                if (!validField[0]) {
+                    return [[], search];
+                }
+
+                if (validField[1] === undefined) throw new Error("Unexpected error in extractFields");
+
+                fields.push(validField[1] as FieldValue);
+                state.fieldName = "";
+                state.current = "";
+                state.negative = undefined;
+                state.foundOpeningQuote = false;
+                continue;
+            }
+
+            if (state.foundColon) {
+                state.foundOpeningQuote = true;
+                state.foundColon = false;
+                state.fieldName = state.current;
+                state.current = "";
+                continue;
+            }
+
+            return [[], search];
         }
 
-        if (!isValidField([...allFields, ...actualFields], newField)) {
-            continue;    
+        if (c === " ") {
+            if (state.foundOpeningQuote) {
+                state.current += " ";
+                continue;
+            }
+
+            if (state.foundColon) {
+                state.current += ":";
+                state.foundColon = false;
+            }
+
+            if (state.current === "") continue;
+
+            text += state.current + " ";
+            state.current = "";
+            continue;
         }
 
-        actualFields.push(newField)
-        console.log("match", match)
-        text = text.replace(match, "");
+        if (state.foundColon) {
+            state.current += ":";
+            state.foundColon = false;
+            state.negative = undefined;
+        }
+        state.current += c;
+        continue;
     }
 
-    return [
-        actualFields,
-        text.trimStart()
-    ]
-} 
-
-function isValidField(list: FieldValue[], field: FieldValue): boolean {
-    const sameFieldName = list.filter(f => f.name === field.name);
-    if (sameFieldName.length === 0) {
-        return true;
+    if (state.foundOpeningQuote) {
+        return [[], search];
     }
 
-    if(sameFieldName[0].negative !== field.negative) {
-        return false;
+    if (state.foundColon) {
+        state.current += ":"
     }
 
-    if(sameFieldName.filter(x => x.value === field.value).length > 0) {
-        return false;
-    }
+    text += state.current;
 
-    return true;
+    if (text.trim() === "" && fields.length === 0) return [[], search];
+
+    if (text[text.length - 1] === " ") text = text.slice(0, text.length - 1);
+
+    return [fields, text];
 }

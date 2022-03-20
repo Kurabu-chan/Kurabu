@@ -85,19 +85,19 @@ export default class List extends React.Component<any, StateType> {
         const statusFields = this.state.filter.fields.filter((field) => field.name === "status");
         if (statusFields === undefined || statusFields.length == 0) {
             status = undefined
-        } else { 
+        } else {
             if (statusFields[0].negative) {
                 status = ["completed", "dropped", "on_hold", "plan_to_watch", "watching"];
 
                 const remove = statusFields.map(x => x.value)
                 status = status.filter(x => !remove.includes(x.replace(/\s/g, "_")));
-            } else { 
+            } else {
                 status = statusFields.map(x => x.value.replace(/\s/g, "_"))
             }
         }
 
 
-        var nodeSource = new AnimeListSource(status, "status");
+        var nodeSource = new AnimeListSource(this.state.filter.search, status, "status");
         this.setState((prevState) => ({
             ...prevState,
             rankingSource: nodeSource,
@@ -105,7 +105,7 @@ export default class List extends React.Component<any, StateType> {
                 ...prevState.filter,
                 searched: true,
             },
-        })); 
+        }));
 
         this.state.animeList?.changeSource(`Your anime list`, nodeSource);
     }
@@ -230,7 +230,41 @@ export default class List extends React.Component<any, StateType> {
                 verify={() => { return true; }}
                 search={this.state.filter.search}
                 currentFields={this.state.filter.fields}
-                onSearch={this.doSearch.bind(this)} />
+                onSearch={this.doSearch.bind(this)}
+
+                styles={{
+                    style: {
+                        backgroundColor: Colors.KURABUPURPLE,
+                        color: Colors.TEXT,
+                        width: Dimensions.get("window").width - 10,
+
+                    },
+                    inputStyle: {
+                        color: Colors.TEXT,
+                    },
+                    labelStyle: {
+                        backgroundColor: Colors.KURABUPURPLE,
+                    },
+                    inputContainerStyle: {
+                        backgroundColor: Colors.KURABUPURPLE,
+                    },
+                    containerStyle: {
+                        backgroundColor: "transparent",
+                        borderTopWidth: 0,
+                        borderBottomWidth: 0,
+                    },
+                    leftIconContainerStyle: {
+                        backgroundColor: Colors.KURABUPURPLE,
+                    },
+                    searchIconStyle: {
+                        color: Colors.TEXT
+                    },
+                    clearIconStyle: {
+                        color: Colors.TEXT
+                    }
+                }}
+
+            />
         );
     }
 

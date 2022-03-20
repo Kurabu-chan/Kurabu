@@ -1,4 +1,4 @@
-import { AnimeList, AnimeListData } from "@kurabu/api-sdk";
+import { AnimeDetailsAlternativeTitles, AnimeList, AnimeListData } from "@kurabu/api-sdk";
 import { MediaListSource } from "../MediaListSource";
 import { requestErrorHandler } from "#decorators/requestErrorHandler";
 import { getListManager } from "#helpers/ListManager";
@@ -6,7 +6,7 @@ import { getListManager } from "#helpers/ListManager";
 export class AnimeListSource implements MediaListSource {
     private listManager = getListManager();
 
-    constructor(private status?: string[], private sort?: string) {
+    constructor(private text?: string, private status?: string[], private sort?: string) {
         
     }
 
@@ -22,10 +22,26 @@ export class AnimeListSource implements MediaListSource {
             list = sortList(list , this.sort);
         }
 
+        if (this.text) {
+            list = searchList(list, this.text);   
+        }
+
         return {
             data: list.filter(x => x.node.myListStatus?.status).slice((offset ?? 0), (offset ?? 0) + (limit ?? 20))
         }
     }
+}
+
+function searchList(list: AnimeListData[], text: string) {
+    return list.filter(x => {
+        return searchShouldInclude(text, x.node.title, x.node.alternativeTitles);
+    });
+}
+
+function searchShouldInclude(text: string, title?: string, titles?: AnimeDetailsAlternativeTitles) {
+    const str = `${title} ${titles?.en} ${titles?.ja} ${titles?.synonyms?.join(" ")}`.toLowerCase();
+    
+    return str.includes(text.toLowerCase());
 }
 
 function filterList(list: AnimeListData[], status: string[]) {
