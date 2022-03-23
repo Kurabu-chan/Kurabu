@@ -2,7 +2,7 @@
 import GeneralError from "../GeneralError";
 
 export default class AuthenticationError extends GeneralError {
-    constructor(message: any) {
+    constructor(message?: string) {
         super(message);
         this.errorCode = "020";
         this.httpCode = 403;

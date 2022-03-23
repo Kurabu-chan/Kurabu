@@ -15,7 +15,7 @@ void (async () => {
         storage: "migrations.db",
     });
     // await createMigrationTable(sequelize);
-    await SequelizeTypescriptMigration.makeMigration(sequelize as any, {
+    await SequelizeTypescriptMigration.makeMigration(sequelize, {
         migrationName: process.argv[2],
         outDir: path.join(__dirname, "./migrations"),
         preview: false,

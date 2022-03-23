@@ -2,7 +2,7 @@
 import AuthenticationError from "./AuthenticationError";
 
 export default class TokensNotPresentError extends AuthenticationError {
-    constructor(message: any) {
+    constructor(message?: string) {
         super(message);
         this.errorCode = "028";
         this.httpCode = 403;

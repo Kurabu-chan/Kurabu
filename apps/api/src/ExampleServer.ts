@@ -16,7 +16,7 @@ class ExampleServer extends Server {
             })
         );
         this.app.disable("x-powered-by");
-        swagger(this.app as any);
+        swagger(this.app);
 
         /* this.app.use((req, res, next) => {
 			if (process.env.NODE_ENV === 'production') {

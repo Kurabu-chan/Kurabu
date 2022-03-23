@@ -2,7 +2,7 @@ import * as express from "express";
 import { serve, setup } from "swagger-ui-express";
 import redoc from "redoc-express";
 
-export function apply(app: express.Express): void {
+export function apply(app: express.Application): void {
     app.use("/api-docs/swagger", serve, setup(undefined, {
         swaggerOptions: {
             url: "../../swagger/swagger.json"

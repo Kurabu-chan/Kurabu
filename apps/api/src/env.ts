@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { checkEnv, Variable } from "@kurabu/env-schema";
 import { Logger } from "@overnightjs/logger";
 
@@ -10,7 +11,11 @@ const variables: Record<string, Variable> = {
         required: true,
         type: "string",
     },
-    "PASSWORD_ENCR": {
+    "DATABASE_URL": {
+        required: true,
+        type: "url",
+    },
+    "EMAIL_DOMAIN": {
         required: true,
         type: "string",
     },
@@ -18,35 +23,31 @@ const variables: Record<string, Variable> = {
         required: true,
         type: "string",
     },
-    "DATABASE_URL": {
-        required: true,
-        type: "url",
-    },
-    "SENDGRID_API_KEY": {
-        required: true,
-        type: "string",
+    "LOCALMODE": {
+        required: false,
+        type: "number",
     },
     "MIGRATION_LOCATION": {
         required: true,
         type: "string",
     },
-    "EMAIL_DOMAIN":{
+    "PASSWORD_ENCR": {
         required: true,
         type: "string",
     },
-    "LOCALMODE": {
+    "PORT": {
         required: false,
-        type: "number",
+        type: "number"
+    },
+    "SENDGRID_API_KEY": {
+        required: true,
+        type: "string",
     },
     "SQL_SSL": {
         required: false,
         type: "boolean",
     },
-    "PORT": {
-        required: false,
-        type: "number"
-    }
-}
+};
 export function check() {
     checkEnv(variables);
     Logger.Info("Environment variables are valid");

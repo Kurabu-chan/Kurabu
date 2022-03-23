@@ -29,6 +29,7 @@ export class CamelToSnakeCase {
             const obj: {
                 [key: string]: any;
             } = {};
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             for (const prop of Object.keys(camel)) {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
                 obj[this.single(prop)] = this.fullObject(camel[prop]);

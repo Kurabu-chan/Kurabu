@@ -19,6 +19,7 @@ export default class ContainerManager {
         if (!this._instance && mock === undefined) {
             this._instance = new ContainerManager();
         } else if (mock !== undefined) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             this._instance = new ContainerManager(mock);
         }
         return this._instance;
