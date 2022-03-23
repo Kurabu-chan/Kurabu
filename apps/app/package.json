@@ -9,7 +9,9 @@
         "ios": "expo start --ios",
         "web": "expo start --web",
         "eject": "expo eject",
-        "check-build-required": "echo \"@kurabu/app\""
+        "check-build-required": "echo \"@kurabu/app\"",
+        "lint": "eslint \"src/**/*.ts\" \"src/**/*.tsx\"",
+        "lint:fix": "eslint \"src/**/*.ts\" \"src/**/*.tsx\" --fix"
     },
     "dependencies": {
         "@babel/helper-builder-react-jsx": "^7.12.13",
@@ -52,6 +54,7 @@
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",
+        "@kurabu/config": "*",
         "@kurabu/tsconfig": "*",
         "@types/react": "~17.0.21",
         "@types/react-native": "~0.64.12",
