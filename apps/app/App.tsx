@@ -5,7 +5,6 @@ import AppLoading from "expo-app-loading";
 import * as Linking from "expo-linking";
 import { AppState, AppStateStatus, LogBox } from "react-native";
 import Authentication from "#api/Authenticate";
-import { Config } from "#config/Config";
 import { NavigationContainer } from "@react-navigation/native";
 import Drawer from "#routes/MainDrawer";
 import Auth from "#routes/AuthStack";
@@ -21,14 +20,10 @@ type StateType = {
     RootSwitch: "Auth" | "Drawer";
 };
 
-export default class Application extends React.Component<any, StateType> {
-    constructor(props: any) {
+export default class Application extends React.Component<never, StateType> {
+    constructor(props: never) {
         super(props);
         registerSwitchListener(this.setRootSwitch.bind(this));
-
-        Config.GetInstance().then((config) => {
-            console.log("Config loaded");
-        });
 
         this.state = {
             fonts: false,
@@ -37,12 +32,12 @@ export default class Application extends React.Component<any, StateType> {
         };
     }
 
-    componentDidMount() {
-        this._checkInitialUrl();
+    async componentDidMount() {
+        await this._checkInitialUrl();
 
-        AppState.addEventListener("change", this._handleAppStateChange);
-        Linking.addEventListener("url", async (ss) => {
-            await this._handleUrl(ss.url);
+        AppState.addEventListener("change", this._handleAppStateChange.bind(this));
+        Linking.addEventListener("url", (ss) => {
+            void this._handleUrl(ss.url);
         });
     }
 
@@ -55,12 +50,12 @@ export default class Application extends React.Component<any, StateType> {
     }
 
     componentWillUnmount() {
-        AppState.removeEventListener("change", this._handleAppStateChange);
+        AppState.removeEventListener("change", this._handleAppStateChange.bind(this));
     }
 
-    private _handleAppStateChange = async (nextAppState: AppStateStatus) => {
+    private _handleAppStateChange(nextAppState: AppStateStatus){
         if (this.state.appstate.match(/inactive|background/) && nextAppState === "active") {
-            this._checkInitialUrl();
+            void this._checkInitialUrl();
         }
         this.setState((prevState) => ({
             ...prevState,
@@ -77,7 +72,7 @@ export default class Application extends React.Component<any, StateType> {
     private async _handleUrl(url: string | null) {
         if (url != null) {
             if (url.includes("auth")) {
-                let token = url.split("auth/")[1];
+                const token = url.split("auth/")[1];
                 console.log(token);
                 const auth = await Authentication.getInstance()
                     
@@ -127,6 +122,7 @@ export default class Application extends React.Component<any, StateType> {
 
 const getFonts = async () => {
     await Font.loadAsync({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         AGRevueCyr: require("./assets/fonts/AGRevueCyr.ttf"),
     });
 };
