@@ -10,7 +10,7 @@ export class AnimeDetailsSource extends AnimeBase {
 
     @requestErrorHandler
     async MakeRequest(): Promise<AnimeDetails> {
-        var api = await super.getApi();
+        const api = await super.getApi();
         const requestParams: GetAnimeDetailsRequest = {
             animeid: this.animeId,
             fields: fieldsToString(this.fields),

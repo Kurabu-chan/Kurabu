@@ -35,15 +35,15 @@ export default class Verif extends React.Component<RegisterProps, State> {
     }
 
     async Submit(code: string): Promise<boolean> {
-        let auth = await Authentication.getInstance();
-        let token = await auth.GetToken();
+        const auth = await Authentication.getInstance();
+        const token = await auth.GetToken();
         if (token == undefined) {
             Alert.alert(
                 "An error occured during the authentication process, please retry entering the verification code. If that doesn't work close and open the app."
             );
             return false;
         }
-        let resp = await auth.TryVerif(token, code);
+        const resp = await auth.TryVerif(token, code);
         if (resp.status == "error") {
             Alert.alert(resp.message);
             return false;
@@ -55,15 +55,15 @@ export default class Verif extends React.Component<RegisterProps, State> {
     }
 
     async Cancel() {
-        let auth = await Authentication.getInstance();
-        let token = await auth.GetToken();
+        const auth = await Authentication.getInstance();
+        const token = await auth.GetToken();
         if (token == undefined) {
             Alert.alert(
                 "An error occured during the authentication process, please retry canceling. If that doesn't work close and open the app."
             );
             return false;
         }
-        let result = await auth.TryCancelRegister(token);
+        const result = await auth.TryCancelRegister(token);
         if (result) {
             console.log("Going to register and clearing token");
             auth.ClearToken();

@@ -8,7 +8,7 @@ export class UpdateMangaList extends ListBase {
     async MakeRequest(mangaId: number,
         before: MangaDetailsMyListStatus,
         after: MangaDetailsMyListStatus): Promise<void> {
-        var api = await super.getApi();
+        const api = await super.getApi();
 
         const changeList = calculateAlteredFields(before, after);
         const changes = select(changeList, after);
@@ -42,7 +42,7 @@ function select(toSelect: (keyof MangaDetailsMyListStatus)[], selectFrom: MangaD
 }
 
 function calculateAlteredFields(before: MangaDetailsMyListStatus, after: MangaDetailsMyListStatus): (keyof MangaDetailsMyListStatus)[] {
-    var changed: (keyof MangaDetailsMyListStatus)[] = [];
+    const changed: (keyof MangaDetailsMyListStatus)[] = [];
     for (const key in before) {
         if (before.hasOwnProperty(key)) {
             const beforeValue = before[key as keyof MangaDetailsMyListStatus];

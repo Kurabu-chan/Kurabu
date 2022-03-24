@@ -52,7 +52,7 @@ export default class PasswordStrength extends React.Component<props, state> {
     componentDidUpdate(prevProps: props) {
         if (prevProps.pass === this.props.pass) return;
 
-        let strength = this.GetStrength();
+        const strength = this.GetStrength();
         let color = Colors.PASSWORD_STRENGTH.TERRIBLE;
         if (strength >= 0.5) {
             color = Colors.PASSWORD_STRENGTH.SUPERBAD;

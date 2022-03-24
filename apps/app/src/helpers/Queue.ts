@@ -7,7 +7,7 @@ export class Queue<T> {
         return this._store.shift();
     }
     surePop(): T {
-        var val = this.pop();
+        const val = this.pop();
         if (val) return val;
         throw new Error("surePop had nothing to pop");
     }

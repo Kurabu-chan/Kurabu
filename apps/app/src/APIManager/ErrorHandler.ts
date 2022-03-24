@@ -2,7 +2,7 @@ type Listeners = {
     [code: string]: (() => void)[] | undefined;
 };
 
-let listeners: Listeners = {};
+const listeners: Listeners = {};
 
 export function listenError(code: string, func: () => void) {
     if (listeners[code] === undefined) listeners[code] = [];

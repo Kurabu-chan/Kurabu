@@ -11,7 +11,7 @@ export class MangaRankingSource extends MangaBase implements MediaListSource {
 
     @requestErrorHandler
     async MakeRequest(limit?: number, offset?: number): Promise<MangaList> {
-        var api = await super.getApi();
+        const api = await super.getApi();
         const requestParams: GetMangaRankingsRequest = {
             fields: fieldsToString(this.fields),
             limit,

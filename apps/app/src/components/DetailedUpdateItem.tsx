@@ -35,11 +35,11 @@ export const DetailedUpdateItemFields: MediaFields[] = [
     MediaFields.StartDate,
     MediaFields.MediaType
 ];
-const animeListStatus: string = "my_list_status{status, comments, is_rewatching, num_times_rewatched, num_watched_episodes, priority, rewatch_value, score, tags}";
-const mangaListStatus: string = "my_list_status{status, score, num_volumes_read, num_chapters_read, is_rereading, updated_at, priority, num_times_reread, reread_value, tags, comments}";
+const animeListStatus = "my_list_status{status, comments, is_rewatching, num_times_rewatched, num_watched_episodes, priority, rewatch_value, score, tags}";
+const mangaListStatus = "my_list_status{status, score, num_volumes_read, num_chapters_read, is_rereading, updated_at, priority, num_times_reread, reread_value, tags, comments}";
 
-export const AnimeExpandedDetailedUpdateItemFields: string = `${fieldsToString(DetailedUpdateItemFields)}, ${animeListStatus}`;
-export const MangaExpandedDetailedUpdateItemFields: string = `${fieldsToString(DetailedUpdateItemFields)}, ${mangaListStatus}`;
+export const AnimeExpandedDetailedUpdateItemFields = `${fieldsToString(DetailedUpdateItemFields)}, ${animeListStatus}`;
+export const MangaExpandedDetailedUpdateItemFields = `${fieldsToString(DetailedUpdateItemFields)}, ${mangaListStatus}`;
 
 export class DetailedUpdateItem extends React.PureComponent<
     DetailedUpdateItemProps,
@@ -286,7 +286,7 @@ export class DetailedUpdateItem extends React.PureComponent<
     }
 }
 
-var fontSize = Dimensions.get("window").width / 36;
+const fontSize = Dimensions.get("window").width / 36;
 
 const TopArea = StyleSheet.create({
     Data: {

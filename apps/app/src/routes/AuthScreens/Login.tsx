@@ -120,7 +120,7 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
 }
 
-var fontSize = Dimensions.get("window").width / 36;
+const fontSize = Dimensions.get("window").width / 36;
 var sizer = Dimensions.get("window").width / 400;
 
 const styles = StyleSheet.create({

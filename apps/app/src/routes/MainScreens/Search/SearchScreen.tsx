@@ -49,7 +49,7 @@ export default class Search extends React.Component<any, StateType> {
 
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new AnimeSearchSource(this.state.search.searchText, fields);
+        const nodeSource = new AnimeSearchSource(this.state.search.searchText, fields);
         this.setState((prevState) => ({
             ...prevState,
             searchSource: nodeSource,

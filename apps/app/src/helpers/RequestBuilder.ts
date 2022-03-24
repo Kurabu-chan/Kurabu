@@ -60,8 +60,8 @@ export class RequestBuilder {
     }
 
     public async addAuthentication() {
-        var auth = await Authentication.getInstance();
-        var token = await auth.GetToken();
+        const auth = await Authentication.getInstance();
+        const token = await auth.GetToken();
 
         if (!token) throw new ReferenceError("No token present");
         console.log(token);
@@ -79,12 +79,12 @@ export class RequestBuilder {
         } else {
             headers = {};
             for (var i = 0; i < this.headers.length; i++) {
-                var header = this.headers[i];
+                const header = this.headers[i];
                 headers[header.key] = header.value;
             }
         }
 
-        let url: string = `${this.scheme}://${this.domain}`;
+        let url = `${this.scheme}://${this.domain}`;
         if (!url.endsWith("/")) url += "/";
         url += this.path;
 
@@ -93,7 +93,7 @@ export class RequestBuilder {
         if (this.queryParams.length !== 0) {
             url += "?";
             for (var i = 0; i < this.queryParams.length; i++) {
-                var queryParam = this.queryParams[i];
+                const queryParam = this.queryParams[i];
 
                 if (url.endsWith("?") !== true) url += "&";
                 url += `${queryParam.key}=${queryParam.value}`;
@@ -111,7 +111,7 @@ export class RequestBuilder {
     public request(): Promise<Response>;
     public request(method?: string): Promise<Response>;
     public request(method?: string): Promise<Response> {
-        var buildResult = this.build(method);
+        const buildResult = this.build(method);
 
         return fetch(buildResult.url, {
             method: buildResult.method,
@@ -120,7 +120,7 @@ export class RequestBuilder {
         });
     }
 }
-var config: Config | undefined = undefined;
+let config: Config | undefined = undefined;
 Config.GetInstance().then((res) => {
     config = res;
 });

@@ -12,7 +12,7 @@ type BackButtonFunctionsType = {
     Suggestions?: voidFunction;
 };
 
-let backButtonState: ButtonState = {
+const backButtonState: ButtonState = {
     currentPage: "Main",
     backButtons: {
         Main: undefined,

@@ -51,7 +51,7 @@ export class ListDetailsStateManager {
         const reg = /^[0-9]*$/;
         if (text.match(reg) == undefined) return;
         let intText: number | undefined = undefined;
-        if (text !== "") intText = parseInt(text) as number;
+        if (text !== "") intText = parseInt(text) ;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
@@ -65,7 +65,7 @@ export class ListDetailsStateManager {
         const reg = /^[0-9]*$/;
         if (text.match(reg) == undefined) return;
         let intText: number | undefined = undefined;
-        if (text !== "") intText = parseInt(text) as number;
+        if (text !== "") intText = parseInt(text) ;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
@@ -79,7 +79,7 @@ export class ListDetailsStateManager {
         const reg = /^[0-9]*$/;
         if (text.match(reg) == undefined) return;
         let intText: number | undefined = undefined;
-        if (text !== "") intText = parseInt(text) as number;
+        if (text !== "") intText = parseInt(text) ;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
@@ -93,7 +93,7 @@ export class ListDetailsStateManager {
         const reg = /^[0-9]*$/;
         if (text.match(reg) == undefined) return;
         let intText: number | undefined = undefined;
-        if (text !== "") intText = parseInt(text) as number;
+        if (text !== "") intText = parseInt(text) ;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
@@ -107,7 +107,7 @@ export class ListDetailsStateManager {
         const reg = /^[0-9]*$/;
         if (text.match(reg) == undefined) return;
         let intText: number | undefined = undefined;
-        if (text !== "") intText = parseInt(text) as number;
+        if (text !== "") intText = parseInt(text) ;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {

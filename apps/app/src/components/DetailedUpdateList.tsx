@@ -131,7 +131,7 @@ class DetailedUpdateList extends React.Component<DetailedUpdateListProps, Detail
         }
     }
 }
-var fontSize = Dimensions.get("window").width / 36;
+const fontSize = Dimensions.get("window").width / 36;
 const styles = StyleSheet.create({
     mediaContainer: {
         height: Dimensions.get("window").height,

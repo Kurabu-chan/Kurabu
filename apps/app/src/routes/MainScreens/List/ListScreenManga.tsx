@@ -97,7 +97,7 @@ export default class List extends React.Component<any, StateType> {
         }
 
 
-        var nodeSource = new MangaListSource(this.state.filter.search, status, "status");
+        const nodeSource = new MangaListSource(this.state.filter.search, status, "status");
         this.setState((prevState) => ({
             ...prevState,
             rankingSource: nodeSource,

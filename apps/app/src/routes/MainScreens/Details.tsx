@@ -40,13 +40,13 @@ type State = {
     mediaType: AnimeDetailsMediaTypeEnum | MangaDetailsMediaTypeEnum;
 };
 
-var sizer = Dimensions.get("window").width / 400;
+const sizer = Dimensions.get("window").width / 400;
 
 export default class Details extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         let mediaId = props.route.params.id;
-        let mediaType = props.route.params.mediaType;
+        const mediaType = props.route.params.mediaType;
         if (mediaId == undefined) {
             mediaId = 1;
         }
@@ -75,7 +75,7 @@ export default class Details extends React.Component<Props, State> {
             MangaDetailsMediaTypeEnum.OneShot
         ];
 
-        var detailsSource: MangaDetailsSource | AnimeDetailsSource;
+        let detailsSource: MangaDetailsSource | AnimeDetailsSource;
         if (mangaMediaTypes.includes(this.state.mediaType)) {
             detailsSource = new MangaDetailsSource(this.state.mediaId, []);
         } else {
@@ -302,7 +302,7 @@ export default class Details extends React.Component<Props, State> {
     }
 }
 
-var fontSize = Dimensions.get("window").width / 36;
+const fontSize = Dimensions.get("window").width / 36;
 
 const styles = StyleSheet.create({
     appContainer: {

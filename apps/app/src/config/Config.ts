@@ -2,7 +2,7 @@ import conf from "../../config.json";
 
 export class Config {
     private config: any;
-    private loaded: boolean = false;
+    private loaded = false;
 
     private constructor(config: any) {
         this.config = config;

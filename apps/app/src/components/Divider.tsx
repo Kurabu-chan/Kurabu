@@ -25,7 +25,7 @@ export class Divider extends React.Component<Props, State> {
     }
 
     render() {
-        let styles = StyleSheet.create({
+        const styles = StyleSheet.create({
             divider: {
                 width: `${this.state.widthPercentage}%`,
                 height: 1,

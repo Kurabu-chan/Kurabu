@@ -42,7 +42,7 @@ export type State = {
     before?: Partial<AnimeDetailsMyListStatus | MangaDetailsMyListStatus>;
 };
 
-var sizer = Dimensions.get("window").width / 400;
+const sizer = Dimensions.get("window").width / 400;
 
 export class ListDetails extends React.PureComponent<Props, State> {
     private stateManager: ListDetailsStateManager;
@@ -51,7 +51,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
         this.stateManager = new ListDetailsStateManager(this);
 
         let mediaId = props.route.params.id;
-        let mediaType = props.route.params.mediaType;
+        const mediaType = props.route.params.mediaType;
         if (mediaId == undefined) {
             mediaId = 1;
         }
@@ -81,8 +81,8 @@ export class ListDetails extends React.PureComponent<Props, State> {
     }
 
     async refresh() {
-        const animeFields: string = "id, title, main_picture, alternative_titles, my_list_status{status, comments, is_rewatching, num_times_rewatched, num_watched_episodes, priority, rewatch_value, score, tags}";
-        const mangaFields: string = "id, title, main_picture, alternative_titles, my_list_status{status, score, num_volumes_read, num_chapters_read, is_rereading, updated_at, priority, num_times_reread, reread_value, tags, comments}";
+        const animeFields = "id, title, main_picture, alternative_titles, my_list_status{status, comments, is_rewatching, num_times_rewatched, num_watched_episodes, priority, rewatch_value, score, tags}";
+        const mangaFields = "id, title, main_picture, alternative_titles, my_list_status{status, score, num_volumes_read, num_chapters_read, is_rereading, updated_at, priority, num_times_reread, reread_value, tags, comments}";
 
         let listSource: AnimeDetailsSource | MangaDetailsSource;
 
@@ -604,7 +604,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
     }
 }
 
-var fontSize = Dimensions.get("window").width / 36;
+const fontSize = Dimensions.get("window").width / 36;
 
 const styles = StyleSheet.create({
     appContainer: {

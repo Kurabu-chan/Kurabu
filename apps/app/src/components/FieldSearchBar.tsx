@@ -85,8 +85,8 @@ export class FieldSearchBar extends React.Component<Props> {
     }
 
     removeField(field: FieldValue) {
-        let fields = this.props.currentFields;
-        let index = fields.findIndex(f => f.name === field.name && f.value === field.value);
+        const fields = this.props.currentFields;
+        const index = fields.findIndex(f => f.name === field.name && f.value === field.value);
         if (index === -1) return;
         fields.splice(index, 1);
         this.setState({ ...this.state, currentFields: fields }, () => {
@@ -97,7 +97,7 @@ export class FieldSearchBar extends React.Component<Props> {
 
     render() {
 
-        var fontSize = Dimensions.get("window").width / 36;
+        const fontSize = Dimensions.get("window").width / 36;
 
         return (
             <View>
@@ -195,7 +195,7 @@ function isValidField(field: Omit<FieldValue, "color">, allowedFields: Field[], 
             if (f.subtractable == false && field.negative == true) return [false, undefined];
 
             if (f.possibleValues.length === 0) {
-                let color = Colors.CYAN;
+                const color = Colors.CYAN;
 
                 const actualField: FieldValue = {
                     color: color,
@@ -208,7 +208,7 @@ function isValidField(field: Omit<FieldValue, "color">, allowedFields: Field[], 
 
             for (const fieldVal of f.possibleValues) {
                 if (fieldVal.val === field.value) {
-                    let color = fieldVal.color ? fieldVal.color : Colors.CYAN;
+                    const color = fieldVal.color ? fieldVal.color : Colors.CYAN;
 
                     const actualField: FieldValue = {
                         color: color,
@@ -228,7 +228,7 @@ function isValidField(field: Omit<FieldValue, "color">, allowedFields: Field[], 
 
 function extractFields(search: string, allowedFields: Field[], currentFields: FieldValue[]): [FieldValue[], string] {
     let text = "";
-    let fields: FieldValue[] = []
+    const fields: FieldValue[] = []
 
     type State = {
         current: string,
@@ -238,7 +238,7 @@ function extractFields(search: string, allowedFields: Field[], currentFields: Fi
         fieldName: string
     }
 
-    let state: State = {
+    const state: State = {
         current: "",
         foundColon: false,
         foundOpeningQuote: false,
@@ -281,7 +281,7 @@ function extractFields(search: string, allowedFields: Field[], currentFields: Fi
 
                 if (validField[1] === undefined) throw new Error("Unexpected error in extractFields");
 
-                fields.push(validField[1] as FieldValue);
+                fields.push(validField[1] );
                 state.fieldName = "";
                 state.current = "";
                 state.negative = undefined;

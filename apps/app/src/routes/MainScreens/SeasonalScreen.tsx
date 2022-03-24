@@ -26,8 +26,8 @@ type StateType = {
     listenerToUnMount: any;
 };
 
-var currYear = new Date().getFullYear();
-var currSeason = getSeason();
+const currYear = new Date().getFullYear();
+const currSeason = getSeason();
 
 export default class Seasonal extends React.Component<any, StateType> {
     constructor(props: any) {
@@ -68,7 +68,7 @@ export default class Seasonal extends React.Component<any, StateType> {
     async DoSeasonal() {
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new AnimeSeasonalSource(
+        const nodeSource = new AnimeSeasonalSource(
             fields,
             this.state.seasonal.yearValue,
             this.state.seasonal.seasonValue,
@@ -93,7 +93,7 @@ export default class Seasonal extends React.Component<any, StateType> {
     }
 
     changeSeason(val: ItemValue, index: number) {
-        var season = val.toString();
+        const season = val.toString();
         if (!["winter", "summer", "spring", "fall"].includes(val.toString())) {
             return;
         }
@@ -112,7 +112,7 @@ export default class Seasonal extends React.Component<any, StateType> {
     }
 
     changeYear(val: ItemValue, index: number) {
-        var year = parseInt(val.toString());
+        const year = parseInt(val.toString());
         if (year < 1917 || year > currYear + 1) {
             return;
         }
@@ -131,7 +131,7 @@ export default class Seasonal extends React.Component<any, StateType> {
     }
 
     createSearchBar() {
-        var allowedSeasons = getAllowedSeasons(maxSeason(this.state.seasonal.yearValue));
+        const allowedSeasons = getAllowedSeasons(maxSeason(this.state.seasonal.yearValue));
         return (
             <View
                 style={{
@@ -252,7 +252,7 @@ function capitalizeFirstLetter(str: string) {
 
 type seasons = "winter" | "summer" | "spring" | "fall";
 function getSeason(): GetSeasonalAnimesSeasonEnum {
-    var month = new Date().getMonth();
+    const month = new Date().getMonth();
     switch (month) {
         case 12:
         case 1:
@@ -276,7 +276,7 @@ function getSeason(): GetSeasonalAnimesSeasonEnum {
 }
 
 function maxYear(season: seasons): number {
-    var currSeasonNr = seasonToNr(currSeason);
+    const currSeasonNr = seasonToNr(currSeason);
     if (currSeasonNr > 1) {
         //max year in general is next year. This year is definetly possible in all seasons
         if ((currSeasonNr + 2) % 4 < seasonToNr(season)) return currYear;
@@ -288,7 +288,7 @@ function maxYear(season: seasons): number {
 }
 
 function maxSeason(year: number): seasons {
-    var currSeasonNr = seasonToNr(currSeason);
+    const currSeasonNr = seasonToNr(currSeason);
 
     if (year < currYear) return "fall";
 

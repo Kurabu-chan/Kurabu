@@ -21,7 +21,7 @@ export default class DrawerComp extends React.Component {
     }
 
     render() {
-        var fontSize = Dimensions.get("window").width / 36;
+        const fontSize = Dimensions.get("window").width / 36;
 
         getListManager();
 

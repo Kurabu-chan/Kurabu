@@ -8,7 +8,7 @@ export class UpdateAnimeList extends ListBase {
     async MakeRequest(animeId: number,
         before: AnimeDetailsMyListStatus,
         after: AnimeDetailsMyListStatus): Promise<void> {
-        var api = await super.getApi();
+        const api = await super.getApi();
 
         const changeList = calculateAlteredFields(before, after);
         const changes = select(changeList, after);
@@ -41,7 +41,7 @@ function select(toSelect: (keyof AnimeDetailsMyListStatus)[], selectFrom: AnimeD
 }
 
 function calculateAlteredFields(before: AnimeDetailsMyListStatus, after: AnimeDetailsMyListStatus): (keyof AnimeDetailsMyListStatus)[] {
-    var changed: (keyof AnimeDetailsMyListStatus)[] = [];
+    const changed: (keyof AnimeDetailsMyListStatus)[] = [];
     for (const key in before) {
         if (before.hasOwnProperty(key)) {
             const beforeValue = before[key as keyof AnimeDetailsMyListStatus];

@@ -68,7 +68,7 @@ export default class Ranking extends React.Component<any, StateType> {
 
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new MangaRankingSource(fields, this.state.ranking.rankingValue);
+        const nodeSource = new MangaRankingSource(fields, this.state.ranking.rankingValue);
         this.setState((prevState) => ({
             ...prevState,
             rankingSource: nodeSource,
@@ -78,7 +78,7 @@ export default class Ranking extends React.Component<any, StateType> {
             },
         }));
         if (this.state.animeList) {
-            var goodNamingMapping: {
+            const goodNamingMapping: {
                 [index: string]: string;
             } = {
                 all: "Overall",

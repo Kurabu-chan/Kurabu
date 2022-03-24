@@ -39,11 +39,11 @@ class MediaItem extends React.Component<MediaItemProps, MediaItemState> {
     }
 
     render() {
-        var width = this.props.width ?? Dimensions.get("window").width / 2 - 15;
+        const width = this.props.width ?? Dimensions.get("window").width / 2 - 15;
 
-        var fontSize = Dimensions.get("window").width / 34;
+        const fontSize = Dimensions.get("window").width / 34;
 
-        var sizer = Dimensions.get("window").width / 400;
+        const sizer = Dimensions.get("window").width / 400;
 
         const styles = StyleSheet.create({
             mediaContainer: {
