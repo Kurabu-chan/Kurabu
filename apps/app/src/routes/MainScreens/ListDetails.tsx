@@ -1,9 +1,8 @@
 import { AnimeDetailsSource } from "#data/anime/AnimeDetailsSource";
 import { UpdateAnimeList } from "#actions/anime/UpdateAnimeList";
 import { MangaDetailsSource } from "#data/manga/MangaDetailsSource";
-import { UpdateMangaList } from "#actions/manga/UpdateMangaList";
 import { Colors } from "#config/Colors";
-import { changeActivePage, changeBackButton, getActivePage } from "#helpers/backButton";
+import { BackButtonFunctionsType, changeActivePage, changeBackButton, getActivePage } from "#helpers/backButton";
 import { ListDetailsStateManager } from "#helpers/Screens/Main/ListDetails/StateManager";
 import { niceTextFormat } from "#helpers/textFormatting";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
@@ -24,7 +23,7 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import TimeAgo from "react-native-timeago";
-import { AnimeDetails, AnimeDetailsMyListStatus, MangaDetails, MangaDetailsMyListStatus } from "@kurabu/api-sdk";
+import { AnimeDetailsMediaTypeEnum, AnimeDetailsMyListStatus, MangaDetailsMediaTypeEnum, MangaDetailsMyListStatus } from "@kurabu/api-sdk";
 
 export type Props = {
     navigation: StackNavigationProp<HomeStackParamList, "ListDetailsScreen">;
@@ -34,15 +33,13 @@ export type Props = {
 export type State = {
     mediaId: number;
     listStatus?: Partial<AnimeDetailsMyListStatus | MangaDetailsMyListStatus>;
-    listenerToUnMount: any;
-    page: string;
-    mediaType: AnimeDetails.MediaTypeEnum | MangaDetails.MediaTypeEnum;
+    listenerToUnMount?: () => void;
+    page: keyof BackButtonFunctionsType;
+    mediaType: AnimeDetailsMediaTypeEnum | MangaDetailsMediaTypeEnum;
     isAnime: boolean;
     isEditing: boolean;
     before?: Partial<AnimeDetailsMyListStatus | MangaDetailsMyListStatus>;
 };
-
-const sizer = Dimensions.get("window").width / 400;
 
 export class ListDetails extends React.PureComponent<Props, State> {
     private stateManager: ListDetailsStateManager;
@@ -77,7 +74,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
             isEditing: false,
         };
 
-        this.refresh();
+        void this.refresh();
     }
 
     async refresh() {
@@ -103,13 +100,13 @@ export class ListDetails extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        changeBackButton(this.state.page as any, () => {
+        changeBackButton(this.state.page, () => {
             this.props.navigation.popToTop();
-            changeBackButton(this.state.page as any, undefined);
+            changeBackButton(this.state.page, undefined);
         });
 
         const unsubscribe = this.props.navigation.addListener("focus", () => {
-            changeActivePage(this.state.page as any);
+            changeActivePage(this.state.page);
             // The screen is focused
             // Call any action
         });
@@ -503,7 +500,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                 this.state.before as AnimeDetailsMyListStatus,
                 this.state.listStatus as AnimeDetailsMyListStatus
             )
-            this.refresh();
+            await this.refresh();
         } else {
             const updateRequest = new UpdateAnimeList();
             await updateRequest.MakeRequest(
@@ -511,7 +508,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                 this.state.before as AnimeDetailsMyListStatus,
                 this.state.listStatus as AnimeDetailsMyListStatus
             )
-            this.refresh();
+            await this.refresh();
         }
     }
 
@@ -557,9 +554,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                                     }}
                                 >
                                     <Text
-                                        style={{
-                                            alignSelf: "center",
-                                        }}
+                                        style={styles.selfAlignCenter}
                                     >
                                         Edit
                                     </Text>
@@ -567,14 +562,12 @@ export class ListDetails extends React.PureComponent<Props, State> {
                             ) : (
                                 <TouchableOpacity
                                     style={styles.listStatusEdit}
-                                    onPress={() => {
-                                        this.saveEdit();
+                                    onPress={async () => {
+                                        await this.saveEdit();
                                     }}
                                 >
                                     <Text
-                                        style={{
-                                            alignSelf: "center",
-                                        }}
+                                        style={styles.selfAlignCenter}
                                     >
                                         Save
                                     </Text>
@@ -583,14 +576,12 @@ export class ListDetails extends React.PureComponent<Props, State> {
                             {this.state.isEditing == true ? (
                                 <TouchableOpacity
                                     style={styles.listStatusEdit}
-                                    onPress={() => {
-                                        this.refresh();
+                                    onPress={async () => {
+                                        await this.refresh();
                                     }}
                                 >
                                     <Text
-                                        style={{
-                                            alignSelf: "center",
-                                        }}
+                                        style={styles.selfAlignCenter}
                                     >
                                         Cancel
                                     </Text>
@@ -672,4 +663,7 @@ const styles = StyleSheet.create({
     newTable: {
         flexDirection: "column",
     },
+    selfAlignCenter: {
+        alignSelf: "center",
+    }
 });

@@ -78,7 +78,7 @@ export class RequestBuilder {
             headers = undefined;
         } else {
             headers = {};
-            for (var i = 0; i < this.headers.length; i++) {
+            for (let i = 0; i < this.headers.length; i++) {
                 const header = this.headers[i];
                 headers[header.key] = header.value;
             }
@@ -92,7 +92,7 @@ export class RequestBuilder {
 
         if (this.queryParams.length !== 0) {
             url += "?";
-            for (var i = 0; i < this.queryParams.length; i++) {
+            for (let i = 0; i < this.queryParams.length; i++) {
                 const queryParam = this.queryParams[i];
 
                 if (url.endsWith("?") !== true) url += "&";
@@ -120,10 +120,7 @@ export class RequestBuilder {
         });
     }
 }
-let config: Config | undefined = undefined;
-Config.GetInstance().then((res) => {
-    config = res;
-});
+const config: Config = Config.GetInstance();
 
 export function baseRequest() {
     if (!config) throw new Error("config not loaded yet fuck");

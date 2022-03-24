@@ -13,7 +13,7 @@ export type HomeStackParamList = {
     ListDetailsScreen: ListDetailsStackParams;
 };
 
-export default function HomeStack(params: any) {
+export default function HomeStack() {
     return (
         <Stack.Navigator
             screenOptions={{

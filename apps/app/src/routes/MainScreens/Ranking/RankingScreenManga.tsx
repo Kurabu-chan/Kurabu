@@ -4,12 +4,16 @@ import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Dimensions } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { MediaListSource } from "#data/MediaListSource";
 import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
 import SearchList from "#comps/DetailedUpdateList";
 import { Colors } from "#config/Colors";
+import { StackScreenProps } from "@react-navigation/stack";
+import { RankingStackParamList } from "#routes/MainStacks/RankingStack";
+
+type Props = StackScreenProps<RankingStackParamList, "Ranking">
 
 type StateType = {
     ranking: {
@@ -22,11 +26,11 @@ type StateType = {
     };
     rankingSource?: MediaListSource;
     animeList?: SearchList;
-    listenerToUnMount: any;
+    listenerToUnMount?: () => void;
 };
 
-export default class Ranking extends React.Component<any, StateType> {
-    constructor(props: any) {
+export default class Ranking extends React.Component<Props, StateType> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             ranking: {
@@ -61,7 +65,7 @@ export default class Ranking extends React.Component<any, StateType> {
         if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
-    async DoRanking() {
+    DoRanking() {
         if (this.state.ranking.rankingValue == "") {
             return;
         }
@@ -101,7 +105,7 @@ export default class Ranking extends React.Component<any, StateType> {
         }
     }
 
-    changeRanking(val: ItemValue, index: number) {
+    changeRanking(val: ItemValue) {
         this.setState(
             (prevState) =>
                 ({
@@ -120,14 +124,7 @@ export default class Ranking extends React.Component<any, StateType> {
             <Picker
                 selectedValue={this.state.ranking.rankingValue}
                 onValueChange={this.changeRanking.bind(this)}
-                style={{
-                    backgroundColor: Colors.KURABUPURPLE,
-                    marginTop: 5,
-                    marginLeft: 5,
-                    marginRight: 5,
-                    width: Dimensions.get("window").width - 10,
-                    color: Colors.TEXT,
-                }}
+                style={styles.searchBarPicker}
             >
                 <Picker.Item key="all" label="All" value="all" />
                 <Picker.Item key="manga" label="Manga" value="manga" />
@@ -163,9 +160,7 @@ export default class Ranking extends React.Component<any, StateType> {
     render() {
         return (
             <SafeAreaProvider
-                style={{
-                    backgroundColor: "#1a1a1a",
-                }}
+                style={styles.safeAreaProvider}
             >
                 <LinearGradient
                     // Background Linear Gradient
@@ -195,3 +190,17 @@ export default class Ranking extends React.Component<any, StateType> {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    searchBarPicker: {
+        backgroundColor: Colors.KURABUPURPLE,
+        marginTop: 5,
+        marginLeft: 5,
+        marginRight: 5,
+        width: Dimensions.get("window").width - 10,
+        color: Colors.TEXT,
+    },
+    safeAreaProvider: {
+        backgroundColor: Colors.ALTERNATE_BACKGROUND,
+    }
+})

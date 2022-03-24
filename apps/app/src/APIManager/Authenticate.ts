@@ -32,14 +32,14 @@ class Authentication {
     private constructor() {
         console.log("Starting Authenticator...");
 
-        listenError("023", () => {
-            Authentication.ClearAsync();
-            Updates.reloadAsync();
+        listenError("023", async () => {
+            await Authentication.ClearAsync();
+            await Updates.reloadAsync();
         });
 
-        listenError("012", () => {
-            Authentication.ClearAsync();
-            Updates.reloadAsync();
+        listenError("012", async () => {
+            await Authentication.ClearAsync();
+            await Updates.reloadAsync();
         });
 
         if (this.token) {
@@ -112,6 +112,7 @@ class Authentication {
             body: JSON.stringify(body),
         });
         //is the response an error !?!?!?
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const json: JsonType = await res.json();
         handleError(json);
         if (json.status == "error") {
@@ -148,6 +149,7 @@ class Authentication {
             body: JSON.stringify(body),
         });
         //is the response an error !?!?!?
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const json: JsonType = await res.json();
         if (json.status == "error") {
             //oh fuck
@@ -168,6 +170,7 @@ class Authentication {
             },
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const json: JsonType = await res.json();
         if (json.status == "error") {
             //oh fuck
@@ -197,6 +200,7 @@ class Authentication {
             body: JSON.stringify(body),
         });
         //is the response an error !?!?!?
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const json: JsonType = await res.json();
         if (json.status == "error") {
             //oh fuck
@@ -233,7 +237,7 @@ class Authentication {
         }
 
         if (!Authentication.root) {
-            const config = await Config.GetInstance();
+            const config = Config.GetInstance();
             Authentication.root = config.GetApiRoot();
         }
 

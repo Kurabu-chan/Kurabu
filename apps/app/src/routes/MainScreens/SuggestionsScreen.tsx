@@ -1,23 +1,27 @@
 import { changeActivePage } from "#helpers/backButton";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import {AnimeSuggestionsSource} from "#data/anime/AnimeSuggestionsSource";
 import {MediaListSource} from "#data/MediaListSource";
 import MediaList, { mediaListFields } from "#comps/MediaList";
 import { Colors } from "#config/Colors";
+import { SuggestionsStackParamList } from "#routes/MainStacks/SuggestionsStack";
+import { StackScreenProps } from "@react-navigation/stack";
+
+type Props = StackScreenProps<SuggestionsStackParamList, "Suggestions">
 
 type StateType = {
     node: {
         key: string;
         nodeSource: MediaListSource;
     };
-    listenerToUnMount: any;
+    listenerToUnMount?: () => void;
 };
 
-export default class Suggestions extends React.Component<any, StateType> {
-    constructor(props: any) {
+export default class Suggestions extends React.Component<Props, StateType> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             node: {
@@ -48,9 +52,7 @@ export default class Suggestions extends React.Component<any, StateType> {
     render() {
         return (
             <SafeAreaProvider
-                style={{
-                    backgroundColor: "#1a1a1a",
-                }}
+                style={styles.safeAreaProvider}
             >
                 <LinearGradient
                     // Background Linear Gradient
@@ -66,9 +68,7 @@ export default class Suggestions extends React.Component<any, StateType> {
                     }}
                 >
                     <View
-                        style={{
-                            flexDirection: "row",
-                        }}
+                        style={styles.listContainer}
                     >
                         <MediaList
                             title={this.state.node.key}
@@ -81,3 +81,12 @@ export default class Suggestions extends React.Component<any, StateType> {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    safeAreaProvider: {
+        backgroundColor: Colors.ALTERNATE_BACKGROUND,
+    },
+    listContainer: {
+        flexDirection: "row",
+    }
+});

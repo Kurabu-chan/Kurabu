@@ -8,16 +8,17 @@ import { MediaFields, AnimeDetails, MangaDetails, AnimeListData, MangaListData }
 import { fieldsToString } from "#helpers/fieldsHelper";
 import { niceDateFormat, niceTextFormat } from "#helpers/textFormatting";
 import { Progress } from "./MediaListStatusProgressBar";
+import { ParamListBase } from "@react-navigation/native";
 
 type DetailedUpdateItemProps = {
     item: AnimeListData | MangaListData;
-    navigator: StackNavigationProp<any, any>;
+    navigator: StackNavigationProp<ParamListBase, string>;
     showListStatus?: boolean;
 };
 
 type DetailedUpdateItemState = {
     item: AnimeListData | MangaListData;
-    navigator: StackNavigationProp<any, any>;
+    navigator: StackNavigationProp<ParamListBase, string>;
 };
 // Add manga fields
 export const DetailedUpdateItemFields: MediaFields[] = [
@@ -108,13 +109,13 @@ export class DetailedUpdateItem extends React.PureComponent<
         if (mangaNode?.myListStatus !== undefined) {
             return this.createMangaListStatus(mangaNode);
         }
-        return undefined;        
+        return undefined;
     }
 
     createMangaListStatus(node: MangaDetails) {
         return (
             <View style={styles.listContainer}>
-                <Divider margin={ false } color={Colors.DIVIDER} widthPercentage={100} />
+                <Divider margin={false} color={Colors.DIVIDER} widthPercentage={100} />
                 <View style={TopArea.Data}>
                     <View style={TopArea.TopLeftLabels}>
                         <Text style={TopArea.Label}>List status:</Text>
@@ -135,12 +136,12 @@ export class DetailedUpdateItem extends React.PureComponent<
                 </View>
                 <View>
                     <View style={TopArea.Data}>
-                        <View style={{ ...TopArea.Labels, flex: 1.5 }}>
-                            <Text style={{...TopArea.Label, marginBottom: 3, marginTop: 3}}>Chapter progress:</Text>
-                            <Text style={{ ...TopArea.Label, marginTop: 8 }}>Volume progress:</Text>
+                        <View style={{ ...TopArea.Labels, ...styles.progressLabel }}>
+                            <Text style={{ ...TopArea.Label, ...styles.progressContainer }}>Chapter progress:</Text>
+                            <Text style={{ ...TopArea.Label, ...styles.additionalProgressLabel }}>Volume progress:</Text>
                         </View>
                         <View style={TopArea.Values}>
-                            <View style={{ marginBottom: 3, marginTop: 3}}>
+                            <View style={styles.progressContainer}>
                                 <Progress fullList={this.state.item.node.myListStatus ?? {}} fieldToControl="numChaptersRead" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numChapters ?? 0} current={node.myListStatus?.numChaptersRead ?? 0} />
                             </View>
                             <Progress fullList={this.state.item.node.myListStatus ?? {}} fieldToControl="numVolumesRead" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numVolumes ?? 0} current={node.myListStatus?.numVolumesRead ?? 0} />
@@ -154,7 +155,7 @@ export class DetailedUpdateItem extends React.PureComponent<
     createAnimeListStatus(node: AnimeDetails) {
         return (
             <View style={styles.listContainer}>
-                <Divider margin={ false} color={Colors.DIVIDER} widthPercentage={100} />
+                <Divider margin={false} color={Colors.DIVIDER} widthPercentage={100} />
                 <View style={TopArea.Data}>
                     <View style={TopArea.TopLeftLabels}>
                         <Text style={TopArea.Label}>List status:</Text>
@@ -175,11 +176,11 @@ export class DetailedUpdateItem extends React.PureComponent<
                 </View>
                 <View>
                     <View style={TopArea.Data}>
-                        <View style={{ ...TopArea.Labels, flex: 1.5 }}>
-                            <Text style={{ ...TopArea.Label, marginBottom: 3, marginTop: 3 }}>Episode progress:</Text>
+                        <View style={{ ...TopArea.Labels, ...styles.progressLabel }}>
+                            <Text style={{ ...TopArea.Label, ...styles.progressContainer }}>Episode progress:</Text>
                         </View>
                         <View style={TopArea.Values}>
-                            <View style={{ marginBottom: 3, marginTop: 3}}>
+                            <View style={styles.progressContainer}>
                                 <Progress fullList={this.state.item.node.myListStatus ?? {}} fieldToControl="numEpisodesWatched" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numEpisodes ?? 0} current={node.myListStatus?.numEpisodesWatched ?? 0} />
                             </View>
                         </View>
@@ -221,7 +222,7 @@ export class DetailedUpdateItem extends React.PureComponent<
                             <View style={TopArea.TopLeftValues}>
                                 <Text style={TopArea.Value}>{this.state.item.node.mean ?? "NA"}</Text>
                                 <Text style={TopArea.Value}>
-                                    {this.state.item.node.rank ? "#" + this.state.item.node.rank : "NA"}
+                                    {this.state.item.node.rank ? `#${this.state.item.node.rank}` : "NA"}
                                 </Text>
                             </View>
                             <View style={TopArea.TopRightLabels}>
@@ -278,9 +279,9 @@ export class DetailedUpdateItem extends React.PureComponent<
                         </View>
                     </View>
                 </TouchableOpacity>
-                
+
                 {listStatusElement}
-                
+
             </View>
         );
     }
@@ -332,8 +333,15 @@ const TopArea = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
-    page: {
-        margin: 10,
+    progressLabel: {
+        flex: 1.5
+    },
+    additionalProgressLabel: {
+        marginTop: 8
+    },
+    progressContainer: {
+        marginBottom: 3,
+        marginTop: 3,
     },
     mediaContainer: {
         borderBottomRightRadius: 10,
@@ -367,7 +375,7 @@ const styles = StyleSheet.create({
     image: {
         width: Dimensions.get("window").width / 3,
         height: (Dimensions.get("window").width / 3) * 1.5,
-    }    
+    }
 });
 
 function dateOnly(date: Date | undefined) {

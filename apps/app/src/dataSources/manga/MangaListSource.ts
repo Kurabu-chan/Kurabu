@@ -1,4 +1,4 @@
-import { AnimeDetailsAlternativeTitles, MangaDetails, MangaList, MangaListData } from "@kurabu/api-sdk";
+import { AnimeDetailsAlternativeTitles, MangaList, MangaListData } from "@kurabu/api-sdk";
 import { MediaListSource } from "../MediaListSource";
 import { ListBase } from "../../apiBase/ListBase";
 import { requestErrorHandler } from "#decorators/requestErrorHandler";
@@ -19,7 +19,7 @@ export class MangaListSource extends ListBase implements MediaListSource {
             list = filterList(list, this.status);
         }
         if (this.sort) {
-            list = sortList(list, this.sort);
+            list = sortList(list);
         }
 
         if (this.text) {
@@ -41,7 +41,9 @@ function searchList(list: MangaListData[], text: string) {
 }
 
 function searchShouldInclude(text: string, title?: string, titles?: AnimeDetailsAlternativeTitles) {
-    const str = `${title} ${titles?.en} ${titles?.ja} ${titles?.synonyms?.join(" ")}`.toLowerCase();
+    const texts = [title, titles?.en, titles?.ja, ...(titles?.synonyms ?? [])];
+
+    const str = texts.join(" ").toLowerCase();
 
     return str.includes(text.toLowerCase());
 }
@@ -60,6 +62,6 @@ const statusSorting = {
     "plan_to_read": 4
 }
 
-function sortList(list: MangaListData[], sort: string) {
+function sortList(list: MangaListData[]) {
     return list.sort((a, b) => (statusSorting[a.node.myListStatus?.status ?? "plan_to_read"] ?? 5) - (statusSorting[b.node.myListStatus?.status ?? "plan_to_read"] ?? 5));
 }

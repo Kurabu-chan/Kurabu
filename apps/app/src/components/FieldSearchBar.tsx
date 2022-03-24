@@ -1,9 +1,8 @@
 import { Colors } from "#config/Colors";
 import { createClearIcon, createSearchIcon } from "#helpers/DefaultIcons";
-import { throws } from "assert";
 import React from "react";
-import { View, Text, Dimensions, ColorValue, StyleProp, TextStyle, ViewStyle } from "react-native";
-import { Icon, SearchBar } from "react-native-elements";
+import { View, Text, Dimensions, ColorValue, StyleProp, TextStyle, ViewStyle, StyleSheet } from "react-native";
+import { SearchBar } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 export type Field = {
@@ -96,19 +95,18 @@ export class FieldSearchBar extends React.Component<Props> {
     }
 
     render() {
-
-        const fontSize = Dimensions.get("window").width / 36;
-
         return (
             <View>
                 <SearchBar
                     value={this.props.search}
                     platform={"default"}
-                    onBlur={() => { }}
+                    onBlur={() => { return; }}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     onChangeText={((text: string) => {
                         this.changeText(text);
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     }) as any}
-                    onFocus={() => { }}
+                    onFocus={() => { return; }}
                     clearIcon={{
                         ...createClearIcon(undefined, this.props.styles.clearIconStyle),
                         name: "search"
@@ -137,29 +135,16 @@ export class FieldSearchBar extends React.Component<Props> {
                 />
 
                 <View>
-                    <View style={{
-                        flexDirection: "row",
-                        width: Dimensions.get("window").width - 10,
-                        flexWrap: "wrap"
-                    }}>
+                    <View style={styles.fieldsContainer}>
                         {
                             this.props.currentFields.map((field, index) => {
                                 return (
                                     <View key={index} style={{
-                                        padding: 5,
-                                        borderRadius: 5,
+                                        ...styles.field,
                                         borderColor: field.color,
-                                        backgroundColor: field.color,
-                                        width: "auto",
-                                        alignSelf: "flex-start",
-                                        alignContent: "center",
-                                        flexDirection: "row",
-                                        margin: 5
+                                        backgroundColor: field.color
                                     }}>
-                                        <Text style={{
-                                            alignSelf: "flex-start",
-                                            fontSize: fontSize * 1.1
-                                        }}>{field.negative ? "-" : "+"}{field.name}: {field.value}</Text>
+                                        <Text style={styles.fieldText}>{field.negative ? "-" : "+"}{field.name}: {field.value}</Text>
                                         <TouchableOpacity
                                             onPress={() => {
                                                 this.removeField(field);
@@ -177,6 +162,30 @@ export class FieldSearchBar extends React.Component<Props> {
         );
     }
 }
+
+const fontSize = Dimensions.get("window").width / 36;
+
+const styles = StyleSheet.create({
+    fieldsContainer: {
+        flexDirection: "row",
+        width: Dimensions.get("window").width - 10,
+        flexWrap: "wrap"
+    },
+    field: {
+        padding: 5,
+        borderRadius: 5,
+
+        width: "auto",
+        alignSelf: "flex-start",
+        alignContent: "center",
+        flexDirection: "row",
+        margin: 5
+    },
+    fieldText: {
+        alignSelf: "flex-start",
+        fontSize: fontSize * 1.1
+    }
+});
 
 function isValidField(field: Omit<FieldValue, "color">, allowedFields: Field[], currentFields: FieldValue[]): [boolean, FieldValue | undefined] {
     for (const f of currentFields) {
@@ -281,7 +290,7 @@ function extractFields(search: string, allowedFields: Field[], currentFields: Fi
 
                 if (validField[1] === undefined) throw new Error("Unexpected error in extractFields");
 
-                fields.push(validField[1] );
+                fields.push(validField[1]);
                 state.fieldName = "";
                 state.current = "";
                 state.negative = undefined;

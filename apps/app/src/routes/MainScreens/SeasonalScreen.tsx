@@ -1,16 +1,20 @@
-import {AnimeSeasonalSource} from "#data/anime/AnimeSeasonalSource";
+import { AnimeSeasonalSource } from "#data/anime/AnimeSeasonalSource";
 import { changeActivePage } from "#helpers/backButton";
 import { Picker } from "@react-native-community/picker";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { MediaListSource  } from "#data/MediaListSource";
+import { MediaListSource } from "#data/MediaListSource";
 import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
 import DetailedUpdateList from "#comps/DetailedUpdateList";
 import { Colors } from "#config/Colors";
 import { GetSeasonalAnimesSeasonEnum } from "@kurabu/api-sdk";
+import { SeasonalStackParamList } from "#routes/MainStacks/SeasonalStack";
+import { StackScreenProps } from "@react-navigation/stack";
+
+type Props = StackScreenProps<SeasonalStackParamList, "Seasonal">
 
 type StateType = {
     seasonal: {
@@ -23,14 +27,14 @@ type StateType = {
     };
     rankingSource?: MediaListSource;
     animeList?: DetailedUpdateList;
-    listenerToUnMount: any;
+    listenerToUnMount?: () => void;
 };
 
 const currYear = new Date().getFullYear();
 const currSeason = getSeason();
 
-export default class Seasonal extends React.Component<any, StateType> {
-    constructor(props: any) {
+export default class Seasonal extends React.Component<Props, StateType> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             seasonal: {
@@ -46,7 +50,7 @@ export default class Seasonal extends React.Component<any, StateType> {
     }
 
     componentDidMount() {
-        
+
         this.DoSeasonal();
 
         const unsubscribe = this.props.navigation.addListener("focus", () => {
@@ -65,7 +69,7 @@ export default class Seasonal extends React.Component<any, StateType> {
         if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
-    async DoSeasonal() {
+    DoSeasonal() {
         const fields = DetailedUpdateItemFields;
 
         const nodeSource = new AnimeSeasonalSource(
@@ -84,34 +88,33 @@ export default class Seasonal extends React.Component<any, StateType> {
         if (this.state.animeList) {
             console.log(this.state.seasonal.seasonValue);
             this.state.animeList.changeSource(
-                `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${
-                    this.state.seasonal.yearValue
+                `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${this.state.seasonal.yearValue
                 }`,
                 nodeSource
             );
         }
     }
 
-    changeSeason(val: ItemValue, index: number) {
+    changeSeason(val: ItemValue) {
         const season = val.toString();
-        if (!["winter", "summer", "spring", "fall"].includes(val.toString())) {
+        if (!["winter", "summer", "spring", "fall"].includes(season)) {
             return;
         }
 
         this.setState(
             (prevState) =>
-                ({
-                    ...prevState,
-                    seasonal: {
-                        ...prevState.seasonal,
-                        seasonValue: val.toString(),
-                    },
-                } as StateType),
+            ({
+                ...prevState,
+                seasonal: {
+                    ...prevState.seasonal,
+                    seasonValue: season,
+                },
+            } as StateType),
             this.DoSeasonal.bind(this)
         );
     }
 
-    changeYear(val: ItemValue, index: number) {
+    changeYear(val: ItemValue) {
         const year = parseInt(val.toString());
         if (year < 1917 || year > currYear + 1) {
             return;
@@ -119,13 +122,13 @@ export default class Seasonal extends React.Component<any, StateType> {
 
         this.setState(
             (prevState) =>
-                ({
-                    ...prevState,
-                    seasonal: {
-                        ...prevState.seasonal,
-                        yearValue: year,
-                    },
-                } as StateType),
+            ({
+                ...prevState,
+                seasonal: {
+                    ...prevState.seasonal,
+                    yearValue: year,
+                },
+            } as StateType),
             this.DoSeasonal.bind(this)
         );
     }
@@ -133,22 +136,11 @@ export default class Seasonal extends React.Component<any, StateType> {
     createSearchBar() {
         const allowedSeasons = getAllowedSeasons(maxSeason(this.state.seasonal.yearValue));
         return (
-            <View
-                style={{
-                    flexDirection: "row",
-                }}
-            >
+            <View style={styles.searchBarContainer}>
                 <Picker
                     selectedValue={this.state.seasonal.seasonValue}
                     onValueChange={this.changeSeason.bind(this)}
-                    style={{
-                        backgroundColor: Colors.KURABUPURPLE,
-                        marginTop: 5,
-                        marginLeft: 5,
-                        marginRight: 5,
-                        width: (Dimensions.get("window").width - 20) / 2,
-                        color: Colors.TEXT,
-                    }}
+                    style={styles.searchBarPicker}
                 >
                     <Picker.Item label="Winter" value="winter" />
                     {allowedSeasons.includes("spring") ? (
@@ -164,14 +156,7 @@ export default class Seasonal extends React.Component<any, StateType> {
                 <Picker
                     selectedValue={this.state.seasonal.yearValue.toString()}
                     onValueChange={this.changeYear.bind(this)}
-                    style={{
-                        backgroundColor: Colors.KURABUPURPLE,
-                        marginTop: 5,
-                        marginLeft: 5,
-                        marginRight: 5,
-                        width: (Dimensions.get("window").width - 20) / 2,
-                        color: Colors.TEXT,
-                    }}
+                    style={styles.searchBarPicker}
                 >
                     {arrayFromXToY(1917, maxYear(this.state.seasonal.seasonValue) + 1)
                         .reverse()
@@ -207,9 +192,7 @@ export default class Seasonal extends React.Component<any, StateType> {
     render() {
         return (
             <SafeAreaProvider
-                style={{
-                    backgroundColor: "#1a1a1a",
-                }}
+                style={styles.safeAreaProvider}
             >
                 <LinearGradient
                     // Background Linear Gradient
@@ -227,9 +210,8 @@ export default class Seasonal extends React.Component<any, StateType> {
                     {this.createSearchBar()}
                     {this.state.rankingSource !== undefined ? (
                         <DetailedUpdateList
-                            title={`${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${
-                                this.state.seasonal.yearValue
-                            }`}
+                            title={`${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${this.state.seasonal.yearValue
+                                }`}
                             mediaNodeSource={this.state.rankingSource}
                             navigator={this.props.navigation}
                             onCreate={this.onSearchListCreate.bind(this)}
@@ -241,6 +223,24 @@ export default class Seasonal extends React.Component<any, StateType> {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    searchBarContainer: {
+        flexDirection: "row",
+    },
+    searchBarPicker: {
+        backgroundColor: Colors.KURABUPURPLE,
+        marginTop: 5,
+        marginLeft: 5,
+        marginRight: 5,
+        width: (Dimensions.get("window").width - 20) / 2,
+        color: Colors.TEXT,
+    },
+    safeAreaProvider: {
+        backgroundColor: Colors.ALTERNATE_BACKGROUND
+    }
+});
+
 
 function arrayFromXToY(x: number, y: number) {
     return Array.from(Array(y - x).keys()).map((z) => z + x);

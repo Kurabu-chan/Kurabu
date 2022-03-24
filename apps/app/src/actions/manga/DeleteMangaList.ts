@@ -11,6 +11,6 @@ export class AddMangaToList extends ListBase {
             mangaid: mangaId,
         }
         await api.deleteMangaListItem(responseParams);
-        await getListManager().removeManga(mangaId);
+        getListManager().removeManga(mangaId);
     }
 }

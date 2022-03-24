@@ -4,7 +4,8 @@ import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, View } from 
 import { Colors } from "#config/Colors";
 import DetailedUpdateItem from "./DetailedUpdateItem";
 import { MediaListSource } from "#data/MediaListSource";
-import { AnimeListData, MangaListData, MediaFields } from "@kurabu/api-sdk";
+import { AnimeListData, MangaListData } from "@kurabu/api-sdk";
+import { ParamListBase } from "@react-navigation/native";
 
 const BatchSize = 20;
 
@@ -12,7 +13,7 @@ type DetailedUpdateListState = {
     title: string;
     data: (AnimeListData | MangaListData)[];
     mediaNodeSource?: MediaListSource;
-    navigator: StackNavigationProp<any, any>;
+    navigator: StackNavigationProp<ParamListBase, string>;
     offset: number;
     needmore: boolean;
     onDataGather?: () => void;
@@ -21,7 +22,7 @@ type DetailedUpdateListState = {
 type DetailedUpdateListProps = {
     title: string;
     mediaNodeSource: MediaListSource;
-    navigator: StackNavigationProp<any, any>;
+    navigator: StackNavigationProp<ParamListBase, string>;
     onCreate?: (media: DetailedUpdateList) => void;
     onDataGather?: () => void;
     showListStatus?: boolean;
@@ -45,14 +46,14 @@ class DetailedUpdateList extends React.Component<DetailedUpdateListProps, Detail
             this.props.onCreate(this);
         }
 
-        this.refresh();
+        void this.refresh();
     }
 
     componentWillUnmount() {
         this.setState({});
     }
 
-    public changeSource(title: string, nodeSource: MediaListSource) {
+    public  changeSource(title: string, nodeSource: MediaListSource) {
         this.setState(
             (prevState) => ({
                 ...prevState,
@@ -62,49 +63,53 @@ class DetailedUpdateList extends React.Component<DetailedUpdateListProps, Detail
                 data: [],
             }),
             () => {
-                this.refresh();
+                void this.refresh();
             }
         );
     }
 
-    public refresh() {
+    public async refresh() {
         if (this.state.onDataGather != undefined) {
             this.state.onDataGather();
         }
-        this.state.mediaNodeSource?.MakeRequest(this.props.limit ?? BatchSize, this.state.offset).then((data) => {
-            this.setState((prevState) => ({
-                ...prevState,
-                data: data.data,
-                offset: data.data.length,
-            }));
-        });
+
+        if (this.state.mediaNodeSource == undefined) return;
+        const data = await this.state.mediaNodeSource.MakeRequest(this.props.limit ?? BatchSize, this.state.offset);
+
+        this.setState((prevState) => ({
+            ...prevState,
+            data: data.data,
+            offset: data.data.length,
+        }));
     }
 
-    public loadExtra() {
-        this.state.mediaNodeSource?.MakeRequest(this.props.limit ?? BatchSize, this.state.offset).then((data) => {
-            this.setState((old) => {
-                old.data.push(...data.data);
-                if (data.data.length < (this.props.limit ?? BatchSize)) {
-                    return {
-                        title: old.title,
-                        data: old.data,
-                        mediaNodeSource: old.mediaNodeSource,
-                        navigator: old.navigator,
-                        offset: old.data.length,
-                        needmore: false,
-                    };
-                }
+    public async loadExtra() {
+        if (this.state.mediaNodeSource == undefined) return;
 
+        const data = await this.state.mediaNodeSource?.MakeRequest(this.props.limit ?? BatchSize, this.state.offset)
+        this.setState((old) => {
+            old.data.push(...data.data);
+            if (data.data.length < (this.props.limit ?? BatchSize)) {
                 return {
                     title: old.title,
                     data: old.data,
                     mediaNodeSource: old.mediaNodeSource,
                     navigator: old.navigator,
                     offset: old.data.length,
-                    needmore: true,
+                    needmore: false,
                 };
-            });
+            }
+
+            return {
+                title: old.title,
+                data: old.data,
+                mediaNodeSource: old.mediaNodeSource,
+                navigator: old.navigator,
+                offset: old.data.length,
+                needmore: true,
+            };
         });
+        
     }
 
     render() {
@@ -144,9 +149,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
         color: Colors.TEXT,
         paddingBottom: 10,
-    },
-    mediaList: {
-        justifyContent: "flex-start",
     },
     loading: {
         marginTop: Dimensions.get("window").height / 2.5,

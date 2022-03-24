@@ -1,8 +1,8 @@
-import { AnimeDetails, MangaDetails } from "@kurabu/api-sdk";
+import { AnimeDetailsMediaTypeEnum, MangaDetailsMediaTypeEnum } from "@kurabu/api-sdk";
 
 type params = {
     id: number;
-    mediaType: AnimeDetails.MediaTypeEnum | MangaDetails.MediaTypeEnum;
+    mediaType: AnimeDetailsMediaTypeEnum | MangaDetailsMediaTypeEnum;
 };
 
 export default params;

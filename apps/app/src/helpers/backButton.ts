@@ -4,7 +4,7 @@ type ButtonState = {
     backButtons: BackButtonFunctionsType;
     rerenderers: voidFunction[];
 };
-type BackButtonFunctionsType = {
+export type BackButtonFunctionsType = {
     Main?: voidFunction;
     Ranking?: voidFunction;
     Search?: voidFunction;

@@ -1,33 +1,29 @@
 import { changeActivePage } from "#helpers/backButton";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackScreenProps } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, View, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AnimeSeasonalSource } from "#data/anime/AnimeSeasonalSource";
 import { MediaListSource } from "#data/MediaListSource";
 import MediaList, { mediaListFields } from "#comps/MediaList";
 import { Colors } from "#config/Colors";
 import { getCurrentSeason } from "#helpers/seasonProvider";
-import { AnimeFields, GetSeasonalAnimesSeasonEnum, MediaFields } from "@kurabu/api-sdk";
+import {  GetSeasonalAnimesSeasonEnum } from "@kurabu/api-sdk";
 
-type PropsType = {
-    navigation: StackNavigationProp<HomeStackParamList, "Home">;
-    route: RouteProp<HomeStackParamList, "Home">;
-};
+type Props = StackScreenProps<HomeStackParamList, "HomeScreen">;
 
 type StateType = {
     node: {
         key: string;
         nodeSource: MediaListSource;
     };
-    listenerToUnMount: any;
+    listenerToUnMount?: () => void;
 };
 
-export default class Home extends React.Component<any, StateType> {
-    constructor(props: any) {
+export default class Home extends React.Component<Props, StateType> {
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -59,9 +55,7 @@ export default class Home extends React.Component<any, StateType> {
     render() {
         return (
             <SafeAreaProvider
-                style={{
-                    backgroundColor: "#1a1a1a",
-                }}
+                style={styles.safeAreaProvider}
             >
                 <LinearGradient
                     // Background Linear Gradient
@@ -77,9 +71,7 @@ export default class Home extends React.Component<any, StateType> {
                     }}
                 >
                     <View
-                        style={{
-                            flexDirection: "row",
-                        }}
+                        style={styles.mediaListContainer}
                     >
                         <MediaList
                             title={this.state.node.key}
@@ -92,3 +84,12 @@ export default class Home extends React.Component<any, StateType> {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    safeAreaProvider: {
+        backgroundColor: Colors.ALTERNATE_BACKGROUND,
+    },
+    mediaListContainer: {
+        flexDirection: "row",
+    }
+});

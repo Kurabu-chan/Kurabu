@@ -150,9 +150,7 @@ export class ListStatus extends React.PureComponent<Props, State> {
                     }}
                 >
                     <Text
-                        style={{
-                            alignSelf: "center",
-                        }}
+                        style={styles.alignSelfCenter}
                     >
                         Add to list
                     </Text>
@@ -167,9 +165,7 @@ export class ListStatus extends React.PureComponent<Props, State> {
                     }}
                 >
                     <Text
-                        style={{
-                            alignSelf: "center",
-                        }}
+                        style={styles.alignSelfCenter}
                     >
                         Details
                     </Text>
@@ -182,6 +178,9 @@ export class ListStatus extends React.PureComponent<Props, State> {
 const fontSize = Dimensions.get("window").width / 36;
 
 const styles = StyleSheet.create({
+    alignSelfCenter: {
+        alignSelf: "center",
+    },
     TopAreaLabels: {
         flexDirection: "column",
         flex: 1.3,

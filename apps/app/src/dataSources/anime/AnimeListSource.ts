@@ -19,7 +19,7 @@ export class AnimeListSource implements MediaListSource {
             list = filterList(list, this.status);
         }
         if (this.sort) { 
-            list = sortList(list , this.sort);
+            list = sortList(list);
         }
 
         if (this.text) {
@@ -39,7 +39,9 @@ function searchList(list: AnimeListData[], text: string) {
 }
 
 function searchShouldInclude(text: string, title?: string, titles?: AnimeDetailsAlternativeTitles) {
-    const str = `${title} ${titles?.en} ${titles?.ja} ${titles?.synonyms?.join(" ")}`.toLowerCase();
+    const texts = [title, titles?.en, titles?.ja, ...(titles?.synonyms ?? [])];
+
+    const str = texts.join(" ").toLowerCase();
     
     return str.includes(text.toLowerCase());
 }
@@ -58,6 +60,6 @@ const statusSorting = {
     "plan_to_watch": 4
 }
 
-function sortList(list: AnimeListData[], sort: string) {
+function sortList(list: AnimeListData[]) {
     return list.sort((a, b) => (statusSorting[a.node.myListStatus?.status ?? "plan_to_watch"] ?? 5) - (statusSorting[b.node.myListStatus?.status ?? "plan_to_watch"] ?? 5));
 }

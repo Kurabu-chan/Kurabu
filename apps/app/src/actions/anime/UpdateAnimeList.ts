@@ -2,6 +2,7 @@ import { ListBase } from "../../apiBase/ListBase";
 import { AnimeDetailsMyListStatus, UpdateAnimeListItemRequest } from "@kurabu/api-sdk";
 import { requestErrorHandler } from "#decorators/requestErrorHandler";
 import { getListManager } from "#helpers/ListManager";
+import { pick } from "lodash";
 
 export class UpdateAnimeList extends ListBase {
     @requestErrorHandler
@@ -11,7 +12,7 @@ export class UpdateAnimeList extends ListBase {
         const api = await super.getApi();
 
         const changeList = calculateAlteredFields(before, after);
-        const changes = select(changeList, after);
+        const changes = pick(after, changeList);
 
         const requestParams: UpdateAnimeListItemRequest = {
             animeId,
@@ -29,15 +30,6 @@ export class UpdateAnimeList extends ListBase {
         await api.updateAnimeListItem(requestParams);
         await getListManager().refreshAnime(animeId);
     }
-}
-
-function select(toSelect: (keyof AnimeDetailsMyListStatus)[], selectFrom: AnimeDetailsMyListStatus): Partial<AnimeDetailsMyListStatus> {
-    const out: any = {};
-    for (const selectElement of toSelect) {
-        out[selectElement] = selectFrom[selectElement];
-    }
-
-    return out;
 }
 
 function calculateAlteredFields(before: AnimeDetailsMyListStatus, after: AnimeDetailsMyListStatus): (keyof AnimeDetailsMyListStatus)[] {

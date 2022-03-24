@@ -1,6 +1,6 @@
 import React from "react";
 import { MangaDetailsSource } from "#data/manga/MangaDetailsSource";
-import { changeActivePage, changeBackButton, getActivePage } from "#helpers/backButton";
+import { BackButtonFunctionsType, changeActivePage, changeBackButton, getActivePage } from "#helpers/backButton";
 import { LinearGradient } from "expo-linear-gradient";
 import {
     ActivityIndicator,
@@ -35,8 +35,8 @@ type Props = {
 type State = {
     mediaId?: number;
     media?: AnimeDetails | MangaDetails;
-    listenerToUnMount: any;
-    page: string;
+    listenerToUnMount?: () => void;
+    page: keyof BackButtonFunctionsType;
     mediaType: AnimeDetailsMediaTypeEnum | MangaDetailsMediaTypeEnum;
 };
 
@@ -58,7 +58,7 @@ export default class Details extends React.Component<Props, State> {
             mediaType: mediaType,
         };
 
-        this.refresh();
+        void this.refresh();
     }
 
     async refresh() {
@@ -93,13 +93,13 @@ export default class Details extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        changeBackButton(this.state.page as any, () => {
+        changeBackButton(this.state.page, () => {
             this.props.navigation.popToTop();
-            changeBackButton(this.state.page as any, undefined);
+            changeBackButton(this.state.page, undefined);
         });
 
         const unsubscribe = this.props.navigation.addListener("focus", () => {
-            changeActivePage(this.state.page as any);
+            changeActivePage(this.state.page);
             // The screen is focused
             // Call any action
         });
@@ -125,7 +125,7 @@ export default class Details extends React.Component<Props, State> {
             return undefined;
         }
 
-        if ("numEpisodes" in this.state.media) { 
+        if ("numEpisodes" in this.state.media) {
             return (<View>
                 <Text style={styles.TopAreaLabel}>Episodes:</Text>
             </View>);
@@ -192,7 +192,7 @@ export default class Details extends React.Component<Props, State> {
                                 <View style={styles.TitleArea}>
                                     <Text style={styles.title}>{this.state.media.title}</Text>
                                     {this.state.media.title !=
-                                    this.state.media.alternativeTitles?.en ? (
+                                        this.state.media.alternativeTitles?.en ? (
                                         <Text style={styles.alternateTitle}>
                                             {this.state.media.alternativeTitles?.en}
                                         </Text>
@@ -248,7 +248,7 @@ export default class Details extends React.Component<Props, State> {
                             <Divider color={Colors.DIVIDER} widthPercentage={100} />
                             <LargeText text={this.state.media.synopsis} />
                             {this.state.media.background != undefined &&
-                            this.state.media.background != "" ? (
+                                this.state.media.background != "" ? (
                                 <View>
                                     <Text style={styles.head2}>Background</Text>
                                     <Divider color={Colors.DIVIDER} widthPercentage={100} />
@@ -289,10 +289,7 @@ export default class Details extends React.Component<Props, State> {
                             />
                             <Divider color={Colors.DIVIDER} widthPercentage={0} />
                             <View
-                                style={{
-                                    height: 80,
-                                    width: 5,
-                                }}
+                                style={styles.extraRoom}
                             />
                         </ScrollView>
                     )}
@@ -339,16 +336,6 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         flex: 1,
     },
-    Synopsis: {
-        color: Colors.TEXT,
-    },
-    ReadMore: {
-        color: Colors.BLUE,
-        textDecorationStyle: "solid",
-        textDecorationLine: "underline",
-        textDecorationColor: Colors.BLUE,
-        fontSize: fontSize,
-    },
     head2: {
         fontSize: fontSize + 4,
         color: Colors.TEXT,
@@ -373,8 +360,12 @@ const styles = StyleSheet.create({
         color: Colors.TEXT,
         fontSize: 12,
     },
+    extraRoom: {
+        height: 80,
+        width: 5,
+    }
 });
 
 function valueOrND(val: number | undefined) {
-    return val === 0 || val === undefined ? "N/A" : val;    
+    return val === 0 || val === undefined ? "N/A" : val;
 }

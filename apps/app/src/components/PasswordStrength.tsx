@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { Colors } from "#config/Colors";
 
 type props = {
@@ -7,7 +7,7 @@ type props = {
 };
 
 type state = {
-    innerStyle: any;
+    innerStyle: StyleProp<ViewStyle>;
 };
 
 export default class PasswordStrength extends React.Component<props, state> {

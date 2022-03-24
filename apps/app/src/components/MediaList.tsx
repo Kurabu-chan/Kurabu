@@ -5,19 +5,20 @@ import { Colors } from "#config/Colors";
 import MediaItem from "./MediaItem";
 import { MediaListSource } from "#data/MediaListSource";
 import { AnimeListData, MangaListData, MediaFields } from "@kurabu/api-sdk";
+import { ParamListBase } from "@react-navigation/native";
 
 type MediaListState = {
     title: string;
     data: (AnimeListData | MangaListData)[];
     mediaNodeSource: MediaListSource;
-    navigator: StackNavigationProp<any, any>;
+    navigator: StackNavigationProp<ParamListBase, string>;
     offset: number;
 };
 
 type MediaListProps = {
     title: string;
     mediaNodeSource: MediaListSource;
-    navigator: StackNavigationProp<any, any>;
+    navigator: StackNavigationProp<ParamListBase, string>;
     onCreate?: (media: MediaList) => void;
 };
 
@@ -30,6 +31,7 @@ export const mediaListFields: MediaFields[] = [
 class MediaList extends React.Component<MediaListProps, MediaListState> {
     constructor(props: MediaListProps) {
         super(props);
+
         this.state = {
             title: props.title,
             data: [],
@@ -42,31 +44,31 @@ class MediaList extends React.Component<MediaListProps, MediaListState> {
             this.props.onCreate(this);
         }
 
-        this.refresh(this.state.mediaNodeSource);
+        void this.refresh(this.state.mediaNodeSource);
     }
 
-    public refresh(nodeSource: MediaListSource) {
-        nodeSource.MakeRequest(20).then((data) => {
-            this.setState((prevState) => ({
-                ...prevState,
-                data: data.data,
-            }));
-        });
+    public async refresh(nodeSource: MediaListSource) {
+        const data = await nodeSource.MakeRequest(20);
+
+        this.setState((prevState) => ({
+            ...prevState,
+            data: data.data,
+        }));
     }
 
-    public loadExtra() {
-        this.state.mediaNodeSource.MakeRequest(20, this.state.offset + 20).then((data) => {
-            this.setState((old) => {
-                old.data.push(...data.data);
+    public async loadExtra() {
+        const data = await this.state.mediaNodeSource.MakeRequest(20, this.state.offset + 20);
 
-                return {
-                    title: old.title,
-                    data: old.data,
-                    mediaNodeSource: old.mediaNodeSource,
-                    navigator: old.navigator,
-                    offset: old.data.length,
-                };
-            });
+        this.setState((old) => {
+            old.data.push(...data.data);
+
+            return {
+                title: old.title,
+                data: old.data,
+                mediaNodeSource: old.mediaNodeSource,
+                navigator: old.navigator,
+                offset: old.data.length,
+            };
         });
     }
 
@@ -103,10 +105,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginLeft: 10,
         color: Colors.TEXT,
-    },
-    mediaList: {
-        justifyContent: "flex-start",
-    },
+    }
 });
 
 export default MediaList;

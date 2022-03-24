@@ -1,11 +1,13 @@
 import * as React from "react";
 import { Queue } from "#helpers/Queue";
+import { NavigationContainerRef } from "@react-navigation/core";
+import { AuthStackParamList } from "./AuthStack";
 
-export const navigationRef = React.createRef<any>();
+export const navigationRef = React.createRef<NavigationContainerRef<AuthStackParamList>>();
 let ready = false;
 const navQueue = new Queue<{
-    name: string;
-    params: any;
+    name: keyof AuthStackParamList;
+    params: AuthStackParamList[keyof AuthStackParamList];
 }>();
 
 export function navigationRefReady() {
@@ -18,7 +20,7 @@ export function navigationRefReady() {
     }
 }
 
-export function navigate(name: string, params?: any) {
+export function navigate(name: keyof AuthStackParamList, params?: AuthStackParamList[keyof AuthStackParamList]) {
     if (ready) {
         navigationRef.current?.navigate(name, params);
     } else {

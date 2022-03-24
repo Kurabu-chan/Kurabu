@@ -52,19 +52,17 @@ class Register extends React.Component<RegisterProps, RegisterState> {
         }));
     }
 
-    private DoSignup() {
-        Auth.getInstance().then((auth) => {
-            auth.TryRegister(this.state.email, this.state.pass).then((res) => {
-                if (res != "") {
-                    //we got the token for the verification
-                    auth.setToken(res);
-                    console.log("Obtained token: " + res);
-                    this.props.navigation.replace("Verify", {
-                        token: res,
-                    });
-                }
+    private async DoSignup() {
+        const auth = await Auth.getInstance()
+        const registerRes = await auth.TryRegister(this.state.email, this.state.pass)
+        if (registerRes != "") {
+            //we got the token for the verification
+            auth.setToken(registerRes);
+            
+            this.props.navigation.replace("Verify", {
+                token: registerRes,
             });
-        });
+        }
     }
 
     private DoSignin() {
@@ -78,17 +76,12 @@ class Register extends React.Component<RegisterProps, RegisterState> {
                     height={Dimensions.get("window").height}
                     width={Dimensions.get("window").width * 3}
                     preserveAspectRatio="xMinYMin slice"
-                    style={{
-                        position: "absolute",
-                    }}
+                    style={styles.kurabuImage}
                 />
                 <SafeAreaView style={styles.safeContainer} />
                 <View style={styles.content}>
                     <View
-                        style={{
-                            width: 10,
-                            height: "25%",
-                        }}
+                        style={styles.extraSpacing}
                     ></View>
                     <TextInput
                         onChangeText={this.changeEmail.bind(this)}
@@ -125,9 +118,7 @@ class Register extends React.Component<RegisterProps, RegisterState> {
                         <Text style={styles.SignupButtonText}>Sign up</Text>
                     </TouchableOpacity>
                     <Text
-                        style={{
-                            color: "white",
-                        }}
+                        style={styles.havaAnAcountText}
                     >
                         Have an account?
                     </Text>
@@ -145,6 +136,16 @@ class Register extends React.Component<RegisterProps, RegisterState> {
 }
 
 const styles = StyleSheet.create({
+    havaAnAcountText: {
+        color: Colors.TEXT,
+    },
+    kurabuImage: {
+        position: "absolute",
+    },
+    extraSpacing: {
+        width: 10,
+        height: "25%",
+    },
     appContainer: {
         backgroundColor: Colors.ALTERNATE_BACKGROUND,
     },
@@ -155,11 +156,6 @@ const styles = StyleSheet.create({
         height: Dimensions.get("window").height,
         alignItems: "center",
         justifyContent: "center",
-    },
-    head: {
-        color: Colors.TEXT,
-        fontSize: 60,
-        fontFamily: "AGRevueCyr",
     },
     Input: {
         width: 250,

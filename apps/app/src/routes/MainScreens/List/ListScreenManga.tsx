@@ -1,15 +1,19 @@
 import { changeActivePage } from "#helpers/backButton";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { MediaListSource } from "#data/MediaListSource";
-import { MangaExpandedDetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
 import SearchList from "#comps/DetailedUpdateList";
 import { Colors } from "#config/Colors";
-import { SearchBar } from "react-native-elements";
 import { MangaListSource } from "#data/manga/MangaListSource";
 import { FieldSearchBar, FieldValue } from "#comps/FieldSearchBar";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ParamListBase } from "@react-navigation/native";
+
+type Props = {
+    navigation: StackNavigationProp<ParamListBase, string>;
+};
 
 type StateType = {
     filter: {
@@ -22,13 +26,11 @@ type StateType = {
     };
     rankingSource?: MediaListSource;
     animeList?: SearchList;
-    listenerToUnMount: any;
+    listenerToUnMount?: () => void;
 };
-const statusRef = /status:(completed|plan( |_)to( |_)read|dropped|reading|on( |_)hold)/i;
 
-
-export default class List extends React.Component<any, StateType> {
-    constructor(props: any) {
+export default class List extends React.Component<Props, StateType> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             filter: {
@@ -79,8 +81,6 @@ export default class List extends React.Component<any, StateType> {
 
     doSearch() {
         // start searching
-        const fields = MangaExpandedDetailedUpdateItemFields;
-
         let status: string[] | undefined = [];
         const statusFields = this.state.filter.fields.filter((field) => field.name === "status");
         if (statusFields === undefined || statusFields.length == 0) {
@@ -221,9 +221,7 @@ export default class List extends React.Component<any, StateType> {
     render() {
         return (
             <SafeAreaProvider
-                style={{
-                    backgroundColor: "#1a1a1a",
-                }}
+                style={styles.safeAreaProvider}
             >
                 <LinearGradient
                     // Background Linear Gradient
@@ -255,22 +253,8 @@ export default class List extends React.Component<any, StateType> {
     }
 }
 
-function extractSearch(query: string) {
-    const matches = query.match(statusRef);
-
-    if (matches === null) {
-        return {
-            search: query.trim(),
-            status: undefined
-        }
+const styles = StyleSheet.create({
+    safeAreaProvider: {
+        backgroundColor: Colors.ALTERNATE_BACKGROUND,
     }
-
-    const statusMatch = matches[0].toLowerCase();
-    const status = statusMatch.split(":")[1];
-
-    const formatted_status = status.replace(/ /g, "_").toLowerCase();
-    return {
-        search: query.replace(statusRef, "").trim(),
-        status: formatted_status
-    }
-}
+});

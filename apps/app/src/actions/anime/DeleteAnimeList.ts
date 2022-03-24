@@ -12,6 +12,6 @@ export class AddAnimeToList extends ListBase {
         }
 
         await api.deleteAnimeListItem(requestParams);
-        await getListManager().removeAnime(animeId);
+        getListManager().removeAnime(animeId);
     }
 }

@@ -1,5 +1,3 @@
-import { FlatList } from "react-native-gesture-handler";
-
 export function getCurrentSeason() {
     const date = new Date();
     const month = date.getMonth();

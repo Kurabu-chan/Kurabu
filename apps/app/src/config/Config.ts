@@ -1,14 +1,22 @@
 import conf from "../../config.json";
 
+type ConfigType = {
+    api: {
+        domain: string,
+        scheme: string,
+        root: string
+    }
+}
+
 export class Config {
-    private config: any;
+    private config: ConfigType;
     private loaded = false;
 
-    private constructor(config: any) {
+    private constructor(config: ConfigType) {
         this.config = config;
     }
 
-    public GetConfig(): any {
+    public GetConfig(): ConfigType {
         return this.config;
     }
 
@@ -29,7 +37,7 @@ export class Config {
     }
 
     private static instance: Config;
-    public static async GetInstance(): Promise<Config> {
+    public static GetInstance(): Config {
         if (!Config.instance) {
             Config.instance = new Config(conf);
         }
