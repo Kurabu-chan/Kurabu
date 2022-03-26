@@ -145,8 +145,8 @@ export class ListStatus extends React.PureComponent<Props, State> {
             return (
                 <TouchableOpacity
                     style={styles.listStatusEdit}
-                    onPress={async () => {
-                        await this.addToList();
+                    onPress={() => {
+                        void this.addToList();
                     }}
                 >
                     <Text

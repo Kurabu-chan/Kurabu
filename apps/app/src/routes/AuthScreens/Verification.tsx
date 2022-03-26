@@ -113,7 +113,9 @@ export default class Verif extends React.Component<RegisterProps, State> {
                     </Text>
                     <CodeField
                         value={this.state.code}
-                        onChangeText={this.SetCode.bind(this)}
+                        onChangeText={(code: string) => {
+                            void this.SetCode(code);
+                        }}
                         cellCount={CELL_COUNT}
                         rootStyle={styles.codeFieldRoot}
                         keyboardType="number-pad"
@@ -127,7 +129,9 @@ export default class Verif extends React.Component<RegisterProps, State> {
                             </Text>
                         )}
                     />
-                    <TouchableOpacity style={styles.cancel} onPress={this.Cancel.bind(this)}>
+                    <TouchableOpacity style={styles.cancel} onPress={() => {
+                        void this.Cancel();
+                    }}>
                         <Text>Cancel</Text>
                     </TouchableOpacity>
                 </View>
