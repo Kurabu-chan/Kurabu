@@ -1,8 +1,9 @@
 {
     "name": "@kurabu/app",
     "main": "index.js",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "scripts": {
+        "eas-build-post-install": "cd ../.. && yarn run build --scope=@kurabu/app --include-dependencies",
         "dev": "expo start --android",
         "start:dev": "expo start",
         "android": "expo start --android",
@@ -32,6 +33,7 @@
         "expo-linear-gradient": "~11.0.3",
         "expo-linking": "~3.0.0",
         "expo-secure-store": "~11.1.0",
+        "expo-splash-screen": "^0.14.2",
         "expo-status-bar": "~1.2.0",
         "expo-updates": "~0.11.6",
         "http": "0.0.1-security",

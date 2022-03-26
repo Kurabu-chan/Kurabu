@@ -13,8 +13,8 @@ export function CustomDrawerContentComponent(props: DrawerContentComponentProps)
 
                 </View>
             </SafeAreaView>
-            <SafeAreaView style={styles.container}>
-                <View style={styles.container}>
+            <SafeAreaView>
+                <View>
                     <DrawerItem
                         label={"Logout"}
                         onPress={() => {
@@ -46,7 +46,7 @@ export function CustomDrawerContentComponent(props: DrawerContentComponentProps)
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        minHeight: Dimensions.get("window").height - 100,
+        minHeight: Dimensions.get("window").height - 100
     },
     drawerItemStyle: {
         width: "100%",
