@@ -1,6 +1,6 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import React from "react";
-import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { Icon } from "react-native-elements";
 import { Colors } from "#config/Colors";
 import { getCurrentBackButtonFunc, registerRerenderer } from "#helpers/backButton";
@@ -11,6 +11,7 @@ import SeasonalStack from "./MainStacks/SeasonalStack";
 import SuggestionsStack from "./MainStacks/SuggestionsStack";
 import ListStack from "./MainStacks/ListStack";
 import { getListManager } from "#helpers/ListManager";
+import { CustomDrawerContentComponent } from "#comps/CustomDrawerNavigator";
 
 export const Drawer = createDrawerNavigator();
 
@@ -30,9 +31,10 @@ export default class DrawerComp extends React.Component<Props> {
         return (
             <Drawer.Navigator
                 initialRouteName="Main"
+                drawerContent={CustomDrawerContentComponent}
                 screenOptions={{
                     drawerActiveBackgroundColor: Colors.KURABUPINK,
-                    drawerInactiveBackgroundColor: Colors.ALTERNATE_BACKGROUND,
+                    drawerInactiveBackgroundColor: Colors.ALTERNATE_CONTENT_BACKGROUND,
                     drawerActiveTintColor: "white",
                     drawerInactiveTintColor: "white",
 
@@ -89,6 +91,7 @@ export default class DrawerComp extends React.Component<Props> {
                 <Drawer.Screen name="Ranking" component={RankingStack} />
                 <Drawer.Screen name="Seasonal" component={SeasonalStack} />
                 <Drawer.Screen name="List" component={ListStack} />
+                
             </Drawer.Navigator>
         );
     }
