@@ -23,7 +23,7 @@ if (isEmptyOrUndefined(head)) {
 if (process.argv.includes("--help")) { 
     const help = `Usage: ts-node update-versions.ts [--local|--list-changes|--output-changes|--output-changed] 
     
-    --local: Update versions on file system instead of in the gihub repository.
+    --local: Update versions on file system instead of in the gihub repository. NOTE: this still gets the changes from the github api.
     --list-changes: List all changed workspaces without editing files or pushing to github. single quoted, comma space seperated.
     --output-changes: Output changed workspaces using the github output format. single quoted, space seperated, variable is 'changes'.
     --output-changed: Do regular procedures but also output whether there were changed workspaces using github output format. Outputs 'changed' if there were changes, 'unchanged' if there were no changes. variable is 'changed'.`

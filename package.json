@@ -20,11 +20,13 @@
         "build:docker-dev": "turbo run build:docker-dev",
         "build:docker-prod": "turbo run build:docker-prod",
         "check-build-required": "turbo run check-build-required",
-        "test": "turbo run test"
+        "test": "turbo run test",
+        "postinstall": "yarn husky install"
     },
     "devDependencies": {
         "@types/mocha": "^9.1.0",
         "cross-env": "^7.0.3",
+        "husky": "^7.0.4",
         "prettier": "^2.5.1",
         "rimraf": "^3.0.2",
         "ts-node": "^10.4.0",
