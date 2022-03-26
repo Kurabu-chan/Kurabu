@@ -23,45 +23,13 @@ jobs:
           else
             echo "::set-output name=is-kurabu-bot::not-kurabu-bot"
           fi    
-  bump-versions:
-    name: Bump version numbers
-    runs-on: ubuntu-latest
-    needs: [check-is-kurabu-bot]
-    outputs:
-      commit_sha: ${{ steps.update-versions.outputs.commit_sha }}
-    if: ${{ needs.check-is-kurabu-bot.outputs.is-kurabu-bot == 'not-kurabu-bot' }}
-    steps:
-      - name: Print output
-        run: echo "${{ toJson(needs.check-build) }}"
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.after }}
-          fetch-depth: 0 
-      - name: Use Node.js 16
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
-      - name: Remove yarnrc
-        run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
-      - name: Add ts-node globally
-        run: yarn global add ts-node
-      - name: Install script dependencies
-        run: cd scripts && npm install && cd ..
-
-      - name: Do version updates and push
-        id: update-versions
-        env:
-          GHAPI_ACCESS_TOKEN: ${{ secrets.GHAPI_ACCESS_TOKEN }}
-          GHAPI_base: ${{ github.event.before }}
-          GHAPI_head: ${{ github.event.after }}
-        run: ts-node scripts/update-versions.ts
   check-build:
     name: Check if a build is necessary
     runs-on: ubuntu-latest
-    needs: bump-versions
+    needs: [check-is-kurabu-bot]
     outputs:
       full_turbo_check: ${{ steps.check-full-turbo.outputs.full_turbo_check }}
+    if: ${{ needs.check-is-kurabu-bot.outputs.is-kurabu-bot == 'not-kurabu-bot' }}
     steps:  
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -110,7 +78,7 @@ jobs:
   build-docker-stage:
     name: Build and publish docker image for staging
     runs-on: ubuntu-latest
-    needs: [bump-versions, check-build]
+    needs: [check-build]
     if: ${{ needs.check-build.outputs.full_turbo_check == 'nofullturbo' }}
     steps:
       - name: Set up QEMU
@@ -122,7 +90,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: ${{ needs.bump-versions.outputs.bump-versions }}
           fetch-depth: 0
       - name: Use Node.js 16
         uses: actions/setup-node@v2
