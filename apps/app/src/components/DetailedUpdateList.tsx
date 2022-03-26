@@ -121,7 +121,9 @@ class DetailedUpdateList extends React.Component<DetailedUpdateListProps, Detail
                         horizontal={false}
                         data={this.state.data}
                         onEndReachedThreshold={0.5}
-                        onEndReached={this.loadExtra.bind(this)}
+                        onEndReached={() => {
+                            void this.loadExtra();
+                        }}
                         renderItem={(item) => (
                             <DetailedUpdateItem item={item.item} navigator={this.state.navigator} showListStatus={this.props.showListStatus}/>
                         )}

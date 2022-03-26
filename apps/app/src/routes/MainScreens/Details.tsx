@@ -259,7 +259,9 @@ export default class Details extends React.Component<Props, State> {
                             <Text style={styles.head2}>Your list status</Text>
                             <Divider color={Colors.DIVIDER} widthPercentage={100} />
                             <ListStatus
-                                parentRefresh={this.refresh.bind(this)}
+                                    parentRefresh={() => {
+                                        void this.refresh();
+                                    }}
                                 id={this.state.mediaId as number}
                                 props={this.state.media.myListStatus}
                                 navigation={this.props.navigation}

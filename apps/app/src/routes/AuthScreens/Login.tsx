@@ -85,7 +85,9 @@ class Login extends React.Component<Props, LoginState> {
                     <TouchableOpacity
                         style={styles.LoginButton}
                         activeOpacity={0.6}
-                        onPress={this.DoLogin.bind(this)}
+                        onPress={() => {
+                            void this.DoLogin();
+                        }}
                     >
                         <Text style={styles.LoginButtonText}>Login</Text>
                     </TouchableOpacity>
