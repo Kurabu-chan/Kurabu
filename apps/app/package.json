@@ -9,7 +9,9 @@
         "ios": "expo start --ios",
         "web": "expo start --web",
         "eject": "expo eject",
-        "check-build-required": "echo \"@kurabu/app\""
+        "check-build-required": "echo \"@kurabu/app\"",
+        "lint": "eslint \"**/*.ts\" \"**/*.tsx\"",
+        "lint:fix": "eslint \"**/*.ts\" \"**/*.tsx\" --fix"
     },
     "dependencies": {
         "@babel/helper-builder-react-jsx": "^7.12.13",
@@ -20,6 +22,7 @@
         "@react-navigation/drawer": "^6.1.8",
         "@react-navigation/native": "^6.0.6",
         "@react-navigation/stack": "^6.0.11",
+        "@types/lodash": "^4.14.180",
         "@types/node": "17.0.18",
         "@types/node-fetch": "^2.5.7",
         "@types/react-native-elements": "^0.18.0",
@@ -33,6 +36,7 @@
         "expo-updates": "~0.11.6",
         "http": "0.0.1-security",
         "https": "^1.0.0",
+        "lodash": "^4.17.21",
         "moment": "^2.29.1",
         "react": "17.0.1",
         "react-native": "0.64.3",
@@ -47,17 +51,17 @@
         "react-native-svg-transformer": "^1.0.0",
         "react-native-timeago": "^0.5.0",
         "tslib": "^2.1.0",
-        "typescript": "4.5.5",
         "url": "^0.11.0"
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",
+        "@kurabu/config": "*",
         "@kurabu/tsconfig": "*",
         "@types/react": "~17.0.21",
         "@types/react-native": "~0.64.12",
         "babel-plugin-module-resolver": "4.1.0",
         "npm-force-resolutions": "0.0.10",
-        "typescript": "~4.3.5"
+        "typescript": "~4.5.5"
     },
     "resolutions": {
         "logkitty": ">=0.7.1",

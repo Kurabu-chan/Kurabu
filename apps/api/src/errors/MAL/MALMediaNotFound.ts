@@ -2,7 +2,7 @@
 import MALError from "./MALError";
 
 export default class MALMediaNotFound extends MALError {
-    constructor(message: any) {
+    constructor(message?: string) {
         super(message);
         this.errorCode = "042";
         this.httpCode = 404;

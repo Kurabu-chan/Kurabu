@@ -1,32 +1,27 @@
 import { MangaRankingSource } from "#data/manga/MangaRankingSource";
 import { changeActivePage } from "#helpers/backButton";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackScreenProps } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { MediaListSource } from "#data/MediaListSource";
 import MediaList, { mediaListFields } from "#comps/MediaList";
-import { Colors } from "../../../config/Colors";
-import { MediaFields } from "@kurabu/api-sdk";
+import { Colors } from "#config/Colors";
 
-type PropsType = {
-    navigation: StackNavigationProp<HomeStackParamList, "Home">;
-    route: RouteProp<HomeStackParamList, "Home">;
-};
+type Props = StackScreenProps<HomeStackParamList, "HomeScreen">;
 
 type StateType = {
     node: {
         key: string;
         nodeSource: MediaListSource;
     };
-    listenerToUnMount: any;
+    listenerToUnMount?: () => void;
 };
 
-export default class Home extends React.Component<PropsType, StateType> {
-    constructor(props: PropsType) {
+export default class Home extends React.Component<Props, StateType> {
+    constructor(props: Props) {
         super(props);
         
         this.state = {
@@ -76,14 +71,12 @@ export default class Home extends React.Component<PropsType, StateType> {
                     }}
                 >
                     <View
-                        style={{
-                            flexDirection: "row",
-                        }}
+                        style={styles.mediaListContainer}
                     >
                         <MediaList
                             title={this.state.node.key}
                             mediaNodeSource={this.state.node.nodeSource}
-                            navigator={this.props.navigation as any}
+                            navigator={this.props.navigation }
                         />
                     </View>
                 </LinearGradient>
@@ -91,3 +84,9 @@ export default class Home extends React.Component<PropsType, StateType> {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    mediaListContainer: {
+        flexDirection: "row",
+    }
+});

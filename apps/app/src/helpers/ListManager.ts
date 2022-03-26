@@ -3,7 +3,6 @@ import { AnimeDetailsSource } from "#data/anime/AnimeDetailsSource"
 import { MangaDetailsSource } from "#data/manga/MangaDetailsSource"
 import { fieldsToString } from "#helpers/fieldsHelper"
 import { ListApi, AnimeListData, MangaListData } from "@kurabu/api-sdk"
-import { arrayBuffer } from "stream/consumers"
 import { ListBase } from "../apiBase/ListBase"
 
 type IdIdentifyableSet<Media> = {
@@ -32,7 +31,7 @@ class ListManager extends ListBase {
         if (Object.keys(this.animeList).length !== 0 && Object.keys(this.mangaList).length !== 0) return;
 
         if (this.loadingPromise !== undefined) return await this.loadingPromise;
-        this.loadingPromise = new Promise(async (resolve, reject) => {
+        this.loadingPromise = (async () => {
             const api = await super.getApi();
             const animeList = await getFullAnimeList(api);
             const mangaList = await getFullMangaList(api);
@@ -46,8 +45,9 @@ class ListManager extends ListBase {
                 this.mangaList[manga.node.id] = manga;
             }
 
-            resolve();
-        });
+            return;
+        })();
+
         await this.loadingPromise;
         this.loadingPromise = undefined;;
         
@@ -88,7 +88,7 @@ class ListManager extends ListBase {
 
 const listManager = new ListManager();
 export function getListManager() {
-    listManager.loadList();
+    void listManager.loadList();
     return listManager;
 };
 

@@ -4,7 +4,7 @@ import { ApiBase } from "./ApiBase";
 
 export abstract class ListBase extends ApiBase {
     protected async getApi() {
-        const appConfig = await Config.GetInstance()
+        const appConfig = Config.GetInstance()
 
         const config = new Configuration({
             accessToken: await super.getAccessToken(),

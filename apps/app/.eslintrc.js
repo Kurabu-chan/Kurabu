@@ -1,10 +1,10 @@
-const base = require("@kurabu/config/eslint-preset");
+const base = require("@kurabu/config/eslint-preset-react-native");
 
 const parserOptions = {
     parserOptions: {
         project: ["./tsconfig.json"],
         sourceType: "module",
-        tsconfigRootDir: __dirname,
+        ecmaVersion: 2015
     },
 }
 

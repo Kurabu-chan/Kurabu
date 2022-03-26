@@ -4,7 +4,7 @@ type ButtonState = {
     backButtons: BackButtonFunctionsType;
     rerenderers: voidFunction[];
 };
-type BackButtonFunctionsType = {
+export type BackButtonFunctionsType = {
     Main?: voidFunction;
     Ranking?: voidFunction;
     Search?: voidFunction;
@@ -12,7 +12,7 @@ type BackButtonFunctionsType = {
     Suggestions?: voidFunction;
 };
 
-let backButtonState: ButtonState = {
+const backButtonState: ButtonState = {
     currentPage: "Main",
     backButtons: {
         Main: undefined,

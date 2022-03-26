@@ -19,14 +19,6 @@ export class Database {
     private _sequelize!: Sequelize;
     private _models!: ModelsType;
 
-    get sequelize(): Sequelize {
-        return this._sequelize;
-    }
-
-    get models(): ModelsType {
-        return this._models;
-    }
-
     constructor() {
         this._models = models;
 
@@ -59,6 +51,14 @@ export class Database {
             });
 
         void this.migrate();
+    }
+
+    get sequelize(): Sequelize {
+        return this._sequelize;
+    }
+
+    get models(): ModelsType {
+        return this._models;
     }
 
     private async migrate() {

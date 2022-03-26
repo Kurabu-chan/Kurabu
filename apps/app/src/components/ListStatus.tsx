@@ -52,7 +52,7 @@ export class ListStatus extends React.PureComponent<Props, State> {
 
     async addToList() {
         let success = false;
-        var action: AddAnimeToList | AddMangaToList;
+        let action: AddAnimeToList | AddMangaToList;
         if (this.state.isAnime == true) {
             action = new AddAnimeToList();
         } else {
@@ -150,9 +150,7 @@ export class ListStatus extends React.PureComponent<Props, State> {
                     }}
                 >
                     <Text
-                        style={{
-                            alignSelf: "center",
-                        }}
+                        style={styles.alignSelfCenter}
                     >
                         Add to list
                     </Text>
@@ -167,9 +165,7 @@ export class ListStatus extends React.PureComponent<Props, State> {
                     }}
                 >
                     <Text
-                        style={{
-                            alignSelf: "center",
-                        }}
+                        style={styles.alignSelfCenter}
                     >
                         Details
                     </Text>
@@ -179,9 +175,12 @@ export class ListStatus extends React.PureComponent<Props, State> {
     }
 }
 
-var fontSize = Dimensions.get("window").width / 36;
+const fontSize = Dimensions.get("window").width / 36;
 
 const styles = StyleSheet.create({
+    alignSelfCenter: {
+        alignSelf: "center",
+    },
     TopAreaLabels: {
         flexDirection: "column",
         flex: 1.3,

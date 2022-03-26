@@ -1,6 +1,6 @@
 export type ResponseMessage = {
     status: string;
-    message: any;
+    message: unknown;
 };
 
 export type ErrorResponse = {

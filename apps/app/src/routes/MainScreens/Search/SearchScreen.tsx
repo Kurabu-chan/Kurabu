@@ -1,14 +1,18 @@
 import { changeActivePage } from "#helpers/backButton";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Dimensions } from "react-native";
-import { Icon, SearchBar } from "react-native-elements";
+import { Dimensions, StyleSheet } from "react-native";
+import { SearchBar } from "react-native-elements";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AnimeSearchSource } from "#data/anime/AnimeSearchSource";
 import { MediaListSource } from "#data/MediaListSource";
 import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
 import SearchList from "#comps/DetailedUpdateList";
 import { Colors } from "#config/Colors";
+import { StackScreenProps } from "@react-navigation/stack";
+import { SearchStackParamList } from "#routes/MainStacks/SearchStack";
+
+type Props = StackScreenProps<SearchStackParamList, "Search">;
 
 type StateType = {
     search: {
@@ -21,11 +25,11 @@ type StateType = {
     };
     searchSource?: MediaListSource;
     animeList?: SearchList;
-    listenerToUnMount: any;
+    listenerToUnMount?: () => void;
 };
 
-export default class Search extends React.Component<any, StateType> {
-    constructor(props: any) {
+export default class Search extends React.Component<Props, StateType> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             search: {
@@ -40,7 +44,7 @@ export default class Search extends React.Component<any, StateType> {
         };
     }
 
-    async DoSearch() {
+    DoSearch() {
         console.log(`Searching for ${this.state.search.searchText}`);
 
         if (this.state.search.searchText == "") {
@@ -49,7 +53,7 @@ export default class Search extends React.Component<any, StateType> {
 
         const fields = DetailedUpdateItemFields;
 
-        var nodeSource = new AnimeSearchSource(this.state.search.searchText, fields);
+        const nodeSource = new AnimeSearchSource(this.state.search.searchText, fields);
         this.setState((prevState) => ({
             ...prevState,
             searchSource: nodeSource,
@@ -85,19 +89,15 @@ export default class Search extends React.Component<any, StateType> {
                 showLoading={false}
                 lightTheme={false}
                 round={true}
-                onFocus={() => { }}
-                onBlur={() => { }}
-                style={{
-                    backgroundColor: Colors.KURABUPURPLE,
-                    color: Colors.TEXT,
-                    width: Dimensions.get("window").width - 10,
+                onFocus={() => {
+                    return;
                 }}
-                inputStyle={{
-                    color: Colors.TEXT,
+                onBlur={() => {
+                    return;
                 }}
-                labelStyle={{
-                    backgroundColor: Colors.KURABUPURPLE,
-                }}
+                style={styles.style}
+                inputStyle={styles.inputStyle}
+                labelStyle={styles.labelStyle}
                 searchIcon={{
                     name: "search",
                     color: Colors.TEXT,
@@ -106,20 +106,12 @@ export default class Search extends React.Component<any, StateType> {
                     name: "close",
                     color: Colors.TEXT
                 }}
-                inputContainerStyle={{
-                    backgroundColor: Colors.KURABUPURPLE,
-                }}
-                containerStyle={{
-                    backgroundColor: "transparent",
-                    borderTopWidth: 0,
-                    borderBottomWidth: 0,
-                }}
-                leftIconContainerStyle={{
-                    backgroundColor: Colors.KURABUPURPLE,
-                }}
+                inputContainerStyle={styles.inputContainerStyle}
+                containerStyle={styles.containerStyle}
+                leftIconContainerStyle={styles.leftIconContainerStyle}
                 onEndEditing={this.DoSearch.bind(this)}
                 platform={"default"}
-                onChangeText={this.updateSearch.bind(this) as any}
+                onChangeText={this.updateSearch.bind(this) as never}
                 onClear={() => {
                     this.updateSearch("");
                 }}
@@ -169,9 +161,7 @@ export default class Search extends React.Component<any, StateType> {
     render() {
         return (
             <SafeAreaProvider
-                style={{
-                    backgroundColor: "#1a1a1a",
-                }}
+                style={styles.safeAreaProvider}
             >
                 <LinearGradient
                     // Background Linear Gradient
@@ -201,3 +191,31 @@ export default class Search extends React.Component<any, StateType> {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    style: {
+        backgroundColor: Colors.KURABUPURPLE,
+        color: Colors.TEXT,
+        width: Dimensions.get("window").width - 10
+    },
+    inputStyle: {
+        color: Colors.TEXT,
+    },
+    labelStyle: {
+        backgroundColor: Colors.KURABUPURPLE,
+    },
+    inputContainerStyle: {
+        backgroundColor: Colors.KURABUPURPLE,
+    },
+    containerStyle: {
+        backgroundColor: Colors.TRANSPARENT,
+        borderTopWidth: 0,
+        borderBottomWidth: 0,
+    },
+    leftIconContainerStyle: {
+        backgroundColor: Colors.KURABUPURPLE,
+    },
+    safeAreaProvider: {
+        backgroundColor: Colors.ALTERNATE_BACKGROUND
+    }
+});

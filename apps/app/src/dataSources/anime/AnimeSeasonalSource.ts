@@ -15,7 +15,7 @@ export class AnimeSeasonalSource extends AnimeBase implements MediaListSource {
 
     @requestErrorHandler
     async MakeRequest(limit?: number, offset?: number): Promise<AnimeList> {
-        var api = await super.getApi();
+        const api = await super.getApi();
         const requestParams: GetSeasonalAnimesRequest = {
             fields: fieldsToString(this.fields),
             year: this.year,

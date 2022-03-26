@@ -1,6 +1,6 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import React from "react";
-import { Dimensions, TouchableOpacity } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
 import { Colors } from "#config/Colors";
 import { getCurrentBackButtonFunc, registerRerenderer } from "#helpers/backButton";
@@ -14,14 +14,16 @@ import { getListManager } from "#helpers/ListManager";
 
 export const Drawer = createDrawerNavigator();
 
-export default class DrawerComp extends React.Component {
-    constructor(props: any) {
+type Props = unknown;
+
+export default class DrawerComp extends React.Component<Props> {
+    constructor(props: Props) {
         super(props);
         registerRerenderer(this.forceUpdate.bind(this));
     }
 
     render() {
-        var fontSize = Dimensions.get("window").width / 36;
+        const fontSize = Dimensions.get("window").width / 36;
 
         getListManager();
 
@@ -73,9 +75,8 @@ export default class DrawerComp extends React.Component {
                                     name="arrow-alt-circle-left"
                                     type="font-awesome-5"
                                     color={Colors.TEXT}
-                                    style={{
-                                        marginRight: 15,
-                                    }}
+                                    style={styles.iconStyles}
+                                    tvParallaxProperties={{}}
                                 />
                             </TouchableOpacity>
                         );
@@ -92,3 +93,9 @@ export default class DrawerComp extends React.Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    iconStyles: {
+        marginRight: 15,
+    }
+})

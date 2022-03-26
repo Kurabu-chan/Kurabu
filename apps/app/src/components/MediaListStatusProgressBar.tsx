@@ -1,6 +1,6 @@
 import { Colors } from "#config/Colors";
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -38,10 +38,10 @@ export class Progress extends React.PureComponent<Props, State>{
             // Anime
             const action = new UpdateAnimeList();
             this.setState({ ...this.state, current: clamp(this.state.current - 1, this.props.min, this.props.max) },
-                async () => {
+                () => {
                     if (this.props.mediaId === undefined) return;
 
-                    await action.MakeRequest(this.props.mediaId,
+                    void action.MakeRequest(this.props.mediaId,
                         {
                             numEpisodesWatched: clamp(this.state.current + 1, this.props.min, this.props.max),
                         },
@@ -52,7 +52,7 @@ export class Progress extends React.PureComponent<Props, State>{
         } else {
             const action = new UpdateMangaList();
             this.setState({ ...this.state, current: clamp(this.state.current - 1, this.props.min, this.props.max) },
-                async () => {
+                () => {
                     if (this.props.mediaId === undefined) return;
 
                     const fieldToControl = this.props.fieldToControl as "numChaptersRead" | "numVolumesRead";
@@ -62,22 +62,22 @@ export class Progress extends React.PureComponent<Props, State>{
                     const after: Partial<MangaDetailsMyListStatus> = {}
                     after[fieldToControl] = this.state.current;
 
-                    await action.MakeRequest(this.props.mediaId, before, after);
+                    void action.MakeRequest(this.props.mediaId, before, after);
                 });
         }
     }
 
-    async pushAdd() {
+    pushAdd() {
         if (this.props.mediaId === undefined) return;
 
         if (this.props.fieldToControl === "numEpisodesWatched") {
             // Anime
             const action = new UpdateAnimeList();
             this.setState({ ...this.state, current: clamp(this.state.current + 1, this.props.min, this.props.max) },
-                async () => {
+                () => {
                     if (this.props.mediaId === undefined) return;
 
-                    await action.MakeRequest(this.props.mediaId,
+                    void action.MakeRequest(this.props.mediaId,
                         {
                             numEpisodesWatched: clamp(this.state.current - 1, this.props.min, this.props.max),
                         },
@@ -87,9 +87,9 @@ export class Progress extends React.PureComponent<Props, State>{
                 });
         } else {
             const action = new UpdateMangaList();
-            
+
             this.setState({ ...this.state, current: clamp(this.state.current + 1, this.props.min, this.props.max) },
-                async () => {
+                () => {
                     if (this.props.mediaId === undefined) return;
 
                     const fieldToControl = this.props.fieldToControl as "numChaptersRead" | "numVolumesRead";
@@ -99,7 +99,7 @@ export class Progress extends React.PureComponent<Props, State>{
                     const after: Partial<MangaDetailsMyListStatus> = {}
                     after[fieldToControl] = this.state.current;
 
-                    await action.MakeRequest(this.props.mediaId, before, after);
+                    void action.MakeRequest(this.props.mediaId, before, after);
                 });
         }
     }
@@ -110,23 +110,6 @@ export class Progress extends React.PureComponent<Props, State>{
         if (isNaN(location)) location = 0;
 
         return (
-            // <View style={{
-            //     ...styles.progressContainer,
-            //     height: this.props.height,
-            //     backgroundColor: Colors.NO_BACKGROUND,
-            //     borderColor: this.props.color,
-            // }}>
-            //     <View style={{
-            //         ...styles.progress,
-            //         backgroundColor: this.props.color,
-            //         width:  * 100 + "%",
-            //         height: "100%",
-            //     }}>
-
-            //     </View>
-
-
-            // </View>
             <LinearGradient
                 colors={[this.props.color, Colors.NO_BACKGROUND]}
                 start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
@@ -135,18 +118,13 @@ export class Progress extends React.PureComponent<Props, State>{
                     ...styles.progressContainer,
                     height: this.props.height,
                     borderColor: this.props.color,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    width: "100%"
                 }}>
                 <TouchableOpacity
                     onPress={this.pushRemove.bind(this)}
                 >
                     <Icon
                         name="remove"
-                        style={{
-                            margin: -2
-                        }}
+                        style={styles.removeIconStyle}
                         color={Colors.TEXT}
                         size={this.props.height}
                         tvParallaxProperties={{}} />
@@ -157,10 +135,7 @@ export class Progress extends React.PureComponent<Props, State>{
                 >
                     <Icon
                         name="add"
-                        style={{
-                            margin: -2,
-                            marginRight: 0
-                        }}
+                        style={styles.addIconStyle}
                         color={Colors.TEXT}
                         size={this.props.height}
                         tvParallaxProperties={{}} />
@@ -176,10 +151,19 @@ const styles = StyleSheet.create({
     progressContainer: {
         borderWidth: 1,
         width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between"
     },
     progressDisplay: {
         color: Colors.TEXT,
         marginTop: 1
+    },
+    addIconStyle: {
+        margin: -2,
+        marginRight: 0
+    },
+    removeIconStyle: {
+        margin: -2
     }
 });
 

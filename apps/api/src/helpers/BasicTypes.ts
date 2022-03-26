@@ -47,6 +47,7 @@ export type Fields = {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function fieldsToString(fields: any): string {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const entries = Object.entries(fields);
     let str = "";
 

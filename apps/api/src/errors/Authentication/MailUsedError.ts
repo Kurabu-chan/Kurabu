@@ -2,7 +2,7 @@
 import AuthenticationError from "./AuthenticationError";
 
 export default class MailUsedError extends AuthenticationError {
-    constructor(message: any) {
+    constructor(message?: string) {
         super(message);
         this.errorCode = "025";
         this.httpCode = 403;

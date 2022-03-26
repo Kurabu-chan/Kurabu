@@ -4,16 +4,17 @@ import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "rea
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { Colors } from "#config/Colors";
 import { AnimeListData, MangaListData } from "@kurabu/api-sdk";
+import { ParamListBase } from "@react-navigation/native";
 
 type MediaItemProps = {
     item: AnimeListData | MangaListData;
     width?: number;
-    navigator: StackNavigationProp<any, any>;
+    navigator: StackNavigationProp<ParamListBase, string>;
 };
 
 type MediaItemState = {
     item: AnimeListData | MangaListData;
-    navigator: StackNavigationProp<any, any>;
+    navigator: StackNavigationProp<ParamListBase, string>;
 };
 
 class MediaItem extends React.Component<MediaItemProps, MediaItemState> {
@@ -39,11 +40,11 @@ class MediaItem extends React.Component<MediaItemProps, MediaItemState> {
     }
 
     render() {
-        var width = this.props.width ?? Dimensions.get("window").width / 2 - 15;
+        const width = this.props.width ?? Dimensions.get("window").width / 2 - 15;
 
-        var fontSize = Dimensions.get("window").width / 34;
+        const fontSize = Dimensions.get("window").width / 34;
 
-        var sizer = Dimensions.get("window").width / 400;
+        const sizer = Dimensions.get("window").width / 400;
 
         const styles = StyleSheet.create({
             mediaContainer: {

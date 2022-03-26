@@ -2,7 +2,7 @@
 import AuthenticationError from "./AuthenticationError";
 
 export default class StateStatusError extends AuthenticationError {
-    constructor(message: any) {
+    constructor(message?: string) {
         super(message);
         this.errorCode = "024";
         this.httpCode = 403;

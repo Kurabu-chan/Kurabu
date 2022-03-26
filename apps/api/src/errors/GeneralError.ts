@@ -3,7 +3,7 @@ export default class GeneralError extends Error {
     protected errorCode = "000";
     protected httpCode = 500;
 
-    constructor(message: any) {
+    constructor(message?: string) {
         super(message);
         this.name = "GeneralError";
     }

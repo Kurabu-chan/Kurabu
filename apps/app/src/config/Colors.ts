@@ -23,6 +23,7 @@ export class Colors {
     public static BACKGROUND = "";
     public static ALTERNATE_BACKGROUND = "#1a1a1a";
     public static TRANSPARENT_BACKGROUND = "rgba(26,26,26, 0.75)";
+    public static TRANSPARENT = "transparent";
     public static NO_BACKGROUND = "rgba(0,0,0, 0)";
     public static INVISIBLE_BACKGROUND = "rgba(0,0,0, 1)";
     public static ERROR: "#FF0000";

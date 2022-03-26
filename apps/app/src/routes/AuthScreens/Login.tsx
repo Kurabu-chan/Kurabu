@@ -1,5 +1,4 @@
-import { RouteProp } from "@react-navigation/core";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import React from "react";
 import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -10,10 +9,7 @@ import { Colors } from "#config/Colors";
 import { AuthStackParamList } from "../AuthStack";
 import { DoSwitch } from "../RootNavigator";
 
-type LoginProps = {
-    navigation: StackNavigationProp<AuthStackParamList, "Login">;
-    route: RouteProp<AuthStackParamList, "Login">;
-};
+type Props = StackScreenProps<AuthStackParamList, "Login">;
 
 type LoginState = {
     navigator: StackNavigationProp<AuthStackParamList, "Login">;
@@ -21,8 +17,8 @@ type LoginState = {
     pass: string;
 };
 
-class Login extends React.Component<LoginProps, LoginState> {
-    constructor(props: LoginProps) {
+class Login extends React.Component<Props, LoginState> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             navigator: props.navigation,
@@ -45,14 +41,12 @@ class Login extends React.Component<LoginProps, LoginState> {
         }));
     }
 
-    private DoLogin() {
-        Auth.getInstance().then((auth) => {
-            auth.Trylogin(this.state.email, this.state.pass).then((res) => {
-                if (res === true) {
-                    DoSwitch("Drawer");
-                }
-            });
-        });
+    private async DoLogin() {
+        const auth = await Auth.getInstance()
+        const loginRes = await auth.Trylogin(this.state.email, this.state.pass)
+        if (loginRes === true) {
+            DoSwitch("Drawer");
+        }
     }
 
     private DoSignup() {
@@ -66,17 +60,12 @@ class Login extends React.Component<LoginProps, LoginState> {
                     height={Dimensions.get("window").height * 1.5}
                     width={Dimensions.get("window").width * 3}
                     preserveAspectRatio="xMinYMin slice"
-                    style={{
-                        position: "absolute",
-                    }}
+                    style={styles.kurabuImage}
                 />
                 <SafeAreaView style={styles.safeContainer} />
                 <View style={styles.content}>
                     <View
-                        style={{
-                            width: 10,
-                            height: `${30 * sizer}%`,
-                        }}
+                        style={styles.extraSpacing}
                     ></View>
                     <TextInput
                         onChangeText={this.changeEmail.bind(this)}
@@ -101,9 +90,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                         <Text style={styles.LoginButtonText}>Login</Text>
                     </TouchableOpacity>
                     <Text
-                        style={{
-                            color: "white",
-                        }}
+                        style={styles.noAccountText}
                     >
                         No Account?
                     </Text>
@@ -120,10 +107,20 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
 }
 
-var fontSize = Dimensions.get("window").width / 36;
-var sizer = Dimensions.get("window").width / 400;
+const fontSize = Dimensions.get("window").width / 36;
+const sizer = Dimensions.get("window").width / 400;
 
 const styles = StyleSheet.create({
+    kurabuImage: {
+        position: "absolute",
+    },
+    extraSpacing: {
+        width: 10,
+        height: `${30 * sizer}%`,
+    },
+    noAccountText: {
+        color: Colors.TEXT,
+    },
     appContainer: {
         // backgroundColor: Colors.BLUE
     },
@@ -134,11 +131,6 @@ const styles = StyleSheet.create({
         height: Dimensions.get("window").height,
         alignItems: "center",
         justifyContent: "center",
-    },
-    head: {
-        color: Colors.TEXT,
-        fontSize: fontSize * 5,
-        fontFamily: "AGRevueCyr",
     },
     Input: {
         width: sizer * 250,

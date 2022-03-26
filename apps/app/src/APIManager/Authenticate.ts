@@ -24,7 +24,7 @@ const secureStoreOptions: SecureStoreOptions = {
 class Authentication {
     private static instance: Authentication;
     private token?: string;
-    private loaded: boolean = false;
+    private loaded = false;
     public static devMode = false;
 
     private static root: string;
@@ -32,14 +32,14 @@ class Authentication {
     private constructor() {
         console.log("Starting Authenticator...");
 
-        listenError("023", () => {
-            Authentication.ClearAsync();
-            Updates.reloadAsync();
+        listenError("023", async () => {
+            await Authentication.ClearAsync();
+            await Updates.reloadAsync();
         });
 
-        listenError("012", () => {
-            Authentication.ClearAsync();
-            Updates.reloadAsync();
+        listenError("012", async () => {
+            await Authentication.ClearAsync();
+            await Updates.reloadAsync();
         });
 
         if (this.token) {
@@ -51,7 +51,7 @@ class Authentication {
     private async LoadStorage(): Promise<boolean> {
         //try to load token from local storage
 
-        var token = await getItemAsync("token", secureStoreOptions);
+        const token = await getItemAsync("token", secureStoreOptions);
         if (token == null) {
             return false;
         }
@@ -97,14 +97,14 @@ class Authentication {
     /** make request to MAL, check status and save token */
     public async Trylogin(email: string, password: string): Promise<boolean> {
         //url to make request to
-        let url = `${Authentication.root}/authed/jwt/login`;
+        const url = `${Authentication.root}/authed/jwt/login`;
         //the body of the request
-        let body = {
+        const body = {
             email: email.replace(" ", ""),
             pass: password.replace(" ", ""),
         };
         //make the request
-        let res = await fetch(url, {
+        const res = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -112,7 +112,8 @@ class Authentication {
             body: JSON.stringify(body),
         });
         //is the response an error !?!?!?
-        let json: JsonType = await res.json();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const json: JsonType = await res.json();
         handleError(json);
         if (json.status == "error") {
             //oh fuck
@@ -132,15 +133,15 @@ class Authentication {
 
     public async TryRegister(email: string, password: string): Promise<string> {
         //url to make request to
-        let url = `${Authentication.root}/authed/jwt/register`;
+        const url = `${Authentication.root}/authed/jwt/register`;
         //the body of the request
 
-        let body = {
+        const body = {
             email: email.replace(" ", ""),
             pass: password.replace(" ", ""),
         };
         //make the request
-        let res = await fetch(url, {
+        const res = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -148,7 +149,8 @@ class Authentication {
             body: JSON.stringify(body),
         });
         //is the response an error !?!?!?
-        let json: JsonType = await res.json();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const json: JsonType = await res.json();
         if (json.status == "error") {
             //oh fuck
             Alert.alert("Something bad happened", json.message);
@@ -159,16 +161,17 @@ class Authentication {
     }
 
     public async TryCancelRegister(token: string): Promise<boolean> {
-        let url = `${Authentication.root}/authed/jwt/cancelRegister`;
+        const url = `${Authentication.root}/authed/jwt/cancelRegister`;
 
-        let res = await fetch(url, {
+        const res = await fetch(url, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
 
-        let json: JsonType = await res.json();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const json: JsonType = await res.json();
         if (json.status == "error") {
             //oh fuck
             Alert.alert("Something bad happened", json.message);
@@ -180,15 +183,15 @@ class Authentication {
 
     public async TryVerif(token: string, code: string): Promise<JsonType> {
         //url to make request to
-        let url = `${Authentication.root}/authed/jwt/verif`;
+        const url = `${Authentication.root}/authed/jwt/verif`;
         //the body of the request
 
-        let body = {
+        const body = {
             code: code,
             redirect: this.MakeRedirect(),
         };
         //make the request
-        let res = await fetch(url, {
+        const res = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -197,7 +200,8 @@ class Authentication {
             body: JSON.stringify(body),
         });
         //is the response an error !?!?!?
-        let json: JsonType = await res.json();
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const json: JsonType = await res.json();
         if (json.status == "error") {
             //oh fuck
             Alert.alert("Something bad happened", json.message);
@@ -233,7 +237,7 @@ class Authentication {
         }
 
         if (!Authentication.root) {
-            let config = await Config.GetInstance();
+            const config = Config.GetInstance();
             Authentication.root = config.GetApiRoot();
         }
 

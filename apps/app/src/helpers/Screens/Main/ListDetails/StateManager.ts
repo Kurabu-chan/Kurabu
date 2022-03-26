@@ -1,16 +1,7 @@
-import { ListDetails, Props, State } from "#routes/MainScreens/ListDetails";
+import { ListDetails } from "#routes/MainScreens/ListDetails";
+import { MangaStatus } from "@kurabu/api-sdk";
 import { ItemValue } from "@react-native-community/picker/typings/Picker";
 
-type setState<P, S> = <K extends keyof S>(
-    state:
-        | ((prevState: Readonly<S>, props: Readonly<P>) => Pick<S, K> | S | null)
-        | (Pick<S, K> | S | null),
-    callback?: () => void
-) => void;
-
-type ListDetailsStateManagerProps = {
-    setState: setState<Props, State>;
-};
 export class ListDetailsStateManager {
     private get setState() {
         return this._listDetails.setState.bind(this._listDetails);
@@ -22,13 +13,24 @@ export class ListDetailsStateManager {
 
     constructor(private _listDetails: ListDetails) {}
 
-    changeStatus(itemValue: ItemValue, itemIndex: number) {
+    changeStatus(itemValue: ItemValue) {
         if (this.state.listStatus == undefined) return;
+        
+        const allowedStatuses = [
+            MangaStatus.Reading,
+            MangaStatus.Completed,
+            MangaStatus.OnHold,
+            MangaStatus.Dropped,
+            MangaStatus.PlanToRead,
+        ];
+
+        if(!(itemValue in allowedStatuses)) return;
+
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                status: itemValue as any,
+                ...oldState.listStatus,
+                status: itemValue as MangaStatus,
             },
         }));
     }
@@ -41,8 +43,8 @@ export class ListDetailsStateManager {
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                score: intText as any,
+                ...oldState.listStatus,
+                score: intText,
             },
         }));
     }
@@ -51,12 +53,12 @@ export class ListDetailsStateManager {
         const reg = /^[0-9]*$/;
         if (text.match(reg) == undefined) return;
         let intText: number | undefined = undefined;
-        if (text !== "") intText = parseInt(text) as number;
+        if (text !== "") intText = parseInt(text) ;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                num_episodes_watched: intText as any,
+                ...oldState.listStatus,
+                numEpisodesWatched: intText,
             },
         }));
     }
@@ -65,12 +67,12 @@ export class ListDetailsStateManager {
         const reg = /^[0-9]*$/;
         if (text.match(reg) == undefined) return;
         let intText: number | undefined = undefined;
-        if (text !== "") intText = parseInt(text) as number;
+        if (text !== "") intText = parseInt(text) ;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                num_chapters_read: intText as any,
+                ...oldState.listStatus,
+                numChaptersRead: intText,
             },
         }));
     }
@@ -79,12 +81,12 @@ export class ListDetailsStateManager {
         const reg = /^[0-9]*$/;
         if (text.match(reg) == undefined) return;
         let intText: number | undefined = undefined;
-        if (text !== "") intText = parseInt(text) as number;
+        if (text !== "") intText = parseInt(text) ;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                num_volumes_read: intText as any,
+                ...oldState.listStatus,
+                numVolumesRead: intText,
             },
         }));
     }
@@ -93,12 +95,12 @@ export class ListDetailsStateManager {
         const reg = /^[0-9]*$/;
         if (text.match(reg) == undefined) return;
         let intText: number | undefined = undefined;
-        if (text !== "") intText = parseInt(text) as number;
+        if (text !== "") intText = parseInt(text) ;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                num_times_rewatched: intText as any,
+                ...oldState.listStatus,
+                numTimesRewatched: intText,
             },
         }));
     }
@@ -107,12 +109,12 @@ export class ListDetailsStateManager {
         const reg = /^[0-9]*$/;
         if (text.match(reg) == undefined) return;
         let intText: number | undefined = undefined;
-        if (text !== "") intText = parseInt(text) as number;
+        if (text !== "") intText = parseInt(text) ;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                num_times_reread: intText as any,
+                ...oldState.listStatus,
+                numTimesReread: intText,
             },
         }));
     }
@@ -125,8 +127,8 @@ export class ListDetailsStateManager {
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                priority: intText as any,
+                ...oldState.listStatus,
+                priority: intText,
             },
         }));
     }
@@ -139,8 +141,8 @@ export class ListDetailsStateManager {
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                rewatch_value: intText as any,
+                ...oldState.listStatus,
+                rewatchValue: intText,
             },
         }));
     }
@@ -153,30 +155,30 @@ export class ListDetailsStateManager {
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                reread_value: intText as any,
+                ...oldState.listStatus,
+                rereadValue: intText,
             },
         }));
     }
 
-    changeIsRewatching(itemValue: ItemValue, itemIndex: number) {
+    changeIsRewatching(itemValue: ItemValue) {
         if (this.state.listStatus == undefined) return;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                is_rewatching: itemValue == "true",
+                ...oldState.listStatus,
+                isRewatching: itemValue == "true",
             },
         }));
     }
 
-    changeIsRereading(itemValue: ItemValue, itemIndex: number) {
+    changeIsRereading(itemValue: ItemValue) {
         if (this.state.listStatus == undefined) return;
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
-                is_rereading: itemValue == "true",
+                ...oldState.listStatus,
+                isRereading: itemValue == "true",
             },
         }));
     }
@@ -185,7 +187,7 @@ export class ListDetailsStateManager {
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
+                ...oldState.listStatus,
                 comments: text,
             },
         }));
@@ -195,7 +197,7 @@ export class ListDetailsStateManager {
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
-                ...oldState.listStatus!,
+                ...oldState.listStatus,
                 tags: text.split(" "),
             },
         }));

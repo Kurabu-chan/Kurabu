@@ -90,9 +90,8 @@ export function param(
                 return;
             }
 
-            val = val as string;
             if (paramType === ParamType.int) {
-                const parsedInt = parseInt(val, 10);
+                const parsedInt = parseInt(val as string, 10);
                 if (isNaN(parsedInt)) {
                     void callback(req, res, arg, false);
                     res.status(403).json({
@@ -107,7 +106,7 @@ export function param(
             }
 
             if (paramType === ParamType.number) {
-                const parsedFloat = parseFloat(val);
+                const parsedFloat = parseFloat(val as string);
                 if (isNaN(parsedFloat)) {
                     void callback(req, res, arg, false);
                     res.status(403).json({

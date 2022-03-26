@@ -17,41 +17,41 @@ function checkSingle(name: string, value: Variable) {
     const envVal = process.env[name];
     if (!envVal) return;
 
-    if (value.type === 'string') {
+    if (value.type === "string") {
         return;
     }
 
-    if (value.type === 'number') {
+    if (value.type === "number") {
         const num = Number(envVal);
         if (!isNaN(num)) return;
 
         throw new EnvError(`Invalid number for environment variable: ${name}`);
     }
 
-    if (value.type === 'boolean') {
+    if (value.type === "boolean") {
         const reg = /^(true|false)$/i;
         const valid = reg.test(envVal);
         if (valid) return;
         throw new EnvError(`Invalid boolean for environment variable: ${name}`);
     }
 
-    if (value.type === 'url') {
-        //check if envVar is a valid url
+    if (value.type === "url") {
+        // check if envVar is a valid url
         const valid = isUri(envVal);
         if (valid) return;
         throw new EnvError(`Invalid url for environment variable: ${name}`);
     }
 
-    if (value.type === 'http') {
-        //check if envVar is a valid url
+    if (value.type === "http") {
+        // check if envVar is a valid url
         const valid = isHttpUri(envVal);
         if (valid) return;
         throw new EnvError(`Invalid http url for environment variable: ${name}`);
 
     }
 
-    if (value.type === 'https') {
-        //check if envVar is a valid url
+    if (value.type === "https") {
+        // check if envVar is a valid url
         const valid = isHttpsUri(envVal);
         if (valid) return;
         throw new EnvError(`Invalid https url for environment variable: ${name}`);
@@ -66,4 +66,3 @@ export type Variable = {
     type: "string" | "url" | "number" | "boolean" | "http" | "https",
     required: boolean
 }
-

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { Colors } from "#config/Colors";
 
 type props = {
@@ -7,7 +7,7 @@ type props = {
 };
 
 type state = {
-    innerStyle: any;
+    innerStyle: StyleProp<ViewStyle>;
 };
 
 export default class PasswordStrength extends React.Component<props, state> {
@@ -52,7 +52,7 @@ export default class PasswordStrength extends React.Component<props, state> {
     componentDidUpdate(prevProps: props) {
         if (prevProps.pass === this.props.pass) return;
 
-        let strength = this.GetStrength();
+        const strength = this.GetStrength();
         let color = Colors.PASSWORD_STRENGTH.TERRIBLE;
         if (strength >= 0.5) {
             color = Colors.PASSWORD_STRENGTH.SUPERBAD;

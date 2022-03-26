@@ -2,7 +2,7 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { Alert, Dimensions, Linking, StyleSheet, Text, View } from "react-native";
-import { CodeField, Cursor } from "react-native-confirmation-code-field";
+import { CodeField, Cursor, RenderCellOptions } from "react-native-confirmation-code-field";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Authentication from "#api/Authenticate";
@@ -35,38 +35,38 @@ export default class Verif extends React.Component<RegisterProps, State> {
     }
 
     async Submit(code: string): Promise<boolean> {
-        let auth = await Authentication.getInstance();
-        let token = await auth.GetToken();
+        const auth = await Authentication.getInstance();
+        const token = await auth.GetToken();
         if (token == undefined) {
             Alert.alert(
                 "An error occured during the authentication process, please retry entering the verification code. If that doesn't work close and open the app."
             );
             return false;
         }
-        let resp = await auth.TryVerif(token, code);
+        const resp = await auth.TryVerif(token, code);
         if (resp.status == "error") {
             Alert.alert(resp.message);
             return false;
         } else {
             //open browser
-            Linking.openURL(resp.message);
+            await Linking.openURL(resp.message);
             return true;
         }
     }
 
     async Cancel() {
-        let auth = await Authentication.getInstance();
-        let token = await auth.GetToken();
+        const auth = await Authentication.getInstance();
+        const token = await auth.GetToken();
         if (token == undefined) {
             Alert.alert(
                 "An error occured during the authentication process, please retry canceling. If that doesn't work close and open the app."
             );
             return false;
         }
-        let result = await auth.TryCancelRegister(token);
+        const result = await auth.TryCancelRegister(token);
         if (result) {
             console.log("Going to register and clearing token");
-            auth.ClearToken();
+            await auth.ClearToken();
 
             RootNavigator.navigate("Register", undefined);
         }
@@ -88,31 +88,21 @@ export default class Verif extends React.Component<RegisterProps, State> {
                     failed: true,
                 }));
             }
-        } else {
-            console.log("hey: " + code.length.toString() + " " + this.state.failed);
         }
     }
 
     render() {
         const CELL_COUNT = 6;
 
-        type renderCell = {
-            index: any;
-            symbol: any;
-            isFocused: any;
-        };
-
         return (
-            <View style={styles.appContainer}>
+            <View>
                 <Kurabu
                     height={Dimensions.get("window").height * 1.5}
                     width={Dimensions.get("window").width * 3}
                     preserveAspectRatio="xMinYMin slice"
-                    style={{
-                        position: "absolute",
-                    }}
+                    style={styles.kurabuImage}
                 />
-                <SafeAreaView style={styles.safeContainer} />
+                <SafeAreaView />
                 <View style={styles.content}>
                     {/* <Text style={styles.head}>Kurabu</Text> */}
                     <Text style={styles.sentMailText}>
@@ -128,7 +118,7 @@ export default class Verif extends React.Component<RegisterProps, State> {
                         rootStyle={styles.codeFieldRoot}
                         keyboardType="number-pad"
                         textContentType="oneTimeCode"
-                        renderCell={(data: renderCell) => (
+                        renderCell={(data: RenderCellOptions) => (
                             <Text
                                 key={data.index}
                                 style={[styles.cell, data.isFocused && styles.focusCell]}
@@ -147,11 +137,9 @@ export default class Verif extends React.Component<RegisterProps, State> {
 }
 
 const styles = StyleSheet.create({
-    root: { flex: 1, padding: 20 },
-    // title: {
-    //     textAlign: "center",
-    //     fontSize: 30,
-    // },
+    kurabuImage: {
+        position: "absolute",
+    },
     codeFieldRoot: { marginTop: 20 },
     cell: {
         width: 40,
@@ -167,31 +155,10 @@ const styles = StyleSheet.create({
     focusCell: {
         borderColor: Colors.CYAN_SELECTED,
     },
-    appContainer: {
-        // backgroundColor: Colors.BLUE,
-        // alignItems: "center",
-        // justifyContent: "center",
-    },
-    safeContainer: {
-        // backgroundColor: Colors.BLUE,
-    },
-    VerifInput: {
-        width: 240,
-        height: 50,
-        borderBottomColor: Colors.INPUT_UNDERLINE,
-        borderBottomWidth: 1,
-        color: Colors.TEXT,
-        fontSize: 50,
-        letterSpacing: 10,
-    },
     content: {
         height: Dimensions.get("window").height,
         alignItems: "center",
         justifyContent: "center",
-    },
-    text: {
-        color: Colors.TEXT,
-        fontSize: 15,
     },
     incorrect: {
         color: Colors.ERROR,
@@ -208,12 +175,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: "AGRevueCyr",
         paddingTop: 100,
-    },
-    head: {
-        color: Colors.TEXT,
-        fontSize: 60,
-        fontFamily: "AGRevueCyr",
-        marginBottom: 100,
     },
     cancel: {
         marginTop: 30,

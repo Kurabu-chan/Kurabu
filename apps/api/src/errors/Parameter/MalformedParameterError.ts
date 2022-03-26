@@ -2,7 +2,7 @@
 import ParameterError from "./ParameterError";
 
 export default class MalformedParameterError extends ParameterError {
-    constructor(message: any) {
+    constructor(message?: string) {
         super(message);
         this.errorCode = "012";
         this.httpCode = 422;

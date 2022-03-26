@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { Icon } from "react-native-elements";
 import { Colors } from "#config/Colors";
 import Anime from "./ListScreen";
 import Manga from "./ListScreenManga";
+import { createIconAnime, createIconManga } from "#helpers/DefaultIcons";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,42 +30,24 @@ export default function ListTabs() {
                 name="Anime"
                 component={Anime}
                 options={{
-                    tabBarIcon: createIconAnime,
+                    tabBarIcon: (props: { focused: boolean, color: string, size: number }) => {
+                        return createIconAnime(props.size, {
+                            color: props.color
+                        })
+                    }
                 }}
             ></Tab.Screen>
             <Tab.Screen
                 name="Manga"
                 component={Manga}
                 options={{
-                    tabBarIcon: createIconManga,
+                    tabBarIcon: (props: { focused: boolean, color: string, size: number }) => {
+                        return createIconManga(props.size, {
+                            color: props.color
+                        })
+                    }
                 }}
             ></Tab.Screen>
         </Tab.Navigator>
-    );
-}
-
-function createIconAnime(props: { focused: boolean; color: string; size: number }) {
-    return (
-        <Icon
-            name="film"
-            type="font-awesome-5"
-            color={Colors.TEXT}
-            style={{
-                padding: 0,
-            }}
-        />
-    );
-}
-
-function createIconManga(props: { focused: boolean; color: string; size: number }) {
-    return (
-        <Icon
-            name="book"
-            type="font-awesome-5"
-            color={Colors.TEXT}
-            style={{
-                padding: 0,
-            }}
-        />
     );
 }

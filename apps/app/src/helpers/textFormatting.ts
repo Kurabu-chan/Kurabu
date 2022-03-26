@@ -17,11 +17,11 @@ export function niceDateFormat(date: Date | undefined): string {
     return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
 }
 
-export function niceTextFormat(str: string | undefined, sentenceCase: boolean = false): string {
+export function niceTextFormat(str: string | undefined, sentenceCase = false): string {
     if (str === undefined) return "";
 
-    var retStr = "";
-    var upper = true;
+    let retStr = "";
+    let upper = true;
     const toUpperCaseChars = ["-", "_"];
     for (const char of str) {
         if (toUpperCaseChars.includes(char)) {

@@ -4,8 +4,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import DetailsStackParams from "./DetailsStackParams";
 
-export type SuggestedStackParamList = {
-    Seasonal: undefined;
+export type SuggestionsStackParamList = {
+    Suggestions: undefined;
     Details: DetailsStackParams;
 };
 

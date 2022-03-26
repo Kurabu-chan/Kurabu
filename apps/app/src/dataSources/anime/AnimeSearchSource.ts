@@ -11,7 +11,7 @@ export class AnimeSearchSource extends AnimeBase implements MediaListSource {
 
     @requestErrorHandler
     async MakeRequest(limit?: number, offset?: number): Promise<AnimeList> {
-        var api = await super.getApi();
+        const api = await super.getApi();
         const requestParams: SearchAnimesRequest = {
             query: this.query,
             fields: fieldsToString(this.fields),

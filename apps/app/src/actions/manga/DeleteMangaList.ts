@@ -6,11 +6,11 @@ import { ListBase } from "../../apiBase/ListBase";
 export class AddMangaToList extends ListBase {
     @requestErrorHandler
     async MakeRequest(mangaId: number): Promise<void> {
-        var api = await super.getApi();
+        const api = await super.getApi();
         const responseParams: DeleteMangaListItemRequest = {
             mangaid: mangaId,
         }
         await api.deleteMangaListItem(responseParams);
-        await getListManager().removeManga(mangaId);
+        getListManager().removeManga(mangaId);
     }
 }
