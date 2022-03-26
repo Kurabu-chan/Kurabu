@@ -113,7 +113,9 @@ class Register extends React.Component<RegisterProps, RegisterState> {
                     <TouchableOpacity
                         style={styles.SignupButton}
                         activeOpacity={0.6}
-                        onPress={this.DoSignup.bind(this)}
+                        onPress={() => {
+                            void this.DoSignup();
+                        }}
                     >
                         <Text style={styles.SignupButtonText}>Sign up</Text>
                     </TouchableOpacity>

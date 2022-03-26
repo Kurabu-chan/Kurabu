@@ -78,7 +78,9 @@ class MediaList extends React.Component<MediaListProps, MediaListState> {
                 <FlatList
                     data={this.state.data}
                     onEndReachedThreshold={0.5}
-                    onEndReached={this.loadExtra.bind(this)}
+                    onEndReached={() => {
+                        void this.loadExtra();
+                    }}
                     numColumns={2}
                     renderItem={(item) =>
                         item.index > 1 ? (

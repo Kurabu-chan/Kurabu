@@ -562,8 +562,8 @@ export class ListDetails extends React.PureComponent<Props, State> {
                             ) : (
                                 <TouchableOpacity
                                     style={styles.listStatusEdit}
-                                    onPress={async () => {
-                                        await this.saveEdit();
+                                    onPress={() => {
+                                        void this.saveEdit();
                                     }}
                                 >
                                     <Text
@@ -576,8 +576,8 @@ export class ListDetails extends React.PureComponent<Props, State> {
                             {this.state.isEditing == true ? (
                                 <TouchableOpacity
                                     style={styles.listStatusEdit}
-                                    onPress={async () => {
-                                        await this.refresh();
+                                    onPress={() => {
+                                        void this.refresh();
                                     }}
                                 >
                                     <Text
