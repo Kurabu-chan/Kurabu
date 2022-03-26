@@ -128,5 +128,5 @@ async function findChangedWorkspaces() {
         }
     }
 
-    return changedWorkspaces;
+    return [...new Set(changedWorkspaces)];
 }
