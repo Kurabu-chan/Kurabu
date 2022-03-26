@@ -22,6 +22,7 @@ export class Colors {
     };
     public static BACKGROUND = "";
     public static ALTERNATE_BACKGROUND = "#1a1a1a";
+    public static ALTERNATE_CONTENT_BACKGROUND = "#2a2a2a";
     public static TRANSPARENT_BACKGROUND = "rgba(26,26,26, 0.75)";
     public static TRANSPARENT = "transparent";
     public static NO_BACKGROUND = "rgba(0,0,0, 0)";
