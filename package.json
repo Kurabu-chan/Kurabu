@@ -20,7 +20,8 @@
         "build:docker-dev": "turbo run build:docker-dev",
         "build:docker-prod": "turbo run build:docker-prod",
         "check-build-required": "turbo run check-build-required",
-        "test": "turbo run test"
+        "test": "turbo run test",
+        "postinstall": "yarn husky install"
     },
     "devDependencies": {
         "@types/mocha": "^9.1.0",
