@@ -1,0 +1,12 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+[ -n "$CI" ] && exit 0
+
+cd scripts
+if [ ! -d "node_modules" ]; then
+  yarn install
+fi
+
+yarn run update-versions-local
+exit 0
