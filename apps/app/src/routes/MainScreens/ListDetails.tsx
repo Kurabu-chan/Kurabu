@@ -6,7 +6,7 @@ import { BackButtonFunctionsType, changeActivePage, changeBackButton, getActiveP
 import { ListDetailsStateManager } from "#helpers/Screens/Main/ListDetails/StateManager";
 import { niceTextFormat } from "#helpers/textFormatting";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
-import { Picker } from "@react-native-community/picker";
+import { Picker } from "@react-native-picker/picker";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";

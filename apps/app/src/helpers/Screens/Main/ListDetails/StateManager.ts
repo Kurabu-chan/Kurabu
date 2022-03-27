@@ -1,6 +1,6 @@
 import { ListDetails } from "#routes/MainScreens/ListDetails";
 import { MangaStatus } from "@kurabu/api-sdk";
-import { ItemValue } from "@react-native-community/picker/typings/Picker";
+import { ItemValue } from "@react-native-picker/picker/typings/Picker";
 
 export class ListDetailsStateManager {
     private get setState() {
