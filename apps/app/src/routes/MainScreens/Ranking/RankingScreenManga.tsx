@@ -1,7 +1,7 @@
 import { MangaRankingSource } from "#data/manga/MangaRankingSource";
 import { changeActivePage } from "#helpers/backButton";
-import { Picker } from "@react-native-community/picker";
-import { ItemValue } from "@react-native-community/picker/typings/Picker";
+import { Picker } from "@react-native-picker/picker";
+import { ItemValue } from "@react-native-picker/picker/typings/Picker";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { StyleSheet, Dimensions } from "react-native";
