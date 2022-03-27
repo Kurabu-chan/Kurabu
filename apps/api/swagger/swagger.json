@@ -110,18 +110,23 @@
         }
     },
     "servers": [{
+            "url": "/",
+            "description": "Current url",
+            "variables": {}
+        },
+        {
             "url": "http://localhost:15000",
             "description": "Localhost environment",
             "variables": {}
         },
         {
-            "url": "http://api.kurabu.moe",
-            "description": "IMal staging environment",
+            "url": "https://prod.kurabu.moe",
+            "description": "Kurabu production environment",
             "variables": {}
         },
         {
-            "url": "http://stage.kurabu.moe",
-            "description": "IMal production environment",
+            "url": "https://stage.kurabu.moe",
+            "description": "Kurabu staging environment",
             "variables": {}
         },
         {
