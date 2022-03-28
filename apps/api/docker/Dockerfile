@@ -1,6 +1,6 @@
 ARG ARCH=
 
-FROM ${ARCH}node:alpine AS builder
+FROM ${ARCH}node:alpine AS base
 
 ENV YARN_VERSION 1.22.17
 RUN yarn policies set-version $YARN_VERSION
@@ -11,6 +11,8 @@ RUN apk update
 WORKDIR /app
 
 
+FROM base AS builder
+
 # Copy the entire monorepo to the container
 # An alternative would be copying only the desired app, and depended upon packages from the get go and not running turbo prune.
 # This would be faster, but is less modular and requires editing the Dockerfile for each app.
@@ -20,31 +22,14 @@ RUN yarn global add turbo
 RUN turbo prune --scope=@kurabu/api --docker
 
 # Add lockfile and package.json's of isolated subworkspace
-FROM ${ARCH}node:alpine AS installer
-
-ENV YARN_VERSION 1.22.17
-RUN yarn policies set-version $YARN_VERSION
-
-# RUN apk add gcc g++ git python2 make
-RUN apk add git
-RUN apk update
-
-WORKDIR /app
+FROM base AS installer
 COPY --from=builder /app/out/json/ .
 # COPY --from=builder /app/out/yarn.lock ./yarn.lock
 
 RUN yarn install
 
-FROM ${ARCH}node:alpine AS sourcer
+FROM base AS sourcer
 
-ENV YARN_VERSION 1.22.17
-RUN yarn policies set-version $YARN_VERSION
-
-# RUN apk add gcc g++ git python3
-RUN apk add git
-RUN apk update
-
-WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=builder /app/out/full/ .
 COPY .gitignore .gitignore
