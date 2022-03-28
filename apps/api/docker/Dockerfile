@@ -24,9 +24,9 @@ RUN turbo prune --scope=@kurabu/api --docker
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
 COPY --from=builder /app/out/json/ .
-# COPY --from=builder /app/out/yarn.lock ./yarn.lock
+COPY --from=builder /app/out/yarn.lock ./yarn.lock
 
-RUN yarn install
+RUN yarn install --pure-lockfile
 
 FROM base AS sourcer
 
