@@ -1,5 +1,6 @@
 ARG ARCH=
 
+# Create a base section that later steps will use
 FROM ${ARCH}node:alpine AS base
 
 ENV YARN_VERSION 1.22.17
@@ -7,11 +8,11 @@ RUN yarn policies set-version $YARN_VERSION
 
 RUN apk add git
 RUN apk update
-# Set working directory
+
 WORKDIR /app
 
-
-FROM base AS builder
+# Create a layer for pruning the monorepo
+FROM base AS pruner
 
 RUN yarn global add turbo
 # Copy the entire monorepo to the container
@@ -21,18 +22,27 @@ RUN yarn global add turbo
 COPY . .
 RUN turbo prune --scope=@kurabu/api --docker
 
-# Add lockfile and package.json's of isolated subworkspace
+# Create a layer for installing modules
 FROM base AS installer
-COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/yarn.lock ./yarn.lock
 
+# Add lockfile and package.json's of isolated subworkspace
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/yarn.lock ./yarn.lock
+
+# Use pure lockfile for faster install
 RUN yarn install --pure-lockfile
 
-FROM base AS sourcer
+# Combine the layers into a fucntioning app.
+FROM base AS builder
 
+# Copy modules
 COPY --from=installer /app/ .
-COPY --from=builder /app/out/full/ .
+# Copy pruned monorepo
+COPY --from=pruner /app/out/full/ .
+# Copy the gitignore
 COPY .gitignore .gitignore
+
+# Build api
 RUN yarn turbo run build --scope=@kurabu/api --include-dependencies --no-deps
 
 ENTRYPOINT [ "yarn", "turbo", "run", "start", "--scope=@kurabu/api" ]
