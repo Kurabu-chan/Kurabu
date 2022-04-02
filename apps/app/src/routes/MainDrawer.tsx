@@ -1,6 +1,6 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import React from "react";
-import { Dimensions, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
 import { Colors } from "#config/Colors";
 import { getCurrentBackButtonFunc, registerRerenderer } from "#helpers/backButton";

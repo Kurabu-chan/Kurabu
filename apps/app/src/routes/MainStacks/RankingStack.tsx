@@ -1,25 +1,11 @@
-import Details from "#routes/MainScreens/Details";
 import Ranking from "#routes/MainScreens/Ranking/RankingTabs";
-import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
-import DetailsStackParams from "./DetailsStackParams";
+import { createStackWithDetails, ParamListWithDetails } from "./DetailsStack";
 
-export type RankingStackParamList = {
-    Ranking: undefined;
-    Details: DetailsStackParams;
+type ParamList = {
+    RankingScreen: undefined;
 };
 
-const Stack = createStackNavigator();
-export default function RankingStack() {
-    return (
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false,
-            }}
-            initialRouteName="RankingScreen"
-        >
-            <Stack.Screen name="RankingScreen" component={Ranking} />
-            <Stack.Screen name="DetailsScreen" component={Details} />
-        </Stack.Navigator>
-    );
-}
+const stack = createStackWithDetails<ParamList>("RankingScreen", Ranking);
+
+export default stack; 
+export type RankingStackParamList = ParamListWithDetails<ParamList>;

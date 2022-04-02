@@ -13,7 +13,7 @@ import { Colors } from "#config/Colors";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RankingStackParamList } from "#routes/MainStacks/RankingStack";
 
-type Props = StackScreenProps<RankingStackParamList, "Ranking">
+type Props = StackScreenProps<RankingStackParamList, "RankingScreen">
 
 type StateType = {
     ranking: {

@@ -12,7 +12,7 @@ import { Colors } from "#config/Colors";
 import { SearchStackParamList } from "#routes/MainStacks/SearchStack";
 import { StackScreenProps } from "@react-navigation/stack";
 
-type Props = StackScreenProps<SearchStackParamList, "Search">
+type Props = StackScreenProps<SearchStackParamList, "SearchScreen">
 
 type StateType = {
     search: {

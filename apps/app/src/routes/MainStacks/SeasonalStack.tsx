@@ -1,25 +1,12 @@
-import Details from "#routes/MainScreens/Details";
 import Seasonal from "#routes/MainScreens/SeasonalScreen";
-import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
-import DetailsStackParams from "./DetailsStackParams";
+import { createStackWithDetails, ParamListWithDetails } from "./DetailsStack";
 
-export type SeasonalStackParamList = {
-    Seasonal: undefined;
-    Details: DetailsStackParams;
+type ParamList = {
+    SeasonalScreen: undefined;
 };
 
-const Stack = createStackNavigator();
-export default function SeasonalStack() {
-    return (
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false,
-            }}
-            initialRouteName="SeasonalScreen"
-        >
-            <Stack.Screen name="SeasonalScreen" component={Seasonal} />
-            <Stack.Screen name="DetailsScreen" component={Details} />
-        </Stack.Navigator>
-    );
-}
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+const stack = createStackWithDetails<ParamList>("SeasonalScreen", Seasonal);
+
+export default stack; 
+export type SeasonalStackParamList = ParamListWithDetails<ParamList>;

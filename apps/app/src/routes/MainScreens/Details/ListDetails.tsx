@@ -5,7 +5,6 @@ import { Colors } from "#config/Colors";
 import { BackButtonFunctionsType, changeActivePage, changeBackButton, getActivePage } from "#helpers/backButton";
 import { ListDetailsStateManager } from "#helpers/Screens/Main/ListDetails/StateManager";
 import { niceTextFormat } from "#helpers/textFormatting";
-import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
 import { Picker } from "@react-native-picker/picker";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -24,10 +23,11 @@ import {
 import { TextInput } from "react-native-gesture-handler";
 import TimeAgo from "react-native-timeago";
 import { AnimeDetailsMediaTypeEnum, AnimeDetailsMyListStatus, MangaDetailsMediaTypeEnum, MangaDetailsMyListStatus } from "@kurabu/api-sdk";
+import { DetailsStackParamList } from "#routes/MainStacks/DetailsStack";
 
 export type Props = {
-    navigation: StackNavigationProp<HomeStackParamList, "ListDetailsScreen">;
-    route: RouteProp<HomeStackParamList, "ListDetailsScreen">;
+    navigation: StackNavigationProp<DetailsStackParamList, "ListDetailsScreen">;
+    route: RouteProp<DetailsStackParamList, "ListDetailsScreen">;
 };
 
 export type State = {

@@ -1,7 +1,7 @@
 {
     "name": "@kurabu/app",
     "main": "index.js",
-    "version": "1.0.14",
+    "version": "1.0.17",
     "scripts": {
         "eas-build-post-install": "cd ../.. && yarn run build --scope=@kurabu/app --include-dependencies",
         "dev": "expo start --android",
@@ -17,6 +17,7 @@
     "dependencies": {
         "@babel/helper-builder-react-jsx": "^7.12.13",
         "@kurabu/api-sdk": "*",
+        "@openspacelabs/react-native-zoomable-view": "^2.0.0",
         "@react-native-picker/picker": "2.2.1",
         "@react-navigation/bottom-tabs": "^6.0.9",
         "@react-navigation/drawer": "^6.1.8",

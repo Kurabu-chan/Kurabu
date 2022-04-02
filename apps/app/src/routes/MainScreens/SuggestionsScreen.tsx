@@ -10,7 +10,7 @@ import { Colors } from "#config/Colors";
 import { SuggestionsStackParamList } from "#routes/MainStacks/SuggestionsStack";
 import { StackScreenProps } from "@react-navigation/stack";
 
-type Props = StackScreenProps<SuggestionsStackParamList, "Suggestions">
+type Props = StackScreenProps<SuggestionsStackParamList, "SuggestionsScreen">
 
 type StateType = {
     node: {

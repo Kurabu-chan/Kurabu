@@ -4,6 +4,7 @@ import { BackButtonFunctionsType, changeActivePage, changeBackButton, getActiveP
 import { LinearGradient } from "expo-linear-gradient";
 import {
     ActivityIndicator,
+    Alert,
     Dimensions,
     FlatList,
     Image,
@@ -12,7 +13,7 @@ import {
     Text,
     View,
 } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -22,7 +23,7 @@ import { Divider } from "#comps/Divider";
 import { LargeText } from "#comps/LargeText";
 import MediaItem from "#comps/MediaItem";
 import { Colors } from "#config/Colors";
-import { HomeStackParamList } from "../MainStacks/HomeStack";
+import { HomeStackParamList } from "../../MainStacks/HomeStack";
 import { ListStatus } from "#comps/ListStatus";
 import { AnimeDetails, AnimeDetailsMediaTypeEnum, AnimeListData, MangaDetails, MangaDetailsMediaTypeEnum, MangaListData } from "@kurabu/api-sdk";
 import { niceDateFormat } from "#helpers/textFormatting";
@@ -183,12 +184,24 @@ export default class Details extends React.Component<Props, State> {
                     ) : (
                         <ScrollView style={styles.page}>
                             <View style={styles.TopArea}>
-                                <Image
-                                    style={styles.image}
-                                    source={{
-                                        uri: this.state.media?.mainPicture?.large,
-                                    }}
-                                />
+                                    <TouchableOpacity onPress={() => {
+                                        if (this.state.media?.pictures === undefined || this.state.media.pictures.length === 0) {
+                                            Alert.alert("No pictures found");
+                                            return;
+                                        }
+
+                                        this.props.navigation.push("DetailsImageListScreen", {
+                                            picture: this.state.media?.pictures
+                                        });
+                                    }}>
+                                    <Image
+                                        style={styles.image}
+                                        source={{
+                                            uri: this.state.media?.mainPicture?.large,
+                                        }}
+                                    />
+                                </TouchableOpacity>
+
                                 <View style={styles.TitleArea}>
                                     <Text style={styles.title}>{this.state.media.title}</Text>
                                     {this.state.media.title !=
@@ -259,9 +272,9 @@ export default class Details extends React.Component<Props, State> {
                             <Text style={styles.head2}>Your list status</Text>
                             <Divider color={Colors.DIVIDER} widthPercentage={100} />
                             <ListStatus
-                                    parentRefresh={() => {
-                                        void this.refresh();
-                                    }}
+                                parentRefresh={() => {
+                                    void this.refresh();
+                                }}
                                 id={this.state.mediaId as number}
                                 props={this.state.media.myListStatus}
                                 navigation={this.props.navigation}
