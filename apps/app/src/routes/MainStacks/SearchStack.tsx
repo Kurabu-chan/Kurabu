@@ -1,25 +1,11 @@
-import Details from "#routes/MainScreens/Details";
 import Search from "#routes/MainScreens/Search/SearchTabs";
-import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
-import DetailsStackParams from "./DetailsStackParams";
+import { createStackWithDetails, ParamListWithDetails } from "./DetailsStack";
 
-export type SearchStackParamList = {
-    Search: undefined;
-    Details: DetailsStackParams;
+type ParamList = {
+    SearchScreen: undefined;
 };
 
-const Stack = createStackNavigator();
-export default function SearchStack() {
-    return (
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false,
-            }}
-            initialRouteName="SearchScreen"
-        >
-            <Stack.Screen name="SearchScreen" component={Search} />
-            <Stack.Screen name="DetailsScreen" component={Details} />
-        </Stack.Navigator>
-    );
-}
+const stack = createStackWithDetails<ParamList>("SearchScreen", Search);
+
+export default stack; 
+export type SearchStackParamList = ParamListWithDetails<ParamList>;

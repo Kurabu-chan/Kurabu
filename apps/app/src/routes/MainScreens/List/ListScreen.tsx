@@ -9,10 +9,10 @@ import { Colors } from "#config/Colors";
 import { AnimeListSource } from "#data/anime/AnimeListSource";
 import { FieldSearchBar, FieldValue } from "#comps/FieldSearchBar";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { ParamListBase } from "@react-navigation/native";
+import { ListStackParamList } from "#routes/MainStacks/ListStack";
 
 type Props = {
-    navigation: StackNavigationProp<ParamListBase, string>;
+    navigation: StackNavigationProp<ListStackParamList, "ListScreen">;
 }
 
 type StateType = {

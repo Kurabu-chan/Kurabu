@@ -14,7 +14,7 @@ import { GetSeasonalAnimesSeasonEnum } from "@kurabu/api-sdk";
 import { SeasonalStackParamList } from "#routes/MainStacks/SeasonalStack";
 import { StackScreenProps } from "@react-navigation/stack";
 
-type Props = StackScreenProps<SeasonalStackParamList, "Seasonal">
+type Props = StackScreenProps<SeasonalStackParamList, "SeasonalScreen">
 
 type StateType = {
     seasonal: {

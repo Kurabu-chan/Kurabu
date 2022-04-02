@@ -1,29 +1,13 @@
-import Details from "#routes/MainScreens/Details";
-import ListTabs from "#routes/MainScreens/List/ListTabs";
-import { ListDetails } from "#routes/MainScreens/ListDetails";
-import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
-import DetailsStackParams from "./DetailsStackParams";
-import ListDetailsStackParams from "./ListDetailsStackParams";
 
-const Stack = createStackNavigator();
-export type ListStackParamList = {
+import ListTabs from "#routes/MainScreens/List/ListTabs";
+import { createStackWithDetails, ParamListWithDetails } from "./DetailsStack";
+
+type ParamList = {
     ListScreen: undefined;
-    DetailsScreen: DetailsStackParams;
-    ListDetailsScreen: ListDetailsStackParams;
 };
 
-export default function ListStack() {
-    return (
-        <Stack.Navigator
-            screenOptions={{
-                headerShown: false,
-            }}
-            initialRouteName="ListScreen"
-        >
-            <Stack.Screen name="ListScreen" component={ListTabs} />
-            <Stack.Screen name="DetailsScreen" component={Details} />
-            <Stack.Screen name="ListDetailsScreen" component={ListDetails} />
-        </Stack.Navigator>
-    );
-}
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+const stack = createStackWithDetails<ParamList>("ListScreen", ListTabs);
+
+export default stack; 
+export type ListStackParamList = ParamListWithDetails<ParamList>;
