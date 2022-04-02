@@ -1,9 +1,11 @@
-import { AnimeDetailsMediaTypeEnum, MangaDetailsMediaTypeEnum } from "@kurabu/api-sdk";
+import { AnimeDetailsMainPicture, AnimeDetailsMediaTypeEnum, MangaDetailsMediaTypeEnum } from "@kurabu/api-sdk";
 import { ParamListBase } from "@react-navigation/core";
 import { createStackNavigator } from "@react-navigation/stack";
 import Details from "#routes/MainScreens/Details/Details";
 import { ListDetails } from "#routes/MainScreens/Details/ListDetails";
 import React from "react";
+import { DetailsImageList } from "#routes/MainScreens/Details/DetailsImageList";
+import { DetailsImage } from "#routes/MainScreens/Details/DetailsImage";
 
 export type DetailsParams = {
     id: number;
@@ -15,9 +17,19 @@ export type ListDetailsParams = {
     mediaType: AnimeDetailsMediaTypeEnum | MangaDetailsMediaTypeEnum;
 };
 
+export type DetailsImageListParams = {
+    picture: AnimeDetailsMainPicture[]
+}
+
+export type DetailsImageParams = {
+    picture: AnimeDetailsMainPicture
+}
+
 export type DetailsStackParamList = {
     DetailsScreen: DetailsParams;
     ListDetailsScreen: ListDetailsParams;
+    DetailsImageListScreen: DetailsImageListParams;
+    DetailsImageScreen: DetailsImageParams;
 }
 
 export type ParamListWithDetails<ParamList extends ParamListBase> = DetailsStackParamList & ParamList;
@@ -37,6 +49,8 @@ export function createStackWithDetails<ParamList extends ParamListBase>(screenNa
                 <Stack.Screen name={screenName} component={component} />
                 <Stack.Screen name="DetailsScreen" component={Details} />
                 <Stack.Screen name="ListDetailsScreen" component={ListDetails} />
+                <Stack.Screen name="DetailsImageListScreen" component={DetailsImageList} />
+                <Stack.Screen name="DetailsImageScreen" component={DetailsImage} />
             </Stack.Navigator>
         );
     }
