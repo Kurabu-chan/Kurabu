@@ -22,7 +22,7 @@ import { Divider } from "#comps/Divider";
 import { LargeText } from "#comps/LargeText";
 import MediaItem from "#comps/MediaItem";
 import { Colors } from "#config/Colors";
-import { HomeStackParamList } from "../MainStacks/HomeStack";
+import { HomeStackParamList } from "../../MainStacks/HomeStack";
 import { ListStatus } from "#comps/ListStatus";
 import { AnimeDetails, AnimeDetailsMediaTypeEnum, AnimeListData, MangaDetails, MangaDetailsMediaTypeEnum, MangaListData } from "@kurabu/api-sdk";
 import { niceDateFormat } from "#helpers/textFormatting";

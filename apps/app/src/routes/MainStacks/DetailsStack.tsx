@@ -1,8 +1,8 @@
 import { AnimeDetailsMediaTypeEnum, MangaDetailsMediaTypeEnum } from "@kurabu/api-sdk";
 import { ParamListBase } from "@react-navigation/core";
 import { createStackNavigator } from "@react-navigation/stack";
-import Details from "#routes/MainScreens/Details";
-import { ListDetails } from "#routes/MainScreens/ListDetails";
+import Details from "#routes/MainScreens/Details/Details";
+import { ListDetails } from "#routes/MainScreens/Details/ListDetails";
 import React from "react";
 
 export type DetailsParams = {

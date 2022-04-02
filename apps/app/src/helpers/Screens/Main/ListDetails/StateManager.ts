@@ -1,4 +1,4 @@
-import { ListDetails } from "#routes/MainScreens/ListDetails";
+import { ListDetails } from "#routes/MainScreens/Details/ListDetails";
 import { MangaStatus } from "@kurabu/api-sdk";
 import { ItemValue } from "@react-native-picker/picker/typings/Picker";
 
