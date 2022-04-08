@@ -128,40 +128,41 @@ export class FieldSearchBar extends React.Component<Props, State> {
         const filterIndex = this.state.filterIndex;
         const theField = this.props.fields[filterIndex];
         const currentFields = this.props.currentFields;
-        // console.log(currentFields, theField)
-        return (<View style={styles.modalView}>
-            {theField.possibleValues
-                // filter already selected fields
-                .filter(
-                    (fieldValue) => {
-                        const filtered = currentFields
-                            .filter(x => {
-                                return x.name === theField.name && x.value === fieldValue.val
-                            });
-                        return filtered.length === 0
-                    })
-                .map((fieldValue, index) => {
-                return (
-                    <TouchableHighlight
-                        style={styles.modalFilterNameButton}
-                        key={index}
-                        underlayColor={Colors.KURABUPINK}
-                        onPress={() => {
-                            if (this.state.filterIndex === false) return;
 
-                            this.props.onChange([...this.props.currentFields, {
-                                color: fieldValue.color ?? "black",
-                                name: this.props.fields[this.state.filterIndex].name,
-                                value: fieldValue.val,
-                                negative: false
-                            }], this.props.search, true);
-                        }}>
-                        <View style={styles.modalFilterNameButtonContentContainer}>
-                            <Text style={styles.modalFilterNameButtonText}>{fieldValue.val}</Text>
-                            <Icon color={Colors.TEXT} name="arrow-right" tvParallaxProperties={undefined} />
-                        </View>
-                    </TouchableHighlight>);
-            })}
+        const possibleValues = theField.possibleValues
+            .filter(
+                (fieldValue) => {
+                    const filtered = currentFields
+                        .filter(x => {
+                            return x.name === theField.name && x.value === fieldValue.val
+                        });
+                    return filtered.length === 0
+                });
+
+        return (<View style={styles.modalView}>
+            {
+                possibleValues.map((fieldValue, index) => {
+                    return (
+                        <TouchableHighlight
+                            style={styles.modalFilterNameButton}
+                            key={index}
+                            underlayColor={Colors.KURABUPINK}
+                            onPress={() => {
+                                if (this.state.filterIndex === false) return;
+
+                                this.props.onChange([...this.props.currentFields, {
+                                    color: fieldValue.color ?? "black",
+                                    name: this.props.fields[this.state.filterIndex].name,
+                                    value: fieldValue.val,
+                                    negative: false
+                                }], this.props.search, true);
+                            }}>
+                            <View style={styles.modalFilterNameButtonContentContainer}>
+                                <Text style={styles.modalFilterNameButtonText}>{fieldValue.val}</Text>
+                                <Icon color={Colors.TEXT} name="arrow-right" tvParallaxProperties={undefined} />
+                            </View>
+                        </TouchableHighlight>);
+                })}
         </View>);
     }
 
