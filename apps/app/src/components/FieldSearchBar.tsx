@@ -1,9 +1,8 @@
 import { Colors } from "#config/Colors";
 import { createClearIcon, createSearchIcon } from "#helpers/DefaultIcons";
 import React from "react";
-import { View, Text, Dimensions, ColorValue, StyleProp, TextStyle, ViewStyle, StyleSheet } from "react-native";
-import { SearchBar } from "react-native-elements";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, Dimensions, ColorValue, StyleProp, TextStyle, ViewStyle, StyleSheet, Modal, TouchableOpacity, TouchableHighlight } from "react-native";
+import { Icon, SearchBar } from "react-native-elements";
 
 export type Field = {
     name: string,
@@ -22,7 +21,7 @@ type Props = {
     fields: Field[],
     /** This function is called before onChange, its only purpose is to verify whether the state is valid. If not valid, on change won't be called. */
     verify: (field: FieldValue[], text: string) => boolean,
-    onChange: (field: FieldValue[], text: string) => void,
+    onChange: (field: FieldValue[], text: string, search: boolean) => void,
     search: string,
     currentFields: FieldValue[],
     onSearch: () => void,
@@ -38,13 +37,23 @@ type Props = {
     }
 }
 
-export class FieldSearchBar extends React.Component<Props> {
+type State = {
+    filtering: boolean,
+    filterIndex: number | false,
+
+}
+
+export class FieldSearchBar extends React.Component<Props, State> {
     private typing: boolean;
     private timeout: NodeJS.Timeout | undefined;
 
     constructor(props: Props) {
         super(props);
         this.typing = false;
+        this.state = {
+            filtering: false,
+            filterIndex: false
+        }
     }
 
     changeText(search: string) {
@@ -57,7 +66,7 @@ export class FieldSearchBar extends React.Component<Props> {
         }, 1000);
 
 
-        this.props.onChange(this.props.currentFields, search);
+        this.props.onChange(this.props.currentFields, search, false);
         // extract the fields
 
         const [fields, text] = extractFields(search, this.props.fields, this.props.currentFields);
@@ -73,14 +82,14 @@ export class FieldSearchBar extends React.Component<Props> {
         }
 
         // call on change
-        this.props.onChange(currentFields, text);
+        this.props.onChange(currentFields, text, false);
 
         // update the state
-        this.setState({
-            ...this.state,
-            search: text,
-            currentFields: currentFields
-        });
+        // this.setState({
+        //     ...this.state,
+        //     search: text,
+        //     currentFields: currentFields
+        // });
     }
 
     removeField(field: FieldValue) {
@@ -88,75 +97,172 @@ export class FieldSearchBar extends React.Component<Props> {
         const index = fields.findIndex(f => f.name === field.name && f.value === field.value);
         if (index === -1) return;
         fields.splice(index, 1);
-        this.setState({ ...this.state, currentFields: fields }, () => {
-            this.props.onChange(fields, this.props.search);
-            this.props.onSearch();
-        });
+        this.props.onChange(fields, this.props.search, true);
+    }
+
+    renderFilterNoSelector() {
+        return (<View style={styles.modalView}>
+            {this.props.fields.map((field, index) => {
+                return (
+                    <TouchableHighlight
+                        style={styles.modalFilterNameButton}
+                        key={index}
+                        underlayColor={Colors.KURABUPINK}
+                        onPress={() => {
+                            // console.log("clicked", field.name)
+                            this.setState({ filtering: true, filterIndex: index });
+                        }}
+                    >
+                        <View style={styles.modalFilterNameButtonContentContainer}>
+                            <Text style={styles.modalFilterNameButtonText}>{field.name}</Text>
+                            <Icon color={Colors.TEXT} name="arrow-right" tvParallaxProperties={undefined} />
+                        </View>
+                    </TouchableHighlight>);
+            })}
+        </View>);
+    }
+
+    renderFilterWithSelector() {
+        if (this.state.filterIndex === false) return;
+
+        const filterIndex = this.state.filterIndex;
+        const theField = this.props.fields[filterIndex];
+        const currentFields = this.props.currentFields;
+        // console.log(currentFields, theField)
+        return (<View style={styles.modalView}>
+            {theField.possibleValues
+                // filter already selected fields
+                .filter(
+                    (fieldValue) => {
+                        const filtered = currentFields
+                            .filter(x => {
+                                return x.name === theField.name && x.value === fieldValue.val
+                            });
+                        return filtered.length === 0
+                    })
+                .map((fieldValue, index) => {
+                return (
+                    <TouchableHighlight
+                        style={styles.modalFilterNameButton}
+                        key={index}
+                        underlayColor={Colors.KURABUPINK}
+                        onPress={() => {
+                            if (this.state.filterIndex === false) return;
+
+                            this.props.onChange([...this.props.currentFields, {
+                                color: fieldValue.color ?? "black",
+                                name: this.props.fields[this.state.filterIndex].name,
+                                value: fieldValue.val,
+                                negative: false
+                            }], this.props.search, true);
+                        }}>
+                        <View style={styles.modalFilterNameButtonContentContainer}>
+                            <Text style={styles.modalFilterNameButtonText}>{fieldValue.val}</Text>
+                            <Icon color={Colors.TEXT} name="arrow-right" tvParallaxProperties={undefined} />
+                        </View>
+                    </TouchableHighlight>);
+            })}
+        </View>);
     }
 
     render() {
         return (
             <View>
-                <SearchBar
-                    value={this.props.search}
-                    platform={"default"}
-                    onBlur={() => { return; }}
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    onChangeText={((text: string) => {
-                        this.changeText(text);
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    }) as any}
-                    onFocus={() => { return; }}
-                    clearIcon={{
-                        ...createClearIcon(undefined, this.props.styles.clearIconStyle),
-                        name: "search"
-                    }}
-                    searchIcon={{
-                        ...createSearchIcon(undefined, this.props.styles.searchIconStyle),
-                        name: "search"
-                    }}
-                    loadingProps={{}}
-                    showLoading={false}
-                    onClear={() => { this.props.onChange([], "") }}
-                    onCancel={() => { console.log("onCancel") }}
-                    lightTheme={false}
-                    round={false}
-                    cancelButtonTitle={""}
-                    cancelButtonProps={{}}
-                    onEndEditing={() => { this.props.onSearch() }}
-                    showCancel={false}
-
-                    style={this.props.styles.style}
-                    inputStyle={this.props.styles.inputStyle}
-                    labelStyle={this.props.styles.labelStyle}
-                    inputContainerStyle={this.props.styles.inputContainerStyle}
-                    containerStyle={this.props.styles.containerStyle}
-                    leftIconContainerStyle={this.props.styles.leftIconContainerStyle}
-                />
-
-                <View>
-                    <View style={styles.fieldsContainer}>
-                        {
-                            this.props.currentFields.map((field, index) => {
-                                return (
-                                    <View key={index} style={{
-                                        ...styles.field,
-                                        borderColor: field.color,
-                                        backgroundColor: field.color
-                                    }}>
-                                        <Text style={styles.fieldText}>{field.negative ? "-" : "+"}{field.name}: {field.value}</Text>
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                this.removeField(field);
-                                            }}>
-                                            {createClearIcon(fontSize * 1.6)}
-                                        </TouchableOpacity>
-                                    </View>
-                                );
-                            })
-                        }
+                <Modal
+                    visible={this.state.filtering}
+                    transparent={true}
+                >
+                    <View style={styles.modalCloseButtonContainer}>
+                        <TouchableOpacity
+                            style={styles.modalCloseButton}
+                            onPress={() => {
+                                this.setState({ filtering: false, filterIndex: false });
+                            }}>
+                            <Icon color={Colors.TEXT} name="close" tvParallaxProperties={undefined} />
+                        </TouchableOpacity>
                     </View>
+                    <View style={styles.modalBackgroundView}>
+                        {this.state.filterIndex === false ? this.renderFilterNoSelector() : this.renderFilterWithSelector()}
+                    </View>
+                </Modal>
+                <View style={styles.searchContainer}>
+                    <View style={styles.searchParent}>
+                        <SearchBar
+                            value={this.props.search}
+                            platform={"default"}
+                            onBlur={() => { return; }}
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                            onChangeText={((text?: string) => {
+                                this.changeText(text ?? "");
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            })}
+                            onFocus={() => { return; }}
+                            clearIcon={{
+                                ...createClearIcon(undefined, this.props.styles.clearIconStyle),
+                                name: "close"
+                            }}
+                            searchIcon={{
+                                ...createSearchIcon(undefined, this.props.styles.searchIconStyle),
+                                name: "search"
+                            }}
+                            loadingProps={{}}
+                            showLoading={false}
+                            onClear={() => { this.props.onChange([], "", false) }}
+                            onCancel={() => { console.log("onCancel") }}
+                            lightTheme={false}
+                            round={false}
+                            cancelButtonTitle={""}
+                            cancelButtonProps={{}}
+                            onEndEditing={() => { this.props.onSearch() }}
+                            showCancel={false}
 
+                            style={this.props.styles.style}
+                            inputStyle={this.props.styles.inputStyle}
+                            labelStyle={this.props.styles.labelStyle}
+                            inputContainerStyle={this.props.styles.inputContainerStyle}
+                            containerStyle={this.props.styles.containerStyle}
+                            leftIconContainerStyle={this.props.styles.leftIconContainerStyle}
+                        />
+                    </View>
+                    <View>
+                        <TouchableOpacity
+                            style={styles.filterAddButton}
+                            onPress={() => {
+                                this.setState({
+                                    filtering: true,
+                                    filterIndex: false
+                                })
+                            }}>
+                            <Icon
+                                type="material-community"
+                                name="filter-variant-plus"
+                                tvParallaxProperties={undefined}
+                                size={fontSize * 2}
+                                color={Colors.TEXT} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <View style={styles.fieldsContainer}>
+                    {
+                        this.props.currentFields.map((field, index) => {
+                            return (
+                                <View key={index} style={{
+                                    ...styles.field,
+                                    borderColor: field.color,
+                                    backgroundColor: field.color
+                                }}>
+                                    <Text style={styles.fieldText}>{field.negative ? "-" : "+"}{field.name}: {field.value}</Text>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.removeField(field);
+                                        }}>
+                                        {createClearIcon(fontSize * 1.6)}
+                                    </TouchableOpacity>
+                                </View>
+                            );
+                        })
+                    }
                 </View>
             </View>
         );
@@ -168,8 +274,9 @@ const fontSize = Dimensions.get("window").width / 36;
 const styles = StyleSheet.create({
     fieldsContainer: {
         flexDirection: "row",
-        width: Dimensions.get("window").width - 10,
-        flexWrap: "wrap"
+        width: Dimensions.get("window").width - 10 - fontSize * 3,
+        flexWrap: "wrap",
+        // backgroundColor: Colors.TEXT,
     },
     field: {
         padding: 5,
@@ -184,6 +291,60 @@ const styles = StyleSheet.create({
     fieldText: {
         alignSelf: "flex-start",
         fontSize: fontSize * 1.1
+    },
+    filterAddButton: {
+        backgroundColor: Colors.KURABUPURPLE,
+        height: "auto",
+        justifyContent: 'center',
+        borderRadius: 100,
+        alignSelf: "stretch",
+        aspectRatio: 1,
+        margin: 10,
+        marginLeft: 0,
+        flex: 1,
+    },
+    searchContainer: {
+        display: "flex",
+        flexDirection: "row",
+        width: Dimensions.get("window").width,
+    },
+    modalBackgroundView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: Colors.TRANSPARENT_BACKGROUND
+    },
+    modalView: {
+        width: Dimensions.get("window").width / 1.5,
+        // minHeight: Dimensions.get("window").width / 1.3,
+    },
+    searchParent: {
+        flex: 1,
+    },
+    modalFilterNameButton: {
+        // width: "100%",
+
+    },
+    modalFilterNameButtonContentContainer: {
+        flexDirection: "row",
+        padding: 20,
+        backgroundColor: Colors.KURABUPURPLE,
+    },
+    modalFilterNameButtonText: {
+        color: Colors.TEXT,
+        fontSize: fontSize * 1.3,
+        flex: 1
+    },
+    modalCloseButtonContainer: {
+        backgroundColor: Colors.TRANSPARENT_BACKGROUND,
+        alignItems: "flex-end",
+        // padding: 20
+    },
+    modalCloseButton: {
+        backgroundColor: Colors.KURABUPINK,
+        borderRadius: 100,
+        padding: 5,
+        margin: 10
     }
 });
 
