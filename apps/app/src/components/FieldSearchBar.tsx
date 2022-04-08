@@ -1,7 +1,7 @@
 import { Colors } from "#config/Colors";
 import { createClearIcon, createSearchIcon } from "#helpers/DefaultIcons";
 import React from "react";
-import { View, Text, Dimensions, ColorValue, StyleProp, TextStyle, ViewStyle, StyleSheet, Modal, TouchableOpacity, TouchableHighlight } from "react-native";
+import { View, Text, Dimensions, ColorValue, StyleProp, TextStyle, ViewStyle, StyleSheet, Modal, TouchableOpacity, TouchableHighlight, Alert } from "react-native";
 import { Icon, SearchBar } from "react-native-elements";
 
 export type Field = {
@@ -129,15 +129,13 @@ export class FieldSearchBar extends React.Component<Props, State> {
         const theField = this.props.fields[filterIndex];
         const currentFields = this.props.currentFields;
 
-        const possibleValues = theField.possibleValues
-            .filter(
-                (fieldValue) => {
-                    const filtered = currentFields
-                        .filter(x => {
-                            return x.name === theField.name && x.value === fieldValue.val
-                        });
-                    return filtered.length === 0
-                });
+        const possibleValues = theField.possibleValues.filter((value) => {
+            return isValidField({
+                name: theField.name,
+                value: value.val,
+                negative: false,
+            }, this.props.fields, currentFields)[0];
+        });
 
         return (<View style={styles.modalView}>
             {
@@ -150,12 +148,19 @@ export class FieldSearchBar extends React.Component<Props, State> {
                             onPress={() => {
                                 if (this.state.filterIndex === false) return;
 
-                                this.props.onChange([...this.props.currentFields, {
-                                    color: fieldValue.color ?? "black",
-                                    name: this.props.fields[this.state.filterIndex].name,
+                                const field = isValidField({
+                                    name: theField.name,
                                     value: fieldValue.val,
-                                    negative: false
-                                }], this.props.search, true);
+                                    negative: false,
+                                }, this.props.fields, currentFields);
+
+                                if (field[0] === false || field[1] === undefined) { 
+                                    Alert.alert("Invalid field", "This field is not valid");
+                                    return;
+                                }
+
+                                this.props.onChange([...this.props.currentFields, field[1]], this.props.search, true);
+                                this.setState({ filtering: false, filterIndex: false });
                             }}>
                             <View style={styles.modalFilterNameButtonContentContainer}>
                                 <Text style={styles.modalFilterNameButtonText}>{fieldValue.val}</Text>
