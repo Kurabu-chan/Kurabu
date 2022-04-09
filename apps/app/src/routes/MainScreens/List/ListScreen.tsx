@@ -210,13 +210,13 @@ export default class List extends React.Component<Props, StateType> {
                         possibleValues: [
                             {
                                 val: "status",
-                                color: "lime"
+                                color: Colors.CYAN
                             }
                         ],
                         subtractable: true
                     }
                 ]}
-                onChange={(fields: FieldValue[], text: string) => {
+                onChange={(fields: FieldValue[], text: string, search: boolean) => {
                     this.setState({
                         ...this.state,
                         filter: {
@@ -224,18 +224,21 @@ export default class List extends React.Component<Props, StateType> {
                             search: text,
                             fields: fields,
                         }
+                    }, () => {
+                        if(search){
+                            this.doSearch();
+                        }
                     })
                 }}
                 verify={() => { return true; }}
                 search={this.state.filter.search}
                 currentFields={this.state.filter.fields}
                 onSearch={this.doSearch.bind(this)}
-
                 styles={{
                     style: {
                         backgroundColor: Colors.KURABUPURPLE,
                         color: Colors.TEXT,
-                        width: Dimensions.get("window").width - 10,
+                        // width: Dimensions.get("window").width - 20,
 
                     },
                     inputStyle: {
@@ -262,7 +265,6 @@ export default class List extends React.Component<Props, StateType> {
                         color: Colors.TEXT
                     }
                 }}
-
             />
         );
     }
