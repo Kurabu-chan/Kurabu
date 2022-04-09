@@ -301,6 +301,7 @@ export default class List extends React.Component<Props, StateType> {
                     style={{
                         width: Dimensions.get("window").width,
                         height: Dimensions.get("window").height,
+                        ...styles.gradient
                     }}
                 >
                     {this.createSearchBar()}
@@ -324,5 +325,9 @@ export default class List extends React.Component<Props, StateType> {
 const styles = StyleSheet.create({
     safeAreaProvider: {
         backgroundColor: Colors.ALTERNATE_BACKGROUND,
+        flex: 1
+    },
+    gradient: {
+        flex: 1
     }
 })

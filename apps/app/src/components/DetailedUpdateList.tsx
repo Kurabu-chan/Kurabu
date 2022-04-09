@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get("window").width,
         marginTop: 10,
         marginRight: 10,
+        flex: 1
     },
     title: {
         fontSize: fontSize * 1.6,
