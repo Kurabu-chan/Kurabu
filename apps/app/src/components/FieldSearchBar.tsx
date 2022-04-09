@@ -134,39 +134,74 @@ export class FieldSearchBar extends React.Component<Props, State> {
                 name: theField.name,
                 value: value.val,
                 negative: false,
-            }, this.props.fields, currentFields)[0];
+            }, this.props.fields, currentFields)[0] ||
+                isValidField({
+                    name: theField.name,
+                    value: value.val,
+                    negative: true,
+                }, this.props.fields, currentFields)[0];
         });
 
         return (<View style={styles.modalView}>
             {
                 possibleValues.map((fieldValue, index) => {
+                    const positiveField = isValidField({
+                        name: theField.name,
+                        value: fieldValue.val,
+                        negative: false,
+                    }, this.props.fields, currentFields)
+
+                    const negativeField = isValidField({
+                        name: theField.name,
+                        value: fieldValue.val,
+                        negative: true,
+                    }, this.props.fields, currentFields)
+
                     return (
-                        <TouchableHighlight
-                            style={styles.modalFilterNameButton}
-                            key={index}
-                            underlayColor={Colors.KURABUPINK}
-                            onPress={() => {
-                                if (this.state.filterIndex === false) return;
+                        <View key={index} style={styles.modalFilterNameButtonContentContainer}>
+                            <Text style={styles.modalFilterNameButtonText}>{fieldValue.val}</Text>
+                            {
+                                positiveField[0] === false ?
+                                    undefined : <TouchableHighlight
+                                        style={styles.modalFilterNameButton}
+                                        underlayColor={Colors.KURABUPINK}
+                                        onPress={() => {
+                                            if (this.state.filterIndex === false) return;
 
-                                const field = isValidField({
-                                    name: theField.name,
-                                    value: fieldValue.val,
-                                    negative: false,
-                                }, this.props.fields, currentFields);
+                                            if (positiveField[0] === false || positiveField[1] === undefined) {
+                                                Alert.alert("Invalid field", "This field is not valid");
+                                                return;
+                                            }
 
-                                if (field[0] === false || field[1] === undefined) { 
-                                    Alert.alert("Invalid field", "This field is not valid");
-                                    return;
-                                }
+                                            this.props.onChange([...this.props.currentFields, positiveField[1]], this.props.search, true);
+                                            this.setState({ filtering: false, filterIndex: false });
+                                        }}>
+                                        <Icon color={Colors.TEXT} name="add" tvParallaxProperties={undefined} />
+                                    </TouchableHighlight>
+                            }
 
-                                this.props.onChange([...this.props.currentFields, field[1]], this.props.search, true);
-                                this.setState({ filtering: false, filterIndex: false });
-                            }}>
-                            <View style={styles.modalFilterNameButtonContentContainer}>
-                                <Text style={styles.modalFilterNameButtonText}>{fieldValue.val}</Text>
-                                <Icon color={Colors.TEXT} name="arrow-right" tvParallaxProperties={undefined} />
-                            </View>
-                        </TouchableHighlight>);
+                            <View style={styles.smallSpacing}></View>
+
+                            {negativeField[0] === false ?
+                                undefined : <TouchableHighlight
+                                    style={styles.modalFilterNameButton}
+                                    underlayColor={Colors.KURABUPINK}
+                                    onPress={() => {
+                                        if (this.state.filterIndex === false) return;
+
+                                        if (negativeField[0] === false || negativeField[1] === undefined) {
+                                            Alert.alert("Invalid field", "This field is not valid");
+                                            return;
+                                        }
+
+                                        this.props.onChange([...this.props.currentFields, negativeField[1]], this.props.search, true);
+                                        this.setState({ filtering: false, filterIndex: false });
+                                    }}>
+                                    <Icon color={Colors.TEXT} name="remove" tvParallaxProperties={undefined} />
+                                </TouchableHighlight>
+                            }
+                        </View>
+                    );
                 })}
         </View>);
     }
@@ -278,6 +313,9 @@ export class FieldSearchBar extends React.Component<Props, State> {
 const fontSize = Dimensions.get("window").width / 36;
 
 const styles = StyleSheet.create({
+    smallSpacing: {
+        width: 10
+    },
     fieldsContainer: {
         flexDirection: "row",
         width: Dimensions.get("window").width - 10 - fontSize * 3,
@@ -357,7 +395,7 @@ const styles = StyleSheet.create({
 function isValidField(field: Omit<FieldValue, "color">, allowedFields: Field[], currentFields: FieldValue[]): [boolean, FieldValue | undefined] {
     for (const f of currentFields) {
         if (f.name === field.name) {
-            if (f.negative !== field.negative && (f.negative == true || field.negative == false)) {
+            if ((f.negative ?? false) !== (field.negative ?? false)) {
                 return [false, undefined];
             }
             if (f.value === field.value) {
