@@ -125,7 +125,10 @@ class DetailedUpdateList extends React.Component<DetailedUpdateListProps, Detail
                             void this.loadExtra();
                         }}
                         renderItem={(item) => (
-                            <DetailedUpdateItem item={item.item} navigator={this.state.navigator} showListStatus={this.props.showListStatus}/>
+                            <DetailedUpdateItem
+                                item={item.item} navigator={this.state.navigator}
+                                showListStatus={this.props.showListStatus}
+                            />
                         )}
                         keyExtractor={(item, index) => index.toString()}
                     />
@@ -145,6 +148,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get("window").width,
         marginTop: 10,
         marginRight: 10,
+        flex: 1
     },
     title: {
         fontSize: fontSize * 1.6,

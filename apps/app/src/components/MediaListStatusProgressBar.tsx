@@ -34,16 +34,19 @@ export class Progress extends React.PureComponent<Props, State>{
     pushRemove() {
         if (this.props.mediaId === undefined) return;
 
+        const min = this.props.min;
+        const max = this.props.max === 0 ? Infinity : this.props.max;
+
         if (this.props.fieldToControl === "numEpisodesWatched") {
             // Anime
             const action = new UpdateAnimeList();
-            this.setState({ ...this.state, current: clamp(this.state.current - 1, this.props.min, this.props.max) },
+            this.setState({ ...this.state, current: clamp(this.state.current - 1, min, max) },
                 () => {
                     if (this.props.mediaId === undefined) return;
 
                     void action.MakeRequest(this.props.mediaId,
                         {
-                            numEpisodesWatched: clamp(this.state.current + 1, this.props.min, this.props.max),
+                            numEpisodesWatched: clamp(this.state.current + 1, min, max),
                         },
                         {
                             numEpisodesWatched: this.state.current,
@@ -51,14 +54,14 @@ export class Progress extends React.PureComponent<Props, State>{
                 });
         } else {
             const action = new UpdateMangaList();
-            this.setState({ ...this.state, current: clamp(this.state.current - 1, this.props.min, this.props.max) },
+            this.setState({ ...this.state, current: clamp(this.state.current - 1, min, max) },
                 () => {
                     if (this.props.mediaId === undefined) return;
 
                     const fieldToControl = this.props.fieldToControl as "numChaptersRead" | "numVolumesRead";
 
                     const before: Partial<MangaDetailsMyListStatus> = {}
-                    before[fieldToControl] = clamp(this.state.current + 1, this.props.min, this.props.max);
+                    before[fieldToControl] = clamp(this.state.current + 1, min, max);
                     const after: Partial<MangaDetailsMyListStatus> = {}
                     after[fieldToControl] = this.state.current;
 
@@ -70,16 +73,19 @@ export class Progress extends React.PureComponent<Props, State>{
     pushAdd() {
         if (this.props.mediaId === undefined) return;
 
+        const min = this.props.min;
+        const max = this.props.max === 0 ? Infinity : this.props.max;
+
         if (this.props.fieldToControl === "numEpisodesWatched") {
             // Anime
             const action = new UpdateAnimeList();
-            this.setState({ ...this.state, current: clamp(this.state.current + 1, this.props.min, this.props.max) },
+            this.setState({ ...this.state, current: clamp(this.state.current + 1, min, max) },
                 () => {
                     if (this.props.mediaId === undefined) return;
 
                     void action.MakeRequest(this.props.mediaId,
                         {
-                            numEpisodesWatched: clamp(this.state.current - 1, this.props.min, this.props.max),
+                            numEpisodesWatched: clamp(this.state.current - 1, min, max),
                         },
                         {
                             numEpisodesWatched: this.state.current,
@@ -88,14 +94,14 @@ export class Progress extends React.PureComponent<Props, State>{
         } else {
             const action = new UpdateMangaList();
 
-            this.setState({ ...this.state, current: clamp(this.state.current + 1, this.props.min, this.props.max) },
+            this.setState({ ...this.state, current: clamp(this.state.current + 1, min, max) },
                 () => {
                     if (this.props.mediaId === undefined) return;
 
                     const fieldToControl = this.props.fieldToControl as "numChaptersRead" | "numVolumesRead";
 
                     const before: Partial<MangaDetailsMyListStatus> = {}
-                    before[fieldToControl] = clamp(this.state.current - 1, this.props.min, this.props.max);
+                    before[fieldToControl] = clamp(this.state.current - 1, min, max);
                     const after: Partial<MangaDetailsMyListStatus> = {}
                     after[fieldToControl] = this.state.current;
 
@@ -108,6 +114,7 @@ export class Progress extends React.PureComponent<Props, State>{
         let location = (this.state.current - this.props.min) / (this.props.max - this.props.min);
 
         if (isNaN(location)) location = 0;
+        if (!isFinite(location)) location = 0.5;
 
         return (
             <LinearGradient
@@ -129,7 +136,7 @@ export class Progress extends React.PureComponent<Props, State>{
                         size={this.props.height}
                         tvParallaxProperties={{}} />
                 </TouchableOpacity>
-                <Text style={styles.progressDisplay}>{this.state.current}/{this.props.max}</Text>
+                <Text style={styles.progressDisplay}>{this.state.current}/{this.props.max === 0 ? "?" : this.props.max}</Text>
                 <TouchableOpacity
                     onPress={this.pushAdd.bind(this)}
                 >

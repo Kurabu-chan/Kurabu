@@ -181,7 +181,16 @@ export class DetailedUpdateItem extends React.PureComponent<
                         </View>
                         <View style={TopArea.Values}>
                             <View style={styles.progressContainer}>
-                                <Progress fullList={this.state.item.node.myListStatus ?? {}} fieldToControl="numEpisodesWatched" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numEpisodes ?? 0} current={node.myListStatus?.numEpisodesWatched ?? 0} />
+                                <Progress
+                                    fullList={this.state.item.node.myListStatus ?? {}}
+                                    fieldToControl="numEpisodesWatched"
+                                    mediaId={node.id}
+                                    color={Colors.KURABUPINK}
+                                    height={25}
+                                    min={0}
+                                    max={node.numEpisodes ?? 0}
+                                    current={node.myListStatus?.numEpisodesWatched ?? 0}
+                                />
                             </View>
                         </View>
                     </View>

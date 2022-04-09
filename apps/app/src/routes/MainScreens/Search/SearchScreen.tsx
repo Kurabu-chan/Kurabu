@@ -174,6 +174,7 @@ export default class Search extends React.Component<Props, StateType> {
                     style={{
                         width: Dimensions.get("window").width,
                         height: Dimensions.get("window").height,
+                        ...styles.gradient
                     }}
                 >
                     {this.createSearchBar()}
@@ -216,6 +217,10 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.KURABUPURPLE,
     },
     safeAreaProvider: {
-        backgroundColor: Colors.ALTERNATE_BACKGROUND
+        backgroundColor: Colors.ALTERNATE_BACKGROUND,
+        flex: 1
+    },
+    gradient: {
+        flex: 1
     }
 });
