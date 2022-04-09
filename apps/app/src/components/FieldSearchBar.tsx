@@ -163,7 +163,7 @@ export class FieldSearchBar extends React.Component<Props, State> {
                             {
                                 positiveField[0] === false ?
                                     undefined : <TouchableHighlight
-                                        style={styles.modalFilterNameButton}
+                                        style={styles.modalFilterButtonAddSubtract}
                                         underlayColor={Colors.KURABUPINK}
                                         onPress={() => {
                                             if (this.state.filterIndex === false) return;
@@ -184,7 +184,7 @@ export class FieldSearchBar extends React.Component<Props, State> {
 
                             {negativeField[0] === false ?
                                 undefined : <TouchableHighlight
-                                    style={styles.modalFilterNameButton}
+                                    style={styles.modalFilterButtonAddSubtract}
                                     underlayColor={Colors.KURABUPINK}
                                     onPress={() => {
                                         if (this.state.filterIndex === false) return;
@@ -313,6 +313,10 @@ export class FieldSearchBar extends React.Component<Props, State> {
 const fontSize = Dimensions.get("window").width / 36;
 
 const styles = StyleSheet.create({
+    modalFilterButtonAddSubtract: {
+        padding: 5,
+        borderRadius: 10
+    },
     smallSpacing: {
         width: 10
     },
