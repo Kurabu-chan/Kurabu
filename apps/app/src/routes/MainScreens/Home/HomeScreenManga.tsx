@@ -53,9 +53,7 @@ export default class Home extends React.Component<Props, StateType> {
     render() {
         return (
             <SafeAreaProvider
-                style={{
-                    backgroundColor: Colors.BACKGROUND,
-                }}
+                style={styles.safeAreaProvider}
             >
                 <LinearGradient
                     // Background Linear Gradient
@@ -68,6 +66,7 @@ export default class Home extends React.Component<Props, StateType> {
                     style={{
                         width: Dimensions.get("window").width,
                         height: Dimensions.get("window").height,
+                        ...styles.gradient
                     }}
                 >
                     <View
@@ -88,5 +87,12 @@ export default class Home extends React.Component<Props, StateType> {
 const styles = StyleSheet.create({
     mediaListContainer: {
         flexDirection: "row",
+    },
+    safeAreaProvider: {
+        backgroundColor: Colors.ALTERNATE_BACKGROUND,
+        flex: 1,
+    },
+    gradient: {
+        flex: 1,
     }
 });
