@@ -108,6 +108,9 @@ export class Progress extends React.PureComponent<Props, State>{
         let location = (this.state.current - this.props.min) / (this.props.max - this.props.min);
 
         if (isNaN(location)) location = 0;
+        if(!isFinite(location)) location = 0.5;
+
+        console.log(location);
 
         return (
             <LinearGradient
@@ -129,7 +132,7 @@ export class Progress extends React.PureComponent<Props, State>{
                         size={this.props.height}
                         tvParallaxProperties={{}} />
                 </TouchableOpacity>
-                <Text style={styles.progressDisplay}>{this.state.current}/{this.props.max}</Text>
+                <Text style={styles.progressDisplay}>{this.state.current}/{this.props.max === 0 ? "?" : this.props.max}</Text>
                 <TouchableOpacity
                     onPress={this.pushAdd.bind(this)}
                 >
