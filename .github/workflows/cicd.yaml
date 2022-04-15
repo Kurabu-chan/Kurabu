@@ -31,7 +31,7 @@ jobs:
         env:
           REF: ${{ github.event.before }}
         run: |
-          turbo run check-build-required --filter=^@kurabu/api[$REF] > ./check-build-required.txt
+          turbo run check-build-required --filter=^@kurabu/api[$REF] 2>&1 | tee ./check-build-required.txt
 
       - name: Output whether a build is required or not
         id: check-full-turbo
