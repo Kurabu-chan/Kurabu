@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       build_required_check: ${{ steps.check-full-turbo.outputs.build_required_check }}
-    if: ${{ needs.check-is-kurabu-bot.outputs.is-kurabu-bot == 'not-kurabu-bot' }}
     steps:  
       - name: Checkout repository
         uses: actions/checkout@v3
