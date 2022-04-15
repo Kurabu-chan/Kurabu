@@ -36,7 +36,7 @@ jobs:
       - name: Output whether a build is required or not
         id: check-full-turbo
         run: |
-          if grep -q "[1-9][0-9]* successful" ./check-build-required.txt; then
+          if grep -E -i -w -q "[1-9][0-9]* successful" ./check-build-required.txt; then
             echo "::set-output name=build_required_check::required"
             echo "fullturbo"
           else
