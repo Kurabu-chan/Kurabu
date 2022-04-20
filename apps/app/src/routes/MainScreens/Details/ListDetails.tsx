@@ -408,7 +408,7 @@ export class ListDetails extends React.PureComponent<Props, State> {
                     <Text style={styles.newLabel}>Volumes read:</Text>
                     <TextInput
                         style={styles.newValue}
-                        value={listStatus.numChaptersRead?.toString() ?? ""}
+                        value={listStatus.numVolumesRead?.toString() ?? ""}
                         onChangeText={this.stateManager.changeVolumesRead.bind(this)}
                         keyboardType={"numeric"}
                     />
