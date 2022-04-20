@@ -24,6 +24,7 @@ import { TextInput } from "react-native-gesture-handler";
 import TimeAgo from "react-native-timeago";
 import { AnimeDetailsMediaTypeEnum, AnimeDetailsMyListStatus, MangaDetailsMediaTypeEnum, MangaDetailsMyListStatus } from "@kurabu/api-sdk";
 import { DetailsStackParamList } from "#routes/MainStacks/DetailsStack";
+import { UpdateMangaList } from "#actions/manga/UpdateMangaList";
 
 export type Props = {
     navigation: StackNavigationProp<DetailsStackParamList, "ListDetailsScreen">;
@@ -510,11 +511,11 @@ export class ListDetails extends React.PureComponent<Props, State> {
             )
             await this.refresh();
         } else {
-            const updateRequest = new UpdateAnimeList();
+            const updateRequest = new UpdateMangaList();
             await updateRequest.MakeRequest(
                 this.state.mediaId,
-                this.state.before as AnimeDetailsMyListStatus,
-                this.state.listStatus as AnimeDetailsMyListStatus
+                this.state.before as MangaDetailsMyListStatus,
+                this.state.listStatus as MangaDetailsMyListStatus
             )
             await this.refresh();
         }
