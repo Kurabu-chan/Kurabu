@@ -1,5 +1,5 @@
 import { ListDetails } from "#routes/MainScreens/Details/ListDetails";
-import { MangaStatus } from "@kurabu/api-sdk";
+import { MangaStatus, AnimeStatus } from "@kurabu/api-sdk";
 import { ItemValue } from "@react-native-picker/picker/typings/Picker";
 
 export class ListDetailsStateManager {
@@ -16,21 +16,29 @@ export class ListDetailsStateManager {
     changeStatus(itemValue: ItemValue) {
         if (this.state.listStatus == undefined) return;
         
-        const allowedStatuses = [
+        
+        const allowedStatuses: string[] = [
             MangaStatus.Reading,
             MangaStatus.Completed,
             MangaStatus.OnHold,
             MangaStatus.Dropped,
             MangaStatus.PlanToRead,
+            AnimeStatus.Watching,
+            AnimeStatus.Completed,
+            AnimeStatus.OnHold,
+            AnimeStatus.Dropped,
+            AnimeStatus.PlanToWatch,
         ];
+        
+        if (!allowedStatuses.includes(itemValue.toString())) return;
 
-        if(!(itemValue in allowedStatuses)) return;
+        console.log("cool")
 
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
                 ...oldState.listStatus,
-                status: itemValue as MangaStatus,
+                status: itemValue as MangaStatus | AnimeStatus,
             },
         }));
     }

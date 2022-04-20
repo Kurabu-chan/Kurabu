@@ -204,10 +204,18 @@ export class ListDetails extends React.PureComponent<Props, State> {
                         style={styles.newValue}
                         onValueChange={this.stateManager.changeStatus.bind(this)}
                     >
-                        <Picker.Item label={niceTextFormat("watching")} value="watching" />
-                        <Picker.Item label={niceTextFormat("completed")} value="completed" />
-                        <Picker.Item label={niceTextFormat("on_hold")} value="on_hold" />
-                        <Picker.Item label={niceTextFormat("dropped")} value="dropped" />
+                        <Picker.Item
+                            label={niceTextFormat("watching")}
+                            value="watching" />
+                        <Picker.Item
+                            label={niceTextFormat("completed")}
+                            value="completed" />
+                        <Picker.Item
+                            label={niceTextFormat("on_hold")}
+                            value="on_hold" />
+                        <Picker.Item
+                            label={niceTextFormat("dropped")}
+                            value="dropped" />
                         <Picker.Item
                             label={niceTextFormat("plan_to_watch")}
                             value="plan_to_watch"
