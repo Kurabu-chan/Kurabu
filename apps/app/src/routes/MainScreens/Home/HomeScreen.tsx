@@ -11,6 +11,7 @@ import MediaList, { mediaListFields } from "#comps/MediaList";
 import { Colors } from "#config/Colors";
 import { getCurrentSeason } from "#helpers/seasonProvider";
 import {  GetSeasonalAnimesSeasonEnum } from "@kurabu/api-sdk";
+import { AnimeRankingSource } from "#data/anime/AnimeRankingSource";
 
 type Props = StackScreenProps<HomeStackParamList, "HomeScreen">;
 
@@ -29,7 +30,7 @@ export default class Home extends React.Component<Props, StateType> {
         this.state = {
             node: {
                 key: "Currently Airing",
-                nodeSource: new AnimeSeasonalSource(mediaListFields, new Date().getFullYear(), getCurrentSeason() as GetSeasonalAnimesSeasonEnum),
+                nodeSource: new AnimeRankingSource(mediaListFields, "airing"),
             },
             listenerToUnMount: undefined,
         };
