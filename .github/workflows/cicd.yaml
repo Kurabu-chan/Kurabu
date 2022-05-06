@@ -117,7 +117,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           crane auth login -u $username -p $password docker.io
-          crane tag docker.io/rafaeltab/kurabu.api:latest prod
+          crane tag docker.io/rafaeltab/kurabu.api:latest production
       - name: Start rollout
         uses: appleboy/ssh-action@master
         with:
