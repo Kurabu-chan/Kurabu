@@ -18,7 +18,7 @@ export class AnimeRankingWebRequestHandler
             .addPath("v2/anime/ranking")
             .setQueryParam(
                 "ranking_type",
-                query.rankingtype !== undefined ? query.rankingtype : "all"
+                query.rankingType !== undefined ? query.rankingType : "all"
             )
             .setQueryParam("limit", (query.limit ? query.limit : 10).toString())
             .setQueryParam("offset", (query.offset ? query.offset : 0).toString())

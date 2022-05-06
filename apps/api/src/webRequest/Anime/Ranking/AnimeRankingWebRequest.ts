@@ -5,7 +5,7 @@ import { IWebRequest } from "#webreq/IWebRequest";
 
 export class AnimeRankingWebRequest extends IWebRequest {
     user!: User;
-    rankingtype?:
+    rankingType?:
         | undefined
         | "all"
         | "airing"

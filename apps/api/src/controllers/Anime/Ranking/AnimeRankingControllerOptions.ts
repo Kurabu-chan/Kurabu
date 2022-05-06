@@ -5,7 +5,7 @@ export const controllerName = "ranking";
 export type Params = {
     state: string;
     user: User;
-    rankingtype?:
+    rankingType?:
         | "all"
         | "airing"
         | "upcoming"
