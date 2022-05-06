@@ -32,7 +32,7 @@ export class MangaRankingController {
     @Get(Options.controllerName)
     @requestHandlerDecorator()
     @state()
-    @Param.param("rankingtype", Param.ParamType.string, true)
+    @Param.param("rankingType", Param.ParamType.string, true)
     @Param.param("limit", Param.ParamType.int, true)
     @Param.param("offset", Param.ParamType.int, true)
     @Param.param("fields", Param.ParamType.string, true)
@@ -42,7 +42,7 @@ export class MangaRankingController {
             arg.limit = 100;
         }
 
-        if (arg.rankingtype && possible.includes(req.query.rankingtype as string)) {
+        if (arg.rankingType && possible.includes(req.query.rankingType as string)) {
             type RankingType =
                 | "all"
                 | "airing"
@@ -54,7 +54,7 @@ export class MangaRankingController {
                 | "bypopularity"
                 | "favorite";
 
-            arg.rankingtype = req.query.rankingtype as RankingType;
+            arg.rankingType = req.query.rankingType as RankingType;
         }
         let fields: Fields | undefined;
         if (arg.fields) {
@@ -65,7 +65,7 @@ export class MangaRankingController {
             fields,
             limit: arg.limit,
             offset: arg.offset,
-            rankingtype: arg.rankingtype,
+            rankingType: arg.rankingType,
             user: arg.user,
         });
 
