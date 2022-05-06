@@ -1,7 +1,7 @@
 ARG ARCH=
 
 # Create a base section that later steps will use
-FROM ${ARCH}node:alpine AS base
+FROM ${ARCH}node:17-alpine AS base
 
 ENV YARN_VERSION 1.22.17
 RUN yarn policies set-version $YARN_VERSION
