@@ -212,7 +212,7 @@ class Authentication {
     }
 
     private MakeRedirect(): string {
-        const expoScheme = "imal://";
+        const expoScheme = "kurabu://";
         // Technically you need to pass the correct redirectUrl to the web browser.
         let redir = Linking.makeUrl();
         if (redir.startsWith("exp://1")) {

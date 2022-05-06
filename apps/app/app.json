@@ -1,47 +1,47 @@
 {
-  "expo": {
-    "name": "iMAL",
-    "slug": "iMAL",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#1a1a1a"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "bundleIdentifier": "com.rafaeltab.iMAL"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "description": "",
-    "scheme": "imal",
-    "android": {
-      "package": "com.rafaeltab.iMAL"
-    },
-    "packagerOpts": {
-      "config": "metro.config.js",
-      "sourceExts": [
-        "expo.ts",
-        "expo.tsx",
-        "expo.js",
-        "expo.jsx",
-        "ts",
-        "tsx",
-        "js",
-        "jsx",
-        "json",
-        "wasm",
-        "svg"
-      ]
+    "expo": {
+        "name": "Kurabu",
+        "slug": "Kurabu",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "cover",
+            "backgroundColor": "#1a1a1a"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "bundleIdentifier": "moe.kurabu.app"
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "description": "",
+        "scheme": "kurabu",
+        "android": {
+            "package": "moe.kurabu.app"
+        },
+        "packagerOpts": {
+            "config": "metro.config.js",
+            "sourceExts": [
+                "expo.ts",
+                "expo.tsx",
+                "expo.js",
+                "expo.jsx",
+                "ts",
+                "tsx",
+                "js",
+                "jsx",
+                "json",
+                "wasm",
+                "svg"
+            ]
+        }
     }
-  }
 }
