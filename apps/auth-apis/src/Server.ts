@@ -54,8 +54,8 @@ import * as pages from "./controllers/pages";
 })
 export class Server {
   @Inject()
-  protected app: PlatformApplication;
+  protected app?: PlatformApplication;
 
   @Configuration()
-  protected settings: Configuration;
+  protected settings?: Configuration;
 }
