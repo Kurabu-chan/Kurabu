@@ -1,0 +1,21 @@
+{
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.d.ts",
+        "**/index.ts",
+        "**/interfaces/**",
+        "**/*.spec.ts"
+    ],
+    "reporter": [
+        "text-summary",
+        "lcovonly"
+    ],
+    "extension": [
+        ".ts"
+    ],
+    "check-coverage": true,
+    "all": true
+}
