@@ -21,6 +21,7 @@
         "build:docker-prod": "turbo run build:docker-prod",
         "check-build-required": "turbo run check-build-required",
         "test": "turbo run test",
+        "test:coverage": "turbo run test:coverage",
         "postinstall": "yarn husky install"
     },
     "devDependencies": {

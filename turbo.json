@@ -40,6 +40,9 @@
         },
         "test": {
 
+        },
+        "test:coverage": {
+            "outputs": ["coverage/**"]
         }
     }
 }
