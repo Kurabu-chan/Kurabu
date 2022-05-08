@@ -1,19 +1,24 @@
 {
     "name": "@kurabu/auth-api",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "",
     "scripts": {
-        "build": "yarn run barrels && yarn run tsc --project tsconfig.compile.json",
+        "build": "yarn run barrels && yarn run tsc --project tsconfig.json",
         "barrels": "barrelsby --config .barrelsby.json",
         "dev": "yarn run barrels && tsnd --inspect --ignore-watch node_modules --respawn --transpile-only -r tsconfig-paths/register src/index.ts",
-        "start": "cross-env NODE_ENV=production node dist/index.js",
+        "start": "cross-env NODE_ENV=production node build/src/index.js",
         "test": "yarn run test:unit && yarn run test:coverage",
         "test:unit": "cross-env NODE_ENV=test mocha",
         "test:coverage": "cross-env NODE_ENV=test nyc mocha",
         "lint": "eslint \"./src/**/*.ts\"",
-        "lint:fix": "eslint \"./src/**/*.ts\" --fix"
+        "lint:fix": "eslint \"./src/**/*.ts\" --fix",
+        "build:docker": "ts-node --project ./scripts/tsconfig.json ./scripts/docker.ts -- --context latest",
+        "build:docker-prod": "ts-node --project ./scripts/tsconfig.json ./scripts/docker.ts -- --context production",
+        "build:docker-dev": "ts-node --project ./scripts/tsconfig.json ./scripts/docker.ts -- --context development"
     },
     "dependencies": {
+        "@kurabu/tsconfig": "*",
+        "@kurabu/config": "*",
         "@tsed/ajv": "^6.114.8",
         "@tsed/common": "^6.114.8",
         "@tsed/core": "^6.114.8",
