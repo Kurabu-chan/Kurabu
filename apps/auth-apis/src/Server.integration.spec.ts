@@ -11,7 +11,9 @@ describe("Server", () => {
     request = SuperTest(PlatformTest.callback());
   });
 
-  afterEach(PlatformTest.reset);
+  afterEach(() => {
+    void PlatformTest.reset();
+  });
 
   it("should call GET /rest", async () => {
      const response = await request.get("/rest").expect(404);

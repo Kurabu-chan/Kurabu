@@ -3,8 +3,12 @@ import { PlatformTest } from "@tsed/common";
 import { HelloWorldController } from "./HelloWorldController";
 
 describe("HelloWorldController", () => {
-  beforeEach(PlatformTest.create);
-  afterEach(PlatformTest.reset);
+  beforeEach(async () => {
+    await PlatformTest.create();
+  });
+  afterEach(async () => {
+    await PlatformTest.reset();
+  });
 
   it("should do something", () => {
     const instance = PlatformTest.get<HelloWorldController>(HelloWorldController);

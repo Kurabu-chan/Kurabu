@@ -8,11 +8,14 @@ async function bootstrap() {
     await platform.listen();
 
     process.on("SIGINT", () => {
-      platform.stop();
+      void platform.stop();
     });
   } catch (error) {
-    $log.error({event: "SERVER_BOOTSTRAP_ERROR", error});
+    $log.error({
+      error,
+      event: "SERVER_BOOTSTRAP_ERROR",
+    });
   }
 }
 
-bootstrap();
+void bootstrap();

@@ -17,6 +17,7 @@ export class IndexController {
     const hostUrl = `${protocol || "http"}://${host}`;
 
     return {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       BASE_URL: hostUrl,
       docs: this.swagger.map((conf) => {
         return {

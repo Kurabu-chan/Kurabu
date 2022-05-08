@@ -3,22 +3,22 @@ import {isProduction} from "../envs";
 
 if (isProduction) {
   $log.appenders.set("stdout", {
-    type: "stdout",
-    levels: ["info", "debug"],
     layout: {
       type: "json"
-    }
+    },
+    levels: ["info", "debug"],
+    type: "stdout",
   });
 
   $log.appenders.set("stderr", {
-    levels: ["trace", "fatal", "error", "warn"],
-    type: "stderr",
     layout: {
       type: "json"
-    }
+    },
+    levels: ["trace", "fatal", "error", "warn"],
+    type: "stderr",
   });
 }
 
-export default <PlatformLoggerSettings> {
+export default {
   disableRoutesSummary: isProduction
-};
+} as PlatformLoggerSettings;

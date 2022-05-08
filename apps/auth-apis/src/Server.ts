@@ -16,23 +16,12 @@ import * as pages from "./controllers/pages";
 @Configuration({
   ...config,
   acceptMimes: ["application/json"],
+  componentsScan: false,
+  exclude: [
+    "**/*.spec.ts"
+  ],
   httpPort: process.env.PORT || 8083,
   httpsPort: false, // CHANGE
-  componentsScan: false,
-  mount: {
-    "/rest": [
-      ...Object.values(rest)
-    ],
-    "/": [
-      ...Object.values(pages)
-    ]
-  },
-  swagger: [
-    {
-      path: "/doc",
-      specVersion: "3.0.1"
-    }
-  ],
   middlewares: [
     cors(),
     cookieParser(),
@@ -41,16 +30,29 @@ import * as pages from "./controllers/pages";
     bodyParser.json(),
     bodyParser.urlencoded({
       extended: true
-    })  ],
+    })],
+  mount: {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    "/": [
+      ...Object.values(pages)
+    ],
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    "/rest": [
+      ...Object.values(rest)
+    ],
+  },
+  swagger: [
+    {
+      path: "/doc",
+      specVersion: "3.0.1"
+    }
+  ],
   views: {
-    root: join(process.cwd(), "../views"),
     extensions: {
       ejs: "ejs"
-    }
-  },
-  exclude: [
-    "**/*.spec.ts"
-  ]
+    },
+    root: join(process.cwd(), "../views"),
+  }
 })
 export class Server {
   @Inject()

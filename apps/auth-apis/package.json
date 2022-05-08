@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/auth-api",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "",
     "scripts": {
         "build": "yarn run barrels && yarn run tsc --project tsconfig.compile.json",
@@ -10,8 +10,8 @@
         "test": "yarn run test:unit && yarn run test:coverage",
         "test:unit": "cross-env NODE_ENV=test mocha",
         "test:coverage": "cross-env NODE_ENV=test nyc mocha",
-        "test:lint": "eslint '**/*.{ts,js}'",
-        "test:lint:fix": "eslint '**/*.{ts,js}' --fix",
+        "lint": "eslint \"./src/**/*.ts\"",
+        "lint:fix": "eslint \"./src/**/*.ts\" --fix",
         "prettier": "prettier '**/*.{ts,js,json,md,yml,yaml}' --write"
     },
     "dependencies": {
