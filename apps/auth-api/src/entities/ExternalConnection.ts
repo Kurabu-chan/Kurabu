@@ -1,19 +1,21 @@
+import { IEntity } from "./IEntity";
+
 // Please note this entity does not define what is actually present in the database, if you want to alter the structure it is required that a migration is made, and only then this interface should be changed.
-export interface ExternalConnection {
+export class ExternalConnection implements IEntity {
     /** uuidv4 Primary Key Unique */
-    externalConnectionId: string;
+    externalConnectionId!: string;
     /** uuidv4 Foreign Key */
-    userId: string;
+    userId!: string;
     /** uuidv4 Foreign Key */
-    externalApplicationId: string;
+    externalApplicationId!: string;
 
-    accessToken: string;
+    accessToken!: string;
 
-    refreshToken: string;
+    refreshToken!: string;
 
-    accessTokenExpiresAt: Date;
+    accessTokenExpiresAt!: Date;
 
-    refreshTokenExpiresAt: Date;
+    refreshTokenExpiresAt!: Date;
 
-    createDate: Date;
+    createDate!: Date;
 }
