@@ -7,7 +7,7 @@ export class Scope implements IEntity {
     /** uuidv4 Foreign Key */
     roleId!: string;
 
-    nam!: string;
+    name!: string;
 
     createDate!: Date;
 }
