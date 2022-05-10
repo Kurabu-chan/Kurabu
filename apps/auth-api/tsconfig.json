@@ -12,7 +12,8 @@
         "baseUrl": "./",
     },
     "include": [
-        "./src/**/*.ts"
+        "./src/**/*.ts",
+        "./migrations/**/*.ts"
     ],
     "exclude": [
         "./src/public/"
