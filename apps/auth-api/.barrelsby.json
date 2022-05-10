@@ -1,6 +1,6 @@
 {
     "directory": [
-        "./src/controllers/rest",
+        "./src/controllers/api/manage",
         "./src/controllers/pages"
     ],
     "exclude": [
