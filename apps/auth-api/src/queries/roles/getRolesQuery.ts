@@ -4,32 +4,32 @@ import { Scope } from "../../entities/Scope";
 import { Repository } from "../../providers/Repository";
 import { IQuery, IQueryHandler, IQueryResult } from "../IQuery";
 
-export interface GetUsersQuery extends IQuery {
+export interface GetRolesQuery extends IQuery {
 
 }
 
-type UserScopeType = {
+type RoleScopeType = {
     roleId: string
     scopes: string[]
     name: string
 }
 
-export interface GetUsersQueryResult extends IQueryResult {
-    data: UserScopeType[]
+export interface GetRolesQueryResult extends IQueryResult {
+    data: RoleScopeType[]
 }
 
 @Injectable({
     scope: ProviderScope.REQUEST,
     type: ProviderType.SERVICE
 })
-export class GetUsersQueryHandler implements IQueryHandler<GetUsersQuery, GetUsersQueryResult> {
+export class GetRolesQueryHandler implements IQueryHandler<GetRolesQuery, GetRolesQueryResult> {
     constructor(
         @Inject(Repository) private readonly repository: Repository<Role>
     ) {
 
     }
 
-    async handle(): Promise<GetUsersQueryResult> {
+    async handle(): Promise<GetRolesQueryResult> {
         type Res = (Pick<Role, "roleId" | "name"> & { scope: Scope["name"] })[]
 
         const res: Res = await this.repository.getRepository(Role)

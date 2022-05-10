@@ -1,22 +1,22 @@
 import { Controller, Inject } from "@tsed/di";
 import { InternalServerError } from "@tsed/exceptions";
 import { Get } from "@tsed/schema";
-import { GetUsersQueryHandler } from "../../../../queries/user/getUsersQuery";
+import { GetRolesQueryHandler } from "../../../../queries/roles/getRolesQuery";
 
 @Controller("/roles")
 export class RolesController {
     constructor(
-        @Inject(GetUsersQueryHandler) private readonly getUserQueryHandler: GetUsersQueryHandler
+        @Inject(GetRolesQueryHandler) private readonly getRolesQueryHandler: GetRolesQueryHandler
     ) {
 
     }
 
     @Get("/")
     async get() {
-        const result = await this.getUserQueryHandler.handle();
+        const result = await this.getRolesQueryHandler.handle();
 
         if (!result.success) {
-            return new InternalServerError("Couldn't get users");
+            return new InternalServerError("Couldn't get roles");
         }
 
         return result.data;
