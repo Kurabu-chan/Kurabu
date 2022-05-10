@@ -1,7 +1,7 @@
 import { Controller, Inject } from "@tsed/di";
 import { InternalServerError } from "@tsed/exceptions";
 import { Get } from "@tsed/schema";
-import { GetRolesQueryHandler } from "../../../../queries/roles/getRolesQuery";
+import { GetRolesQueryHandler } from "../../../../queries/roles/GetRolesQuery";
 
 @Controller("/roles")
 export class RolesController {
