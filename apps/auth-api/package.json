@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/auth-api",
-    "version": "1.0.26",
+    "version": "1.0.27",
     "description": "",
     "scripts": {
         "build": "yarn run barrels && yarn run tsc --project tsconfig.json",
