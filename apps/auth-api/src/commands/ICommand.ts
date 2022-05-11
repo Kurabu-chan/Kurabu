@@ -1,5 +1,5 @@
 export interface ICommandHandler<TCommand extends ICommand, TResult extends ICommandResult> {
-    handle(Command: TCommand): Promise<TResult>;
+    handle(command: TCommand): Promise<TResult>;
 }
 
 export interface ICommand {
