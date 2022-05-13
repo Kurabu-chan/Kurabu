@@ -6,13 +6,10 @@ import { DatabaseService } from "./providers/DatabaseService";
 
 async function bootstrap() {
     try {
-        const injector = new InjectorService();
-
-        await injector.load();
-
+        const platform = await PlatformExpress.bootstrap(Server);
+        const injector = platform.injector;
         const database = await initializeDatabase(injector);
 
-		const platform = await PlatformExpress.bootstrap(Server);
 		await platform.listen();
 
 		process.on("SIGINT", () => {

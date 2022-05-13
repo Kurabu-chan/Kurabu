@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@tsed/di";
-import { IEntity } from "src/entities/IEntity";
+import { IEntity } from "../entities/IEntity";
 import { DatabaseService } from "./DatabaseService";
 
 type EntityConstructor<TEntity extends IEntity> = new () => TEntity

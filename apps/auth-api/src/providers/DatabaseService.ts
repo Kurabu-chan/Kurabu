@@ -1,15 +1,14 @@
-import { Injectable, ProviderScope, ProviderType } from "@tsed/di";
+import { ProviderScope, Scope, Service } from "@tsed/di";
 import { $log } from "@tsed/logger";
 import { knex as kn, Knex } from "knex";
-import { databaseConnectionOptions } from "src/config/envs";
+import { databaseConnectionOptions } from "../config/envs";
 
-@Injectable({
-    scope: ProviderScope.SINGLETON,
-    type: ProviderType.SERVICE,
-})
+let migrated = false;
+
+@Service()
+@Scope(ProviderScope.SINGLETON)
 export class DatabaseService {
     private knex: Knex;
-    private migrated: boolean;
 
     constructor() {
         $log.info("Starting database connection");
@@ -20,20 +19,20 @@ export class DatabaseService {
             }
         });
 
-        this.migrated = false;
+        migrated = false;
     }
 
     get database(): Knex {
         return this.getDatabase();
     }
     public getDatabase(): Knex {
-        if (!this.migrated) throw new Error("Database access before migration");
+        if (!migrated) throw new Error("Database access before migration");
 
         return this.knex;
     }
 
     public async migrate(): Promise<void> {
-        if (this.migrated) return;
+        if (migrated) return;
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const migrations = await this.knex.migrate.list();
@@ -52,7 +51,10 @@ export class DatabaseService {
         });
 
         await this.knex.migrate.latest();
-        this.migrated = true;
+        migrated = true;
+        $log.info({
+            "event": "Migration completed"
+        });
     }
 
     public async destroy() {

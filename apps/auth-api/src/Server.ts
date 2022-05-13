@@ -10,7 +10,7 @@ import cors from "cors";
 import "@tsed/ajv";
 import "@tsed/swagger";
 import { config } from "./config";
-import * as rest from "./controllers/rest";
+import * as manageApi from "./controllers/api/manage";
 import * as pages from "./controllers/pages";
 
 @Configuration({
@@ -37,8 +37,8 @@ import * as pages from "./controllers/pages";
 			...Object.values(pages)
 		],
 		// eslint-disable-next-line @typescript-eslint/naming-convention
-		"/rest": [
-			...Object.values(rest)
+		"/api/v1/manage": [
+            ...Object.values(manageApi)
 		],
 	},
 	swagger: [
