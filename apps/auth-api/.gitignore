@@ -55,3 +55,4 @@ test/**/*.js.map
 #env
 .env.local
 .env.development
+.env
