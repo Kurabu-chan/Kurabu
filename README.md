@@ -18,3 +18,5 @@ The repo uses yarn for package management.
 -   `yarn run lint` used for linting all projects (currently excluding app, config and tsconfig)
 -   `yarn run format` used for formatting all ts, tsx and md files
 -   `yarn run lint:fix` used for fixing lint in all projects (currently excluding app, config and tsconfig)
+
+![Alt](https://repobeats.axiom.co/api/embed/9e476a2774c08f616ed2c8dea4d461eefa743403.svg "Repobeats analytics image")
