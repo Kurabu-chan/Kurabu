@@ -1,0 +1,29 @@
+{
+    "include": [
+        "src/**"
+    ],
+    "exclude": [
+        "node_modules",
+        "tests/**/*",
+        "**/*.d.ts",
+        "**/index.ts",
+        "**/interfaces/**",
+        "**/*.spec.ts"
+    ],
+    "require": [
+        "ts-node/register"
+    ],
+    "reporter": [
+        "text-summary",
+        "lcovonly"
+    ],
+    "extension": [
+        ".ts"
+    ],
+    "check-coverage": true,
+    "all": true,
+    "lines": 0,
+    "statements": 0,
+    "functions": 0,
+    "branches": 0
+}
