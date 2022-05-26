@@ -114,7 +114,7 @@ module.exports = {
                 ignoreTemplateLiterals: true,
                 ignoreRegExpLiterals: true,
                 ignoreUrls: true,
-                ignorePattern: '^import .*'
+                ignorePattern: '(^import .*)|(^.*it\(".*))'
             },
         ],
         "new-parens": "error",
