@@ -38,8 +38,9 @@
                 "^check-build-required"
             ]
         },
-        "test": {
-
-        }
+        "test": {},
+        "test:unit": {},
+        "test:coverage": {},
+        "test:coverage-text": {}
     }
 }
