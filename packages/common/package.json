@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/common",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "main": "./build/index.js",
     "files": [
         "./build/**"
@@ -14,7 +14,8 @@
         "test": "yarn run test:unit && yarn run test:coverage",
         "test:unit": "cross-env NODE_ENV=test mocha",
         "test:coverage": "cross-env NODE_ENV=test nyc mocha",
-        "test:coverage-text": "cross-env NODE_ENV=test nyc --reporter=text --reporter=lcovonly mocha"
+        "test:coverage-text": "cross-env NODE_ENV=test nyc --reporter=text --reporter=lcovonly mocha",
+        "test:coverage-html": "cross-env NODE_ENV=test nyc --reporter=html --reporter=lcovonly mocha"
     },
     "devDependencies": {
         "@istanbuljs/schema": "^0.1.3",
