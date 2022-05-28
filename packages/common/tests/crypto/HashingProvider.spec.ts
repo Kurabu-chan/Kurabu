@@ -1,11 +1,11 @@
-import { expect, should } from "chai";
+import { expect } from "chai";
 import "chai-as-promised";
 import { describe, it, beforeEach } from "mocha";
 import { HashingProvider } from "../../src/crypto/HashingProvider";
 
-describe("HashingProvider", HashingProviderTest);
+describe("HashingProvider", hashingProviderTest);
 
-function HashingProviderTest() {
+function hashingProviderTest() {
     let hashingProvider: HashingProvider;
 
     beforeEach(() => {
@@ -18,23 +18,11 @@ function HashingProviderTest() {
         const hashed = hashingProvider.hash(input, "testkey");
 
         expect(() => {
-            hashingProvider.hash(input, "")
-        }).to.throw();
-        expect(() => {
-            hashingProvider.hash(input, undefined as any)
-        }).to.throw();
-        expect(() => {
-            hashingProvider.hash(input, null as any)
+            hashingProvider.hash(input, "");
         }).to.throw();
 
         expect(() => {
-            hashingProvider.verify(input, hashed, "")
-        }).to.throw();
-        expect(() => {
-            hashingProvider.verify(input, hashed, undefined as any)
-        }).to.throw();
-        expect(() => {
-            hashingProvider.verify(input, hashed, null as any)
+            hashingProvider.verify(input, hashed, "");
         }).to.throw();
     });
 
@@ -44,11 +32,11 @@ function HashingProviderTest() {
         const hashed = hashingProvider.hash(input, "actualkey");
 
         expect(() => {
-            hashingProvider.hash(input, "actualkey")
+            hashingProvider.hash(input, "actualkey");
         }).not.to.throw();
 
         expect(() => {
-            hashingProvider.verify(input, hashed, "actualkey")
+            hashingProvider.verify(input, hashed, "actualkey");
         }).not.to.throw();
     });
 
