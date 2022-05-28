@@ -1,6 +1,6 @@
-import { expect, should } from "chai";
+import { expect } from "chai";
 import "chai-as-promised";
-import { describe, it, beforeEach } from "mocha";
+import { describe, it } from "mocha";
 import { KeyProvider } from "../../src/crypto/KeyProvider";
 
 describe("KeyProvider", keyProviderTest);
