@@ -1,4 +1,5 @@
 import { autoInjectable } from "tsyringe";
+import { HashingProvider, KeyProvider } from "@kurabu/common";
 import { StartUserRegisterCommand } from "./StartUserRegisterCommand";
 import { StartUserRegisterCommandResult } from "./StartUserRegisterCommandResult";
 import { ICommandHandler, ICommandResultStatus } from "#commands/ICommand";
@@ -6,7 +7,6 @@ import MailUsedError from "#errors/Authentication/MailUsedError";
 import MalformedParameterError from "#errors/Parameter/MalformedParameterError";
 import PasswordStrengthError from "#errors/Parameter/PasswordStrengthError";
 import { Database } from "#helpers/Database";
-import * as hasher from "#helpers/Hasher";
 import { getUUID, makeVerifCode } from "#helpers/randomCodes";
 import { UserEmailUsedQueryHandler } from "#queries/Users/EmailUsed/UserEmailUsedQueryHandler";
 import { MailServiceProvider } from "#serviceprovs/MailServiceProvider";
@@ -19,7 +19,9 @@ export class StartUserRegisterCommandHandler
     constructor(
         private _userEmailUsedQuery: UserEmailUsedQueryHandler,
         private _mailServiceProvider: MailServiceProvider,
-        private _database: Database
+        private _database: Database,
+        private _hashingProvider: HashingProvider,
+        private _keyProvider: KeyProvider
     ) {}
 
     async handle(command: StartUserRegisterCommand): Promise<StartUserRegisterCommandResult> {
@@ -50,7 +52,8 @@ export class StartUserRegisterCommandHandler
         const uuid = getUUID();
         const code = makeVerifCode();
 
-        const hash = await hasher.hash(command.password);
+        const encryptionKey = this._keyProvider.getKey("encr");
+        const hash = this._hashingProvider.hash(command.password, encryptionKey);
         await this._database.models.user.create({
             email: command.email,
             pass: hash,

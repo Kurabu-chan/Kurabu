@@ -1,0 +1,46 @@
+{
+    "name": "@kurabu/common",
+    "version": "0.0.12",
+    "main": "./build/index.js",
+    "files": [
+        "./build/**"
+    ],
+    "scripts": {
+        "barrels": "yarn barrelsby --config .barrelsby.json",
+        "build": "yarn rimraf ./build/ && yarn tsc",
+        "check-build-required": "echo \"@kurabu/common\"",
+        "lint": "eslint \"src/**/*.ts\"",
+        "lint:fix": "eslint \"**/*.ts\" --fix",
+        "test": "yarn run test:unit && yarn run test:coverage",
+        "test:unit": "cross-env TS_NODE_PROJECT=tsconfig.tests.json NODE_ENV=test mocha",
+        "test:coverage": "cross-env TS_NODE_PROJECT=tsconfig.tests.json NODE_ENV=test nyc mocha",
+        "test:coverage-text": "cross-env TS_NODE_PROJECT=tsconfig.tests.json NODE_ENV=test nyc --reporter=text --reporter=lcovonly mocha",
+        "test:coverage-html": "cross-env TS_NODE_PROJECT=tsconfig.tests.json NODE_ENV=test nyc --reporter=html --reporter=lcovonly mocha"
+    },
+    "devDependencies": {
+        "@istanbuljs/schema": "^0.1.3",
+        "@kurabu/config": "*",
+        "@kurabu/tsconfig": "*",
+        "@types/chai": "^4.3.1",
+        "@types/chai-as-promised": "^7.1.5",
+        "@types/mocha": "^9.1.1",
+        "@types/node": "^17.0.8",
+        "@types/sinon": "^10.0.11",
+        "@types/sinon-chai": "^3.2.8",
+        "@typescript-eslint/eslint-plugin": "^5.16.0",
+        "chai": "^4.3.6",
+        "chai-as-promised": "^7.1.1",
+        "eslint": "^8.11.0",
+        "mocha": "^10.0.0",
+        "nyc": "^15.1.0",
+        "sinon": "^14.0.0",
+        "sinon-chai": "^3.7.0",
+        "source-map-support": "^0.5.21",
+        "typescript": "^4.5.4"
+    },
+    "dependencies": {
+        "@types/node-forge": "^1.0.2",
+        "barrelsby": "^2.3.4",
+        "node-forge": "^1.3.1"
+    }
+}
