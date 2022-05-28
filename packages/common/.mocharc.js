@@ -1,7 +1,8 @@
 module.exports = {
     require: [
         "ts-node/register/transpile-only",
-        "scripts/mocha/register"
+        "scripts/mocha/register",
+        "source-map-support/register"
     ],
     recursive: true,
     reporter: "dot",
