@@ -10,6 +10,6 @@
 		"baseUrl": "./",
 		"types": ["node"]
 	},
-	"include": ["./src/**/*.ts", "./tests/**/*.ts"],
+	"include": ["./src/**/*.ts"],
 	"extends": "@kurabu/tsconfig/base.json"
 }
