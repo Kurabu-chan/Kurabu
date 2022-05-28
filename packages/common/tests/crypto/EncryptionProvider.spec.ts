@@ -2,9 +2,9 @@ import { expect } from "chai";
 import { describe, it, beforeEach } from "mocha";
 import { EncryptionProvider } from "../../src/crypto/EncryptionProvider";
 
-describe("EncryptionProvider", EncryptionProviderTest);
+describe("EncryptionProvider", encryptionProviderTest);
 
-function EncryptionProviderTest() {
+function encryptionProviderTest() {
     let encryptionProvider: EncryptionProvider;
 
     beforeEach(() => {
@@ -40,7 +40,7 @@ function EncryptionProviderTest() {
         expect(encryptedOne).to.not.equal(encryptedTwo);
     });
 
-    it("Encrypting or decrypting should throw when no or an empty key is provided", () => {
+    it("Encrypting or decrypting should throw when an empty key is provided", () => {
         const input = "Hello World!";
 
         const encrypted = encryptionProvider.encrypt(input, "testkey");
@@ -50,24 +50,7 @@ function EncryptionProviderTest() {
         }, "Encrypt empty key").to.throw();
 
         expect(() => {
-            encryptionProvider.encrypt(input, undefined as any);
-        }, "Encrypt undefined key").to.throw();
-
-        expect(() => {
-            encryptionProvider.encrypt(input, null as any);
-        }, "Encrypt null key").to.throw();
-
-
-        expect(() => {
             encryptionProvider.decrypt(encrypted, "");
         }, "Decrypt empty key").to.throw();
-
-        expect(() => {
-            encryptionProvider.decrypt(encrypted, undefined as any);
-        }, "Decrypt undefined key").to.throw();
-
-        expect(() => {
-            encryptionProvider.decrypt(encrypted, null as any);
-        }, "Decrypt null key").to.throw();
     });
 }
