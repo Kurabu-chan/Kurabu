@@ -1,16 +1,23 @@
 import { $log } from "@tsed/common";
 import { PlatformExpress } from "@tsed/platform-express";
-import { InjectorService } from "@tsed/di";
+import { InjectorService, ProviderType, ProviderScope } from "@tsed/di";
+import { CertificateProvider, EncryptionProvider, HashingProvider, KeyProvider } from "@kurabu/common";
 import { Server } from "./Server";
 import { DatabaseService } from "./providers/DatabaseService";
-import { CertificateProvider } from "./providers/CertificateProvider";
 
 async function bootstrap() {
     try {
         const platform = await PlatformExpress.bootstrap(Server);
         const injector = platform.injector;
         const database = await initializeDatabase(injector);
-        injector.get<CertificateProvider>(CertificateProvider); // load certificates
+
+        registerSingleton(CertificateProvider, injector);
+        registerSingleton(EncryptionProvider, injector);
+        registerSingleton(HashingProvider, injector);
+        registerSingleton(KeyProvider, injector);
+
+        const certProvider = injector.get<CertificateProvider>(CertificateProvider); // load certificates
+        certProvider?.requireCertificate("jwt", "EC PRIVATE KEY");
 
 		await platform.listen();
 
@@ -25,6 +32,13 @@ async function bootstrap() {
 			event: "SERVER_BOOTSTRAP_ERROR",
 		});
 	}
+}
+
+function registerSingleton(token: any, injector: InjectorService) {
+    injector.addProvider(token, {
+        scope: ProviderScope.SINGLETON,
+        type: ProviderType.PROVIDER,
+    });
 }
 
 async function initializeDatabase(injector: InjectorService) {
