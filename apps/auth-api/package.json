@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/auth-api",
-    "version": "1.0.37",
+    "version": "1.0.38",
     "description": "",
     "scripts": {
         "build": "yarn run barrels && yarn run tsc --project tsconfig.json",
@@ -17,9 +17,9 @@
         "build:docker-dev": "ts-node --project ./scripts/tsconfig.json ./scripts/docker.ts -- --context development"
     },
     "dependencies": {
+        "@kurabu/common": "*",
         "@kurabu/config": "*",
         "@kurabu/tsconfig": "*",
-        "@kurabu/common": "*",
         "@tsed/ajv": "^6.114.8",
         "@tsed/common": "^6.114.8",
         "@tsed/core": "^6.114.8",
@@ -54,7 +54,8 @@
         "knex": "^2.0.0",
         "lodash": "^4.17.21",
         "method-override": "^3.0.0",
-        "pg": "^8.7.3"
+        "pg": "^8.7.3",
+        "zod": "^3.17.3"
     },
     "devDependencies": {
         "@tsed/cli-plugin-eslint": "3.20.11",
