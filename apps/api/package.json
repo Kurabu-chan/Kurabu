@@ -31,6 +31,7 @@
         "@istanbuljs/nyc-config-typescript": "^1.0.1",
         "@kurabu/env-schema": "*",
         "@kurabu/logging": "*",
+        "@kurabu/common": "*",
         "@overnightjs/core": "^1.7.5",
         "@overnightjs/logger": "^1.2.0",
         "@sendgrid/mail": "^7.4.2",

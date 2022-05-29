@@ -17,6 +17,7 @@ class StateMock {
 export function state(): void {
     describe("State Decorator", () => {
         ContainerManager.getInstance({
+            registerSingleton: () => { },
             resolve: () => {
                 // console.log("resolve called");
                 // console.log(a);
