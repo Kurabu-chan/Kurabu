@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import * as tsyringe from "tsyringe";
+import { HashingProvider, CertificateProvider,EncryptionProvider,KeyProvider } from "@kurabu/common";
 
 export default class ContainerManager {
     private static _instance: ContainerManager;
@@ -8,6 +9,12 @@ export default class ContainerManager {
 
     constructor(container = tsyringe.container) {
         this._container = container;
+
+        // this._container.registerSingleton<HashingProvider>();
+        this._container.registerSingleton<HashingProvider>(HashingProvider);
+        this._container.registerSingleton<CertificateProvider>(CertificateProvider);
+        this._container.registerSingleton<EncryptionProvider>(EncryptionProvider);
+        this._container.registerSingleton<KeyProvider>(KeyProvider);
     }
 
     public get container(): tsyringe.DependencyContainer {

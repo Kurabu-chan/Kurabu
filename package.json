@@ -20,6 +20,9 @@
         "build:docker-dev": "turbo run build:docker-dev",
         "build:docker-prod": "turbo run build:docker-prod",
         "check-build-required": "turbo run check-build-required",
+        "test:coverage": "turbo run test:coverage",
+        "test:coverage-text": "turbo run test:coverage-text",
+        "test:unit": "turbo run test:unit",
         "test": "turbo run test",
         "test:coverage": "turbo run test:coverage",
         "postinstall": "yarn husky install"
