@@ -1,8 +1,8 @@
 import { Inject, ProviderScope, Scope, Service } from "@tsed/di";
 import { Algorithm, verify, sign, SignOptions, Secret } from "jsonwebtoken";
 import { v4 } from "uuid";
+import { CertificateProvider } from "@kurabu/common";
 import { domain } from "../config/envs";
-import { CertificateProvider } from "./CertificateProvider";
 
 const allowedAlgorithms: Algorithm[] = ["HS256",
     "HS384",
@@ -28,12 +28,12 @@ export class JWTProvider {
         const cert = this.certificateProvider.getCertificate("jwt", false);
 
         if (cert.pass === undefined) {
-            this.certificate = cert.cert;
+            this.certificate = cert.certificate;
             return;
         }
 
         this.certificate = {
-            key: cert.cert,
+            key: cert.certificate,
             passphrase: cert.pass,
         };
     }

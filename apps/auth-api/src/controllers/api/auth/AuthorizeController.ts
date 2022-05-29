@@ -2,6 +2,7 @@ import { Controller, Inject } from "@tsed/di";
 import { NotFound } from "@tsed/exceptions";
 import { QueryParams } from "@tsed/platform-params";
 import { Get } from "@tsed/schema";
+import { AuthorizationSession } from "../../../types/JWTKinds";
 import { domain } from "../../../config/envs";
 import { Base64EncodingProvider } from "../../../providers/Encoding/Base64EncodingProvider";
 import { UTF8EncodingProvider } from "../../../providers/Encoding/UTF8EncodingProvider";
@@ -10,7 +11,7 @@ import { GetClientQueryFailureResult, GetClientQueryHandler, GetClientQueryResul
 import { AuthorizeModel } from "./AuthorizeModel";
 
 @Controller("/authorize")
-export class ClientController {
+export class AuthorizeController {
     constructor(
         @Inject(GetClientQueryHandler)
         private readonly createClientCommandHandler: GetClientQueryHandler,
@@ -47,7 +48,7 @@ export class ClientController {
             clientId: model.clientId,
             redirectUri: model.redirectUri,
             state: model.state,
-        }, "10min",
+        } as AuthorizationSession, "10min",
             new URL(model.redirectUri).hostname,
             domain);
 
