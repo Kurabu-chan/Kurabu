@@ -1,0 +1,9 @@
+{
+    "auth": {
+        "pass": "rafael",
+        "user": "rafael"
+    },
+    "host": "255.255.255.255",
+    "port": 82898,
+    "secure": false
+}
