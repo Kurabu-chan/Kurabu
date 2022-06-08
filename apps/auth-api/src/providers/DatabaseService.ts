@@ -46,7 +46,7 @@ export class DatabaseService {
             "event": "Starting migration",
             "migrations": {
                 "completed": completed.map(x => x.name),
-                "todo": todo.map(x => x.name),
+                "todo": todo.map(x => x.file),
             }
         });
 
@@ -64,4 +64,5 @@ export class DatabaseService {
 
 type Migration = {
     name: string;
+    file: string;
 }

@@ -1,30 +1,60 @@
 import { $log } from "@tsed/common";
 import { PlatformExpress } from "@tsed/platform-express";
-import { InjectorService, ProviderType, ProviderScope } from "@tsed/di";
-import { CertificateProvider, EncryptionProvider, HashingProvider, KeyProvider } from "@kurabu/common";
+import { MailConfiguration } from "@kurabu/common";
 import { Server } from "./Server";
-import { DatabaseService } from "./providers/DatabaseService";
+import { bootstrappers } from "./bootstrap";
+import { IBootstrapper } from "./bootstrap/IBootstrapper";
+
+export enum MailConfigurations {
+    verify = "verify",
+}
+
+const emailConfigurations: Record<MailConfigurations, MailConfiguration> = {
+    verify: {
+        from: "noreply@mail.kurabu.moe"
+    }
+};
+
+export function getMailConfiguration(key: MailConfigurations) {
+    return emailConfigurations[key];
+}
 
 async function bootstrap() {
+
+    const bootstrapperInstances: IBootstrapper[] = [];
+
+    for (const bootstrapper of bootstrappers) {
+        bootstrapperInstances.push(new bootstrapper());
+    }
+
     try {
         const platform = await PlatformExpress.bootstrap(Server);
         const injector = platform.injector;
-        const database = await initializeDatabase(injector);
 
-        registerSingleton(CertificateProvider, injector);
-        registerSingleton(EncryptionProvider, injector);
-        registerSingleton(HashingProvider, injector);
-        registerSingleton(KeyProvider, injector);
+        for (const bootstrapper of bootstrapperInstances) {
+            if (bootstrapper.bootstrap !== undefined) {
+                await bootstrapper.bootstrap(injector);
+            }
+        }
 
-        const certProvider = injector.get<CertificateProvider>(CertificateProvider); // load certificates
-        certProvider?.requireCertificate("jwt", "EC PRIVATE KEY");
+        injector.loadSync();
+
+        for (const bootstrapper of bootstrapperInstances) {
+            if (bootstrapper.postLoad !== undefined) {
+                await bootstrapper.postLoad(injector);
+            }
+        }
 
 		await platform.listen();
 
 		process.on("SIGINT", () => {
             void platform.stop();
 
-            void database?.destroy();
+            for (const bootstrapper of bootstrapperInstances) {
+                if (bootstrapper.destroy !== undefined) {
+                    void bootstrapper.destroy(injector);
+                }
+            }
 		});
 	} catch (error) {
 		$log.error({
@@ -34,18 +64,5 @@ async function bootstrap() {
 	}
 }
 
-function registerSingleton(token: any, injector: InjectorService) {
-    injector.addProvider(token, {
-        scope: ProviderScope.SINGLETON,
-        type: ProviderType.PROVIDER,
-    });
-}
-
-async function initializeDatabase(injector: InjectorService) {
-    const database = injector.get<DatabaseService>(DatabaseService);
-    await database?.migrate();
-
-    return database;
-}
 
 void bootstrap();

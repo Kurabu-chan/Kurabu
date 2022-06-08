@@ -6,3 +6,5 @@ export * from "./AuthorizeController";
 export * from "./AuthorizeModel";
 export * from "./LoginController";
 export * from "./LoginModel";
+export * from "./RegisterController";
+export * from "./RegisterModel";

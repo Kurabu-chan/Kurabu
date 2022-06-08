@@ -25,3 +25,18 @@ export function parseAuthorizationSession(data: any): AuthorizationSession {
 }
 
 export type AuthorizationSession = z.infer<typeof authorizationSessionShape>;
+
+
+const verificationSessionShape = z.object({
+    clientId: z.string(),
+    redirectUri: z.string(),
+    state: z.string(),
+    userId: z.string(),
+    verified: z.literal(false)
+});
+
+export function parseVerificationSession(data: any): VerificationSession {
+    return verificationSessionShape.parse(data);
+}
+
+export type VerificationSession = z.infer<typeof verificationSessionShape>;
