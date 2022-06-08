@@ -11,9 +11,8 @@ export class MailServiceFactory {
     private mailConfig!: SMTPTransport.Options;
     private transporter!: Transporter;
 
-    private configurations: Record<string, MailConfiguration> = {};
 
-    constructor(createTransporter?: typeof createTransport) {
+    constructor(createTransporter: typeof createTransport | undefined = undefined) {
         this.loadConfiguration();
 
         if (createTransporter === undefined) {
@@ -27,32 +26,28 @@ export class MailServiceFactory {
         return this.transporter;
     }
 
-    public addConfiguration(key: string, config: MailConfiguration) {
-        this.configurations[key] = config;
-    }
-
-    public getProvider(key: string) {
-        if (!(key in this.configurations)) {
-            throw new Error(`Mail configuration for key ${key} not found`);
+    public getProvider(mailConfiguration: MailConfiguration) {
+        if (mailConfiguration === undefined) {
+            throw new Error("Mail configuration is undefined");
         }
-
-        return new MailServiceProvider(this.transporter, this.configurations[key]);
+        return new MailServiceProvider(this.transporter, mailConfiguration);
     }
 
     private loadConfiguration() {
         // options should be loaded from configuration file or environment variables
         let configText: string;
 
-        if (MAIL_ENV_NAME in process.env && process.env[MAIL_ENV_NAME] !== undefined) {
-            configText = process.env[MAIL_ENV_NAME];
-        } else if (MAIL_CONFIG_FILE_ENV_NAME in process.env
-            && process.env[MAIL_CONFIG_FILE_ENV_NAME] !== undefined) {
-            const configPath = process.env[MAIL_CONFIG_FILE_ENV_NAME];
-            if (!existsSync(configPath)) {
-                throw new Error(`Mail configuration file ${configPath as string} does not exist`);
+        const envConfig = process.env[MAIL_ENV_NAME];
+        const envConfigFile = process.env[MAIL_CONFIG_FILE_ENV_NAME];
+
+        if (envConfig !== undefined) {
+            configText = envConfig;
+        } else if (envConfigFile !== undefined) {
+            if (!existsSync(envConfigFile)) {
+                throw new Error(`Mail configuration file ${envConfigFile} does not exist`);
             }
 
-            configText = readFileSync(configPath, "utf8");
+            configText = readFileSync(envConfigFile, "utf8");
         } else {
             throw new Error(`Mail configuration not found, no ${MAIL_ENV_NAME} or ${MAIL_CONFIG_FILE_ENV_NAME} environment variable found`);
         }
@@ -61,10 +56,10 @@ export class MailServiceFactory {
         const parsed = JSON.parse(configText);
 
         const configSchema = z.object({
-            auth: z.object({
+            auth: z.union([z.object({
                 pass: z.string(),
                 user: z.string(),
-            }),
+            }), z.undefined()]),
             host: z.string(),
             port: z.number(),
             secure: z.boolean(),

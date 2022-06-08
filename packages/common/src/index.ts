@@ -7,3 +7,5 @@ export * from "./crypto/HashingProvider";
 export * from "./crypto/KeyProvider";
 export * from "./crypto/certificates/Certificate";
 export * from "./crypto/certificates/CertificateProvider";
+export * from "./mail/MailServiceFactory";
+export * from "./mail/MailServiceProvider";

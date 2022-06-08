@@ -44,7 +44,7 @@ function mailServiceFactoryTest() {
     });
 
 
-    it("Should allow adding configurations and loading them into a MailServiceProvider", async () => {
+    it("Should allow loading configurations into a MailServiceProvider", async () => {
         const input = {
             auth: {
                 pass: "rafael",
@@ -70,10 +70,6 @@ function mailServiceFactoryTest() {
 
         delete process.env.MAIL_CONFIG;
 
-        factory.addConfiguration("test", {
-            from: "info@example.com"
-        });
-
         const expected = {
             from: "info@example.com",
             subject: "johny",
@@ -81,7 +77,9 @@ function mailServiceFactoryTest() {
             to: "john@example.com"
         };
 
-        const actual = factory.getProvider("test");
+        const actual = factory.getProvider({
+            from: "info@example.com"
+        });
         await actual.sendText(expected.to, expected.subject, expected.text);
 
         // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -110,7 +108,7 @@ function mailServiceFactoryTest() {
         delete process.env.MAIL_CONFIG;
 
         expect(() => {
-            factory.getProvider("test");
+            factory.getProvider(undefined);
         }).to.throw(Error);
     });
 
