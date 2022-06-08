@@ -9,5 +9,9 @@ export class User implements IEntity {
 
     hash!: string;
 
+    verificationCode!: string;
+
+    verificationCompleted!: boolean;
+
     createDate!: Date;
 }

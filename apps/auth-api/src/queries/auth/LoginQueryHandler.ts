@@ -39,9 +39,17 @@ export class LoginQueryHandler implements
         const user = await this.userRepository
             .getRepository(User)
             .where("email", "=", query.email)
-            .select("userId", "hash");
+            .select("userId", "hash", "verificationCompleted");
 
         if (user.length === 0) {
+            return {
+                message: "Email or password is incorrect",
+                success: false,
+            };
+        }
+
+        // If user isn't verified yet act like they don't exist
+        if (user[0].verificationCompleted === false) {
             return {
                 message: "Email or password is incorrect",
                 success: false,
