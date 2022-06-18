@@ -1,0 +1,16 @@
+# use node port, load balancing will be done by ingress
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.names.api.service }}
+  labels:
+    {{- toYaml .Values.labels.api.service | nindent 4 }}
+spec:
+  type: {{ .Values.serviceTypes.api }}
+  selector:
+    {{- toYaml .Values.labels.api.deployment_pod | nindent 4 }}
+  ports:
+    - port: {{ .Values.ports.api }}
+      targetPort: {{ .Values.ports.api }}
+      

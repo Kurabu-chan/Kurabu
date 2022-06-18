@@ -1,6 +1,6 @@
 {
     "expo": {
-        "name": "Kurabu",
+        "name": "kurabu.moe",
         "slug": "Kurabu",
         "version": "1.0.0",
         "orientation": "portrait",
@@ -22,7 +22,7 @@
         "web": {
             "favicon": "./assets/favicon.png"
         },
-        "description": "",
+        "description": "An app for browsing and getting information on animes.",
         "scheme": "kurabu",
         "android": {
             "package": "moe.kurabu.app"

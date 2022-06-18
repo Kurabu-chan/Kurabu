@@ -1,0 +1,26 @@
+config:
+  kurabu:api.clientId:
+    secure: AAABAPdNd8mpkzvX1DD73NdLcMmuxZZCWz1F07xOcyFpvhJ9/nVVF2qXcVKOXVMgho3v5Fm21XTHL+k5GDI80g==
+  kurabu:api.clientSecret:
+    secure: AAABAB11pLDNRDbq+wm+EPQP1XxfqqMJRtU1Q+Iyl1v12A6tuNpZOXQEIIdPS6eD/d35+Da1IwkjV+cPdlfpGYKoUDmzGl1WhVXgSZjJy1mGJvpO7NJu3/4arrifCGka
+  kurabu:api.databaseSSL:
+    secure: AAABAKVjCpiZ6Sb1LlBffvpBuxkZS6l+L68XHfO+eccN8nBMPQ==
+  kurabu:api.databaseUrl:
+    secure: AAABAE8iiA8raGLpJIZbUCe8Btq8hRcigzUEGmV1GnUvxKKxU5DqbLq/S07GLQgC0UnIiI2E8hNJpmZteKi6t7tdEktR5RX17YA6e7DBN4LP6/soR5uIy+hEf/v5E0zy2TZnrVUwg1s=
+  kurabu:api.emailDomain:
+    secure: AAABABROjruw96JM35LzttdHhLICMcx4P5P1C0E9Ij86AsftYfgb+R+r
+  kurabu:api.jwtEncryptionCertificate:
+    secure: AAABAMX7lV1sAQhkiQrArYmz/ldyFHim/DR2izAF/xrIWBCzBHCcxj4q4HerH3Jj6ZwGwowv61NJ8320uukUK7+5v7+DzsiVBQZGZgo+pW/w0GZLcrJhMLkC+eabk3cHTQHMJruX/cSTL5F1VJksp7Rp3/KX/OvZbNRNvV4M2yB26fs=
+  kurabu:api.migrationPath:
+    secure: AAABAHZ5Zlam3+IV4aL4G+CsLI+z3qUD9XAJ2mUZ7QqfmY+aiqJx0kV9ivb1KsUkKLFLOmJoR251gw==
+  kurabu:api.passwordEncryptionKey:
+    secure: AAABAGqL2JfWQ/t97fvx3k8wjzEsJXV8s3RXrNwrViSNKoT2/iXv4ojBFDjSnapNszMTqxeGOk6kjhjXIOfLHTOXb4jTZzWAY5EDuF/a7D7oSdAa5tgi+5cUFqFNvgehyMOgU0buKPgA8ZAugZSddZlJ6JgSQlMwUB+3d9YKLqcBvHM=
+  kurabu:api.sendgridApiKey:
+    secure: AAABAHAYozGI1Se9ASjKk003VNOSXa4DPCCHP49q60KwXMBNLHCcVajq0SUGzZEqppWNMs2i/Px6Zx2/WRu8ub9lEPNISOOYEcWOR/iFMm8Ntwt0lI080rjYtnAm6H3ERirTgrc=
+  kurabu:db.database:
+    secure: AAABAIUX9h+67UtLytvB4btuVtWxKbTYLY7soLhO26aH8+P6Y2k=
+  kurabu:db.password:
+    secure: AAABAIUnkB8Na/fL4tmVm/rt44U3qT/KcjXZvi5aPhEVX8V6rRB0RrENFJrSSkU8jz2yXVSdGX0T51W50pyj
+  kurabu:db.user:
+    secure: AAABAJya2CJ51weW7YXHaZlyJ5ZyfTfwA8/YGgAUmFdIB1YjZ9c=
+  kurabu:production: "false"
