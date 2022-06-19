@@ -12,6 +12,30 @@ export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Res
         path: "./charts/kurabu",
         values: {
             namespace: "staging",
+            names: {
+                db: {
+                    persistentVolume: "db-persistent-volume-stage"
+                }
+            },
+            labels: {
+                db: {
+                    persistentVolume: {
+                        app: "db-persistent-volume-stage",
+                        kind: "persistentVolume"
+                    }
+                }
+            },
+            volumeSettings: {
+                storageClassName: "standard",
+                volumeMode: "Filesystem",
+                accessModes: [
+                    "ReadWriteOnce"
+                ],
+                hostPath: {
+                    path: "/data/stage"
+                },
+                persistentVolumeReclaimPolicy: "Retain"
+            },
             secrets: {
                 api: {
                     values: {
@@ -35,7 +59,8 @@ export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Res
                 }
             },
             ingress: {
-                path: "/stage(/|$)(.*)"
+                path: "/stage(/|$)(.*)",
+                domain: "staging.kurabu.moe",
             }
         } as Values
     }, {
@@ -51,6 +76,30 @@ export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Res
             replicaCounts: {
                 api: 3
             },
+            names: {
+                db: {
+                    persistentVolume: "db-persistent-volume-prod"
+                }
+            },
+            labels: {
+                db: {
+                    persistentVolume: {
+                        app: "db-persistent-volume-prod",
+                        kind: "persistentVolume"
+                    }
+                }
+            },
+            volumeSettings: {
+                storageClassName: "standard",
+                volumeMode: "Filesystem",
+                accessModes: [
+                    "ReadWriteOnce"
+                ],
+                hostPath: {
+                    path: "/data/prod"
+                },
+                persistentVolumeReclaimPolicy: "Retain"
+            },
             secrets: {
                 api: {
                     values: {
@@ -74,7 +123,8 @@ export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Res
                 }
             },
             ingress: {
-                path: "/prod(/|$)(.*)"
+                path: "/prod(/|$)(.*)",
+                domain: "prod.kurabu.moe",
             }
         } as Values
     }, {
