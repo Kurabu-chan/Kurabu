@@ -1,9 +1,10 @@
 import * as k8s from "@pulumi/kubernetes";
 import { Secrets } from "./index";
 import { Values } from "./charts/kurabuValues"
+import { Input, Resource } from "@pulumi/pulumi";
 
 
-export function deploy(outputs: string[], secrets: Secrets) {
+export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Resource> | Input<Input<Resource>[]>) {
     // create cert manager
 
 
@@ -32,8 +33,13 @@ export function deploy(outputs: string[], secrets: Secrets) {
                         user: secrets["db.user"]
                     }
                 }
+            },
+            ingress: {
+                path: "/stage(/|$)(.*)"
             }
         } as Values
+    }, {
+        dependsOn: dependsOn
     });
 
     outputs.push("staging", "api-deployment")
@@ -66,8 +72,13 @@ export function deploy(outputs: string[], secrets: Secrets) {
                         user: secrets["db.user"]
                     }
                 }
+            },
+            ingress: {
+                path: "/prod(/|$)(.*)"
             }
         } as Values
+    }, {
+        dependsOn: dependsOn
     });
 
     outputs.push("production", "api-deployment")

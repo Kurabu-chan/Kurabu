@@ -1,8 +1,5 @@
 import * as k8s from "@pulumi/kubernetes";
-import { Namespace } from "@pulumi/kubernetes/core/v1";
-import * as kx from "@pulumi/kubernetesx";
 import { Output, Config } from "@pulumi/pulumi";
-import { Values } from "./charts/kurabuValues"
 import { deploy as productionDeploy } from "./production";
 import { deploy as developmentDeploy } from "./development";
 
@@ -24,6 +21,7 @@ export type Secrets = {
     "db.database": Output<string>,
     "db.password": Output<string>,
     "db.user": Output<string>,
+    "grafanaPassword": Output<string>,
 }
 
 const secrets: Secrets = {
@@ -39,22 +37,64 @@ const secrets: Secrets = {
     "db.database": config.requireSecret("db.database"),
     "db.password": config.requireSecret("db.password"),
     "db.user": config.requireSecret("db.user"),
+    "grafanaPassword": config.requireSecret("grafanaPassword")
 }
 
 console.log(`Deploying to ${isProduction? "production" : "development"}`)
 
-// create ingress controller
-var ingress = new k8s.helm.v3.Chart("nginx-ingress", {
+var monitoringNamespace = new k8s.core.v1.Namespace("monitoring", {
+    kind: "Namespace",
+    metadata: {
+        name: "monitoring",
+        labels: {
+            app: "monitoring",
+            kind: "namespace"
+        }
+    },
+    apiVersion: "v1"
+});
+
+var ingress = new k8s.helm.v3.Release("nginx-ingress", {
     chart: "ingress-nginx",
-    fetchOpts: {
+    repositoryOpts: {
         repo: "https://kubernetes.github.io/ingress-nginx",
     }
 });
 
+var prometheus = new k8s.helm.v3.Release("prometheus-monitoring", {
+    chart: "kube-prometheus-stack",
+    repositoryOpts: {
+        repo: "https://prometheus-community.github.io/helm-charts"
+    },
+    values: {
+        grafana: {
+            ingress: {
+                enabled: true,
+                ingressClassName: "nginx",
+                paths: [
+                    "/"
+                ],
+                hosts: [
+                    "monitor.kurabu.moe"
+                ]
+            },
+            adminPassword: secrets.grafanaPassword
+        },
+        namespaceOverride: "monitoring",
+        "prometheus-node-exporter": {
+            hostRootFsMount: {
+                enabled: false
+            }
+        }
+    }
+}, {
+    dependsOn: [monitoringNamespace, ingress]
+})
+
 if (isProduction) {
-    productionDeploy(outputs, secrets);
+    productionDeploy(outputs, secrets, [ingress]);
 } else {
-    developmentDeploy(outputs, secrets);
+    developmentDeploy(outputs, secrets, [ingress]);
 }
 
 export {

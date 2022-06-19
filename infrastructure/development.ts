@@ -1,10 +1,10 @@
 import * as k8s from "@pulumi/kubernetes";
 import { Secrets } from "./index";
 import { Values } from "./charts/kurabuValues"
-import { interpolate } from "@pulumi/pulumi"
+import { Input, interpolate, Resource } from "@pulumi/pulumi"
 
 
-export function deploy(outputs: string[], secrets: Secrets) {
+export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Resource> | Input<Input<Resource>[]>) {
     var devDeployment = new k8s.helm.v3.Chart("dev", {
         path: "./charts/kurabu",
         values: {
@@ -35,6 +35,8 @@ export function deploy(outputs: string[], secrets: Secrets) {
                 tls: false
             }
         } as Values
+    }, {
+        dependsOn: dependsOn
     });
 
     outputs.push("dev", "api-deployment")

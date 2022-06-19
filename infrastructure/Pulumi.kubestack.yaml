@@ -23,4 +23,6 @@ config:
     secure: AAABAIUnkB8Na/fL4tmVm/rt44U3qT/KcjXZvi5aPhEVX8V6rRB0RrENFJrSSkU8jz2yXVSdGX0T51W50pyj
   kurabu:db.user:
     secure: AAABAJya2CJ51weW7YXHaZlyJ5ZyfTfwA8/YGgAUmFdIB1YjZ9c=
+  kurabu:grafanaPassword:
+    secure: AAABABMvDGQvSArFGRr3ZD2rdp7kXY6XnqTdt19Enx6N1472E75PMAJdQ9bwvsGVAdMxMw==
   kurabu:production: "false"
