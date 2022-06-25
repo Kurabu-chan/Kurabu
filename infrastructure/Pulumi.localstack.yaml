@@ -1,0 +1,32 @@
+config:
+  kurabu:api.clientId:
+    secure: AAABAJuwjKhF5XfQN9BOOP/lr7DD9OMe6mh7di3z9b6XX04M8XS/SS4x88rp5udL8YlCI0v6Z8dCwO/HGrrpNA==
+  kurabu:api.clientSecret:
+    secure: AAABAMUX3bUgQcB/4uCoEvPeqYmyMoV3atLY8ElwmrxA3vkyaueCL5qMG5lz/FMxBGNmeAs/vilsxMermPbNISMKeeyDLhNMpYrzSrjxVR2dWmTuIxiUrEB7K2+h1/dL
+  kurabu:api.databaseSSL:
+    secure: AAABADWWwnD7i8cIFTltNsOxjqktftkFfVeJL33xPmDqjwfRww==
+  kurabu:api.databaseUrl:
+    secure: AAABAAinNrq7SOYYexVIqKbUsJjVbmqGHepepmDGIMFjWET1puiudSr9oucvL22nm2zV8OL3mq1GbwzMVfk10pHwenJpjZfnXh9M1uYSj+QCecMa77Iru29NScFZX5FyKsfI7Juot4M=
+  kurabu:api.emailDomain:
+    secure: AAABAGXWfpZjBbB+vem6sFwj6KMxK6km9CroXdsD8qfJMSxC/Pdd8HIo
+  kurabu:api.jwtEncryptionCertificate:
+    secure: AAABAOMseCiDbbvFqAcMCJySCMkC9vms0SeOuiWBHLl/eQCubDsTwOlUHSO+PwnwdKlv1HpLekiiiaL6YJs9BRBrTsgXlq6T3amUiAdqCVs9qBwIHP6Ilst5sgNEjob49rwfVJ5QT5dE+jWf7R2wC0K8jY65fcFYtzYmzJ9o/d36b9M=
+  kurabu:api.migrationPath:
+    secure: AAABAGIpDlYo5CVuH2FjzowxZMeY7bC53KBefDTu7eEQoWbYNb8YFCLIbBFJr3WZUqzItQvifCdJsQ==
+  kurabu:api.passwordEncryptionKey:
+    secure: AAABABrfUO92T/s2wbMC+rLxjCtBusaqTrsAlR51rd2WPSXRBttkZU5zye6oG2G54UTPFEzdBNKNcHuh2lBe2FADnWp+pUjYjX6WgrkTgJUlApYViOO5XyJEv53OZ7sejLWIJ0cMut8tYhhz32gpXu84NI6j3jWAFvU2WP4WTC0loLU=
+  kurabu:api.sendgridApiKey:
+    secure: AAABAMPqjGbVD8vtL+gs3bpby/NIEtkCQO6LIPCHSRh9ETjCJdBPR1YPHq3RFy2Vyz8Z3ih12hl5IGl8payt5HrAtCLbTFk62wTY0s/+HeD+Vo+L306Lapqm/zLvki0Z16C4QVE=
+  kurabu:databaseMonitorEmail:
+    secure: AAABAKaMXQFBDWDR6LnJ2NJj+7h2dGu3OZYE7tXMDm0wV6/2M+BIfI9FFU0FwV3ZgUsthw==
+  kurabu:databaseMonitorPassword:
+    secure: AAABAI7J4fOtlnKL3fCNNu0xT5hpNcbjYM96H2wbhgPEC8GLAVIk/UTJUeiO1GDBZRTG7Q==
+  kurabu:db.database:
+    secure: AAABAPTiGQvfBICsncW0zix2LD7R/J2a7FgVX55pz/5qzZbehYs=
+  kurabu:db.password:
+    secure: AAABAFfBEV2CYRr21sZ009cV1bU+gvOY0t1yz4LX2ucUTH+Ba4awAfd6xcsvF8Fzz9NSA4V60F0OCQ3+LHcd
+  kurabu:db.user:
+    secure: AAABADPorTd85079YJ2pTNwF4ScWxDy+zgQBRiJaTDg3ewC7RSA=
+  kurabu:grafanaPassword:
+    secure: AAABAMzNOuhoqYfmYardwDLHcPPDCrT2oMsAaeM+ViU2pOImZndYGMcbCijMgl3PCoYaNg==
+  kurabu:production: "false"

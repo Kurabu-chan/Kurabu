@@ -2,6 +2,7 @@ import * as k8s from "@pulumi/kubernetes";
 import { Output, Config } from "@pulumi/pulumi";
 import { deploy as productionDeploy } from "./production";
 import { deploy as developmentDeploy } from "./development";
+import { addDatabaseMonitoring, addLogging, addMonitoring } from "./monitoring";
 
 const outputs: string[] = []
 
@@ -22,6 +23,8 @@ export type Secrets = {
     "db.password": Output<string>,
     "db.user": Output<string>,
     "grafanaPassword": Output<string>,
+    "databaseMonitorEmail": Output<string>,
+    "databaseMonitorPassword": Output<string>,
 }
 
 const secrets: Secrets = {
@@ -37,22 +40,12 @@ const secrets: Secrets = {
     "db.database": config.requireSecret("db.database"),
     "db.password": config.requireSecret("db.password"),
     "db.user": config.requireSecret("db.user"),
-    "grafanaPassword": config.requireSecret("grafanaPassword")
+    "grafanaPassword": config.requireSecret("grafanaPassword"),
+    "databaseMonitorEmail": config.requireSecret("databaseMonitorEmail"),
+    "databaseMonitorPassword": config.requireSecret("databaseMonitorPassword")
 }
 
-console.log(`Deploying to ${isProduction? "production" : "development"}`)
-
-var monitoringNamespace = new k8s.core.v1.Namespace("monitoring", {
-    kind: "Namespace",
-    metadata: {
-        name: "monitoring",
-        labels: {
-            app: "monitoring",
-            kind: "namespace"
-        }
-    },
-    apiVersion: "v1"
-});
+console.log(`Deploying to ${isProduction ? "production" : "development"}`)
 
 var ingress = new k8s.helm.v3.Release("nginx-ingress", {
     chart: "ingress-nginx",
@@ -61,40 +54,15 @@ var ingress = new k8s.helm.v3.Release("nginx-ingress", {
     }
 });
 
-var prometheus = new k8s.helm.v3.Release("prometheus-monitoring", {
-    chart: "kube-prometheus-stack",
-    repositoryOpts: {
-        repo: "https://prometheus-community.github.io/helm-charts"
-    },
-    values: {
-        grafana: {
-            ingress: {
-                enabled: true,
-                ingressClassName: "nginx",
-                paths: [
-                    "/"
-                ],
-                hosts: [
-                    "monitor.kurabu.moe"
-                ]
-            },
-            adminPassword: secrets.grafanaPassword
-        },
-        namespaceOverride: "monitoring",
-        "prometheus-node-exporter": {
-            hostRootFsMount: {
-                enabled: false
-            }
-        }
-    }
-}, {
-    dependsOn: [monitoringNamespace, ingress]
-})
+const monitoring = addMonitoring(secrets, ingress);
+const logging = addLogging(isProduction, ingress);
+const dabaseMonitoring = addDatabaseMonitoring(isProduction, secrets, ingress);
+
 
 if (isProduction) {
-    productionDeploy(outputs, secrets, [ingress]);
+    productionDeploy(outputs, secrets, [ingress, ...monitoring, ...logging]);
 } else {
-    developmentDeploy(outputs, secrets, [ingress]);
+    developmentDeploy(outputs, secrets, [ingress, ...monitoring, ...logging]);
 }
 
 export {
