@@ -4,7 +4,7 @@ import { Values } from "../charts/kurabuValues"
 import { Input, Resource } from "@pulumi/pulumi";
 
 
-export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Resource> | Input<Input<Resource>[]>) {
+export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Resource> | Input<Input<Resource>[]>, isCertManaged: boolean) {
     var stagingDeployment = new k8s.helm.v3.Chart("staging", {
         path: "./charts/kurabu",
         values: {
@@ -57,7 +57,9 @@ export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Res
             },
             ingress: {
                 path: "/stage(/|$)(.*)",
-                domain: "staging.kurabu.moe",
+                domain: "stage.kurabu.moe",
+                tls: isCertManaged,
+                tlsSecret: isCertManaged ? "kurabu-stage-tls" : undefined,
             }
         } as Values
     }, {
@@ -122,6 +124,8 @@ export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Res
             ingress: {
                 path: "/prod(/|$)(.*)",
                 domain: "prod.kurabu.moe",
+                tls: isCertManaged,
+                tlsSecret: isCertManaged ? "kurabu-prod-tls" : undefined,
             }
         } as Values
     }, {
@@ -130,4 +134,5 @@ export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Res
 
     outputs.push("production", "api-deployment")
 
+    return [stagingDeployment, productionDeployment]
 }

@@ -57,42 +57,64 @@ var ingress = new k8s.helm.v3.Release("nginx-ingress", {
     }
 });
 
-const certificates: Record<string, string[]> = {
-    "kibana-tls": [
-        "logs.monitor.kurabu.moe"
-    ],
-    "grafana-tls": [
-        "cluster.monitor.kurabu.moe"
-    ],
-    "pgadmin-tls": [
-        "database.monitor.kurabu.moe"
-    ]
+type Certificate = {
+    domains: string[],
+    namespace: string | Output<string>,
+    dependsOn?: k8s.helm.v3.Chart[]
 }
 
-if (isProduction) {
-    certificates["kurabu-prod-tls"] = [
-        "prod.kurabu.moe"
-    ];
-    certificates["kurabu-stage-tls"] = [
-        "stage.kurabu.moe"
-    ];
-}
+export type Certificates = Record<string, Certificate>;
 
-if (isCertManaged) { 
-    addSSL(ingress, certificates);
+const certificates: Record<string, Certificate> = {
+    "kibana-tls": {
+        namespace: "logging",
+        domains: [
+            "logs.monitor.kurabu.moe"
+        ]
+    },
+    "grafana-tls": {
+        namespace: "default",
+        domains: [
+            "cluster.monitor.kurabu.moe"
+        ]
+    },
+    "pgadmin-tls": {
+        namespace: "db-monitoring",
+        domains: [
+            "database.monitor.kurabu.moe"
+        ]
+    }
 }
-
 
 const monitoring = addMonitoring(secrets, ingress, isCertManaged, certificates);
 const logging = addLogging(isProduction, ingress, isCertManaged, certificates);
 const dabaseMonitoring = addDatabaseMonitoring(isProduction, secrets, ingress, isCertManaged, certificates);
 
-
 if (isProduction) {
-    productionDeploy(outputs, secrets, [ingress, ...monitoring, ...logging]);
+    const prodResources = productionDeploy(outputs, secrets, [ingress, ...monitoring, ...logging], isCertManaged);
+
+    certificates["kurabu-prod-tls"] = {
+        namespace: "production",
+        domains: [
+            "prod.kurabu.moe"
+        ],
+        dependsOn: prodResources
+    };
+    certificates["kurabu-stage-tls"] = {
+        namespace: "staging",
+        domains: [
+            "stage.kurabu.moe"
+        ],
+        dependsOn: prodResources
+    };
 } else {
     developmentDeploy(outputs, secrets, [ingress, ...monitoring, ...logging]);
 }
+
+if (isCertManaged) {
+    addSSL(ingress, certificates);
+}
+
 
 export {
     outputs

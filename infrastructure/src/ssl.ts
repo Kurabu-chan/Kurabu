@@ -1,7 +1,8 @@
 import { Input, Resource } from "@pulumi/pulumi";
 import * as k8s from "@pulumi/kubernetes";
+import { Certificates } from ".";
 
-export function addSSL(ingress: k8s.helm.v3.Release, certificates: Record<string, string[]>) { 
+export function addSSL(ingress: k8s.helm.v3.Release, certificates: Certificates) { 
     var certManagerNamespace = new k8s.core.v1.Namespace("cert-manager", {
         kind: "Namespace",
         metadata: {
@@ -37,9 +38,9 @@ export function addSSL(ingress: k8s.helm.v3.Release, certificates: Record<string
         spec: {
             acme: {
 
-                server: "https://acme-v02.api.letsencrypt.org/directory",
-                // skipTLSVerify: true,
-                // server: "https://pebble:14000/dir",
+                // server: "https://acme-v02.api.letsencrypt.org/directory",
+                skipTLSVerify: true,
+                server: "https://pebble:14000/dir",
                 email: "rafael@rafaeltab.com",
                 privateKeySecretRef: {
                     name: "issuer-account-key",
@@ -60,15 +61,16 @@ export function addSSL(ingress: k8s.helm.v3.Release, certificates: Record<string
     });
 
 
-    for (const [certificateName, domains] of Object.entries(certificates)) {
+    for (const [certificateName, certificate] of Object.entries(certificates)) {
         var cert = new k8s.apiextensions.CustomResource("certificate-" + certificateName, {
             apiVersion: "cert-manager.io/v1",
             kind: "Certificate",
             metadata: {
                 name: certificateName,
+                namespace: certificate.namespace,
             },
             spec: {
-                dnsNames: domains,
+                dnsNames: certificate.domains,
                 issuerRef: {
                     kind: "ClusterIssuer",
                     name: clusterIssuer.metadata.name,
@@ -76,7 +78,7 @@ export function addSSL(ingress: k8s.helm.v3.Release, certificates: Record<string
                 secretName: certificateName,
             }
         }, {
-            dependsOn: [clusterIssuer]
+            dependsOn: [clusterIssuer, ...(certificate.dependsOn ?? [])]
         })
     }
 }

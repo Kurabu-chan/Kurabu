@@ -1,9 +1,9 @@
 import * as k8s from "@pulumi/kubernetes";
 import { Output } from "@pulumi/pulumi";
 import { readFileSync } from "fs";
-import { Secrets } from "..";
+import { Secrets, Certificates } from ".";
 
-export function addMonitoring(secrets: Secrets, ingress: k8s.helm.v3.Release, isCertManaged: boolean, certificates: Record<string, string[]>) { 
+export function addMonitoring(secrets: Secrets, ingress: k8s.helm.v3.Release, isCertManaged: boolean, certificates: Certificates) { 
     var monitoringNamespace = new k8s.core.v1.Namespace("monitoring", {
         kind: "Namespace",
         metadata: {
@@ -30,7 +30,7 @@ export function addMonitoring(secrets: Secrets, ingress: k8s.helm.v3.Release, is
         prometheusIngressSettings.tls = [
             {
                 secretName: "grafana-tls",
-                hosts: certificates["grafana-tls"]
+                hosts: certificates["grafana-tls"].domains
             }
         ]
     }
@@ -59,7 +59,7 @@ export function addMonitoring(secrets: Secrets, ingress: k8s.helm.v3.Release, is
     return [monitoringNamespace, prometheus];
 }
 
-export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, isCertManaged: boolean, certificates: Record<string, string[]>) {
+export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, isCertManaged: boolean, certificates: Certificates) {
     const logstashConfig = readFileSync("./config/logstash.conf", "utf8");
     const logstashYaml = readFileSync("./config/logstash.yml", "utf8");
     let filebeatConfig = readFileSync("./config/filebeat.yml", "utf8");
@@ -214,7 +214,7 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
             kibanaIngressSettings.tls = [
                 {
                     secretName: "kibana-tls",
-                    hosts: certificates["kibana-tls"]
+                    hosts: certificates["kibana-tls"].domains
                 }
             ]
         }
@@ -245,7 +245,7 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
     return [elasticsearch, logstash, filebeat, kibana];
 }
 
-export function addDatabaseMonitoring(isProduction: boolean, secrets: Secrets, ingress: k8s.helm.v3.Release, isCertManaged: boolean, certificates: Record<string, string[]>) { 
+export function addDatabaseMonitoring(isProduction: boolean, secrets: Secrets, ingress: k8s.helm.v3.Release, isCertManaged: boolean, certificates: Certificates) { 
     type Server = {
         Name: string | Output<string>,
         Group: string | Output<string>,
@@ -322,7 +322,7 @@ export function addDatabaseMonitoring(isProduction: boolean, secrets: Secrets, i
         pgAdminIngressSettings.tls = [
             {
                 secretName: "pgadmin-tls",
-                hosts: certificates["pgadmin-tls"]
+                hosts: certificates["pgadmin-tls"].domains
             }
         ]
     }
