@@ -1,13 +1,10 @@
 import * as k8s from "@pulumi/kubernetes";
 import { Secrets } from "./index";
-import { Values } from "./charts/kurabuValues"
+import { Values } from "../charts/kurabuValues"
 import { Input, Resource } from "@pulumi/pulumi";
 
 
 export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Resource> | Input<Input<Resource>[]>) {
-    // create cert manager
-
-
     var stagingDeployment = new k8s.helm.v3.Chart("staging", {
         path: "./charts/kurabu",
         values: {

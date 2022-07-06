@@ -1,9 +1,9 @@
 import * as k8s from "@pulumi/kubernetes";
 import { Output } from "@pulumi/pulumi";
 import { readFileSync } from "fs";
-import { Secrets } from ".";
+import { Secrets } from "..";
 
-export function addMonitoring(secrets: Secrets, ingress: k8s.helm.v3.Release) { 
+export function addMonitoring(secrets: Secrets, ingress: k8s.helm.v3.Release, isCertManaged: boolean, certificates: Record<string, string[]>) { 
     var monitoringNamespace = new k8s.core.v1.Namespace("monitoring", {
         kind: "Namespace",
         metadata: {
@@ -15,6 +15,26 @@ export function addMonitoring(secrets: Secrets, ingress: k8s.helm.v3.Release) {
         },
         apiVersion: "v1"
     });
+    const prometheusIngressSettings: any = {
+        enabled: true,
+        ingressClassName: "nginx",
+        paths: [
+            "/"
+        ],
+        hosts: [
+            "cluster.monitor.kurabu.moe"
+        ]
+    }
+
+    if (isCertManaged) { 
+        prometheusIngressSettings.tls = [
+            {
+                secretName: "grafana-tls",
+                hosts: certificates["grafana-tls"]
+            }
+        ]
+    }
+
     var prometheus = new k8s.helm.v3.Release("prometheus-monitoring", {
         chart: "kube-prometheus-stack",
         repositoryOpts: {
@@ -22,16 +42,7 @@ export function addMonitoring(secrets: Secrets, ingress: k8s.helm.v3.Release) {
         },
         values: {
             grafana: {
-                ingress: {
-                    enabled: true,
-                    ingressClassName: "nginx",
-                    paths: [
-                        "/"
-                    ],
-                    hosts: [
-                        "cluster.monitor.kurabu.moe"
-                    ]
-                },
+                ingress: prometheusIngressSettings,
                 adminPassword: secrets.grafanaPassword
             },
             namespaceOverride: "monitoring",
@@ -48,7 +59,7 @@ export function addMonitoring(secrets: Secrets, ingress: k8s.helm.v3.Release) {
     return [monitoringNamespace, prometheus];
 }
 
-export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release) {
+export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, isCertManaged: boolean, certificates: Record<string, string[]>) {
     const logstashConfig = readFileSync("./config/logstash.conf", "utf8");
     const logstashYaml = readFileSync("./config/logstash.yml", "utf8");
     let filebeatConfig = readFileSync("./config/filebeat.yml", "utf8");
@@ -184,26 +195,37 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release) 
             };
         }
 
+        let kibanaIngressSettings: any = {
+            enabled: true,
+            className: "nginx",
+            hosts: [
+                {
+                    host: "logs.monitor.kurabu.moe",
+                    paths: [
+                        {
+                            path: "/"
+                        }
+                    ]
+                }
+            ]
+        }
+
+        if (isCertManaged) { 
+            kibanaIngressSettings.tls = [
+                {
+                    secretName: "kibana-tls",
+                    hosts: certificates["kibana-tls"]
+                }
+            ]
+        }
+
         return new k8s.helm.v3.Release("kibana", {
             chart: "kibana",
             repositoryOpts: {
                 repo: "https://helm.elastic.co"
             },
             values: {
-                ingress: {
-                    enabled: true,
-                    className: "nginx",
-                    hosts: [
-                        {
-                            host: "logs.monitor.kurabu.moe",
-                            paths: [
-                                {
-                                    path: "/"
-                                }
-                            ]
-                        }
-                    ]
-                },
+                ingress: kibanaIngressSettings,
                 resources: kibanaResources
             },
             namespace: "logging"
@@ -223,7 +245,7 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release) 
     return [elasticsearch, logstash, filebeat, kibana];
 }
 
-export function addDatabaseMonitoring(isProduction: boolean, secrets: Secrets, ingress: k8s.helm.v3.Release) { 
+export function addDatabaseMonitoring(isProduction: boolean, secrets: Secrets, ingress: k8s.helm.v3.Release, isCertManaged: boolean, certificates: Record<string, string[]>) { 
     type Server = {
         Name: string | Output<string>,
         Group: string | Output<string>,
@@ -279,6 +301,31 @@ export function addDatabaseMonitoring(isProduction: boolean, secrets: Secrets, i
         },
         apiVersion: "v1"
     });
+    
+    let pgAdminIngressSettings: any = {
+        enabled: true,
+        ingressClassName: "nginx",
+        hosts: [
+            {
+                host: "database.monitor.kurabu.moe",
+                paths: [
+                    {
+                        path: "/",
+                        pathType: "Prefix"
+                    }
+                ]
+            }
+        ]
+    }
+    
+    if (isCertManaged) { 
+        pgAdminIngressSettings.tls = [
+            {
+                secretName: "pgadmin-tls",
+                hosts: certificates["pgadmin-tls"]
+            }
+        ]
+    }
 
     var pgadmin = new k8s.helm.v3.Release("pg-admin", {
         chart: "pgadmin4",
@@ -290,21 +337,7 @@ export function addDatabaseMonitoring(isProduction: boolean, secrets: Secrets, i
                 enabled: true,
                 servers: servers
             },
-            ingress: {
-                enabled: true,
-                ingressClassName: "nginx",
-                hosts: [
-                    {
-                        host: "database.monitor.kurabu.moe",
-                        paths: [
-                            {
-                                path: "/",
-                                pathType: "Prefix"
-                            }
-                        ]
-                    }
-                ]
-            },
+            ingress: pgAdminIngressSettings,
             env: {
                 email: secrets["databaseMonitorEmail"],
                 password: secrets["databaseMonitorPassword"]

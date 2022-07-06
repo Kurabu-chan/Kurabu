@@ -1,0 +1,32 @@
+config:
+  kurabu:api.clientId:
+    secure: AAABAIlTmA+Kua648d8s/vDjHVpqhQf4NeYBJJMxCByyVkOtwOydXirFHzQ4wR/giC1s1kZr7H/HWxR/eGYvCw==
+  kurabu:api.clientSecret:
+    secure: AAABAEki69Da7USKO7TCDHlp0YFxTEgLGg8N5wiLeuD7ds8Wx3AAtx+ON8ocMkCZSKE5nWwI1l7vQStzfo4W3DdXJ2Z5JVrzEFBcG0M7SCGpPg7oJAUJQ7Wl+efqTSXa
+  kurabu:api.databaseSSL:
+    secure: AAABAGQE1UaH8IEVUZrrYDiAejN67o3A3ay+QL16wDw1KsKa9g==
+  kurabu:api.databaseUrl:
+    secure: AAABAASbyovNshWFQS07jW7PdBEYNR0i1vPkZcfXH9PO+HfNN+ezKAaNYSttpYt5cVe5IED2+YmEChkx9t5qk4nNl5RUYKnwc6zDRkqpYkuvS0C3OhIRNi+VVjmv5mgUGlcW7GQcOZ4=
+  kurabu:api.emailDomain:
+    secure: AAABAMLVRFigEH9m5ndIwxleiK7qlPTrLubBE+PHlo4j4jZj+AnnBEdA
+  kurabu:api.jwtEncryptionCertificate:
+    secure: AAABADHrXB/b972IT9K0xpb4dZCWBVdv5pA+Q9zdwere8FCLuYkGHIzaUHBKfB7qwXnOWqusGfkhK4/T9zXDHh78nWvh/C80C2H36dfkT3WDqKjbfdVzeJbba4djex8BomqyURp2R5pI3MLNMhlj8wiaooGKcV/WBb9TDdHUGwM86xc=
+  kurabu:api.migrationPath:
+    secure: AAABAH4huy4jOxSZ9YCazz6w2JnNsiy+h/9O2kNC/X+SqFnYckZ/pIe3wV2N0ZXtzFZQENVD9T0QCg==
+  kurabu:api.passwordEncryptionKey:
+    secure: AAABAKPlj34aAC2iaIcJp3bwi+alT/tmfF8XTarvKquWLNoDen0wfNkWsJW45hzeu718EHQHkzjBonLFD4qhkqY7LgHhD0qn5iev0Z56ozqpqYDLQW62pjM4O6SVKY6ZcLjx/sMOmxBBgwi69gkutqDx4sonSr8GFSSaiLHreNBOeEQ=
+  kurabu:api.sendgridApiKey:
+    secure: AAABAGxsXqDt8c8GXG9S2l9ntfQHKF61mUftssViiOUNdQ4wLEp9AqQMVRRTlkkzgbvIV7DnjKUWqK5+MMTUm5McezpJueSA0SXD0LYq9Osqc2hE89DevQJgkwiG1k2/mhd+RmM=
+  kurabu:databaseMonitorEmail:
+    secure: AAABAI9uVAcjYh3XiG1YV2dpbZxjp7dCJ3/6vZI/TvIIyZ9UXWkupCjktdne/cOy4MnfwQ==
+  kurabu:databaseMonitorPassword:
+    secure: AAABABsf5cpNRG9smf6IVlfCL+9Z1VomTZMLhuaVosal8Vrx0LkHm6sfbqMny1OWPITeTQ==
+  kurabu:db.database:
+    secure: AAABAH4LpUK/TrqxB7N/wZWnZgU2TnKKaFuROs+YpA/isRtNKek=
+  kurabu:db.password:
+    secure: AAABAG5I+lfhdzlWSK8HZJSxaUncc8pl1CkK2tbqZ9tWGz6cA6FfR1dTN1wC4GDENED/Rt4fYDY6L1J2ftTe
+  kurabu:db.user:
+    secure: AAABAC+cZWU4ChARRVNDM3h+7Fdkllwdz+qY8pIVMqRDgZ8JSu0=
+  kurabu:grafanaPassword:
+    secure: AAABAL7y/L7gIAclbWH/qNr/LHIJlfWKQp+LjZIf7rEh1Ec7yoPUg0QPLGfpA228EHonwA==
+  kurabu:production: "true"

@@ -1,6 +1,6 @@
 import * as k8s from "@pulumi/kubernetes";
 import { Secrets } from "./index";
-import { Values } from "./charts/kurabuValues"
+import { Values } from "../charts/kurabuValues"
 import { Input, interpolate, Resource } from "@pulumi/pulumi"
 
 
