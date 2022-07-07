@@ -64,7 +64,7 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
     const logstashYaml = readFileSync("./config/logstash.yml", "utf8");
     let filebeatConfig = readFileSync("./config/filebeat.yml", "utf8");
 
-    var loggingNamesapce = new k8s.core.v1.Namespace("logging", {
+    var loggingNamespace = new k8s.core.v1.Namespace("logging", {
         kind: "Namespace",
         metadata: {
             name: "logging",
@@ -109,7 +109,7 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
             },
             namespace: "logging"
         }, {
-            dependsOn: [loggingNamesapce]
+            dependsOn: [loggingNamespace]
         });
     }
 
@@ -146,7 +146,7 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
             },
             namespace: "logging"
         }, {
-            dependsOn: [elasticsearch, loggingNamesapce]
+            dependsOn: [elasticsearch, loggingNamespace]
         });
     }
 
@@ -172,7 +172,7 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
             },
             namespace: "logging"
         }, {
-            dependsOn: [logstash, loggingNamesapce]
+            dependsOn: [logstash, loggingNamespace]
         })
     }
 
@@ -228,9 +228,9 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
                 ingress: kibanaIngressSettings,
                 resources: kibanaResources
             },
-            namespace: "logging"
+            namespace: loggingNamespace.metadata.name
         }, {
-            dependsOn: [ingress, elasticsearch, loggingNamesapce]
+            dependsOn: [ingress, elasticsearch, loggingNamespace, kibanaCreds]
         });
     }
 
