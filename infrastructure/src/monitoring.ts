@@ -59,7 +59,7 @@ export function addMonitoring(secrets: Secrets, ingress: k8s.helm.v3.Release, is
     return [monitoringNamespace, prometheus];
 }
 
-export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, isCertManaged: boolean, certificates: Certificates) {
+export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, isCertManaged: boolean, certificates: Certificates, secrets: Secrets) {
     const logstashConfig = readFileSync("./config/logstash.conf", "utf8");
     const logstashYaml = readFileSync("./config/logstash.yml", "utf8");
     let filebeatConfig = readFileSync("./config/filebeat.yml", "utf8");
@@ -76,6 +76,23 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
         apiVersion: "v1"
     });
 
+    const elasticCreds = new k8s.core.v1.Secret("elastic-credentials", {
+        apiVersion: "v1",
+        stringData: {
+            username: secrets["kibanaMonitorUser"],
+            password: secrets["kibanaMonitorPassword"],
+            roles: "kibana_admin,ingest_admin"
+        },
+        immutable: true,
+        kind: "Secret",
+        type: "kubernetes.io/basic-auth",
+        metadata: {
+            namespace: loggingNamespace.metadata.name,
+            name: "elastic-credentials"
+        }
+    }, {
+        dependsOn: []
+    });
 
     function addElasticSearch() {
         var elasticsearchResources: k8s.types.input.core.v1.ResourceRequirements = {
@@ -106,10 +123,24 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
                 antiAffinity: "soft",
                 replicas: 1,
                 minimumMasterNodes: 1,
+                extraEnvs: [
+                    {
+                        name: "ELASTIC_PASSWORD",
+                        valueFrom: {
+                            secretKeyRef: {
+                                name: elasticCreds.metadata.name,
+                                key: "password"
+                            }
+                        }
+                    }
+                ],
+                esConfig: {
+                    "elasticsearch.yml": `xpack.security.enabled: true`
+                }
             },
             namespace: "logging"
         }, {
-            dependsOn: [loggingNamespace]
+            dependsOn: [loggingNamespace, elasticCreds]
         });
     }
 
@@ -142,7 +173,22 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
                             targetPort: 8080
                         }
                     ]
-                }
+                },
+                extraEnvs: [
+                    {
+                        name: "ELASTICSEARCH_USERNAME",
+                        value: "elastic"
+                    },
+                    {
+                        name: "ELASTICSEARCH_PASSWORD",
+                        valueFrom: {
+                            secretKeyRef: {
+                                name: elasticCreds.metadata.name,
+                                key: "password"
+                            }
+                        }
+                    }
+                ]
             },
             namespace: "logging"
         }, {
@@ -219,6 +265,8 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
             ]
         }
 
+        
+
         return new k8s.helm.v3.Release("kibana", {
             chart: "kibana",
             repositoryOpts: {
@@ -226,11 +274,29 @@ export function addLogging(isProduction: boolean, ingress: k8s.helm.v3.Release, 
             },
             values: {
                 ingress: kibanaIngressSettings,
-                resources: kibanaResources
+                resources: kibanaResources,
+                extraEnvs: [
+                    {
+                        name: "ELASTICSEARCH_USERNAME",
+                        value: "elastic"
+                    },
+                    {
+                        name: "ELASTICSEARCH_PASSWORD",
+                        valueFrom: {
+                            secretKeyRef: {
+                                name: elasticCreds.metadata.name,
+                                key: "password"
+                            }
+                        }
+                    }
+                ],
+                kibanaConfig: {
+                    "kibana.yml": `xpack.security.enabled: true`
+                }
             },
             namespace: loggingNamespace.metadata.name
         }, {
-            dependsOn: [ingress, elasticsearch, loggingNamespace, kibanaCreds]
+            dependsOn: [ingress, elasticsearch, loggingNamespace, elasticCreds]
         });
     }
 

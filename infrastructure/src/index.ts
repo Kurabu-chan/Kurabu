@@ -28,6 +28,8 @@ export type Secrets = {
     "grafanaPassword": Output<string>,
     "databaseMonitorEmail": Output<string>,
     "databaseMonitorPassword": Output<string>,
+    "kibanaMonitorUser": Output<string>,
+    "kibanaMonitorPassword": Output<string>,
 }
 
 const secrets: Secrets = {
@@ -45,7 +47,9 @@ const secrets: Secrets = {
     "db.user": config.requireSecret("db.user"),
     "grafanaPassword": config.requireSecret("grafanaPassword"),
     "databaseMonitorEmail": config.requireSecret("databaseMonitorEmail"),
-    "databaseMonitorPassword": config.requireSecret("databaseMonitorPassword")
+    "databaseMonitorPassword": config.requireSecret("databaseMonitorPassword"),
+    "kibanaMonitorUser": config.requireSecret("kibanaMonitorUser"),
+    "kibanaMonitorPassword": config.requireSecret("kibanaMonitorPassword")
 }
 
 console.log(`Deploying to ${isProduction ? "production" : "development"}`)
@@ -87,7 +91,7 @@ const certificates: Record<string, Certificate> = {
 }
 
 const monitoring = addMonitoring(secrets, ingress, isCertManaged, certificates);
-const logging = addLogging(isProduction, ingress, isCertManaged, certificates);
+const logging = addLogging(isProduction, ingress, isCertManaged, certificates, secrets);
 const dabaseMonitoring = addDatabaseMonitoring(isProduction, secrets, ingress, isCertManaged, certificates);
 
 if (isProduction) {

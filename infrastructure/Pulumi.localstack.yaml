@@ -29,4 +29,8 @@ config:
     secure: AAABADPorTd85079YJ2pTNwF4ScWxDy+zgQBRiJaTDg3ewC7RSA=
   kurabu:grafanaPassword:
     secure: AAABAMzNOuhoqYfmYardwDLHcPPDCrT2oMsAaeM+ViU2pOImZndYGMcbCijMgl3PCoYaNg==
+  kurabu:kibanaMonitorPassword:
+    secure: AAABABwuSzMC3x/Q07KczCjyPuSnE/bbdCydIiojSqkI3vzN+R33nAWLCsIBl0C/M9mtOQ==
+  kurabu:kibanaMonitorUser:
+    secure: AAABAJJIu6ixcJbkKpiA5WVcdBNjf5BFf6szVVSrvkO30thjm1PveKT8NpPNDXJ0OO37RQ==
   kurabu:production: "true"
