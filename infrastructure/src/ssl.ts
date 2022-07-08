@@ -38,9 +38,9 @@ export function addSSL(ingress: k8s.helm.v3.Release, certificates: Certificates)
         spec: {
             acme: {
 
-                // server: "https://acme-v02.api.letsencrypt.org/directory",
-                skipTLSVerify: true,
-                server: "https://pebble:14000/dir",
+                server: "https://acme-v02.api.letsencrypt.org/directory",
+                // skipTLSVerify: true,
+                // server: "https://pebble:14000/dir",
                 email: "rafael@rafaeltab.com",
                 privateKeySecretRef: {
                     name: "issuer-account-key",
