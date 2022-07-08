@@ -22,16 +22,20 @@ export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Res
                     }
                 }
             },
-            volumeSettings: {
-                storageClassName: "standard",
-                volumeMode: "Filesystem",
-                accessModes: [
-                    "ReadWriteOnce"
-                ],
-                hostPath: {
-                    path: "/data/stage"
-                },
-                persistentVolumeReclaimPolicy: "Retain"
+            storage: {
+                db: {
+                    volumeSettings: {
+                        storageClassName: "standard",
+                        volumeMode: "Filesystem",
+                        accessModes: [
+                            "ReadWriteOnce"
+                        ],
+                        hostPath: {
+                            path: "/data/stage"
+                        },
+                        persistentVolumeReclaimPolicy: "Retain"
+                    }
+                }
             },
             secrets: {
                 api: {
@@ -88,16 +92,20 @@ export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Res
                     }
                 }
             },
-            volumeSettings: {
-                storageClassName: "standard",
-                volumeMode: "Filesystem",
-                accessModes: [
-                    "ReadWriteOnce"
-                ],
-                hostPath: {
-                    path: "/data/prod"
-                },
-                persistentVolumeReclaimPolicy: "Retain"
+            storage: {
+                db: {
+                    volumeSettings: {
+                        storageClassName: "standard",
+                        volumeMode: "Filesystem",
+                        accessModes: [
+                            "ReadWriteOnce"
+                        ],
+                        hostPath: {
+                            path: "/data/prod"
+                        },
+                        persistentVolumeReclaimPolicy: "Retain"
+                    }
+                }
             },
             secrets: {
                 api: {
