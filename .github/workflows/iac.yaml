@@ -55,4 +55,4 @@ jobs:
           work-dir: infrastructure
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          KUBECONFIG: ./.kube/config
+          KUBECONFIG: ../.kube/config
