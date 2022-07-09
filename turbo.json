@@ -9,15 +9,9 @@
                 "build/**"
             ]
         },
-        "build:docker": {
-
-        },
-        "build:docker-dev": {
-
-        },
-        "build:docker-prod": {
-
-        },
+        "build:docker": {},
+        "build:docker-dev": {},
+        "build:docker-prod": {},
         "start": {
             "dependsOn": [
                 "build"
@@ -40,7 +34,11 @@
         },
         "test": {},
         "test:unit": {},
-        "test:coverage": {},
+        "test:coverage": {
+            "outputs": [
+                "coverage/**"
+            ]
+        },
         "test:coverage-text": {}
     }
 }

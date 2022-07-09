@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "outDir": "build",
+        "removeComments": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "importHelpers": true,
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "baseUrl": "./",
+    },
+    "include": [
+        "./src/**/*.ts",
+        "./migrations/**/*.ts"
+    ],
+    "exclude": [
+        "./src/public/"
+    ],
+    "extends": "@kurabu/tsconfig/base.json"
+}
