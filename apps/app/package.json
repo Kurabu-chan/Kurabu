@@ -1,9 +1,9 @@
 {
     "name": "@kurabu/app",
     "main": "index.js",
-    "version": "1.0.32",
+    "version": "1.0.33",
     "scripts": {
-        "eas-build-post-install": "cd ../.. && yarn run build --scope=@kurabu/app --include-dependencies",
+        "eas-build-post-install": "cd ../.. && yarn run build --filter=@kurabu/app^... --filter=!@kurabu/api-sdk",
         "dev": "expo start --android",
         "start:dev": "expo start",
         "android": "expo start --android",

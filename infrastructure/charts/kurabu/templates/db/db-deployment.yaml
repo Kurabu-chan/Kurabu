@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Values.names.db.pod }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- toYaml .Values.labels.db.pod | nindent 4}}
+spec:
+spec:
+  containers:
+  - name: {{ .Values.names.db.container }}
+    image: {{ .Values.images.db.imageName }}
+    imagePullPolicy: {{ .Values.images.db.imagePullPolicy }}
+    env:
+      - name: POSTGRES_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: {{ .Values.secrets.secretName }}
+            key: {{ .Values.secrets.db.keys.password }}
+      - name: POSTGRES_USER
+        valueFrom:
+          secretKeyRef:
+            name: {{ .Values.secrets.secretName }}
+            key: {{ .Values.secrets.db.keys.user }}
+      - name: POSTGRES_DB
+        valueFrom:
+          secretKeyRef:
+            name: {{ .Values.secrets.secretName }}
+            key: {{ .Values.secrets.db.keys.database }}
+    resources:
+      {{- toYaml .Values.resources.db | nindent 6}}
+    ports:
+    - containerPort: {{ .Values.ports.db }}
+    volumeMounts:
+    - name: {{ .Values.names.db.volume }}
+      mountPath: /var/lib/postgresql/data
+  volumes:
+    - name: {{ .Values.names.db.volume }}
+      persistentVolumeClaim:
+        claimName: {{ .Values.names.db.persistentVolumeClaim }}
+      
+
+      
+         

@@ -1,0 +1,170 @@
+namespace: "dev"
+
+ports:
+  api: 15000
+  db: 5432
+
+resources:
+  api: {
+    requests: {
+      memory: "250Mi",
+      cpu: "100m"
+    },
+    limits: {
+      memory: "1000Mi",
+      cpu: "250m"
+    }
+  }
+  db: {
+    requests: {
+      memory: "64Mi",
+      cpu: "100m"
+    },
+    limits: {
+      memory: "300Mi",
+      cpu: "100m"
+    }
+  }
+
+replicaCounts:
+  api: 1
+  
+storage:
+  db:
+    size: "1Gi"
+    volumeClaimSettings: {
+        storageClassName: standard,
+        accessModes: [
+          "ReadWriteOnce"
+        ]
+    }
+    volumeSettings: {
+      storageClassName: standard,
+      volumeMode: Filesystem,
+      accessModes: [
+        "ReadWriteOnce"
+      ],
+      hostPath: {
+        path: "/data/dev" 
+      },
+      persistentVolumeReclaimPolicy: Retain
+    }
+
+serviceTypes:
+  api: NodePort
+  db: NodePort
+
+ingress:
+  tls: false
+  tlsSecret: "kurabu-dev-tls"
+  name: "nginx"
+  path: /dev(/|$)(.*)
+  domain: dev.kurabu.moe
+
+names:
+  api: 
+    service: "api-service"
+    deployment: "api-deployment"
+    container: "api-deployment-container"
+    host_ingress: "api-host-ingress"
+    path_ingress: "api-path-ingress"
+  db:
+    service: "db-service"
+    pod: "db-pod"
+    container: "db-pod-container"
+    volume: "db-volume"
+    persistentVolumeClaim: "db-persistent-volume-claim"
+    persistentVolume: "db-persistent-volume"
+
+labels:
+  namespace: {
+    app: "namespace",
+    kind: "namespace"
+  }
+  secret: {
+    app: "secret-config",
+    kind: "secret"
+  }
+  api:
+    deployment: {
+      app: "api-deployment",
+      kind: "deployment"
+    }
+    deployment_pod: {
+      app: "api-deployment-pod",
+      kind: "pod"
+    }
+    service: {
+      app: "api-service",
+      kind: "service"
+    }
+    host_ingress: {
+      app: "api-host-ingress",
+      kind: "ingress"
+    }
+    path_ingress: {
+      app: "api-path-ingress",
+      kind: "ingress"
+    }
+  db:
+    service: {
+      app: "db-service",
+      kind: "service"
+    }
+    pod: {
+      app: "db-pod",
+      kind: "pod"
+    }
+    container: {
+      app: "db-pod-container",
+      kind: "container"
+    }
+    persistentVolumeClaim: {
+      app: "db-persistent-volume-claim",
+      kind: "persistentVolumeClaim"
+    }
+    persistentVolume: {
+      app: "db-persistent-volume",
+      kind: "persistentVolume"
+    }
+
+images:
+  api:
+    imageName: rafaeltab/kurabu.api:latest
+    imagePullPolicy: Always
+  db: 
+    imageName: postgres:14.2-alpine
+    imagePullPolicy: IfNotPresent
+
+secrets:
+  secretName: "secret-config"
+  api:
+    keys:      
+      clientId: "api.CLIENT_ID"
+      clientSecret: "api.CLIENT_SECRET"
+      passwordEncryptionKey: "api.PASSWORD_ENCR"
+      jwtEncryptionCertificate: "api.JWT_ENCRYPTION"
+      databaseUrl: "api.DATABASE_URL"
+      sendgridApiKey: "api.SENDGRID_API_KEY"
+      migrationPath: "api.MIGRATION_LOCATION"
+      emailDomain: "api.EMAIL_DOMAIN"
+      databaseSSL: "api.SQL_SSL"
+    values:    
+      clientId: null
+      clientSecret: null
+      passwordEncryptionKey: null
+      jwtEncryptionCertificate: null
+      databaseUrl: null
+      sendgridApiKey: null
+      migrationPath: null
+      emailDomain: null
+      databaseSSL: null
+  db:
+    keys:
+      password: "db.POSTGRES_PASSWORD"
+      user: "db.POSTGRES_USER"
+      database: "db.POSTGRES_DB"
+    values:
+      password: null
+      user: null
+      database: null

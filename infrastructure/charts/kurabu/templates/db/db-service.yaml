@@ -1,0 +1,16 @@
+# Use type node port sicne there will only ever be one instance
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.names.db.service }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- toYaml .Values.labels.db.service | nindent 4 }}
+spec:
+  type: {{ .Values.serviceTypes.db }}
+  selector:
+    {{- toYaml .Values.labels.db.pod | nindent 4 }}
+  ports:
+    - port: {{ .Values.ports.db }}
+      targetPort: {{ .Values.ports.db }}
+      

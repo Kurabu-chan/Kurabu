@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.names.api.deployment }}
+  labels: 
+    {{- toYaml .Values.labels.api.deployment | nindent 4}}
+spec:
+  replicas: {{ .Values.replicaCounts.api }}
+  selector:
+    matchLabels: 
+      {{- toYaml .Values.labels.api.deployment_pod | nindent 6 }}
+  template:
+    metadata:
+      labels: 
+        {{- toYaml .Values.labels.api.deployment_pod | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Values.names.api.container }}
+        imagePullPolicy: {{ .Values.images.api.imagePullPolicy }}
+        image: {{ .Values.images.api.imageName }}
+        env:
+          - name: CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.secretName }}
+                key: {{ .Values.secrets.api.keys.clientId }}
+          - name: CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.secretName }}
+                key: {{ .Values.secrets.api.keys.clientSecret }}
+          - name: PASSWORD_ENCR
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.secretName }}
+                key: {{ .Values.secrets.api.keys.passwordEncryptionKey }}
+          - name: JWT_ENCRYPTION
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.secretName }}
+                key: {{ .Values.secrets.api.keys.jwtEncryptionCertificate }}
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.secretName }}
+                key: {{ .Values.secrets.api.keys.databaseUrl }}
+          - name: SENDGRID_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.secretName }}
+                key: {{ .Values.secrets.api.keys.sendgridApiKey }}
+          - name: MIGRATION_LOCATION
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.secretName }}
+                key: {{ .Values.secrets.api.keys.migrationPath }}
+          - name: EMAIL_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.secretName }}
+                key: {{ .Values.secrets.api.keys.emailDomain }}
+          - name: SQL_SSL
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secrets.secretName }}
+                key: {{ .Values.secrets.api.keys.databaseSSL }}
+
+        resources:
+          {{- toYaml .Values.resources.api | nindent 10}}
+        ports:
+        - containerPort: {{ .Values.ports.api }}
+        
+
+      
+         
