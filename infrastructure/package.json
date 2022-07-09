@@ -1,5 +1,6 @@
 {
     "name": "kurabu",
+    "version": "0.0.1",
     "devDependencies": {
         "@types/node": "^14"
     },

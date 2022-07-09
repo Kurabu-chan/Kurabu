@@ -1,0 +1,11 @@
+name: "Setup kubectl"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup kubectl
+      run: |
+        echo $KUBE_CONFIG | base64 --docode > ~/.kube/config
+        stat --printf="%s" ~/.kube/config
+
+     

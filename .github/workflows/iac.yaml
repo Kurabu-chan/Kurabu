@@ -17,10 +17,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-      - name: Setup kubectl
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
       - name: "Install dependencies"
         working-directory: ./infrastructure
         run: npm install
@@ -44,7 +40,7 @@ jobs:
         with:
           node-version: 16
       - name: Setup kubectl
-        uses: actions-hub/kubectl@master
+        uses: ./.github/actions/setup-kubectl
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
       - name: "Install dependencies"
