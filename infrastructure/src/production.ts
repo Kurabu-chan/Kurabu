@@ -77,7 +77,7 @@ export function deploy(outputs: string[], secrets: Secrets, dependsOn: Input<Res
         values: {
             namespace: "production",
             replicaCounts: {
-                api: 3
+                api: 5
             },
             names: {
                 db: {
