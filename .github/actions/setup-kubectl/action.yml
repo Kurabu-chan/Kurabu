@@ -11,5 +11,5 @@ runs:
       shell: bash
       run: |
         mkdir $(dirname ${{ inputs.config_path }})
-        echo $KUBE_CONFIG | base64 --docode > ${{ inputs.config_path }}
+        echo $KUBE_CONFIG | base64 --decode > ${{ inputs.config_path }}
         stat --printf="%s" ${{ inputs.config_path }}
