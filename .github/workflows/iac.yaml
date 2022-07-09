@@ -39,10 +39,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-      - name: Setup kubectl
-        uses: ./.github/actions/setup-kubectl
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      # - name: Setup kubectl
+      #   uses: ./.github/actions/setup-kubectl
+      #   env:
+      #     KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
       - name: "Install dependencies"
         working-directory: ./infrastructure
         run: npm install
@@ -53,3 +53,4 @@ jobs:
           work-dir: infrastructure
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
