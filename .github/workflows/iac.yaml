@@ -1,0 +1,65 @@
+name: "Update infrastructure"
+
+on:
+  push:
+    branches: [main]
+    paths: 
+      - "infrastructure/*"
+
+jobs:
+  preview-changes:
+    name: "Preview changes"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.after }}
+          fetch-depth: 0
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Setup kubectl
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      - name: "Install dependencies"
+        working-directory: ./infrastructure
+        run: npm install
+      - uses: pulumi/actions@v3
+        with:
+          command: preview
+          stack-name: oraclestack
+          work-dir: infrastructure
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+  deploy-changes:
+    name: "Deploy changes"
+    runs-on: ubuntu-latest
+    environment:
+      name: Oracle
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.after }}
+          fetch-depth: 0
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Setup kubectl
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      - name: "Install dependencies"
+        working-directory: ./infrastructure
+        run: npm install
+      - uses: pulumi/actions@v3
+        with:
+          command: up
+          stack-name: oraclestack
+          work-dir: infrastructure
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}

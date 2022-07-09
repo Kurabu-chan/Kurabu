@@ -94,14 +94,12 @@ jobs:
       name: Staging
       url: 'https://stage.kurabu.moe'
     steps:
-      - name: Start rollout
-        uses: appleboy/ssh-action@master
+      - name: "Start rollout"
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
-          host: ${{ secrets.K8S_HOST }}
-          username: ${{ secrets.K8S_USER }}
-          key: ${{ secrets.K8S_SSH }}
-          script: kubectl rollout restart deployments api-deployment -n=${{ secrets.NAMESPACE }}
-
+          args: rollout restart deployments api-deployment -n=${{ secrets.NAMESPACE }}
   publish-prod:
     name: Publish to production
     runs-on: ubuntu-latest
@@ -118,10 +116,9 @@ jobs:
         run: |
           crane auth login -u $username -p $password docker.io
           crane tag docker.io/rafaeltab/kurabu.api:latest production
-      - name: Start rollout
-        uses: appleboy/ssh-action@master
+      - name: "Start rollout"
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
-          host: ${{ secrets.K8S_HOST }}
-          username: ${{ secrets.K8S_USER }}
-          key: ${{ secrets.K8S_SSH }}
-          script: kubectl rollout restart deployments api-deployment -n=${{ secrets.NAMESPACE }}
+          args: rollout restart deployments api-deployment -n=${{ secrets.NAMESPACE }}
