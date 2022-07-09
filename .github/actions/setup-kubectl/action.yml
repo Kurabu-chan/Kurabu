@@ -10,5 +10,6 @@ runs:
     - name: Setup kubectl
       shell: bash
       run: |
+        mkdir $(${{ inputs.config_path }})
         echo $KUBE_CONFIG | base64 --docode > ${{ inputs.config_path }}
         stat --printf="%s" ${{ inputs.config_path }}
