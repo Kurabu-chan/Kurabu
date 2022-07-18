@@ -1,21 +1,27 @@
 // import {  } from "./Tokens";
-import { ProvidedTheme, Theme, useTheme } from "./Theme";
+import { ProvidedTheme, Theme, useTheme, ThemeProvider, ThemeApplier, AppliedStyles } from "./Theme";
+import { ThemedComponent } from "./ThemedComponent";
 import { sizing } from "./sizing";
-import { defaultPalette, defaultTheme } from "./defaultTheme";
+import { defaultPalette, defaultTheme, defaultThemeSet } from "./defaultTheme";
 import { ReactDomUIScaling, ReactNativeUIScaling } from "./scaling";
 import { Typography, typography } from "./typography";
 import { Colors, darken, fromPrimer, lighten, colors } from "./colors";
+import { ThemeSet, addTheme } from "./ThemeSet";
+import { resolve } from "./Tokens";
 export type {
     ProvidedTheme,
     Theme,
     Typography,
-    Colors
+    Colors,
+    AppliedStyles,
+    ThemeSet,
 };
 
 export {
     useTheme,
     sizing,
     defaultTheme,
+    defaultThemeSet,
     defaultPalette,
     ReactDomUIScaling,
     ReactNativeUIScaling,
@@ -23,5 +29,10 @@ export {
     lighten,
     fromPrimer,
     typography,
-    colors
+    colors,
+    ThemeProvider,
+    ThemeApplier,
+    ThemedComponent,
+    addTheme,
+    resolve
 };

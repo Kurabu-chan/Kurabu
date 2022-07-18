@@ -1,4 +1,3 @@
-import { randomInt } from "crypto";
 import { ProvidedTheme } from "../Theme";
 import { ColorToken, isToken, PaletteToken, SpecificTokenSetting, SpecificTokenTypeSet, TokenReference } from "../Tokens";
 import { indexWalk } from "../util";
@@ -17,8 +16,8 @@ export function resolveColor(
 
     if (typeSet === "labels") {
         const labels = theme.theme.colors.colors.labels;
-        const r = randomInt(labels.length);
 
+        const r = Math.round((Math.random() * labels.length - 0.5));
 
         return new TokenReference(labels[r]).resolve(theme);
     }

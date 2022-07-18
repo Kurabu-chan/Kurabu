@@ -8,8 +8,9 @@
 		"importHelpers": true,
 		"typeRoots": ["node_modules/@types"],
 		"baseUrl": "./",
-		"types": ["node"]
+		"types": ["node"],
+    "strict": true
 	},
-	"include": ["./src/**/*.ts", "./test/**/*.ts"],
+	"include": ["./src/**/*.ts", "./test/**/*.ts", "src/ThemedComponent.tsx"],
 	"extends": "@kurabu/tsconfig/base.json"
 }

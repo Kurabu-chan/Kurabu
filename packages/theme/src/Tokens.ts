@@ -120,7 +120,8 @@ export class TokenReference<TToken extends Token = AnyToken> {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unused-vars
                 return resolveColor(
                     typeSet as SpecificTokenTypeSet<ColorToken>,
-                    setting ,
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                    setting as any,
                     theme);
             case "siz":
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unused-vars
@@ -149,4 +150,14 @@ export function isToken(obj: any): obj is Token {
         return obj.startsWith("themed.ref.");
     }
     return false;
+}
+
+export function resolve(obj: any, theme: ProvidedTheme): any {
+    if (typeof obj === "object") {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        if(obj[tokenSymbol] !== undefined) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            return (obj as TokenReference<AnyToken>).resolve(theme);
+        }
+    }
 }

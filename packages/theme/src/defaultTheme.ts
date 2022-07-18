@@ -96,9 +96,9 @@ export const defaultPalette = fromPrimer({
         "#f37dfe",
         "#e253db",
         "#b138ad",
-        "#782584",
-        "#521c69",
-        "#3e1350",
+        "#842a90",
+        "#661c7a",
+        "#410e55",
         "#26012b"
     ],
     "coral": [
@@ -176,8 +176,8 @@ export const defaultTheme: Theme = {
             },
 
 
-            secondary: "themed.ref.pal.pink.800",
-            secondaryBorder: "themed.ref.pal.gray.800",
+            secondary: "themed.ref.pal.pink.700",
+            secondaryBorder: "themed.ref.pal.gray.700",
             secondaryContainer: "themed.ref.pal.gray.900",
             secondaryContainerBorder: "themed.ref.pal.gray.900",
             onSecondary: {
@@ -414,6 +414,10 @@ export const defaultTheme: Theme = {
     }
 };
 
+export const defaultThemeSet = {
+    default: defaultTheme
+};
+
 export const defaultProvidedTheme: ProvidedTheme = {
     scaling: new ReactDomUIScaling(),
     setTheme: () => { return; },
@@ -424,5 +428,6 @@ export const defaultProvidedTheme: ProvidedTheme = {
         densityIndependentWidth: 1920,
         pixelHeight: 1080,
         pixelWidth: 1920,
-    }
+    },
+    themeSet: defaultThemeSet,
 };
