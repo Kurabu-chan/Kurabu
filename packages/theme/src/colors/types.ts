@@ -20,7 +20,8 @@ type SubSets<Name extends string> = Record<`${Name}`, PaletteToken>
     & Record<`on${Capitalize<Name>}`, TypographicColorSet>
     & Record<`${Name}Container`, PaletteToken>
     & Record<`${Name}ContainerBorder`, PaletteToken>
-    & Record<`on${Capitalize<Name>}Container`, TypographicColorSet>;
+    & Record<`on${Capitalize<Name>}Container`, TypographicColorSet>
+    & Record<`${Name}Gradient`, Gradient>;
 
 export type ColorSet = {
     color: PaletteToken,
@@ -34,4 +35,9 @@ export type TypographicColorSet = {
     link: PaletteToken,
     linkActive: PaletteToken,
     subText: PaletteToken,
+}
+
+export type Gradient = {
+    start: PaletteToken,
+    second: PaletteToken,
 }

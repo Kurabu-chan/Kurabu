@@ -25,7 +25,7 @@ export type ColorToken =
     | SpecificToken<"col", "labels", undefined>;
 type ColorTokenColorSet = "color" | "border" | `text.${"header" | "paragraph" | "link" | "linkHover" | "subText"}`;
 
-type ColorSet<Name extends string> = `${Name}` | `${Name}Border` | `${Name}Container` | `${Name}ContainerBorder`;
+type ColorSet<Name extends string> = `${Name}` | `${Name}Border` | `${Name}Container` | `${Name}ContainerBorder` | `${Name}Gradient.start` | `${Name}Gradient.second`;
 type TypographicColorSet<Name extends string> = `on${Capitalize<Name>}` | `on${Capitalize<Name>}Container`;
 export type TypographicColorSetSetting = "header" |"paragraph" |"link" |"linkActive" |"subText"
 

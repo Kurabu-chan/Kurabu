@@ -9,12 +9,19 @@ export const colors = {
     colorContainer(variant: MainColorSets): string {
         return new TokenReference(`themed.ref.col.${variant}Container`) as unknown as string;
     },
+    gradientSecond(variant: MainColorSets): string {
+        return new TokenReference(`themed.ref.col.${variant}Gradient.second`) as unknown as string;
+    },
+    gradientStart(variant: MainColorSets): string {
+        return new TokenReference(`themed.ref.col.${variant}Gradient.start`) as unknown as string;
+    },
     onColor(variant: MainColorSets, textKind: TypographicColorSetSetting): string {
         return new TokenReference(`themed.ref.col.on${firstUpper(variant)}.${textKind}`) as unknown as string;
     },
     onColorContainer(variant: MainColorSets, textKind: TypographicColorSetSetting): string {
         return new TokenReference(`themed.ref.col.on${firstUpper(variant)}Container.${textKind}`) as unknown as string;
     },
+
 
     // eslint-disable-next-line sort-keys
     labels() {

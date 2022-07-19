@@ -122,6 +122,10 @@ export const defaultTheme: Theme = {
             backgroundBorder: "themed.ref.pal.gray.900",
             backgroundContainer: "themed.ref.pal.gray.800",
             backgroundContainerBorder: "themed.ref.pal.gray.800",
+            backgroundGradient: {
+                second: "themed.ref.pal.gray.900",
+                start: "themed.ref.pal.gray.800"
+            },
             onBackground: {
                 header: "themed.ref.pal.gray.50",
                 link: "themed.ref.pal.gray.100",
@@ -141,6 +145,10 @@ export const defaultTheme: Theme = {
             surfaceBorder: "themed.ref.pal.gray.700",
             surfaceContainer: "themed.ref.pal.gray.600",
             surfaceContainerBorder: "themed.ref.pal.gray.500",
+            surfaceGradient: {
+                second: "themed.ref.pal.gray.800",
+                start: "themed.ref.pal.gray.700"
+            },
             onSurface: {
                 header: "themed.ref.pal.gray.50",
                 link: "themed.ref.pal.gray.50",
@@ -160,6 +168,10 @@ export const defaultTheme: Theme = {
             primaryBorder: "themed.ref.pal.pink.500",
             primaryContainer: "themed.ref.pal.pink.700",
             primaryContainerBorder: "themed.ref.pal.pink.700",
+            primaryGradient: {
+                second: "themed.ref.pal.pink.500",
+                start: "themed.ref.pal.pink.600"
+            },
             onPrimary: {
                 header: "themed.ref.pal.gray.50",
                 link: "themed.ref.pal.gray.50",
@@ -180,6 +192,10 @@ export const defaultTheme: Theme = {
             secondaryBorder: "themed.ref.pal.gray.700",
             secondaryContainer: "themed.ref.pal.gray.900",
             secondaryContainerBorder: "themed.ref.pal.gray.900",
+            secondaryGradient: {
+                second: "themed.ref.pal.pink.700",
+                start: "themed.ref.pal.pink.800"
+            },
             onSecondary: {
                 header: "themed.ref.pal.gray.50",
                 link: "themed.ref.pal.gray.50",
@@ -196,9 +212,13 @@ export const defaultTheme: Theme = {
             },
 
             tertiary: "themed.ref.pal.gray.900",
-            tertiaryBorder: "themed.ref.pal.gray.800",
+            tertiaryBorder: "themed.ref.pal.gray.900",
             tertiaryContainer: "themed.ref.pal.gray.700",
-            tertiaryContainerBorder: "themed.ref.pal.gray.600",
+            tertiaryContainerBorder: "themed.ref.pal.gray.700",
+            tertiaryGradient: {
+                second: "themed.ref.pal.gray.900",
+                start: "themed.ref.pal.gray.800"
+            },
             onTertiary: {
                 header: "themed.ref.pal.gray.100",
                 link: "themed.ref.pal.gray.100",
