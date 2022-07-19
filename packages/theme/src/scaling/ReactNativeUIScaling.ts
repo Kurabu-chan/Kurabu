@@ -2,6 +2,17 @@ import { Box } from "../util";
 import { ProvidedTheme } from "../Theme";
 import { IUIScaling } from ".";
 
+/**
+ * Class used for deciding the scaling of the UI where react native is used.
+ *
+ * @category General Use
+ * @example
+ * ```ts
+ *  new ReactNativeUIScaling((num: number) => {
+ *      return PixelRatio.roundToNearestPixel(num);
+ *  })
+ * ```
+ */
 export class ReactNativeUIScaling implements IUIScaling {
     constructor(private roundToNearestPixel: (num: number) => number) {
 

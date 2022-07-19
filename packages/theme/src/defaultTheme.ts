@@ -4,6 +4,11 @@ import { fromPrimer } from "./colors";
 import { ReactDomUIScaling } from "./scaling";
 import { Theme, ProvidedTheme } from "./Theme";
 
+/**
+ * A default palette with all colors present, generated using primer
+ *
+ * @category General Use
+ */
 export const defaultPalette = fromPrimer({
     "gray": [
         "#ffffff",
@@ -115,6 +120,11 @@ export const defaultPalette = fromPrimer({
     ]
 });
 
+/**
+ * A default theme with all options set to a reasonable default
+ *
+ * @category General Use
+ */
 export const defaultTheme: Theme = {
     colors: {
         colors: {
@@ -434,10 +444,20 @@ export const defaultTheme: Theme = {
     }
 };
 
+/**
+ * A themeset containing a default theme
+ *
+ * @category General Use
+ */
 export const defaultThemeSet = {
     default: defaultTheme
 };
 
+/**
+ * A default provided theme
+ *
+ * @hidden
+ */
 export const defaultProvidedTheme: ProvidedTheme = {
     scaling: new ReactDomUIScaling(),
     setTheme: () => { return; },

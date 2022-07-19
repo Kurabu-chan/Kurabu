@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/theme",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "main": "./build/index.js",
     "files": [
         "./build/**"
@@ -10,7 +10,7 @@
         "check-build-required": "echo \"@kurabu/theme\"",
         "lint": "eslint \"src/**/*.ts\"",
         "lint:fix": "eslint \"src/**/*.ts\" --fix",
-        "docs": "typedoc --out docs src/index.ts"
+        "docs": "typedoc --categorizeByGroup false --out docs src/index.ts"
     },
     "devDependencies": {
         "@kurabu/config": "*",

@@ -7,12 +7,22 @@ import { IUIScaling, ReactDomUIScaling } from "./scaling";
 import { Sizing } from "./sizing";
 import { getTheme, ThemeSet } from "./ThemeSet";
 
+/**
+ * A theme is a set of colors, typography, scaling, and sizing
+ *
+ * @category General Use
+ */
 export type Theme = {
     typography: Typography;
     colors: Colors;
     sizing: Sizing;
 }
 
+/**
+ * A theme that is provided to the UI
+ *
+ * @category General Use
+ */
 export type ProvidedTheme = {
     theme: Theme;
     themeSet: ThemeSet;
@@ -22,7 +32,12 @@ export type ProvidedTheme = {
     setViewPort: (viewPort: ViewPort) => void;
 }
 
-type ViewPort = {
+/**
+ * A type containing the different settings for a viewport
+ *
+ * @category General Use
+ */
+export type ViewPort = {
     densityIndependentWidth: number;
     densityIndependentHeight: number;
     pixelWidth: number;
@@ -52,27 +67,46 @@ const themeContext = createContext<ProvidedTheme>({
     },
 });
 
+/**
+ * React hook for getting the full theming context
+ *
+ * @category Advanced Use
+ */
 export function useThemeProvider(): ProvidedTheme {
     return useContext(themeContext);
 }
 
-export function useTheme(styles: Record<string, React.CSSProperties>)
-    : Record<string, React.CSSProperties>
-export function useTheme(styles: React.CSSProperties)
-    : React.CSSProperties
-export function useTheme(styles: React.CSSProperties | Record<string, React.CSSProperties>)
-    : React.CSSProperties | Record<string, React.CSSProperties>{
+/**
+ * React hook for applying a theme to a style
+ *
+ * @category General Use
+ */
+export function useTheme(styles: StyleType)
+    : AppliedStyles<StyleType>{
     const context = useContext(themeContext);
-    applyTheme(styles as Record<string | number, Record<string, unknown>>, context);
+    const applied = applyTheme(styles, context);
 
-    return styles;
+    return applied;
 }
 
+/**
+ * Type for a theming applied to styles.
+ * Each key in the object is a style property and the value is an array of two elements, the second the normal styles, the first with the properties that were themed with applied values.
+ *
+ * @category General Use
+ */
 export type AppliedStyles<TStyle> = {
     [P in keyof TStyle]: [Partial<TStyle[P]>, TStyle[P]]
 }
 
-function applyTheme<TStyle extends Record<string | number, Record<string, unknown>>>
+/**
+ * A type representing a style object. It is this obscure since we need to support both ReactDom and ReactNative
+ *
+ * @category General Use
+ */
+export type StyleType = Record<string | number, Record<string, unknown>>
+
+function applyTheme<TStyle extends StyleType>
     (obj: TStyle, theme: ProvidedTheme) {
     const retObj: Partial<AppliedStyles<TStyle>> = {};
 
@@ -122,6 +156,22 @@ function applySubTheme<TSubStyle>(obj: TSubStyle, theme: ProvidedTheme): TSubSty
     return retObj as TSubStyle;
 }
 
+/**
+ * Provides a theme context to the component.
+ *
+ * @category General Use
+ *
+ * @example
+ * ```tsx
+ *  function App(){
+ *      return (
+ *          <ThemeProvider scaling={new ReactDomUIScaling()}>
+ *              <RootNavigator />
+ *          </ThemeProvider>
+ *      );
+ *  }
+ * ```
+ */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function ThemeProvider({ scaling, children, themeSet, customViewport }:
     {
@@ -150,9 +200,20 @@ export function ThemeProvider({ scaling, children, themeSet, customViewport }:
     });
 }
 
+/**
+ * Provides a theme context to the component.
+ *
+ * @category Advanced Use
+ */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const ThemeConsumer = themeContext.Consumer;
 
+/**
+ *
+ * Applies theming to a provided style and calls children with the resulting style.
+ *
+ * @category Advanced Use
+ */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function ThemeApplier<TStyle extends Record<string | number, Record<string, unknown>>>
     (props: { style: TStyle } & React.ConsumerProps<{

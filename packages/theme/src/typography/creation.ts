@@ -1,6 +1,12 @@
 import { TokenReference } from "../Tokens";
 import { FontCasing, FontStyle, FontWeight, TypographyScales } from "./types";
 
+/**
+ * All functions used for creating typography tokens.
+ * These can be used inside your styles
+ *
+ * @category General Use
+ */
 export const typography = {
     case(scale: TypographyScales): FontCasing {
         return new TokenReference(`themed.ref.typ.scales.${scale}.case`) as unknown as FontCasing;

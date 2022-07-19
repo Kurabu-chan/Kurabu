@@ -2,6 +2,9 @@ import { ProvidedTheme } from "../Theme";
 import { SizingToken, SpecificTokenSetting, SpecificTokenTypeSet } from "../Tokens";
 import { Rounding, Spacing } from "./types";
 
+/**
+ * @hidden
+ */
 export function resolveSizing(
     typeSet: SpecificTokenTypeSet<SizingToken>,
     setting: SpecificTokenSetting<SizingToken>,

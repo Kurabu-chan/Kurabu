@@ -3,6 +3,11 @@ import { PaletteKeys, PaletteShade } from "./types";
 import { parsePaletteColor } from "./util";
 import { palettes, paletteShades } from "./";
 
+/**
+ * A function that takes a palette color and lightens it by an amount
+ *
+ * @category Advanced Use
+ */
 export function lighten(paletteRef: TokenReference, amount = 1): PaletteToken {
     const [paletteKey, shade] = parsePaletteColor(paletteRef.parse("pal"));
 
@@ -13,6 +18,11 @@ export function lighten(paletteRef: TokenReference, amount = 1): PaletteToken {
     return `themed.ref.pal.${paletteKey}.${paletteShades[lightenedIndex]}`;
 }
 
+/**
+ * A function that takes a palette color and darkens it by an amount
+ *
+ * @category Advanced Use
+ */
 export function darken(paletteRef: TokenReference, amount = 1): PaletteToken {
     const [paletteKey, shade] = parsePaletteColor(paletteRef.parse("pal"));
 
@@ -22,6 +32,12 @@ export function darken(paletteRef: TokenReference, amount = 1): PaletteToken {
 
     return `themed.ref.pal.${paletteKey}.${paletteShades[darkenedIndex]}`;
 }
+
+/**
+ * Take a primer palette and load it into a theme
+ *
+ * @category General Use
+ */
 export function fromPrimer(primerPalette: Record<string, string | string[]>) {
     const primerPaletteKeys = Object.keys(primerPalette);
     const createdPalette: Partial<Record<PaletteKeys, Partial<Record<PaletteShade, string>>>> = {};

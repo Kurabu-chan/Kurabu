@@ -2,6 +2,11 @@ import { Box } from "../util";
 import { ProvidedTheme } from "../Theme";
 import { IUIScaling } from ".";
 
+/**
+ * Class used for deciding the scaling of the UI where react dom is used.
+ *
+ * @category General Use
+ */
 export class ReactDomUIScaling implements IUIScaling {
     scaleBox(box: Box<number>, theme: ProvidedTheme): Box<string> {
         const ratio = this.getRatio(theme);

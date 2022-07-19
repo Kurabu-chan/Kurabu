@@ -2,6 +2,11 @@ import { indexWalk } from "../util";
 import { ProvidedTheme } from "../Theme";
 import { isToken, SpecificTokenSetting, SpecificTokenTypeSet, TokenReference, TypographyToken } from "../Tokens";
 
+/**
+ * All the different types of typography
+ *
+ * @category Advanced Use
+ */
 export const typographyScales = [
     "headline1",
     "headline2",
@@ -17,6 +22,9 @@ export const typographyScales = [
     "caption",
     "overline"] as const;
 
+/**
+ * @hidden
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function resolveTypography(
     typeSet: SpecificTokenTypeSet<TypographyToken>,

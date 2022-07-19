@@ -1,7 +1,12 @@
 import { TokenReference } from "../Tokens";
 import { Rounding, Spacing } from "./types";
 
-
+/**
+ * All functions used for creating sizing tokens.
+ * These can be used inside your styles
+ *
+ * @category General Use
+ */
 export const sizing = {
     vh<T extends string | number>(_vh: number, plus?: number): T {
         if (plus === undefined || plus === 0) {

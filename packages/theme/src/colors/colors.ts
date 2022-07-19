@@ -2,11 +2,25 @@ import { ProvidedTheme } from "../Theme";
 import { ColorToken, isToken, PaletteToken, SpecificTokenSetting, SpecificTokenTypeSet, TokenReference } from "../Tokens";
 import { indexWalk } from "../util";
 
+/**
+ * All palette keys
+ *
+ * @category Advanced Use
+ */
 export const palettes =
     ["gray", "blue", "green", "yellow", "orange", "red", "purple", "pink", "coral"] as const;
+
+/**
+ * All palette shades
+ *
+ * @category Advanced Use
+ */
 export const paletteShades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 
 
+/**
+ * @hidden
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function resolveColor(
     typeSet: SpecificTokenTypeSet<ColorToken>,
@@ -41,6 +55,9 @@ export function resolveColor(
     return walked;
 }
 
+/**
+ * @hidden
+ */
 export function resolvePalette(
     typeSet: SpecificTokenTypeSet<PaletteToken>,
     setting: SpecificTokenSetting<PaletteToken>,

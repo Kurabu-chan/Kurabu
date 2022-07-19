@@ -2,6 +2,12 @@ import { TokenReference, TypographicColorSetSetting } from "../Tokens";
 import { firstUpper } from "../util";
 import { MainColorSets, Status } from "./types";
 
+/**
+ * All functions used for creating color tokens.
+ * These can be used inside your styles
+ *
+ * @category General Use
+ */
 export const colors = {
     color(variant: MainColorSets): string {
         return new TokenReference(`themed.ref.col.${variant}`) as unknown as string;
