@@ -24,7 +24,8 @@
         "test:coverage-text": "turbo run test:coverage-text",
         "test:unit": "turbo run test:unit",
         "test": "turbo run test",
-        "postinstall": "yarn husky install"
+        "postinstall": "yarn husky install",
+        "docs": "turbo run docs"
     },
     "devDependencies": {
         "@types/mocha": "^9.1.0",
