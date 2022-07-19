@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"outDir": "build",
+		"removeComments": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"importHelpers": true,
+		"typeRoots": ["node_modules/@types"],
+		"baseUrl": "./",
+		"types": ["node"],
+    "strict": true
+	},
+	"include": ["./src/**/*.ts", "./test/**/*.ts", "src/ThemedComponent.tsx"],
+	"extends": "@kurabu/tsconfig/base.json"
+}

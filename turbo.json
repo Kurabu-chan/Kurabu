@@ -41,6 +41,11 @@
         "test": {},
         "test:unit": {},
         "test:coverage": {},
-        "test:coverage-text": {}
+        "test:coverage-text": {},
+        "docs": {
+            "outputs": [
+                "docs"
+            ]
+        }
     }
 }

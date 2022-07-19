@@ -1,7 +1,7 @@
 {
     "name": "@kurabu/app",
     "main": "index.js",
-    "version": "1.0.33",
+    "version": "1.0.34",
     "scripts": {
         "eas-build-post-install": "cd ../.. && yarn run build --filter=@kurabu/app^... --filter=!@kurabu/api-sdk",
         "dev": "expo start --android",
@@ -17,6 +17,7 @@
     "dependencies": {
         "@babel/helper-builder-react-jsx": "^7.12.13",
         "@kurabu/api-sdk": "*",
+        "@kurabu/theme": "*",
         "@openspacelabs/react-native-zoomable-view": "^2.0.0",
         "@react-native-picker/picker": "2.2.1",
         "@react-navigation/bottom-tabs": "^6.0.9",
@@ -63,7 +64,7 @@
         "@types/react-native": "~0.64.12",
         "babel-plugin-module-resolver": "4.1.0",
         "npm-force-resolutions": "0.0.10",
-        "typescript": "~4.5.5"
+        "typescript": "^4.7.4"
     },
     "resolutions": {
         "logkitty": ">=0.7.1",

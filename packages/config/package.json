@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/config",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "main": "index.js",
     "license": "MIT",
     "files": [
@@ -13,6 +13,7 @@
         "eslint-config-next": "^12.0.7",
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-react": "^7.29.4",
-        "eslint-plugin-react-native": "^4.0.0"
+        "eslint-plugin-react-native": "^4.0.0",
+        "@typescript-eslint/eslint-plugin-tslint": "^5.30.6"
     }
 }

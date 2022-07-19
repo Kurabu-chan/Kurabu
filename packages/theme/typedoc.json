@@ -1,0 +1,6 @@
+{
+    "searchCategoryBoosts": {
+        "General Use": 1.5
+    },
+    "categoryOrder": ["General Use", "Advanced Use", "*"]
+}
