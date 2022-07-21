@@ -1,9 +1,9 @@
 import "react-native-gesture-handler";
 import * as Font from "expo-font";
-import React from "react";
+import React, { useEffect } from "react";
 import AppLoading from "expo-app-loading";
 import * as Linking from "expo-linking";
-import { AppState, AppStateStatus, LogBox } from "react-native";
+import { AppState, AppStateStatus, Dimensions, LogBox, PixelRatio, ScaledSize, useWindowDimensions } from "react-native";
 import Authentication from "#api/Authenticate";
 import { NavigationContainer } from "@react-navigation/native";
 import Drawer from "#routes/MainDrawer";
@@ -11,6 +11,8 @@ import Auth from "#routes/AuthStack";
 import { DoSwitch, navigationRef, navigationRefReady } from "#routes/RootNavigator";
 import { registerSwitchListener } from "#routes/RootNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { defaultTheme, defaultThemeSet, ReactNativeUIScaling, ThemeProvider, addTheme, ThemeSet, Theme } from "@kurabu/theme";
+import { addKurabuTheme } from "src/themes/kurabu";
 
 LogBox.ignoreLogs([/Require\scycles/]);
 
@@ -18,6 +20,11 @@ type StateType = {
     fonts: boolean;
     appstate: AppStateStatus;
     RootSwitch: "Auth" | "Drawer";
+    dimensions: {
+        screen: ScaledSize,
+        window: ScaledSize,
+    },
+    themeSet: ThemeSet
 };
 
 export default class Application extends React.Component<never, StateType> {
@@ -25,10 +32,27 @@ export default class Application extends React.Component<never, StateType> {
         super(props);
         registerSwitchListener(this.setRootSwitch.bind(this));
 
+        const _themeSet: ThemeSet = {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            default: {} as unknown as Theme
+        };
+        const def = addKurabuTheme(_themeSet);
+
+        const themeSet = {
+            ..._themeSet,
+            default: def,
+        }
+
         this.state = {
             fonts: false,
             appstate: AppState.currentState,
             RootSwitch: "Auth",
+            dimensions: {
+                window: Dimensions.get("window"),
+                screen: Dimensions.get("screen"),
+            },
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            themeSet: themeSet,
         };
     }
 
@@ -98,12 +122,31 @@ export default class Application extends React.Component<never, StateType> {
                 fonts: yes,
             }));
         };
+
+        Dimensions.addEventListener(
+            "change",
+            ({ window, screen }) => {
+                this.setState(x => ({...x, dimensions: {window, screen}}));
+            }
+        );
+
         if (this.state.fonts == true) {
             return (
                 <SafeAreaProvider>
-                    <NavigationContainer ref={navigationRef} onReady={navigationRefReady}>
-                        {this.state.RootSwitch == "Auth" ? <Auth /> : <Drawer />}
-                    </NavigationContainer>
+                    <ThemeProvider scaling={new ReactNativeUIScaling((num: number) => { 
+                        return PixelRatio.roundToNearestPixel(num);
+                    })} customViewport={{
+                        densityIndependentHeight: this.state.dimensions.window.height,
+                        densityIndependentWidth: this.state.dimensions.window.width,
+                        pixelHeight: this.state.dimensions.screen.height,
+                        pixelWidth: this.state.dimensions.screen.height,
+                        }}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    themeSet={this.state.themeSet}>
+                        <NavigationContainer ref={navigationRef} onReady={navigationRefReady}>
+                            {this.state.RootSwitch == "Auth" ? <Auth /> : <Drawer />}
+                        </NavigationContainer>
+                    </ThemeProvider>
                 </SafeAreaProvider>
             );
         } else {
