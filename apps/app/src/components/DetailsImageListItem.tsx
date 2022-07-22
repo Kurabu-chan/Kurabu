@@ -1,16 +1,22 @@
+import { ThemedStyleSheet } from "#helpers/ThemedStyleSheet";
 import { DetailsStackParamList } from "#routes/MainStacks/DetailsStack";
 import { AnimeDetailsMainPicture } from "@kurabu/api-sdk";
+import { AppliedStyles, sizing, ThemedComponent } from "@kurabu/theme";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { Dimensions, Image, StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 type Props = {
     picture: AnimeDetailsMainPicture;
     navigation: StackNavigationProp<DetailsStackParamList, "DetailsImageListScreen">;
 }
-export class DetailsImageListItem extends React.Component<Props> {
-    render() {
+export class DetailsImageListItem extends ThemedComponent<Styles, Props> {
+    constructor(props: Props) {
+        super(styles, props)
+    }
+
+    renderThemed(styles: AppliedStyles<Styles>) {
         return (
             <TouchableOpacity
                 onPress={() => {
@@ -27,12 +33,12 @@ export class DetailsImageListItem extends React.Component<Props> {
         );
     }
 }
-
-const styles = StyleSheet.create({
+type Styles = typeof styles;
+const styles = ThemedStyleSheet.create({
     image: {
-        width: Dimensions.get("window").width / 2 - 15,
-        height: (Dimensions.get("window").width / 2 - 15) * 1.5,
-        marginLeft: 10,
-        marginTop: 10
+        width: sizing.vw(50, -15),
+        height: sizing.vw(75, -22.5),
+        marginLeft: sizing.spacing("medium"),
+        marginTop: sizing.spacing("medium"),
     }
 });
