@@ -2,7 +2,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { Image, StyleProp, TouchableOpacity, View, ViewStyle } from "react-native";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
-import { Divider } from "./Divider";
+import { Divider } from "./themed/Divider";
 import { MediaFields, AnimeDetails, MangaDetails, AnimeListData, MangaListData } from "@kurabu/api-sdk";
 import { fieldsToString } from "#helpers/fieldsHelper";
 import { niceDateFormat, niceTextFormat } from "#helpers/textFormatting";

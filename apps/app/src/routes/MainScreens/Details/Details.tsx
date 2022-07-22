@@ -19,7 +19,7 @@ import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { AnimeDetailsSource } from "#data/anime/AnimeDetailsSource";
-import { Divider } from "#comps/Divider";
+import { Divider } from "#comps/themed/Divider";
 import { LargeText } from "#comps/LargeText";
 import MediaItem from "#comps/MediaItem";
 import { Colors } from "#config/Colors";
@@ -213,7 +213,7 @@ export default class Details extends React.Component<Props, State> {
                                     <Text style={styles.alternateTitle}>
                                         {this.state.media.alternativeTitles?.ja}
                                     </Text>
-                                    <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                                    <Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
                                     <View style={styles.TopAreaData}>
                                         <View style={styles.TopAreaLabels}>
                                             <Text style={styles.TopAreaLabel}>Score:</Text>
@@ -232,7 +232,7 @@ export default class Details extends React.Component<Props, State> {
                                             </Text>
                                         </View>
                                     </View>
-                                    <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                                    <Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
                                     <View style={styles.TopAreaData}>
                                         <View style={styles.TopAreaLabels}>
                                             <Text style={styles.TopAreaLabel}>Status:</Text>
@@ -258,19 +258,19 @@ export default class Details extends React.Component<Props, State> {
                                 </View>
                             </View>
                             <Text style={styles.head2}>Synopsis</Text>
-                            <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                            <Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
                             <LargeText text={this.state.media.synopsis} />
                             {this.state.media.background != undefined &&
                                 this.state.media.background != "" ? (
                                 <View>
                                     <Text style={styles.head2}>Background</Text>
-                                    <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                                    <Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
                                     <LargeText text={this.state.media.background} />
                                 </View>
                             ) : undefined}
-                            <Divider color={Colors.DIVIDER} widthPercentage={0} />
+                            <Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
                             <Text style={styles.head2}>Your list status</Text>
-                            <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                            <Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
                             <ListStatus
                                 parentRefresh={() => {
                                     void this.refresh();
@@ -281,9 +281,9 @@ export default class Details extends React.Component<Props, State> {
                                 route={this.props.route}
                                 mediaType={this.state.mediaType}
                             />
-                            <Divider color={Colors.DIVIDER} widthPercentage={0} />
+                            <Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
                             <Text style={styles.head2}>Recommendations</Text>
-                            <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                            <Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
                             <FlatList
                                 horizontal={true}
                                 data={this.state.media.recommendations?.map((x) => ({
@@ -302,7 +302,7 @@ export default class Details extends React.Component<Props, State> {
                                 )}
                                 keyExtractor={(_, index) => index.toString()}
                             />
-                            <Divider color={Colors.DIVIDER} widthPercentage={0} />
+                            <Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
                             <View
                                 style={styles.extraRoom}
                             />

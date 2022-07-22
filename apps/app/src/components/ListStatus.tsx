@@ -2,7 +2,7 @@ import { Colors } from "#config/Colors";
 import { niceTextFormat } from "#helpers/textFormatting";
 import React from "react";
 import { TouchableOpacity, View, Text, Dimensions, StyleSheet } from "react-native";
-import { Divider } from "#comps/Divider";
+import { Divider } from "#comps/themed/Divider";
 import TimeAgo from "react-native-timeago";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
@@ -123,7 +123,7 @@ export class ListStatus extends React.PureComponent<Props, State> {
                             </Text>
                         </View>
                     </View>
-                    <Divider color={Colors.DIVIDER} widthPercentage={0} />
+                    <Divider margin={false} variant="secondary" isOnContainer={false} widthPercentage={0} />
                     {this.showListStatusButton()}
                 </View>
             );
@@ -134,7 +134,7 @@ export class ListStatus extends React.PureComponent<Props, State> {
                 {this.state.isAnime
                     ? this.renderAnime(this.props.props as AnimeDetailsMyListStatus)
                     : this.renderManga(this.props.props as MangaDetailsMyListStatus)}
-                <Divider color={Colors.DIVIDER} widthPercentage={0} />
+                <Divider margin={false} variant="secondary" isOnContainer={false} widthPercentage={0} />
                 {this.showListStatusButton()}
             </View>
         );
