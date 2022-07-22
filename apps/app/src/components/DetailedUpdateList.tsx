@@ -1,15 +1,13 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
-import { Colors } from "#config/Colors";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import DetailedUpdateItem from "./DetailedUpdateItem";
 import { MediaListSource } from "#data/MediaListSource";
 import { AnimeListData, MangaListData } from "@kurabu/api-sdk";
 import { ParamListBase } from "@react-navigation/native";
-import { AppliedStyles, colors, sizing, ThemedComponent } from "@kurabu/theme";
+import { AppliedStyles, colors, sizing, ThemedComponent, resolve, ProvidedTheme } from "@kurabu/theme";
 import { Typography } from "./themed/Typography";
 import { ThemedStyleSheet } from "#helpers/ThemedStyleSheet";
-import { resolve } from "path";
 
 const BatchSize = 20;
 
@@ -116,7 +114,7 @@ class DetailedUpdateList extends ThemedComponent<Styles, DetailedUpdateListProps
         
     }
 
-    renderThemed(styles: AppliedStyles<Styles>) {
+    renderThemed(styles: AppliedStyles<Styles>, theme: ProvidedTheme) {
         if (this.state.data.length > 0) {
             return (
                 <View style={styles.mediaContainer}>
@@ -142,7 +140,8 @@ class DetailedUpdateList extends ThemedComponent<Styles, DetailedUpdateListProps
             );
         } else {
             return (
-                <ActivityIndicator style={styles.loading} size="large" color={resolve(colors.color("primary"))} />
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                <ActivityIndicator style={styles.loading} size="large" color={resolve(colors.color("primary"), theme)} />
             );
         }
     }
