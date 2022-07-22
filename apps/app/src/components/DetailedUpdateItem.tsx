@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
 import { Colors } from "#config/Colors";
 import { Divider } from "./Divider";
@@ -9,6 +9,9 @@ import { fieldsToString } from "#helpers/fieldsHelper";
 import { niceDateFormat, niceTextFormat } from "#helpers/textFormatting";
 import { Progress } from "./MediaListStatusProgressBar";
 import { ParamListBase } from "@react-navigation/native";
+import { AppliedStyles, colors, sizing, ThemedComponent, typography, mergeStyles } from "@kurabu/theme";
+import { ThemedStyleSheet } from "#helpers/ThemedStyleSheet";
+import { Typography } from "./themed/Typography";
 
 type DetailedUpdateItemProps = {
     item: AnimeListData | MangaListData;
@@ -16,10 +19,6 @@ type DetailedUpdateItemProps = {
     showListStatus?: boolean;
 };
 
-type DetailedUpdateItemState = {
-    item: AnimeListData | MangaListData;
-    navigator: StackNavigationProp<ParamListBase, string>;
-};
 // Add manga fields
 export const DetailedUpdateItemFields: MediaFields[] = [
     MediaFields.Id,
@@ -42,12 +41,12 @@ const mangaListStatus = "my_list_status{status, score, num_volumes_read, num_cha
 export const AnimeExpandedDetailedUpdateItemFields = `${fieldsToString(DetailedUpdateItemFields)}, ${animeListStatus}`;
 export const MangaExpandedDetailedUpdateItemFields = `${fieldsToString(DetailedUpdateItemFields)}, ${mangaListStatus}`;
 
-export class DetailedUpdateItem extends React.PureComponent<
-    DetailedUpdateItemProps,
-    DetailedUpdateItemState
+export class DetailedUpdateItem extends ThemedComponent<
+    Styles,
+    DetailedUpdateItemProps
 > {
     constructor(props: DetailedUpdateItemProps) {
-        super(props);
+        super(style, props);
         let item = props.item;
         if (item == undefined) {
             item = {
@@ -69,9 +68,9 @@ export class DetailedUpdateItem extends React.PureComponent<
     }
 
     public openDetails() {
-        this.state.navigator.push("DetailsScreen", {
-            id: this.state.item.node.id,
-            mediaType: this.state.item.node.mediaType,
+        this.props.navigator.push("DetailsScreen", {
+            id: this.props.item.node.id,
+            mediaType: this.props.item.node.mediaType,
         });
     }
 
@@ -82,107 +81,139 @@ export class DetailedUpdateItem extends React.PureComponent<
     }
 
     getMangaNode(): MangaDetails | undefined {
-        if ("numEpisodes" in this.state.item.node) {
+        if ("numEpisodes" in this.props.item.node) {
             return undefined;
         }
 
-        return this.state.item.node as MangaDetails;
+        return this.props.item.node as MangaDetails;
     }
 
     getAnimeNode(): AnimeDetails | undefined {
-        if ("numChapters" in this.state.item.node) {
+        if ("numChapters" in this.props.item.node) {
             return undefined;
         }
 
-        return this.state.item.node as AnimeDetails;
+        return this.props.item.node as AnimeDetails;
     }
 
-    createListStatus() {
+    createListStatus(styles: AppliedStyles<Styles>) {
         if (this.props.showListStatus !== true) return;
 
         const animeNode = this.getAnimeNode();
         const mangaNode = this.getMangaNode();
 
         if (animeNode?.myListStatus !== undefined) {
-            return this.createAnimeListStatus(animeNode);
+            return this.createAnimeListStatus(animeNode, styles);
         }
         if (mangaNode?.myListStatus !== undefined) {
-            return this.createMangaListStatus(mangaNode);
+            return this.createMangaListStatus(mangaNode, styles);
         }
         return undefined;
     }
 
-    createMangaListStatus(node: MangaDetails) {
+    createMangaListStatus(node: MangaDetails, styles: AppliedStyles<Styles>) {
         return (
             <View style={styles.listContainer}>
                 <Divider margin={false} color={Colors.DIVIDER} widthPercentage={100} />
-                <View style={TopArea.Data}>
-                    <View style={TopArea.TopLeftLabels}>
-                        <Text style={TopArea.Label}>List status:</Text>
+                <View style={styles.dataSection}>
+                    <View style={styles.sideBySideLabels}>
+                        <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                            List status:
+                        </Typography>
                     </View>
-                    <View style={TopArea.TopLeftValues}>
-                        <Text style={TopArea.Value}>
+                    <View style={styles.sideBySideValues}>
+                        <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
                             {niceTextFormat(node?.myListStatus?.status)}
-                        </Text>
+                        </Typography>
+
                     </View>
-                    <View style={TopArea.TopLeftLabels}>
-                        <Text style={TopArea.Label}>Last updated:</Text>
+                    <View style={styles.sideBySideLabels}>
+                        <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                            Last updated:
+                        </Typography>
                     </View>
-                    <View style={TopArea.TopLeftValues}>
-                        <Text style={TopArea.Value}>
+                    <View style={styles.sideBySideValues}>
+                        <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
                             {niceDateFormat(node?.myListStatus?.updatedAt)}
-                        </Text>
+                        </Typography>
                     </View>
                 </View>
                 <View>
-                    <View style={TopArea.Data}>
-                        <View style={{ ...TopArea.Labels, ...styles.progressLabel }}>
-                            <Text style={{ ...TopArea.Label, ...styles.progressContainer }}>Chapter progress:</Text>
-                            <Text style={{ ...TopArea.Label, ...styles.additionalProgressLabel }}>Volume progress:</Text>
+                    <View style={styles.dataSection}>
+                        <View style={mergeStyles(styles, ["labelsSection", "progressLabel"]) as StyleProp<ViewStyle>}>
+                            <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6" style={styles.progressContainer[1]}>
+                                Chapter progress:
+                            </Typography>
+                            <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6" style={styles.additionalProgressLabel[1]}>
+                                Volume progress:
+                            </Typography>
                         </View>
-                        <View style={TopArea.Values}>
+                        <View style={styles.valuesSection}>
                             <View style={styles.progressContainer}>
-                                <Progress fullList={this.state.item.node.myListStatus ?? {}} fieldToControl="numChaptersRead" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numChapters ?? 0} current={node.myListStatus?.numChaptersRead ?? 0} />
+                                <Progress
+                                    fullList={this.props.item.node.myListStatus ?? {}}
+                                    fieldToControl="numChaptersRead" mediaId={node.id}
+                                    color={Colors.KURABUPINK}
+                                    height={25}
+                                    min={0}
+                                    max={node.numChapters ?? 0}
+                                    current={node.myListStatus?.numChaptersRead ?? 0}
+                                />
                             </View>
-                            <Progress fullList={this.state.item.node.myListStatus ?? {}} fieldToControl="numVolumesRead" mediaId={node.id} color={Colors.KURABUPINK} height={25} min={0} max={node.numVolumes ?? 0} current={node.myListStatus?.numVolumesRead ?? 0} />
+                            <Progress
+                                fullList={this.props.item.node.myListStatus ?? {}}
+                                fieldToControl="numVolumesRead"
+                                mediaId={node.id}
+                                color={Colors.KURABUPINK}
+                                height={25}
+                                min={0}
+                                max={node.numVolumes ?? 0}
+                                current={node.myListStatus?.numVolumesRead ?? 0}
+                            />
                         </View>
                     </View>
                 </View>
-            </View>
+            </View >
         );
     }
 
-    createAnimeListStatus(node: AnimeDetails) {
+    createAnimeListStatus(node: AnimeDetails, styles: AppliedStyles<Styles>) {
         return (
             <View style={styles.listContainer}>
                 <Divider margin={false} color={Colors.DIVIDER} widthPercentage={100} />
-                <View style={TopArea.Data}>
-                    <View style={TopArea.TopLeftLabels}>
-                        <Text style={TopArea.Label}>List status:</Text>
+                <View style={styles.dataSection}>
+                    <View style={styles.sideBySideLabels}>
+                        <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                            List status:
+                        </Typography>
                     </View>
-                    <View style={TopArea.TopLeftValues}>
-                        <Text style={TopArea.Value}>
+                    <View style={styles.sideBySideValues}>
+                        <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
                             {niceTextFormat(node?.myListStatus?.status)}
-                        </Text>
+                        </Typography>
                     </View>
-                    <View style={TopArea.TopLeftLabels}>
-                        <Text style={TopArea.Label}>Last updated:</Text>
+                    <View style={styles.sideBySideLabels}>
+                        <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                            Last updated:
+                        </Typography>
                     </View>
-                    <View style={TopArea.TopLeftValues}>
-                        <Text style={TopArea.Value}>
+                    <View style={styles.sideBySideValues}>
+                        <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
                             {niceDateFormat(node?.myListStatus?.updatedAt)}
-                        </Text>
+                        </Typography>
                     </View>
                 </View>
                 <View>
-                    <View style={TopArea.Data}>
-                        <View style={{ ...TopArea.Labels, ...styles.progressLabel }}>
-                            <Text style={{ ...TopArea.Label, ...styles.progressContainer }}>Episode progress:</Text>
+                    <View style={styles.dataSection}>
+                        <View style={mergeStyles(styles, ["labelsSection", "progressLabel"]) as StyleProp<ViewStyle>}>
+                            <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6" style={styles.progressContainer[1]}>
+                                Episode progress:
+                            </Typography>
                         </View>
-                        <View style={TopArea.Values}>
+                        <View style={styles.valuesSection}>
                             <View style={styles.progressContainer}>
                                 <Progress
-                                    fullList={this.state.item.node.myListStatus ?? {}}
+                                    fullList={this.props.item.node.myListStatus ?? {}}
                                     fieldToControl="numEpisodesWatched"
                                     mediaId={node.id}
                                     color={Colors.KURABUPINK}
@@ -199,91 +230,122 @@ export class DetailedUpdateItem extends React.PureComponent<
         );
     }
 
-    render() {
+    renderThemed(styles: AppliedStyles<Styles>) {
         const manga = this.getMangaNode();
         const anime = this.getAnimeNode();
 
-        const listStatusElement = this.createListStatus();
+        const listStatusElement = this.createListStatus(styles);
 
         return (
-            <View style={styles.mediaContainer} >
+            <View style={styles.container} >
                 <TouchableOpacity style={styles.mainContainer} onPress={this.openDetails.bind(this)}>
-                    {this.state.item.node.mainPicture !== undefined ? (
+                    {this.props.item.node.mainPicture !== undefined ? (
                         <Image
-                            style={styles.image}
+                            style={styles.image[1]}
                             source={{
-                                uri: this.state.item.node.mainPicture.medium,
+                                uri: this.props.item.node.mainPicture.medium,
                             }}
                         />
                     ) : (
                         <View style={styles.image}>
-                            <NoImageKurabu style={styles.image} />
+                            <NoImageKurabu style={styles.image[1]} />
                         </View>
                     )}
-                    <View style={styles.TitleArea}>
-                        <Text style={styles.title}>{this.state.item.node.title}</Text>
+                    <View style={styles.titleArea}>
+                        <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline5" style={styles.title[1]}>
+                            {this.props.item.node.title}
+                        </Typography>
                         <Divider color={Colors.DIVIDER} widthPercentage={100} />
-                        <View style={TopArea.Data}>
-                            <View style={TopArea.TopLeftLabels}>
-                                <Text style={TopArea.Label}>Score:</Text>
-                                <Text style={TopArea.Label}>Rank:</Text>
+                        <View style={styles.dataSection}>
+                            <View style={styles.sideBySideLabels}>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                                    Score:
+                                </Typography>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                                    Rank:
+                                </Typography>
                             </View>
-                            <View style={TopArea.TopLeftValues}>
-                                <Text style={TopArea.Value}>{this.state.item.node.mean ?? "NA"}</Text>
-                                <Text style={TopArea.Value}>
-                                    {this.state.item.node.rank ? `#${this.state.item.node.rank}` : "NA"}
-                                </Text>
+                            <View style={styles.sideBySideValues}>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
+                                    {this.props.item.node.mean ?? "NA"}
+                                </Typography>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
+                                    {this.props.item.node.rank ? `#${this.props.item.node.rank}` : "NA"}
+                                </Typography>
                             </View>
-                            <View style={TopArea.TopRightLabels}>
-                                {anime === undefined ? undefined : <Text style={TopArea.Label}>Episodes:</Text>}
+                            <View style={styles.sideBySideLabels}>
+                                {anime === undefined ? undefined : <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                                    Episodes:
+                                </Typography>}
                                 {manga === undefined ? undefined : (<View>
-                                    <Text style={TopArea.Label}>Chapters:</Text>
-                                    <Text style={TopArea.Label}>Volumes:</Text>
+                                    <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                                        Chapters:
+                                    </Typography>
+                                    <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                                        Volumes:
+                                    </Typography>
                                 </View>)}
-                                <Text style={TopArea.Label}>Popularity:</Text>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                                    Popularity:
+                                </Typography>
                             </View>
-                            <View style={TopArea.TopRightValues}>
+                            <View style={styles.sideBySideValues}>
                                 {anime === undefined ? undefined : (
-                                    <Text style={TopArea.Value}>
+                                    <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
                                         {anime.numEpisodes == 0
                                             ? "N/A"
                                             : anime.numEpisodes}
-                                    </Text>
+                                    </Typography>
                                 )}
                                 {manga === undefined ? undefined : (<View>
-                                    <Text style={TopArea.Value}>{manga.numChapters == 0
-                                        ? "N/A"
-                                        : manga.numChapters}</Text>
-                                    <Text style={TopArea.Value}>{manga.numVolumes == 0
-                                        ? "N/A"
-                                        : manga.numVolumes}</Text>
+                                    <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
+                                        {manga.numChapters == 0
+                                            ? "N/A"
+                                            : manga.numChapters}
+                                    </Typography>
+                                    <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
+                                        {manga.numVolumes == 0
+                                            ? "N/A"
+                                            : manga.numVolumes}
+                                    </Typography>
                                 </View>)}
 
-                                <Text style={TopArea.Value}>#{this.state.item.node.popularity}</Text>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
+                                    #{this.props.item.node.popularity}
+                                </Typography>
                             </View>
                         </View>
                         <Divider color={Colors.DIVIDER} widthPercentage={100} />
-                        <View style={TopArea.Data}>
-                            <View style={TopArea.Labels}>
-                                <Text style={TopArea.Label}>Aired:</Text>
-                                <Text style={TopArea.Label}>Status:</Text>
+                        <View style={styles.dataSection}>
+                            <View style={styles.labelsSection}>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                                    Aired:
+                                </Typography>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                                    Status:
+                                </Typography>
                             </View>
-                            <View style={TopArea.Values}>
-                                <Text style={TopArea.Value}>{dateOnly(this.state.item.node.startDate)}</Text>
-                                <Text style={TopArea.Value}>
-                                    {this.NiceString(this.state.item.node.status?.toString())}
-                                </Text>
+                            <View style={styles.valuesSection}>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
+                                    {dateOnly(this.props.item.node.startDate)}
+                                </Typography>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
+                                    {this.NiceString(this.props.item.node.status?.toString())}
+                                </Typography>
                             </View>
                         </View>
                         <Divider color={Colors.DIVIDER} widthPercentage={100} />
-                        <View style={TopArea.Data}>
-                            <View style={TopArea.Labels}>
-                                <Text style={TopArea.Label}>Genres:</Text>
+                        <View style={styles.dataSection}>
+                            <View style={styles.labelsSection}>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
+                                    Genres:
+                                </Typography>
                             </View>
-                            <View style={TopArea.Values}>
-                                <Text style={TopArea.Value}>
-                                    {this.state.item.node.genres?.map((x) => x.name).join(", ")}
-                                </Text>
+
+                            <View style={styles.valuesSection}>
+                                <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="body2">
+                                    {this.props.item.node.genres?.map((x) => x.name).join(", ")}
+                                </Typography>
                             </View>
                         </View>
                     </View>
@@ -296,95 +358,69 @@ export class DetailedUpdateItem extends React.PureComponent<
     }
 }
 
-const fontSize = Dimensions.get("window").width / 36;
 
-const TopArea = StyleSheet.create({
-    Data: {
+type Styles = typeof style;
+const style = ThemedStyleSheet.create({
+    additionalProgressLabel: {
+        marginTop: sizing.spacing("medium"),
+    },
+    container: {
+        borderBottomRightRadius: sizing.rounding<number>("large"),
+        borderTopRightRadius: sizing.rounding<number>("large"),
+        backgroundColor: colors.color("secondary"),
+        marginBottom: sizing.spacing("small"),
+        marginLeft: 0,
+        marginRight: sizing.spacing("small"),
+        flexDirection: "column"
+    },
+    dataSection: {
         flexDirection: "row",
     },
-    Labels: {
+    image: {
+        width: sizing.vw(33),
+        height: sizing.vw(50),
+    },
+    labelsSection: {
         flexDirection: "column",
         flex: 1,
-        marginLeft: 5,
+        marginLeft: sizing.spacing("small"),
     },
-    Label: {
-        color: Colors.TEXT,
-        fontWeight: "bold",
-        fontSize: fontSize,
+    listContainer: {
+        padding: sizing.spacing("small"),
+        paddingTop: 0
     },
-    Values: {
-        flexDirection: "column",
-        flex: 3.5,
+    mainContainer: {
+        width: sizing.vw(100, -5),
+        flexDirection: "row",
     },
-    Value: {
-        color: Colors.TEXT,
-        fontSize: fontSize,
-    },
-
-    TopLeftLabels: {
-        flexDirection: "column",
-        flex: 1,
-        marginLeft: 5,
-    },
-    TopLeftValues: {
-        flexDirection: "column",
-        flex: 1,
-    },
-    TopRightLabels: {
-        flexDirection: "column",
-        flex: 1.5,
-        marginLeft: 5,
-    },
-    TopRightValues: {
-        flexDirection: "column",
-        flex: 1,
-    },
-});
-
-const styles = StyleSheet.create({
     progressLabel: {
         flex: 1.5
     },
-    additionalProgressLabel: {
-        marginTop: 8
-    },
     progressContainer: {
-        marginBottom: 3,
-        marginTop: 3,
-    },
-    mediaContainer: {
-        borderBottomRightRadius: 10,
-        borderTopRightRadius: 10,
-        backgroundColor: Colors.KURABUPURPLE,
-        marginBottom: 5,
-        marginLeft: 0,
-        marginRight: 5,
-        flexDirection: "column"
-    },
-    mainContainer: {
-        width: Dimensions.get("window").width - 5,
-        height: (Dimensions.get("window").width / 3) * 1.5,
-        flexDirection: "row",
-    },
-    listContainer: {
-        padding: 5,
-        paddingTop: 0
+        marginBottom: sizing.spacing("halfSmall"),
+        marginTop: sizing.spacing("halfSmall"),
     },
     title: {
-        fontSize: fontSize * 1.2,
-        fontWeight: "bold",
         textAlign: "center",
-        color: Colors.TEXT,
     },
-    TitleArea: {
+    titleArea: {
         flexDirection: "column",
         flex: 1,
-        padding: 5,
+        padding: sizing.spacing("small"),
     },
-    image: {
-        width: Dimensions.get("window").width / 3,
-        height: (Dimensions.get("window").width / 3) * 1.5,
-    }
+    sideBySideLabels: {
+        flexDirection: "column",
+        flex: 1.5,
+        marginLeft: sizing.spacing("small")
+    },
+    sideBySideValues: {
+        flexDirection: "column",
+        flex: 1,
+    },
+    valuesSection: {
+        flexDirection: "column",
+        flex: 3.5,
+    },
 });
 
 function dateOnly(date: Date | undefined) {

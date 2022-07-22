@@ -69,7 +69,7 @@ export const commonTypography: Typography = {
         headline5: {
             case: "Sentence",
             fontFamily: "Roboto",
-            fontSize: 16,
+            fontSize: 14,
             fontStyle: "normal",
             fontWeight: "400",
             letterSpacing: 0,
