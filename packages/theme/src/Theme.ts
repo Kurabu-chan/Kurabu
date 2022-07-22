@@ -81,8 +81,8 @@ export function useThemeProvider(): ProvidedTheme {
  *
  * @category General Use
  */
-export function useTheme(styles: StyleType)
-    : AppliedStyles<StyleType>{
+export function useTheme<T extends StyleType>(styles: T)
+    : AppliedStyles<T>{
     const context = useContext(themeContext);
     const applied = applyTheme(styles, context);
 
