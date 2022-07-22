@@ -122,6 +122,28 @@ function applyTheme<TStyle extends StyleType>
     return retObj as AppliedStyles<TStyle>;
 }
 
+/**
+ * Apply a theme to a style object, which is not frozen.
+ * This allows group resolving of tokens.
+ *
+ * @category General Use
+ */
+export function applyUnfrozen<TStyle extends StyleType>(obj: TStyle, theme: ProvidedTheme)
+    : TStyle {
+    const retObj: Partial<TStyle> = {};
+
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            retObj[key] = {
+                ...obj[key],
+                ...applySubTheme(obj[key], theme)
+            };
+        }
+    }
+
+    return retObj as TStyle;
+}
+
 function applySubTheme<TSubStyle>(obj: TSubStyle, theme: ProvidedTheme): TSubStyle {
     const retObj: Partial<TSubStyle> = {};
 
