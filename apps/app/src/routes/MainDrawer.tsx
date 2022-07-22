@@ -2,7 +2,6 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import React from "react";
 import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
-import { Colors } from "#config/Colors";
 import { getCurrentBackButtonFunc, registerRerenderer } from "#helpers/backButton";
 import MainStack from "./MainStacks/HomeStack";
 import RankingStack from "./MainStacks/RankingStack";
@@ -12,50 +11,58 @@ import SuggestionsStack from "./MainStacks/SuggestionsStack";
 import ListStack from "./MainStacks/ListStack";
 import { getListManager } from "#helpers/ListManager";
 import { CustomDrawerContentComponent } from "#comps/CustomDrawerNavigator";
+import { applyUnfrozen, colors, ProvidedTheme, sizing, ThemedComponent, typography } from "@kurabu/theme";
 
 export const Drawer = createDrawerNavigator();
 
 type Props = unknown;
 
-export default class DrawerComp extends React.Component<Props> {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export default class DrawerComp extends ThemedComponent<{}, Props> {
     constructor(props: Props) {
-        super(props);
+        super({}, props);
         registerRerenderer(this.forceUpdate.bind(this));
     }
 
-    render() {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    renderThemed(style: {}, theme: ProvidedTheme) {
         const fontSize = Dimensions.get("window").width / 36;
 
         getListManager();
+
+        const navStyles = applyUnfrozen(navigatorStyles, theme);
 
         return (
             <Drawer.Navigator
                 initialRouteName="Main"
                 drawerContent={CustomDrawerContentComponent}
                 screenOptions={{
-                    drawerActiveBackgroundColor: Colors.KURABUPINK,
-                    drawerInactiveBackgroundColor: Colors.ALTERNATE_CONTENT_BACKGROUND,
-                    drawerActiveTintColor: "white",
-                    drawerInactiveTintColor: "white",
+                    drawerActiveBackgroundColor: navStyles.drawer.activeBackgroundColor,
+                    drawerInactiveBackgroundColor: navStyles.drawer.inactiveBackgroundColor,
+                    drawerActiveTintColor: navStyles.drawer.activeTintColor,
+                    drawerInactiveTintColor: navStyles.drawer.inactiveTintColor,
 
                     drawerStyle: {
-                        backgroundColor: Colors.ALTERNATE_BACKGROUND,
+                        backgroundColor: navStyles.drawer.backgroundColor,
                         borderStyle: undefined,
                         padding: 0,
                     },
                     drawerItemStyle: {
                         width: "100%",
                         margin: 0,
-                        borderRadius: 2,
+                        borderRadius: navStyles.drawer.drawerItemBorderRadius,
                     },
                     headerStyle: {
-                        backgroundColor: Colors.KURABUPINK,
+                        backgroundColor: navStyles.header.backgroundColor,
                     },
                     headerTitleStyle: {
-                        fontFamily: "AGRevueCyr",
+                        fontFamily: navStyles.header.fontFamily,
+                        letterSpacing: navStyles.header.letterSpacing,
+                        fontWeight: navStyles.header.fontWeight,
+                        fontStyle: navStyles.header.fontStyle,
                     },
-                    headerTintColor: Colors.TEXT,
-                    headerTitleAlign: "center",
+                    headerTintColor: navStyles.header.tintColor,
+                    headerTitleAlign: navStyles.header.titleAlign,
                     headerTitle: "Kurabu",
                     drawerLabelStyle: {
                         fontSize: fontSize * 1.2,
@@ -76,7 +83,7 @@ export default class DrawerComp extends React.Component<Props> {
                                 <Icon
                                     name="arrow-alt-circle-left"
                                     type="font-awesome-5"
-                                    color={Colors.TEXT}
+                                    color={navStyles.icon.color}
                                     style={styles.iconStyles}
                                     tvParallaxProperties={{}}
                                 />
@@ -94,6 +101,29 @@ export default class DrawerComp extends React.Component<Props> {
                 
             </Drawer.Navigator>
         );
+    }
+}
+
+const navigatorStyles = {
+    drawer: {
+        activeBackgroundColor: colors.color("primary"),
+        inactiveBackgroundColor: colors.color("surface"),
+        activeTintColor: colors.onColor("primary", "link"),
+        inactiveTintColor: colors.onColor("surface", "link"),
+        backgroundColor: colors.color("background"),
+        drawerItemBorderRadius: sizing.rounding<number>("extraSmall")
+    },
+    header: {
+        tintColor: colors.onColor("primary", "header"),
+        titleAlign: "center" as "center" | "left",
+        fontFamily: typography.fontFamily("headline1"),
+        fontWeight: typography.fontWeight("headline1"),
+        letterSpacing: typography.letterSpacing("headline1"),
+        fontStyle: typography.fontStyle("headline1"),
+        backgroundColor: colors.color("primary"),
+    },
+    icon: {
+        color: colors.onColor("primary", "link"),
     }
 }
 

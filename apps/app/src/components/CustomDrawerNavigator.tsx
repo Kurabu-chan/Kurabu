@@ -1,18 +1,21 @@
 import Authentication from '#api/Authenticate';
 import { Colors } from '#config/Colors';
 import { DrawerItem, DrawerItemList, DrawerContentScrollView, DrawerContentComponentProps } from '@react-navigation/drawer';
-import { SafeAreaView, View, StyleSheet, Dimensions, Alert, Linking } from 'react-native';
+import { SafeAreaView, View, Alert, Linking } from 'react-native';
 import * as Updates from "expo-updates";
+import { colors, resolve, sizing, useTheme, useThemeProvider } from '@kurabu/theme';
+import { ThemedStyleSheet } from '#helpers/ThemedStyleSheet';
 
 export function CustomDrawerContentComponent(props: DrawerContentComponentProps) {
+    const providedTheme = useThemeProvider();
+
+    const styles = useTheme(style);
+
     return (
         <DrawerContentScrollView>
             <SafeAreaView style={styles.container}>
-                <View
-                    // style={styles.container}
-                >
+                <View>
                     <DrawerItemList descriptors={props.descriptors} navigation={props.navigation} state={props.state} />
-
                 </View>
                 <View style={styles.bottomListContainer}> 
                     <DrawerItem
@@ -28,10 +31,14 @@ export function CustomDrawerContentComponent(props: DrawerContentComponentProps)
                             ])
 
                         }}
-                        activeBackgroundColor={Colors.KURABUPINK}
-                        inactiveBackgroundColor={Colors.ALTERNATE_CONTENT_BACKGROUND}
-                        activeTintColor={"white"}
-                        inactiveTintColor={"white"}
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        activeBackgroundColor={resolve(colors.color("primary"), providedTheme)}
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        inactiveBackgroundColor={resolve(colors.color("surface"), providedTheme)}
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        activeTintColor={resolve(colors.onColor("primary", "link"), providedTheme)}
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        inactiveTintColor={resolve(colors.onColor("surface", "link"), providedTheme)}
                         style={styles.drawerItemStyle}
                     />
                     <DrawerItem
@@ -46,12 +53,15 @@ export function CustomDrawerContentComponent(props: DrawerContentComponentProps)
                                     }
                                 }
                             ])
-
                         }}
-                        activeBackgroundColor={Colors.KURABUPINK}
-                        inactiveBackgroundColor={Colors.ALTERNATE_CONTENT_BACKGROUND}
-                        activeTintColor={"white"}
-                        inactiveTintColor={"white"}
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        activeBackgroundColor={resolve(colors.color("primary"), providedTheme)}
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        inactiveBackgroundColor={resolve(colors.color("surface"), providedTheme)}
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        activeTintColor={resolve(colors.onColor("primary", "link"), providedTheme)}
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        inactiveTintColor={resolve(colors.onColor("surface", "link"), providedTheme)}
                         style={styles.drawerItemStyle}
                     />
                 </View>
@@ -61,15 +71,15 @@ export function CustomDrawerContentComponent(props: DrawerContentComponentProps)
 
 }
 
-const styles = StyleSheet.create({
+const style = ThemedStyleSheet.create({
     container: {
         flex: 1,
-        minHeight: Dimensions.get("window").height,
+        minHeight: sizing.vh(100),
     },
     drawerItemStyle: {
         width: "100%",
         margin: 0,
-        borderRadius: 2
+        borderRadius: sizing.rounding<number>("extraSmall")
     },
     bottomListContainer: {
         flex: 1,
