@@ -6,6 +6,10 @@ import DetailedUpdateItem from "./DetailedUpdateItem";
 import { MediaListSource } from "#data/MediaListSource";
 import { AnimeListData, MangaListData } from "@kurabu/api-sdk";
 import { ParamListBase } from "@react-navigation/native";
+import { AppliedStyles, colors, sizing, ThemedComponent } from "@kurabu/theme";
+import { Typography } from "./themed/Typography";
+import { ThemedStyleSheet } from "#helpers/ThemedStyleSheet";
+import { resolve } from "path";
 
 const BatchSize = 20;
 
@@ -29,9 +33,9 @@ type DetailedUpdateListProps = {
     limit?: number;
 };
 
-class DetailedUpdateList extends React.Component<DetailedUpdateListProps, DetailedUpdateListState> {
+class DetailedUpdateList extends ThemedComponent<Styles, DetailedUpdateListProps, DetailedUpdateListState> {
     constructor(props: DetailedUpdateListProps) {
-        super(props);
+        super(styles, props);
         this.state = {
             title: props.title,
             data: [],
@@ -112,11 +116,13 @@ class DetailedUpdateList extends React.Component<DetailedUpdateListProps, Detail
         
     }
 
-    render() {
+    renderThemed(styles: AppliedStyles<Styles>) {
         if (this.state.data.length > 0) {
             return (
                 <View style={styles.mediaContainer}>
-                    <Text style={styles.title}>{this.state.title}</Text>
+                    <Typography style={styles.title} colorVariant="primary" isOnContainer={false} textKind="header" variant="headline3">
+                        {this.state.title}
+                    </Typography>
                     <FlatList
                         horizontal={false}
                         data={this.state.data}
@@ -136,28 +142,27 @@ class DetailedUpdateList extends React.Component<DetailedUpdateListProps, Detail
             );
         } else {
             return (
-                <ActivityIndicator style={styles.loading} size="large" color={Colors.KURABUPINK} />
+                <ActivityIndicator style={styles.loading} size="large" color={resolve(colors.color("primary"))} />
             );
         }
     }
 }
-const fontSize = Dimensions.get("window").width / 36;
-const styles = StyleSheet.create({
+
+type Styles = typeof styles;
+const styles = ThemedStyleSheet.create({
     mediaContainer: {
-        height: Dimensions.get("window").height,
-        width: Dimensions.get("window").width,
-        marginTop: 10,
-        marginRight: 10,
+        height: sizing.vh(100),
+        width: sizing.vw(100),
+        marginTop: sizing.spacing("medium"),
+        marginRight: sizing.spacing("medium"),
         flex: 1
     },
     title: {
-        fontSize: fontSize * 1.6,
         textAlign: "center",
-        color: Colors.TEXT,
-        paddingBottom: 10,
+        paddingBottom: sizing.spacing("medium"),
     },
     loading: {
-        marginTop: Dimensions.get("window").height / 2.5,
+        marginTop: sizing.vh(40),
     },
 });
 
