@@ -1,15 +1,14 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { Dimensions, Image, StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Image, StyleProp, TouchableOpacity, View, ViewStyle } from "react-native";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
-import { Colors } from "#config/Colors";
 import { Divider } from "./Divider";
 import { MediaFields, AnimeDetails, MangaDetails, AnimeListData, MangaListData } from "@kurabu/api-sdk";
 import { fieldsToString } from "#helpers/fieldsHelper";
 import { niceDateFormat, niceTextFormat } from "#helpers/textFormatting";
 import { Progress } from "./MediaListStatusProgressBar";
 import { ParamListBase } from "@react-navigation/native";
-import { AppliedStyles, colors, sizing, ThemedComponent, typography, mergeStyles } from "@kurabu/theme";
+import { AppliedStyles, colors, sizing, ThemedComponent, mergeStyles, resolve, ProvidedTheme } from "@kurabu/theme";
 import { ThemedStyleSheet } from "#helpers/ThemedStyleSheet";
 import { Typography } from "./themed/Typography";
 
@@ -96,25 +95,25 @@ export class DetailedUpdateItem extends ThemedComponent<
         return this.props.item.node as AnimeDetails;
     }
 
-    createListStatus(styles: AppliedStyles<Styles>) {
+    createListStatus(styles: AppliedStyles<Styles>, theme: ProvidedTheme) {
         if (this.props.showListStatus !== true) return;
 
         const animeNode = this.getAnimeNode();
         const mangaNode = this.getMangaNode();
 
         if (animeNode?.myListStatus !== undefined) {
-            return this.createAnimeListStatus(animeNode, styles);
+            return this.createAnimeListStatus(animeNode, styles, theme);
         }
         if (mangaNode?.myListStatus !== undefined) {
-            return this.createMangaListStatus(mangaNode, styles);
+            return this.createMangaListStatus(mangaNode, styles, theme);
         }
         return undefined;
     }
 
-    createMangaListStatus(node: MangaDetails, styles: AppliedStyles<Styles>) {
+    createMangaListStatus(node: MangaDetails, styles: AppliedStyles<Styles>, theme: ProvidedTheme) {
         return (
             <View style={styles.listContainer}>
-                <Divider margin={false} color={Colors.DIVIDER} widthPercentage={100} />
+                <Divider margin={false} variant="secondary" isOnContainer={false} widthPercentage={100} />
                 <View style={styles.dataSection}>
                     <View style={styles.sideBySideLabels}>
                         <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
@@ -153,7 +152,8 @@ export class DetailedUpdateItem extends ThemedComponent<
                                 <Progress
                                     fullList={this.props.item.node.myListStatus ?? {}}
                                     fieldToControl="numChaptersRead" mediaId={node.id}
-                                    color={Colors.KURABUPINK}
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                                    color={resolve(colors.color("primary"), theme)}
                                     height={25}
                                     min={0}
                                     max={node.numChapters ?? 0}
@@ -164,7 +164,8 @@ export class DetailedUpdateItem extends ThemedComponent<
                                 fullList={this.props.item.node.myListStatus ?? {}}
                                 fieldToControl="numVolumesRead"
                                 mediaId={node.id}
-                                color={Colors.KURABUPINK}
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                                color={resolve(colors.color("primary"), theme)}
                                 height={25}
                                 min={0}
                                 max={node.numVolumes ?? 0}
@@ -177,10 +178,10 @@ export class DetailedUpdateItem extends ThemedComponent<
         );
     }
 
-    createAnimeListStatus(node: AnimeDetails, styles: AppliedStyles<Styles>) {
+    createAnimeListStatus(node: AnimeDetails, styles: AppliedStyles<Styles>, theme: ProvidedTheme) {
         return (
             <View style={styles.listContainer}>
-                <Divider margin={false} color={Colors.DIVIDER} widthPercentage={100} />
+                <Divider margin={false} variant="secondary" isOnContainer={false} widthPercentage={100} />
                 <View style={styles.dataSection}>
                     <View style={styles.sideBySideLabels}>
                         <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
@@ -216,7 +217,8 @@ export class DetailedUpdateItem extends ThemedComponent<
                                     fullList={this.props.item.node.myListStatus ?? {}}
                                     fieldToControl="numEpisodesWatched"
                                     mediaId={node.id}
-                                    color={Colors.KURABUPINK}
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                                    color={resolve(colors.color("primary"), theme)}
                                     height={25}
                                     min={0}
                                     max={node.numEpisodes ?? 0}
@@ -230,11 +232,11 @@ export class DetailedUpdateItem extends ThemedComponent<
         );
     }
 
-    renderThemed(styles: AppliedStyles<Styles>) {
+    renderThemed(styles: AppliedStyles<Styles>, theme: ProvidedTheme) {
         const manga = this.getMangaNode();
         const anime = this.getAnimeNode();
 
-        const listStatusElement = this.createListStatus(styles);
+        const listStatusElement = this.createListStatus(styles, theme);
 
         return (
             <View style={styles.container} >
@@ -255,7 +257,7 @@ export class DetailedUpdateItem extends ThemedComponent<
                         <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline5" style={styles.title[1]}>
                             {this.props.item.node.title}
                         </Typography>
-                        <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                        <Divider margin={false} variant="secondary" isOnContainer={false} widthPercentage={100} />
                         <View style={styles.dataSection}>
                             <View style={styles.sideBySideLabels}>
                                 <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
@@ -315,7 +317,7 @@ export class DetailedUpdateItem extends ThemedComponent<
                                 </Typography>
                             </View>
                         </View>
-                        <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                        <Divider margin={false} variant="secondary" isOnContainer={false} widthPercentage={100} />
                         <View style={styles.dataSection}>
                             <View style={styles.labelsSection}>
                                 <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
@@ -334,7 +336,7 @@ export class DetailedUpdateItem extends ThemedComponent<
                                 </Typography>
                             </View>
                         </View>
-                        <Divider color={Colors.DIVIDER} widthPercentage={100} />
+                        <Divider margin={false} variant="secondary" isOnContainer={false} widthPercentage={100} />
                         <View style={styles.dataSection}>
                             <View style={styles.labelsSection}>
                                 <Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="headline6">
