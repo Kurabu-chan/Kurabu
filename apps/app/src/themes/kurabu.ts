@@ -1,4 +1,5 @@
 import { addTheme, Theme, ThemeSet } from "@kurabu/theme";
+import { commonSizing, commonTypography } from "./common";
 import { kurabuPalette } from "./palettes/kurabu";
 
 export function addKurabuTheme(themeSet: ThemeSet) {
@@ -192,133 +193,8 @@ export function addKurabuTheme(themeSet: ThemeSet) {
             },
             palettes: kurabuPalette,
         },
-        sizing: {
-            rounding: {
-                "extraLarge": 16,
-                "extraSmall": 3,
-                full: 100000000,
-                large: 12,
-                medium: 8,
-                none: 0,
-                small: 6,
-            },
-            spacing: {
-                "halfLarge": 8,
-                "halfMedium": 5,
-                "halfSmall": 2,
-                large: 16,
-                medium: 10,
-                small: 4,
-            }
-        },
-        typography: {
-            scales: {
-                body1: {
-                    case: "Sentence",
-                    fontFamily: "Roboto",
-                    fontSize: 16,
-                    fontStyle: "normal",
-                    fontWeight: "400",
-                    letterSpacing: 0.5,
-                },
-                body2: {
-                    case: "Sentence",
-                    fontFamily: "Roboto",
-                    fontSize: 14,
-                    fontStyle: "normal",
-                    fontWeight: "400",
-                    letterSpacing: 0.25,
-                },
-                button: {
-                    case: "AllCaps",
-                    fontFamily: "Roboto",
-                    fontSize: 14,
-                    fontStyle: "normal",
-                    fontWeight: "500",
-                    letterSpacing: 1.25,
-                },
-                caption: {
-                    case: "Sentence",
-                    fontFamily: "Roboto",
-                    fontSize: 12,
-                    fontStyle: "normal",
-                    fontWeight: "400",
-                    letterSpacing: 0.4,
-                },
-                headline1: {
-                    case: "Sentence",
-                    fontFamily: "Roboto",
-                    fontSize: 96,
-                    fontStyle: "normal",
-                    fontWeight: "300",
-                    letterSpacing: -1.5,
-                },
-                headline2: {
-                    case: "Sentence",
-                    fontFamily: "Roboto",
-                    fontSize: 60,
-                    fontStyle: "normal",
-                    fontWeight: "300",
-                    letterSpacing: -0.5,
-                },
-                headline3: {
-                    case: "Sentence",
-                    fontFamily: "Roboto",
-                    fontSize: 48,
-                    fontStyle: "normal",
-                    fontWeight: "400",
-                    letterSpacing: 0,
-                },
-                headline4: {
-                    case: "Sentence",
-                    fontFamily: "Roboto",
-                    fontSize: 34,
-                    fontStyle: "normal",
-                    fontWeight: "400",
-                    letterSpacing: 0.25,
-                },
-                headline5: {
-                    case: "Sentence",
-                    fontFamily: "Roboto",
-                    fontSize: 24,
-                    fontStyle: "normal",
-                    fontWeight: "400",
-                    letterSpacing: 0,
-                },
-                headline6: {
-                    case: "Sentence",
-                    fontFamily: "Roboto",
-                    fontSize: 20,
-                    fontStyle: "normal",
-                    fontWeight: "500",
-                    letterSpacing: 0.15,
-                },
-                overline: {
-                    case: "AllCaps",
-                    fontFamily: "Roboto",
-                    fontSize: 10,
-                    fontStyle: "normal",
-                    fontWeight: "400",
-                    letterSpacing: 1.5,
-                },
-                subtitle1: {
-                    case: "Sentence",
-                    fontFamily: "Roboto",
-                    fontSize: 16,
-                    fontStyle: "normal",
-                    fontWeight: "400",
-                    letterSpacing: 0.15,
-                },
-                subtitle2: {
-                    case: "Sentence",
-                    fontFamily: "Roboto",
-                    fontSize: 14,
-                    fontStyle: "normal",
-                    fontWeight: "500",
-                    letterSpacing: 0.1,
-                },
-            }
-        }
+        sizing: commonSizing,
+        typography: commonTypography
     }
 
     addTheme("kurabu", theme, themeSet);
