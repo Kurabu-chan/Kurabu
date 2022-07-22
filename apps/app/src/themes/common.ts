@@ -5,7 +5,7 @@ export const commonTypography: Typography = {
         body1: {
             case: "Sentence",
             fontFamily: "Roboto",
-            fontSize: 16,
+            fontSize: 14,
             fontStyle: "normal",
             fontWeight: "400",
             letterSpacing: 0.5,
@@ -13,7 +13,7 @@ export const commonTypography: Typography = {
         body2: {
             case: "Sentence",
             fontFamily: "Roboto",
-            fontSize: 14,
+            fontSize: 12,
             fontStyle: "normal",
             fontWeight: "400",
             letterSpacing: 0.25,
@@ -37,7 +37,7 @@ export const commonTypography: Typography = {
         headline1: {
             case: "Sentence",
             fontFamily: "AGRevueCyr",
-            fontSize: 96,
+            fontSize: 36,
             fontStyle: "normal",
             fontWeight: "300",
             letterSpacing: 0.5,
@@ -45,7 +45,7 @@ export const commonTypography: Typography = {
         headline2: {
             case: "Sentence",
             fontFamily: "Roboto",
-            fontSize: 60,
+            fontSize: 26,
             fontStyle: "normal",
             fontWeight: "300",
             letterSpacing: -0.5,
@@ -53,7 +53,7 @@ export const commonTypography: Typography = {
         headline3: {
             case: "Sentence",
             fontFamily: "Roboto",
-            fontSize: 48,
+            fontSize: 20,
             fontStyle: "normal",
             fontWeight: "400",
             letterSpacing: 0,
@@ -61,7 +61,7 @@ export const commonTypography: Typography = {
         headline4: {
             case: "Sentence",
             fontFamily: "Roboto",
-            fontSize: 34,
+            fontSize: 18,
             fontStyle: "normal",
             fontWeight: "400",
             letterSpacing: 0.25,
@@ -69,7 +69,7 @@ export const commonTypography: Typography = {
         headline5: {
             case: "Sentence",
             fontFamily: "Roboto",
-            fontSize: 24,
+            fontSize: 16,
             fontStyle: "normal",
             fontWeight: "400",
             letterSpacing: 0,
@@ -77,9 +77,9 @@ export const commonTypography: Typography = {
         headline6: {
             case: "Sentence",
             fontFamily: "Roboto",
-            fontSize: 20,
+            fontSize: 12,
             fontStyle: "normal",
-            fontWeight: "500",
+            fontWeight: "700",
             letterSpacing: 0.15,
         },
         overline: {
