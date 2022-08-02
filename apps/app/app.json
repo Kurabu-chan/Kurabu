@@ -1,47 +1,50 @@
 {
-    "expo": {
-        "name": "kurabu.moe",
-        "slug": "Kurabu",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "./assets/icon.png",
-        "splash": {
-            "image": "./assets/splash.png",
-            "resizeMode": "cover",
-            "backgroundColor": "#1a1a1a"
-        },
-        "updates": {
-            "fallbackToCacheTimeout": 0
-        },
-        "assetBundlePatterns": [
-            "**/*"
-        ],
-        "ios": {
-            "bundleIdentifier": "moe.kurabu.app"
-        },
-        "web": {
-            "favicon": "./assets/favicon.png"
-        },
-        "description": "An app for browsing and getting information on animes.",
-        "scheme": "kurabu",
-        "android": {
-            "package": "moe.kurabu.app"
-        },
-        "packagerOpts": {
-            "config": "metro.config.js",
-            "sourceExts": [
-                "expo.ts",
-                "expo.tsx",
-                "expo.js",
-                "expo.jsx",
-                "ts",
-                "tsx",
-                "js",
-                "jsx",
-                "json",
-                "wasm",
-                "svg"
-            ]
-        }
-    }
+  "expo": {
+    "name": "kurabu.moe",
+    "slug": "Kurabu",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "jsEngine": "hermes",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#1a1a1a"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "moe.kurabu.app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "description": "An app for browsing and getting information on animes.",
+    "scheme": "kurabu",
+    "android": {
+      "package": "moe.kurabu.app"
+    },
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": [
+        "expo.ts",
+        "expo.tsx",
+        "expo.js",
+        "expo.jsx",
+        "ts",
+        "tsx",
+        "js",
+        "jsx",
+        "json",
+        "wasm",
+        "svg"
+      ]
+    },
+    "sdkVersion": "45.0.0"
+  },
+  "name": "@kurabu/app"
 }
