@@ -43,8 +43,7 @@
         "wasm",
         "svg"
       ]
-    },
-    "sdkVersion": "45.0.0"
+    }
   },
   "name": "@kurabu/app"
 }
