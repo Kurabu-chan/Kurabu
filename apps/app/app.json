@@ -18,32 +18,19 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "moe.kurabu.app"
+      "bundleIdentifier": "moe.kurabu.app",
+      "jsEngine": "hermes"
+    },
+    "android": {
+      "package": "moe.kurabu.app",
+      "jsEngine": "hermes"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "description": "An app for browsing and getting information on animes.",
     "scheme": "kurabu",
-    "android": {
-      "package": "moe.kurabu.app"
-    },
-    "packagerOpts": {
-      "config": "metro.config.js",
-      "sourceExts": [
-        "expo.ts",
-        "expo.tsx",
-        "expo.js",
-        "expo.jsx",
-        "ts",
-        "tsx",
-        "js",
-        "jsx",
-        "json",
-        "wasm",
-        "svg"
-      ]
-    }
+    "sdkVersion": "46.0.0"
   },
   "name": "@kurabu/app"
 }
