@@ -42,6 +42,7 @@
         "node": ">=14.0.0"
     },
     "resolutions": {
-        "swagger-ui-dist": "4.6.0"
+        "swagger-ui-dist": "4.6.0",
+        "@types/react": "18.0.15"
     }
 }
