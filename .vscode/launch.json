@@ -14,38 +14,13 @@
 				"-w=@kurabu/api"
 			]
 		},
-        // Attach to app without using hermes (this works but does not permit JSI modules)
-		{
-			"name": "Attach to @kurabu/app",
-			"request": "attach",
-			"type": "reactnative",
-			"cwd": "${workspaceFolder}/apps/app",
-            "port": 19000
-		},
-        // This does not attach to anything
         {
-            "name": "Hermes - Attach to @kurabu/app",
-            "request": "attach",
+            "name": "Debug android Hermes",
+            "cwd": "${workspaceFolder}/apps/app",
             "type": "reactnativedirect",
-            "cwd": "${workspaceFolder}/apps/app",
-            "port": 19000
-        },
-        // Start the app without using hermes (this works but does not permit JSI modules)
-		{
-            "name": "Start exponent",
             "request": "launch",
-            "type": "reactnative",
-            "cwd": "${workspaceFolder}/apps/app",
-            "platform": "exponent",
-        },
-        // This does not exist
-        // {
-        //     "name": "Start exponent",
-        //     "request": "launch",
-        //     "type": "reactnativedirect",
-        //     "cwd": "${workspaceFolder}/apps/app",
-        //     "platform": "exponent",
-        // },
-        // I assume reactnative = without hermes and reactnativedirect = with hermes
+            "platform": "android",
+            "preLaunchTask": "Kurabu: eject"
+        }
 	]
 }

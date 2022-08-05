@@ -1,19 +1,20 @@
 {
     "name": "@kurabu/app",
     "main": "index.js",
-    "version": "1.0.37",
+    "version": "1.0.38",
     "scripts": {
         "eas-build-post-install": "cd ../.. && yarn run build --filter=@kurabu/app^... --filter=!@kurabu/api-sdk",
         "dev": "expo start --android",
         "dev:clear": "expo start --android --clear",
         "start:dev": "expo start",
-        "android": "expo start --android",
-        "ios": "expo start --ios",
+        "android": "expo run:android",
+        "ios": "expo run:ios",
         "web": "expo start --web",
-        "eject": "expo eject",
+        "eject": "expo prebuild",
         "check-build-required": "echo \"@kurabu/app\"",
         "lint": "eslint \"**/*.ts\" \"**/*.tsx\"",
-        "lint:fix": "eslint \"**/*.ts\" \"**/*.tsx\" --fix"
+        "lint:fix": "eslint \"**/*.ts\" \"**/*.tsx\" --fix",
+        "start": "expo start --dev-client"
     },
     "dependencies": {
         "@babel/helper-builder-react-jsx": "^7.12.13",

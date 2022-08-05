@@ -1,14 +1,25 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Kurabu: Start emulator",
-      "type": "shell",
-      "command": "emulator",
-      "args": [
-        "-avd",
-        "kurabu"
-      ],
-    }
-  ]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Kurabu: Start emulator",
+            "type": "shell",
+            "command": "emulator",
+            "args": [
+                "-avd",
+                "kurabu"
+            ],
+        },
+        {
+            "label": "Kurabu: eject",
+            "type": "shell",
+            "command": "yarn",
+            "args": [
+                "workspace",
+                "@kurabu/app",
+                "run",
+                "eject"
+            ],
+        }
+    ]
 }

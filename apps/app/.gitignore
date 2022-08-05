@@ -2,6 +2,7 @@
 .expo
 __generated__
 web-build
+android/
 
 # macOS
 .DS_Store

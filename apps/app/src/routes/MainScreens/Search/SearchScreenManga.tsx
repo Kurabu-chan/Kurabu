@@ -103,7 +103,8 @@ export default class Search extends React.Component<Props, StateType> {
                 loadingProps={{}}
                 showLoading={false}
                 lightTheme={false}
-                round={true}
+				round={true}
+				autoCompleteType={undefined}
                 onFocus={() => {
                     return;
                 }}
