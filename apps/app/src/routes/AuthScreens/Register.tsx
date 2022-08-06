@@ -86,14 +86,14 @@ class Register extends React.Component<RegisterProps, RegisterState> {
                     <TextInput
                         onChangeText={this.changeEmail.bind(this)}
                         placeholder="Email"
-                        autoCompleteType="email"
+                        autoComplete="email"
                         style={styles.Input}
                         value={this.state.email}
                     />
                     <TextInput
                         onChangeText={this.changePass.bind(this)}
                         placeholder="Password"
-                        autoCompleteType="password"
+                        autoComplete="password"
                         secureTextEntry
                         passwordRules="required: lower; required: upper; required digit; required: [~!@#$%^*_-+=`|(){}[:;'<>,.? \]]; minlength: 8;"
                         spellCheck={false}
@@ -104,7 +104,7 @@ class Register extends React.Component<RegisterProps, RegisterState> {
                     <TextInput
                         onChangeText={this.changeRetype.bind(this)}
                         placeholder="Retype Password"
-                        autoCompleteType="password"
+                        autoComplete="password"
                         secureTextEntry
                         spellCheck={false}
                         style={styles.Input}

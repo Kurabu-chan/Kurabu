@@ -230,7 +230,8 @@ export class FieldSearchBar extends React.Component<Props, State> {
                     <View style={styles.searchParent}>
                         <SearchBar
                             value={this.props.search}
-                            platform={"default"}
+							platform={"default"}
+							autoCompleteType={undefined}
                             onBlur={() => { return; }}
                             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                             onChangeText={((text?: string) => {

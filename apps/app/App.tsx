@@ -1,9 +1,8 @@
 import "react-native-gesture-handler";
 import * as Font from "expo-font";
 import React from "react";
-import AppLoading from "expo-app-loading";
 import * as Linking from "expo-linking";
-import { AppState, AppStateStatus, LogBox } from "react-native";
+import { AppState, AppStateStatus, LogBox, NativeEventSubscription } from "react-native";
 import Authentication from "#api/Authenticate";
 import { NavigationContainer } from "@react-navigation/native";
 import Drawer from "#routes/MainDrawer";
@@ -11,8 +10,11 @@ import Auth from "#routes/AuthStack";
 import { DoSwitch, navigationRef, navigationRefReady } from "#routes/RootNavigator";
 import { registerSwitchListener } from "#routes/RootNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { hideAsync, preventAutoHideAsync } from "expo-splash-screen"
 
 LogBox.ignoreLogs([/Require\scycles/]);
+
+void preventAutoHideAsync()
 
 type StateType = {
     fonts: boolean;
@@ -21,6 +23,8 @@ type StateType = {
 };
 
 export default class Application extends React.Component<never, StateType> {
+    private _appStateChangeSubscription?: NativeEventSubscription;
+
     constructor(props: never) {
         super(props);
         registerSwitchListener(this.setRootSwitch.bind(this));
@@ -35,10 +39,12 @@ export default class Application extends React.Component<never, StateType> {
     async componentDidMount() {
         await this._checkInitialUrl();
 
-        AppState.addEventListener("change", this._handleAppStateChange.bind(this));
+        this._appStateChangeSubscription = AppState.addEventListener("change", this._handleAppStateChange.bind(this));
         Linking.addEventListener("url", (ss) => {
             void this._handleUrl(ss.url);
         });
+
+        void this.getFonts();
     }
 
     setRootSwitch(sw: "Auth" | "Drawer") {
@@ -50,10 +56,10 @@ export default class Application extends React.Component<never, StateType> {
     }
 
     componentWillUnmount() {
-        AppState.removeEventListener("change", this._handleAppStateChange.bind(this));
+        this._appStateChangeSubscription?.remove();  
     }
 
-    private _handleAppStateChange(nextAppState: AppStateStatus){
+    private _handleAppStateChange(nextAppState: AppStateStatus) {
         if (this.state.appstate.match(/inactive|background/) && nextAppState === "active") {
             void this._checkInitialUrl();
         }
@@ -91,14 +97,22 @@ export default class Application extends React.Component<never, StateType> {
         }
     }
 
+    private async getFonts() { 
+        await Font.loadAsync({
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            AGRevueCyr: require("./assets/fonts/AGRevueCyr.ttf"),
+        });
+
+        await hideAsync();
+
+        this.setState((prevState) => ({
+            ...prevState,
+            fonts: true,
+        }));
+    }
+
     render() {
-        const setFontsLoaded = (yes: boolean) => {
-            this.setState((prevState) => ({
-                ...prevState,
-                fonts: yes,
-            }));
-        };
-        if (this.state.fonts == true) {
+        if (this.state.fonts) {
             return (
                 <SafeAreaProvider>
                     <NavigationContainer ref={navigationRef} onReady={navigationRefReady}>
@@ -106,23 +120,6 @@ export default class Application extends React.Component<never, StateType> {
                     </NavigationContainer>
                 </SafeAreaProvider>
             );
-        } else {
-            return (
-                <AppLoading
-                    startAsync={getFonts}
-                    onFinish={() => {
-                        setFontsLoaded(true);
-                    }}
-                    onError={console.warn}
-                />
-            );
         }
     }
 }
-
-const getFonts = async () => {
-    await Font.loadAsync({
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        AGRevueCyr: require("./assets/fonts/AGRevueCyr.ttf"),
-    });
-};
