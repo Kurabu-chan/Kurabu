@@ -86,7 +86,8 @@ export default class Search extends React.Component<Props, StateType> {
             <SearchBar
                 placeholder="Search for an Anime Title.."
                 loadingProps={{}}
-                showLoading={false}
+				showLoading={false}
+				autoCompleteType={undefined}
                 lightTheme={false}
                 round={true}
                 onFocus={() => {

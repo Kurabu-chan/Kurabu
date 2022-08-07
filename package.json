@@ -25,7 +25,8 @@
         "test:unit": "turbo run test:unit",
         "test": "turbo run test",
         "postinstall": "yarn husky install",
-        "docs": "turbo run docs"
+        "docs": "turbo run docs",
+        "doctor": "cd scripts && yarn run doctor"
     },
     "devDependencies": {
         "@types/mocha": "^9.1.0",
@@ -41,6 +42,7 @@
         "node": ">=14.0.0"
     },
     "resolutions": {
-        "swagger-ui-dist": "4.6.0"
+        "swagger-ui-dist": "4.6.0",
+        "@types/react": "18.0.15"
     }
 }

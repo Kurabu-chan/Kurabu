@@ -68,16 +68,16 @@ class Login extends React.Component<Props, LoginState> {
                         style={styles.extraSpacing}
                     ></View>
                     <TextInput
-                        onChangeText={this.changeEmail.bind(this)}
+						onChangeText={this.changeEmail.bind(this)}
+						autoComplete="email"
                         placeholder="Email"
-                        autoCompleteType="email"
                         style={styles.Input}
                         value={this.state.email}
                     />
                     <TextInput
                         onChangeText={this.changePass.bind(this)}
                         placeholder="Password"
-                        autoCompleteType="password"
+                        autoComplete="password"
                         secureTextEntry
                         style={styles.Input}
                         value={this.state.pass}

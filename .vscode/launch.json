@@ -1,20 +1,26 @@
 {
 	"version": "0.2.0",
 	"configurations": [
+        // This starts the api
 		{
 			"name": "Launch @kurabu/api",
 			"type": "node",
 			"request": "launch",
 			"cwd": "${workspaceFolder}",
 			"runtimeExecutable": "npm",
-			"runtimeArgs": ["run-script", "dev", "-w=@kurabu/api"]
+			"runtimeArgs": [
+				"run-script",
+				"dev",
+				"-w=@kurabu/api"
+			]
 		},
-		{
-			"name": "Attach to @kurabu/app",
-			"request": "attach",
-			"type": "reactnative",
-			"cwd": "${workspaceFolder}/apps/app",
-			"port": 19000
-		}
+        {
+            "name": "Debug android Hermes",
+            "cwd": "${workspaceFolder}/apps/app",
+            "type": "reactnativedirect",
+            "request": "launch",
+            "platform": "android",
+            "preLaunchTask": "Kurabu: eject"
+        }
 	]
 }
