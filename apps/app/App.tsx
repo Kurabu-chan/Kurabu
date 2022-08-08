@@ -12,7 +12,7 @@ import { registerSwitchListener } from "#routes/RootNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { hideAsync, preventAutoHideAsync } from "expo-splash-screen"
 import { defaultTheme, defaultThemeSet, ReactNativeUIScaling, ThemeProvider, addTheme, ThemeSet, Theme } from "@kurabu/theme";
-import { addKurabuTheme } from "src/themes/kurabu";
+import { themes } from "./src/themes";
 
 LogBox.ignoreLogs([/Require\scycles/]);
 
@@ -39,8 +39,15 @@ export default class Application extends React.Component<never, StateType> {
         const _themeSet: ThemeSet = {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             default: {} as unknown as Theme
-        };
-        const def = addKurabuTheme(_themeSet);
+		};
+		
+		const themesEntries = Object.entries(themes);
+
+		for (const theme of themesEntries) {
+			addTheme(theme[0], theme[1], _themeSet);
+		}
+
+		const def = themesEntries[0][1];
 
         const themeSet = {
             ..._themeSet,
