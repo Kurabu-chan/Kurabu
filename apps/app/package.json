@@ -1,7 +1,7 @@
 {
     "name": "@kurabu/app",
     "main": "index.js",
-    "version": "1.0.45",
+    "version": "1.0.46",
     "scripts": {
         "eas-build-post-install": "cd ../.. && yarn run build --filter=@kurabu/app^... --filter=!@kurabu/api-sdk",
         "dev": "expo start --android",
@@ -43,6 +43,7 @@
         "lodash": "^4.17.21",
         "moment": "^2.29.4",
         "react": "18.0.0",
+        "react-dom": "18.0.0",
         "react-native": "0.69.3",
         "react-native-confirmation-code-field": "^7.2.0",
         "react-native-elements": "^3.4.2",
@@ -54,10 +55,9 @@
         "react-native-svg": "12.3.0",
         "react-native-svg-transformer": "^1.0.0",
         "react-native-timeago": "^0.5.0",
+        "react-native-web": "~0.18.7",
         "tslib": "^2.1.0",
-        "url": "^0.11.0",
-        "react-dom": "18.0.0",
-        "react-native-web": "~0.18.7"
+        "url": "^0.11.0"
     },
     "devDependencies": {
         "@babel/core": "^7.18.6",
@@ -66,6 +66,7 @@
         "@types/react": "~18.0.0",
         "@types/react-native": "~0.69.1",
         "babel-plugin-module-resolver": "4.1.0",
+        "expo-cli": "^6.0.1",
         "npm-force-resolutions": "0.0.10",
         "typescript": "^4.6.3"
     },

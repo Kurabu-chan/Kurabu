@@ -68,7 +68,7 @@ export default class Application extends React.Component<never, StateType> {
             void this._handleUrl(ss.url);
         });
 
-        void this.getFonts();
+		await this.getFonts();
     }
 
     setRootSwitch(sw: "Auth" | "Drawer") {
@@ -122,10 +122,36 @@ export default class Application extends React.Component<never, StateType> {
     }
 
     private async getFonts() { 
-        await Font.loadAsync({
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            AGRevueCyr: require("./assets/fonts/AGRevueCyr.ttf"),
-        });
+		await Font.loadAsync({
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			AGRevueCyr: require("./assets/fonts/AGRevueCyr.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto: require("./assets/fonts/Roboto_Regular.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Black_Italic: require("./assets/fonts/Roboto_Black_Italic.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Black: require("./assets/fonts/Roboto_Black.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Bold_Italic: require("./assets/fonts/Roboto_Bold_Italic.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Bold: require("./assets/fonts/Roboto_Bold.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Light_Italic: require("./assets/fonts/Roboto_Light_Italic.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Light: require("./assets/fonts/Roboto_Light.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Medium_Italic: require("./assets/fonts/Roboto_Medium_Italic.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Medium: require("./assets/fonts/Roboto_Medium.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Regular_Italic: require("./assets/fonts/Roboto_Regular_Italic.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Regular: require("./assets/fonts/Roboto_Regular.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Thin_Italic: require("./assets/fonts/Roboto_Thin_Italic.ttf"),
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			Roboto_Thin: require("./assets/fonts/Roboto_Thin.ttf"),
+		});
 
         await hideAsync();
 
@@ -136,13 +162,6 @@ export default class Application extends React.Component<never, StateType> {
     }
 
     render() {
-        const setFontsLoaded = (yes: boolean) => {
-            this.setState((prevState) => ({
-                ...prevState,
-                fonts: yes,
-            }));
-        };
-
         Dimensions.addEventListener(
             "change",
             ({ window, screen }) => {
@@ -172,36 +191,3 @@ export default class Application extends React.Component<never, StateType> {
         }
     }
 }
-
-const getFonts = async () => {
-    await Font.loadAsync({
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        AGRevueCyr: require("./assets/fonts/AGRevueCyr.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto: require("./assets/fonts/Roboto_Regular.ttf"),        
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Black_Italic: require("./assets/fonts/Roboto_Black_Italic.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Black: require("./assets/fonts/Roboto_Black.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Bold_Italic: require("./assets/fonts/Roboto_Bold_Italic.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Bold: require("./assets/fonts/Roboto_Bold.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Light_Italic: require("./assets/fonts/Roboto_Light_Italic.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Light: require("./assets/fonts/Roboto_Light.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Medium_Italic: require("./assets/fonts/Roboto_Medium_Italic.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Medium: require("./assets/fonts/Roboto_Medium.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Regular_Italic: require("./assets/fonts/Roboto_Regular_Italic.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Regular: require("./assets/fonts/Roboto_Regular.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Thin_Italic: require("./assets/fonts/Roboto_Thin_Italic.ttf"),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        Roboto_Thin: require("./assets/fonts/Roboto_Thin.ttf"),
-    });
-};
