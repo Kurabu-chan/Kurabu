@@ -131,6 +131,13 @@ const kurabuTheme: Theme = {
 				"themed.ref.pal.red.300",
 				"themed.ref.pal.yellow.300"
 			],
+			onLabels: {
+				header: "themed.ref.pal.gray.800",
+				link: "themed.ref.pal.gray.800",
+				linkActive: "themed.ref.pal.gray.700",
+				paragraph: "themed.ref.pal.gray.800",
+				subText: "themed.ref.pal.gray.800",
+			},
 
 			status: {
 				danger: {

@@ -31,8 +31,12 @@ export const colors = {
 
     // eslint-disable-next-line sort-keys
     labels() {
-        return new TokenReference("themed.ref.col.labels") as unknown as string;
-    },
+        return new TokenReference("themed.ref.col.labels.on") as unknown as string;
+	},
+	// eslint-disable-next-line sort-keys
+	onLabels(textKind: TypographicColorSetSetting) {
+		return new TokenReference(`themed.ref.col.labels.onLabels.${textKind}`) as unknown as string;
+	},
 
     status(variant: Status,
         section: "border" | "color" | `text.${"header"
