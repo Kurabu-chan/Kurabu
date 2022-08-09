@@ -127,56 +127,6 @@ export default class List extends React.Component<Props, StateType> {
 
     createSearchBar() {
         return (
-            // <SearchBar
-            //     placeholder="Search for an Anime Title.."
-            //     loadingProps={{}}
-            //     showLoading={false}
-            //     lightTheme={false}
-            //     round={true}
-            //     onFocus={() => { }}
-            //     onBlur={() => { }}
-            //     style={{
-            //         backgroundColor: Colors.KURABUPURPLE,
-            //         color: Colors.TEXT,
-            //         width: Dimensions.get("window").width - 10,
-            //     }}
-            //     inputStyle={{
-            //         color: Colors.TEXT,
-            //     }}
-            //     labelStyle={{
-            //         backgroundColor: Colors.KURABUPURPLE,
-            //     }}
-            //     searchIcon={{
-            //         name: "search",
-            //         color: Colors.TEXT,
-            //     }}
-            //     clearIcon={{
-            //         name: "close",
-            //         color: Colors.TEXT
-            //     }}
-            //     inputContainerStyle={{
-            //         backgroundColor: Colors.KURABUPURPLE,
-            //     }}
-            //     containerStyle={{
-            //         backgroundColor: "transparent",
-            //         borderTopWidth: 0,
-            //         borderBottomWidth: 0,
-            //     }}
-            //     leftIconContainerStyle={{
-            //         backgroundColor: Colors.KURABUPURPLE,
-            //     }}
-            //     onEndEditing={this.doSearch.bind(this)}
-            //     platform={"default"}
-            //     onChangeText={this.updateSearch.bind(this) as any}
-            //     onClear={() => {
-            //         this.updateSearch("");
-            //     }}
-            //     onCancel={this.doSearch.bind(this)}
-            //     value={this.state.filter?.query ?? ""}
-            //     cancelButtonTitle={"Cancel"}
-            //     cancelButtonProps={{}}
-            //     showCancel={this.state.filter?.query != undefined}
-            // />
             <FieldSearchBar
                 fields={[
                     {
@@ -234,37 +184,6 @@ export default class List extends React.Component<Props, StateType> {
                 search={this.state.filter.search}
                 currentFields={this.state.filter.fields}
                 onSearch={this.doSearch.bind(this)}
-                styles={{
-                    style: {
-                        backgroundColor: Colors.KURABUPURPLE,
-                        color: Colors.TEXT,
-                        // width: Dimensions.get("window").width - 20,
-
-                    },
-                    inputStyle: {
-                        color: Colors.TEXT,
-                    },
-                    labelStyle: {
-                        backgroundColor: Colors.KURABUPURPLE,
-                    },
-                    inputContainerStyle: {
-                        backgroundColor: Colors.KURABUPURPLE,
-                    },
-                    containerStyle: {
-                        backgroundColor: "transparent",
-                        borderTopWidth: 0,
-                        borderBottomWidth: 0,
-                    },
-                    leftIconContainerStyle: {
-                        backgroundColor: Colors.KURABUPURPLE,
-                    },
-                    searchIconStyle: {
-                        color: Colors.TEXT
-                    },
-                    clearIconStyle: {
-                        color: Colors.TEXT
-                    }
-                }}
             />
         );
     }
