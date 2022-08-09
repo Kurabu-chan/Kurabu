@@ -4,7 +4,7 @@ import { AnimeDetailsMainPicture } from "@kurabu/api-sdk";
 import { AppliedStyles, sizing, ThemedComponent } from "@kurabu/theme";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { Image, StyleSheet } from "react-native";
+import { Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 type Props = {

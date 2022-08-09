@@ -5,12 +5,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, View, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { AnimeSeasonalSource } from "#data/anime/AnimeSeasonalSource";
 import { MediaListSource } from "#data/MediaListSource";
 import MediaList, { mediaListFields } from "#comps/MediaList";
 import { Colors } from "#config/Colors";
-import { getCurrentSeason } from "#helpers/seasonProvider";
-import {  GetSeasonalAnimesSeasonEnum } from "@kurabu/api-sdk";
 import { AnimeRankingSource } from "#data/anime/AnimeRankingSource";
 
 type Props = StackScreenProps<HomeStackParamList, "HomeScreen">;

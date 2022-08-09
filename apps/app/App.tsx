@@ -1,8 +1,8 @@
 import "react-native-gesture-handler";
 import * as Font from "expo-font";
-import React, { useEffect } from "react";
+import React from "react";
 import * as Linking from "expo-linking";
-import { AppState, AppStateStatus, Dimensions, LogBox, PixelRatio, ScaledSize, useWindowDimensions, NativeEventSubscription } from "react-native";
+import { AppState, AppStateStatus, Dimensions, LogBox, PixelRatio, ScaledSize, NativeEventSubscription } from "react-native";
 import Authentication from "#api/Authenticate";
 import { NavigationContainer } from "@react-navigation/native";
 import Drawer from "#routes/MainDrawer";
@@ -11,7 +11,7 @@ import { DoSwitch, navigationRef, navigationRefReady } from "#routes/RootNavigat
 import { registerSwitchListener } from "#routes/RootNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { hideAsync, preventAutoHideAsync } from "expo-splash-screen"
-import { defaultTheme, defaultThemeSet, ReactNativeUIScaling, ThemeProvider, addTheme, ThemeSet, Theme } from "@kurabu/theme";
+import { ReactNativeUIScaling, ThemeProvider, addTheme, ThemeSet, Theme } from "@kurabu/theme";
 import { themes } from "./src/themes";
 
 LogBox.ignoreLogs([/Require\scycles/]);

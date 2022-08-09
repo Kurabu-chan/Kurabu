@@ -4,9 +4,8 @@ import { RouteProp } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Dimensions, SafeAreaView, StyleSheet, Image, Text, findNodeHandle, View } from "react-native";
+import { Dimensions, SafeAreaView, StyleSheet, Image } from "react-native";
 import ReactNativeZoomableView from '@openspacelabs/react-native-zoomable-view/src/ReactNativeZoomableView';
-import { Button } from "react-native-elements";
 
 type Props = {
     navigation: StackNavigationProp<DetailsStackParamList, "DetailsImageScreen">;
