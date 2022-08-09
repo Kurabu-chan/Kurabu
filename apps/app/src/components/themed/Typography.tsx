@@ -14,11 +14,11 @@ import {
 	TypographyScales
 } from "@kurabu/theme";
 import React from "react";
-import { TextProps, Text, TextStyle, StyleProp } from "react-native";
+import { TextProps, Text, TextStyle, StyleProp, StyleSheet } from "react-native";
 
 type Props = {
 	variant: TypographyScales,
-	colorVariant: MainColorSets,
+	colorVariant: MainColorSets | "labels",
 	isOnContainer: boolean,
 	textKind: TypographicColorSetSetting
 } & TextProps;
@@ -41,7 +41,16 @@ export function createTypographyStyles(
 	variant: TypographyScales,
 	textKind: TypographicColorSetSetting,
 	isOnContainer: boolean,
-	colorVariant: MainColorSets): [Styles, (styles: AppliedStyles<Styles>, theme: ProvidedTheme, propertyStyles: StyleProp<TextStyle>) => StyleProp<TextStyle>] {
+	colorVariant: MainColorSets | "labels"): [Styles, (styles: AppliedStyles<Styles>, theme: ProvidedTheme, propertyStyles: StyleProp<TextStyle>) => StyleProp<TextStyle>] {
+	
+	let color: string;	
+	
+	if (colorVariant === "labels") {
+		color = colors.onLabels(textKind)
+	} else { 
+		color = isOnContainer ? colors.onColor(colorVariant, textKind) : colors.onColorContainer(colorVariant, textKind)
+	}
+	
 	const styles: Styles = ThemedStyleSheet.create({
 		text: {
 			fontSize: typography.fontSize(variant),
@@ -49,7 +58,7 @@ export function createTypographyStyles(
 			fontFamily: typography.fontFamily(variant),
 			letterSpacing: typography.letterSpacing(variant),
 			fontStyle: typography.fontStyle(variant),
-			color: isOnContainer ? colors.onColor(colorVariant, textKind) : colors.onColorContainer(colorVariant, textKind)
+			color: color
 		}
 	})
 
@@ -74,13 +83,15 @@ export function createTypographyStyles(
 			propertyStyles = [propertyStyles];
 		}
 
-		return [
+		const ret: StyleProp<TextStyle> = StyleSheet.flatten([
 			{
 				textTransform: textTransform,
 				...styles.text[1]
 			},
 			...propertyStyles
-		]
+		])
+		console.log("ret",ret)
+		return ret
 	}
 
 	return [styles, apply];
