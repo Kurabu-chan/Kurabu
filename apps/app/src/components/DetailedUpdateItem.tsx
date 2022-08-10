@@ -102,15 +102,15 @@ export class DetailedUpdateItem extends ThemedComponent<
         const mangaNode = this.getMangaNode();
 
         if (animeNode?.myListStatus !== undefined) {
-            return this.createAnimeListStatus(animeNode, styles, theme);
+            return this.createAnimeListStatus(animeNode, styles);
         }
         if (mangaNode?.myListStatus !== undefined) {
-            return this.createMangaListStatus(mangaNode, styles, theme);
+            return this.createMangaListStatus(mangaNode, styles);
         }
         return undefined;
     }
 
-    createMangaListStatus(node: MangaDetails, styles: AppliedStyles<Styles>, theme: ProvidedTheme) {
+    createMangaListStatus(node: MangaDetails, styles: AppliedStyles<Styles>) {
         return (
             <View style={styles.listContainer}>
                 <Divider margin={false} variant="secondary" isOnContainer={false} widthPercentage={100} />
@@ -153,7 +153,7 @@ export class DetailedUpdateItem extends ThemedComponent<
                                     fullList={this.props.item.node.myListStatus ?? {}}
                                     fieldToControl="numChaptersRead" mediaId={node.id}
                                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                                    color={resolve(colors.color("primary"), theme)}
+									color="primary"
                                     height={25}
                                     min={0}
                                     max={node.numChapters ?? 0}
@@ -165,7 +165,7 @@ export class DetailedUpdateItem extends ThemedComponent<
                                 fieldToControl="numVolumesRead"
                                 mediaId={node.id}
                                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                                color={resolve(colors.color("primary"), theme)}
+                                color="primary"
                                 height={25}
                                 min={0}
                                 max={node.numVolumes ?? 0}
@@ -178,7 +178,7 @@ export class DetailedUpdateItem extends ThemedComponent<
         );
     }
 
-    createAnimeListStatus(node: AnimeDetails, styles: AppliedStyles<Styles>, theme: ProvidedTheme) {
+    createAnimeListStatus(node: AnimeDetails, styles: AppliedStyles<Styles>) {
         return (
             <View style={styles.listContainer}>
                 <Divider margin={false} variant="secondary" isOnContainer={false} widthPercentage={100} />
@@ -218,7 +218,7 @@ export class DetailedUpdateItem extends ThemedComponent<
                                     fieldToControl="numEpisodesWatched"
                                     mediaId={node.id}
                                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                                    color={resolve(colors.color("primary"), theme)}
+									color="primary"
                                     height={25}
                                     min={0}
                                     max={node.numEpisodes ?? 0}
