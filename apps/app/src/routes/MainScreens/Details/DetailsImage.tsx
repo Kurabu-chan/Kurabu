@@ -2,10 +2,10 @@ import { Colors } from "#config/Colors";
 import { DetailsStackParamList } from "#routes/MainStacks/DetailsStack";
 import { RouteProp } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Dimensions, SafeAreaView, StyleSheet, Image } from "react-native";
 import ReactNativeZoomableView from '@openspacelabs/react-native-zoomable-view/src/ReactNativeZoomableView';
+import { MainGradientBackground } from "#comps/MainGradientBackground";
 
 type Props = {
     navigation: StackNavigationProp<DetailsStackParamList, "DetailsImageScreen">;
@@ -42,15 +42,7 @@ export class DetailsImage extends React.Component<Props, State> {
     render() {
         return (
             <SafeAreaView style={styles.appContainer}>
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={[
-                        Colors.KURABUPINK,
-                        Colors.KURABUPURPLE,
-                        Colors.BACKGROUNDGRADIENT_COLOR1,
-                        Colors.BACKGROUNDGRADIENT_COLOR2_DETAILS,
-                    ]}
-                    style={styles.linearGradient}>
+				<MainGradientBackground>
 
                     <ReactNativeZoomableView
                         key={new Date().getTime()}
@@ -73,7 +65,7 @@ export class DetailsImage extends React.Component<Props, State> {
                     </ReactNativeZoomableView>
 
 
-                </LinearGradient>
+                </MainGradientBackground>
             </SafeAreaView>
         );
     }
@@ -83,11 +75,6 @@ const styles = StyleSheet.create({
     appContainer: {
         backgroundColor: Colors.INVISIBLE_BACKGROUND,
         flex: 1
-    },
-    linearGradient: {
-        width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height,
-        flex: 1,
     },
     image: {
         width: "100%",

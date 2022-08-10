@@ -6,8 +6,8 @@ import { DetailsImageListItem } from "#comps/DetailsImageListItem";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { DetailsStackParamList } from "#routes/MainStacks/DetailsStack";
 import { RouteProp } from "@react-navigation/core";
-import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "#config/Colors";
+import { MainGradientBackground } from "#comps/MainGradientBackground";
 
 type Props = {
     navigation: StackNavigationProp<DetailsStackParamList, "DetailsImageListScreen">;
@@ -18,15 +18,7 @@ export class DetailsImageList extends React.Component<Props> {
     render() {
         return (
             <SafeAreaView style={styles.appContainer}>
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={[
-                        Colors.KURABUPINK,
-                        Colors.KURABUPURPLE,
-                        Colors.BACKGROUNDGRADIENT_COLOR1,
-                        Colors.BACKGROUNDGRADIENT_COLOR2_DETAILS,
-                    ]}
-                    style={styles.linearGradient}>
+				<MainGradientBackground>
                     <Text style={styles.title}>Pictures</Text>
                     <FlatList
                         data={this.props.route.params.picture}
@@ -38,7 +30,7 @@ export class DetailsImageList extends React.Component<Props> {
                         contentContainerStyle={styles.imageListContentContainer}
                         keyExtractor={(item: AnimeDetailsMainPicture, index: number) => index.toString()}
                     />
-                </LinearGradient>
+                </MainGradientBackground>
             </SafeAreaView>
         );
     }
@@ -57,11 +49,6 @@ const styles = StyleSheet.create({
     },
     imageListContentContainer: {
         paddingBottom: 10
-    },
-    linearGradient: {
-        width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height,
-        flex: 1
     },
     title: {
         fontSize: fontSize * 1.6,

@@ -1,7 +1,6 @@
 import React from "react";
 import { MangaDetailsSource } from "#data/manga/MangaDetailsSource";
 import { BackButtonFunctionsType, changeActivePage, changeBackButton, getActivePage } from "#helpers/backButton";
-import { LinearGradient } from "expo-linear-gradient";
 import {
 	ActivityIndicator,
 	Alert,
@@ -27,6 +26,7 @@ import { HomeStackParamList } from "../../MainStacks/HomeStack";
 import { ListStatus } from "#comps/ListStatus";
 import { AnimeDetails, AnimeDetailsMediaTypeEnum, AnimeListData, MangaDetails, MangaDetailsMediaTypeEnum, MangaListData } from "@kurabu/api-sdk";
 import { niceDateFormat } from "#helpers/textFormatting";
+import { MainGradientBackground } from "#comps/MainGradientBackground";
 
 type Props = {
 	navigation: StackNavigationProp<HomeStackParamList, "DetailsScreen">;
@@ -160,155 +160,149 @@ export default class Details extends React.Component<Props, State> {
 	}
 
 	render() {
-		return (
-			<SafeAreaView style={styles.appContainer}>
-				<LinearGradient
-					// Background Linear Gradient
-					colors={[
-						Colors.KURABUPINK,
-						Colors.KURABUPURPLE,
-						Colors.BACKGROUNDGRADIENT_COLOR1,
-						Colors.BACKGROUNDGRADIENT_COLOR2_DETAILS,
-					]}
-					style={{
-						width: Dimensions.get("window").width,
-						height: Dimensions.get("window").height,
-					}}
-				>
-					{this.state.media == undefined ? (
+
+		if (this.state.media == undefined) {
+			return (
+				<SafeAreaView style={styles.appContainer}>
+					<MainGradientBackground noFlex={true}>
 						<ActivityIndicator
 							style={styles.loading}
 							size="large"
 							color={Colors.BLUE}
 						/>
-					) : (
-						<ScrollView style={styles.page}>
-							<View style={styles.TopArea}>
-								<TouchableOpacity onPress={() => {
-									if (this.state.media?.pictures === undefined || this.state.media.pictures.length === 0) {
-										Alert.alert("No pictures found");
-										return;
-									}
+					</MainGradientBackground>
+				</SafeAreaView>);
+		}
 
-									this.props.navigation.push("DetailsImageListScreen", {
-										picture: this.state.media?.pictures
-									});
-								}}>
-									<Image
-										style={styles.image}
-										source={{
-											uri: this.state.media?.mainPicture?.large,
-										}}
-									/>
-								</TouchableOpacity>
+		return (
+			<SafeAreaView style={styles.appContainer}>
+				<MainGradientBackground noFlex={true}>
+					<ScrollView style={styles.page}>
+						<View style={styles.TopArea}>
+							<TouchableOpacity onPress={() => {
+								if (this.state.media?.pictures === undefined || this.state.media.pictures.length === 0) {
+									Alert.alert("No pictures found");
+									return;
+								}
 
-								<View style={styles.TitleArea}>
-									<Text style={styles.title}>{this.state.media.title}</Text>
-									{this.state.media.title !=
-										this.state.media.alternativeTitles?.en ? (
-										<Text style={styles.alternateTitle}>
-											{this.state.media.alternativeTitles?.en}
-										</Text>
-									) : undefined}
+								this.props.navigation.push("DetailsImageListScreen", {
+									picture: this.state.media?.pictures
+								});
+							}}>
+								<Image
+									style={styles.image}
+									source={{
+										uri: this.state.media?.mainPicture?.large,
+									}}
+								/>
+							</TouchableOpacity>
+
+							<View style={styles.TitleArea}>
+								<Text style={styles.title}>{this.state.media.title}</Text>
+								{this.state.media.title !=
+									this.state.media.alternativeTitles?.en ? (
 									<Text style={styles.alternateTitle}>
-										{this.state.media.alternativeTitles?.ja}
+										{this.state.media.alternativeTitles?.en}
 									</Text>
-									<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
-									<View style={styles.TopAreaData}>
-										<View style={styles.TopAreaLabels}>
-											<Text style={styles.TopAreaLabel}>Score:</Text>
-											<Text style={styles.TopAreaLabel}>Rank:</Text>
-											<Text style={styles.TopAreaLabel}>Popularity:</Text>
-										</View>
-										<View style={styles.TopAreaValues}>
-											<Text style={styles.TopAreaValue}>
-												{this.state.media.mean}
-											</Text>
-											<Text style={styles.TopAreaValue}>
-												#{this.state.media.rank}
-											</Text>
-											<Text style={styles.TopAreaValue}>
-												#{this.state.media.popularity}
-											</Text>
-										</View>
+								) : undefined}
+								<Text style={styles.alternateTitle}>
+									{this.state.media.alternativeTitles?.ja}
+								</Text>
+								<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
+								<View style={styles.TopAreaData}>
+									<View style={styles.TopAreaLabels}>
+										<Text style={styles.TopAreaLabel}>Score:</Text>
+										<Text style={styles.TopAreaLabel}>Rank:</Text>
+										<Text style={styles.TopAreaLabel}>Popularity:</Text>
 									</View>
-									<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
-									<View style={styles.TopAreaData}>
-										<View style={styles.TopAreaLabels}>
-											<Text style={styles.TopAreaLabel}>Status:</Text>
-											<Text style={styles.TopAreaLabel}>Aired:</Text>
-											{this.episodesLabel()}
-											<Text style={styles.TopAreaLabel}>Genres:</Text>
-										</View>
-										<View style={styles.TopAreaValues}>
-											<Text style={styles.TopAreaValue}>
-												{this.niceString(this.state.media.status?.toString())}
-											</Text>
-											<Text style={styles.TopAreaValue}>
-												{niceDateFormat(this.state.media.startDate)}
-											</Text>
-											{this.episodesValue()}
-											<Text style={styles.TopAreaValue}>
-												{this.state.media.genres
-													?.map((x) => x.name)
-													.join(", ")}
-											</Text>
-										</View>
+									<View style={styles.TopAreaValues}>
+										<Text style={styles.TopAreaValue}>
+											{this.state.media.mean}
+										</Text>
+										<Text style={styles.TopAreaValue}>
+											#{this.state.media.rank}
+										</Text>
+										<Text style={styles.TopAreaValue}>
+											#{this.state.media.popularity}
+										</Text>
+									</View>
+								</View>
+								<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
+								<View style={styles.TopAreaData}>
+									<View style={styles.TopAreaLabels}>
+										<Text style={styles.TopAreaLabel}>Status:</Text>
+										<Text style={styles.TopAreaLabel}>Aired:</Text>
+										{this.episodesLabel()}
+										<Text style={styles.TopAreaLabel}>Genres:</Text>
+									</View>
+									<View style={styles.TopAreaValues}>
+										<Text style={styles.TopAreaValue}>
+											{this.niceString(this.state.media.status?.toString())}
+										</Text>
+										<Text style={styles.TopAreaValue}>
+											{niceDateFormat(this.state.media.startDate)}
+										</Text>
+										{this.episodesValue()}
+										<Text style={styles.TopAreaValue}>
+											{this.state.media.genres
+												?.map((x) => x.name)
+												.join(", ")}
+										</Text>
 									</View>
 								</View>
 							</View>
-							<Text style={styles.head2}>Synopsis</Text>
-							<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
-							<LargeText text={this.state.media.synopsis} backgroundColorVariant="background" isOnContainer={false} />
-							{this.state.media.background != undefined &&
-								this.state.media.background != "" ? (
-								<View>
-									<Text style={styles.head2}>Background</Text>
-									<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
-									<LargeText text={this.state.media.background} backgroundColorVariant="background" isOnContainer={false} />
-								</View>
-							) : undefined}
-							<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
-							<Text style={styles.head2}>Your list status</Text>
-							<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
-							<ListStatus
-								parentRefresh={() => {
-									void this.refresh();
-								}}
-								id={this.state.mediaId as number}
-								props={this.state.media.myListStatus}
-								navigation={this.props.navigation}
-								route={this.props.route}
-								mediaType={this.state.mediaType}
-							/>
-							<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
-							<Text style={styles.head2}>Recommendations</Text>
-							<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
-							<FlatList
-								horizontal={true}
-								data={this.state.media.recommendations?.map((x) => ({
-									...x,
-									node: {
-										...x.node,
-										mediaType: this.state.mediaType,
-									},
-								} as (AnimeListData | MangaListData)))}
-								renderItem={(item) => (
-									<MediaItem
-										item={item.item}
-										width={150 * sizer}
-										navigator={this.props.navigation}
-									/>
-								)}
-								keyExtractor={(_, index) => index.toString()}
-							/>
-							<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
-							<View
-								style={styles.extraRoom}
-							/>
-						</ScrollView>
-					)}
-				</LinearGradient>
+						</View>
+						<Text style={styles.head2}>Synopsis</Text>
+						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
+						<LargeText text={this.state.media.synopsis} backgroundColorVariant="background" isOnContainer={false} />
+						{this.state.media.background != undefined &&
+							this.state.media.background != "" ? (
+							<View>
+								<Text style={styles.head2}>Background</Text>
+								<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
+								<LargeText text={this.state.media.background} backgroundColorVariant="background" isOnContainer={false} />
+							</View>
+						) : undefined}
+						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
+						<Text style={styles.head2}>Your list status</Text>
+						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
+						<ListStatus
+							parentRefresh={() => {
+								void this.refresh();
+							}}
+							id={this.state.mediaId as number}
+							props={this.state.media.myListStatus}
+							navigation={this.props.navigation}
+							route={this.props.route}
+							mediaType={this.state.mediaType}
+						/>
+						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
+						<Text style={styles.head2}>Recommendations</Text>
+						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
+						<FlatList
+							horizontal={true}
+							data={this.state.media.recommendations?.map((x) => ({
+								...x,
+								node: {
+									...x.node,
+									mediaType: this.state.mediaType,
+								},
+							} as (AnimeListData | MangaListData)))}
+							renderItem={(item) => (
+								<MediaItem
+									item={item.item}
+									width={150 * sizer}
+									navigator={this.props.navigation}
+								/>
+							)}
+							keyExtractor={(_, index) => index.toString()}
+						/>
+						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
+						<View
+							style={styles.extraRoom}
+						/>
+					</ScrollView>
+				</MainGradientBackground>
 			</SafeAreaView>
 		);
 	}

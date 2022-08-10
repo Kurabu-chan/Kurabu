@@ -1,7 +1,6 @@
 import { changeActivePage } from "#helpers/backButton";
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { MediaListSource } from "#data/MediaListSource";
 import SearchList from "#comps/DetailedUpdateList";
@@ -10,6 +9,7 @@ import { AnimeListSource } from "#data/anime/AnimeListSource";
 import { FieldSearchBar, FieldValue } from "#comps/FieldSearchBar";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ListStackParamList } from "#routes/MainStacks/ListStack";
+import { MainGradientBackground } from "#comps/MainGradientBackground";
 
 type Props = {
     navigation: StackNavigationProp<ListStackParamList, "ListScreen">;
@@ -209,20 +209,7 @@ export default class List extends React.Component<Props, StateType> {
             <SafeAreaProvider
                 style={styles.safeAreaProvider}
             >
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={[
-                        Colors.KURABUPINK,
-                        Colors.KURABUPURPLE,
-                        Colors.BACKGROUNDGRADIENT_COLOR1,
-                        Colors.BACKGROUNDGRADIENT_COLOR2,
-                    ]}
-                    style={{
-                        width: Dimensions.get("window").width,
-                        height: Dimensions.get("window").height,
-                        ...styles.gradient
-                    }}
-                >
+				<MainGradientBackground>
                     {this.createSearchBar()}
                     {this.state.rankingSource !== undefined ? (
                         <SearchList
@@ -235,7 +222,7 @@ export default class List extends React.Component<Props, StateType> {
                             limit={10000}
                         />
                     ) : undefined}
-                </LinearGradient>
+                </MainGradientBackground>
             </SafeAreaProvider>
         );
     }
@@ -244,9 +231,6 @@ export default class List extends React.Component<Props, StateType> {
 const styles = StyleSheet.create({
     safeAreaProvider: {
         backgroundColor: Colors.ALTERNATE_BACKGROUND,
-        flex: 1
-    },
-    gradient: {
         flex: 1
     }
 })

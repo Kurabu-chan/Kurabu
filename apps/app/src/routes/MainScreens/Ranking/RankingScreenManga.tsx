@@ -2,7 +2,6 @@ import { MangaRankingSource } from "#data/manga/MangaRankingSource";
 import { changeActivePage } from "#helpers/backButton";
 import { Picker } from "@react-native-picker/picker";
 import { ItemValue } from "@react-native-picker/picker/typings/Picker";
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { StyleSheet, Dimensions } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -12,6 +11,7 @@ import SearchList from "#comps/DetailedUpdateList";
 import { Colors } from "#config/Colors";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RankingStackParamList } from "#routes/MainStacks/RankingStack";
+import { MainGradientBackground } from "#comps/MainGradientBackground";
 
 type Props = StackScreenProps<RankingStackParamList, "RankingScreen">
 
@@ -162,20 +162,7 @@ export default class Ranking extends React.Component<Props, StateType> {
             <SafeAreaProvider
                 style={styles.safeAreaProvider}
             >
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={[
-                        Colors.KURABUPINK,
-                        Colors.KURABUPURPLE,
-                        Colors.BACKGROUNDGRADIENT_COLOR1,
-                        Colors.BACKGROUNDGRADIENT_COLOR2,
-                    ]}
-                    style={{
-                        width: Dimensions.get("window").width,
-                        height: Dimensions.get("window").height,
-                        ...styles.gradient
-                    }}
-                >
+				<MainGradientBackground>
                     {this.createSearchBar()}
                     {this.state.rankingSource !== undefined ? (
                         <SearchList
@@ -186,7 +173,7 @@ export default class Ranking extends React.Component<Props, StateType> {
                             onDataGather={this.onSearchListDataGather.bind(this)}
                         />
                     ) : undefined}
-                </LinearGradient>
+                </MainGradientBackground>
             </SafeAreaProvider>
         );
     }
@@ -204,8 +191,5 @@ const styles = StyleSheet.create({
     safeAreaProvider: {
         backgroundColor: Colors.ALTERNATE_BACKGROUND,
         flex: 1
-    },
-    gradient: {
-        flex: 1,
     }
 })
