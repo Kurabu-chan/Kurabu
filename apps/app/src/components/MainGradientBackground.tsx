@@ -5,7 +5,7 @@ import React from "react";
 import { Dimensions, StyleSheet } from "react-native";
 
 type Props = React.PropsWithChildren<{
-	noFlex: boolean;
+	noFlex?: boolean;
 }>;
 
 export class MainGradientBackground extends ThemedComponent<Styles, Props>{ 
@@ -33,7 +33,7 @@ export class MainGradientBackground extends ThemedComponent<Styles, Props>{
 					gradient.gradient.fourth,
 				]}
 				style={StyleSheet.flatten([styles.gradient, {
-					flex: 0
+					flex: this.props.noFlex === true ? 0 : 1,
 				}])}
 			>
 				{this.props.children}

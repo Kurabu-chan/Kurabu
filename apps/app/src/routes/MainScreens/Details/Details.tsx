@@ -178,7 +178,7 @@ export default class Details extends ThemedComponent<Styles, Props, State> {
 
 		return (
 			<SafeAreaView>
-				<MainGradientBackground noFlex={false}>
+				<MainGradientBackground noFlex={true}>
 					<ScrollView
 						style={styles.page}
 						contentContainerStyle={styles.scrollContentContainer}>
