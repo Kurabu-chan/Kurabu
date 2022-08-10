@@ -35,9 +35,9 @@ export function CustomDrawerContentComponent(props: DrawerContentComponentProps)
 								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 								inactiveBackgroundColor={resolve(colors.color("surface"), providedTheme)}
 								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-								activeTintColor={resolve(colors.onColor("primary", "link"), providedTheme)}
+								activeTintColor={resolve(colors.onColor("primary", "paragraph"), providedTheme)}
 								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-								inactiveTintColor={resolve(colors.onColor("surface", "link"), providedTheme)}
+								inactiveTintColor={resolve(colors.onColor("surface", "paragraph"), providedTheme)}
 								style={styles.drawerItemStyle}
 							/>
 							<DrawerItem
@@ -58,9 +58,9 @@ export function CustomDrawerContentComponent(props: DrawerContentComponentProps)
 								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 								inactiveBackgroundColor={resolve(colors.color("surface"), providedTheme)}
 								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-								activeTintColor={resolve(colors.onColor("primary", "link"), providedTheme)}
+								activeTintColor={resolve(colors.onColor("primary", "paragraph"), providedTheme)}
 								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-								inactiveTintColor={resolve(colors.onColor("surface", "link"), providedTheme)}
+								inactiveTintColor={resolve(colors.onColor("surface", "paragraph"), providedTheme)}
 								style={styles.drawerItemStyle}
 							/>
 						</View>

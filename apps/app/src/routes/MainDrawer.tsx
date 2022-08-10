@@ -108,8 +108,8 @@ const navigatorStyles = {
     drawer: {
         activeBackgroundColor: colors.color("primary"),
         inactiveBackgroundColor: colors.color("surface"),
-        activeTintColor: colors.onColor("primary", "link"),
-        inactiveTintColor: colors.onColor("surface", "link"),
+        activeTintColor: colors.onColor("primary", "paragraph"),
+        inactiveTintColor: colors.onColor("surface", "paragraph"),
         backgroundColor: colors.color("background"),
         drawerItemBorderRadius: sizing.rounding<number>("extraSmall")
     },
@@ -123,7 +123,7 @@ const navigatorStyles = {
         backgroundColor: colors.color("primary"),
     },
     icon: {
-        color: colors.onColor("primary", "link"),
+        color: colors.onColor("primary", "paragraph"),
     }
 }
 

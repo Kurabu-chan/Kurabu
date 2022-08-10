@@ -1,9 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Colors } from "#config/Colors";
+import { AppliedStyles, colors, MainColorSets, sizing, ThemedComponent } from "@kurabu/theme";
+import { Typography } from "./themed/Typography";
 
 type Props = {
-    text?: string;
+	text?: string;
+	backgroundColorVariant: MainColorSets;
+	isOnContainer: boolean
 };
 
 type State = {
@@ -11,9 +14,9 @@ type State = {
     text?: string;
 };
 
-export class LargeText extends React.Component<Props, State> {
+export class LargeText extends ThemedComponent<Styles, Props, State> {
     constructor(props: Props) {
-        super(props);
+        super(styles, props);
         this.state = {
             text: props.text,
             readmore: false,
@@ -28,7 +31,7 @@ export class LargeText extends React.Component<Props, State> {
         }
     }
 
-    render() {
+    renderThemed(styles: AppliedStyles<Styles>) {
         if (this.state.text == undefined) return <Text>No synopsis</Text>;
 
         let text: string | undefined;
@@ -43,7 +46,8 @@ export class LargeText extends React.Component<Props, State> {
         }
 
         return (
-            <View>
+			<View>
+				<Typography colorVariant={this.props.backgroundColorVariant} isOnContainer={false} textKind="paragraph" variant="body1">{text}</Typography>
                 <Text style={styles.text}>{text}</Text>
                 {this.state.text.length > 300 ? (
                     <TouchableOpacity
@@ -53,8 +57,8 @@ export class LargeText extends React.Component<Props, State> {
                                 readmore: !prevState.readmore,
                             }));
                         }}
-                    >
-                        <Text style={styles.ReadMore}>{read}</Text>
+					>
+						<Typography style={styles.ReadMore} colorVariant={this.props.backgroundColorVariant} isOnContainer={false} textKind="link" variant="body1">{read}</Typography>
                     </TouchableOpacity>
                 ) : undefined}
             </View>
@@ -62,17 +66,16 @@ export class LargeText extends React.Component<Props, State> {
     }
 }
 
+type Styles = typeof styles;
 const styles = StyleSheet.create({
     text: {
-        color: Colors.TEXT,
+        color: colors.onColor("background", "paragraph"),
         fontSize: 13,
     },
     ReadMore: {
-        color: Colors.BLUE,
         textDecorationStyle: "solid",
         textDecorationLine: "underline",
-        textDecorationColor: Colors.BLUE,
-        fontSize: 12,
-        marginBottom: 15,
+		textDecorationColor: colors.onColor("background", "link"),
+        marginBottom: sizing.spacing("large"),
     },
 });
