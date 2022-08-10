@@ -9,14 +9,11 @@ import {
 	Image,
 	SafeAreaView,
 	StyleSheet,
-	Text,
 	View,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-
 import { AnimeDetailsSource } from "#data/anime/AnimeDetailsSource";
 import { Divider } from "#comps/themed/Divider";
 import { LargeText } from "#comps/LargeText";
@@ -27,6 +24,11 @@ import { ListStatus } from "#comps/ListStatus";
 import { AnimeDetails, AnimeDetailsMediaTypeEnum, AnimeListData, MangaDetails, MangaDetailsMediaTypeEnum, MangaListData } from "@kurabu/api-sdk";
 import { niceDateFormat } from "#helpers/textFormatting";
 import { MainGradientBackground } from "#comps/MainGradientBackground";
+import { Typography } from "#comps/themed/Typography";
+import { TopAreaLabel } from "./components/TopAreaLabel";
+import { TopAreaValue } from "./components/TopAreaValue";
+import { Spacer } from "#comps/themed/Spacer";
+import { AppliedStyles, sizing, ThemedComponent } from "@kurabu/theme";
 
 type Props = {
 	navigation: StackNavigationProp<HomeStackParamList, "DetailsScreen">;
@@ -43,9 +45,9 @@ type State = {
 
 const sizer = Dimensions.get("window").width / 400;
 
-export default class Details extends React.Component<Props, State> {
+export default class Details extends ThemedComponent<Styles, Props, State> {
 	constructor(props: Props) {
-		super(props);
+		super(styles, props);
 		let mediaId = props.route.params.id;
 		const mediaType = props.route.params.mediaType;
 		if (mediaId == undefined) {
@@ -128,13 +130,13 @@ export default class Details extends React.Component<Props, State> {
 
 		if ("numEpisodes" in this.state.media) {
 			return (<View>
-				<Text style={styles.TopAreaLabel}>Episodes:</Text>
+				<TopAreaLabel>Episodes:</TopAreaLabel>
 			</View>);
 		}
 
 		return (<View>
-			<Text style={styles.TopAreaLabel}>Chapters:</Text>
-			<Text style={styles.TopAreaLabel}>Volumes:</Text>
+			<TopAreaLabel>Chapters:</TopAreaLabel>
+			<TopAreaLabel>Volumes:</TopAreaLabel>
 		</View>);
 	}
 
@@ -147,23 +149,23 @@ export default class Details extends React.Component<Props, State> {
 			const media: AnimeDetails = this.state.media;
 
 			return (<View>
-				<Text style={styles.TopAreaLabel}>{valueOrND(media.numEpisodes)}</Text>
+				<TopAreaValue>{valueOrND(media.numEpisodes)}</TopAreaValue>
 			</View>);
 		}
 
 		const media: MangaDetails = this.state.media as MangaDetails;
 
 		return (<View>
-			<Text style={styles.TopAreaLabel}>{valueOrND(media.numChapters)}</Text>
-			<Text style={styles.TopAreaLabel}>{valueOrND(media.numVolumes)}</Text>
+			<TopAreaValue>{valueOrND(media.numChapters)}</TopAreaValue>
+			<TopAreaValue>{valueOrND(media.numVolumes)}</TopAreaValue>
 		</View>);
 	}
 
-	render() {
+	renderThemed(styles: AppliedStyles<Styles>) {
 
 		if (this.state.media == undefined) {
 			return (
-				<SafeAreaView style={styles.appContainer}>
+				<SafeAreaView>
 					<MainGradientBackground noFlex={true}>
 						<ActivityIndicator
 							style={styles.loading}
@@ -175,9 +177,11 @@ export default class Details extends React.Component<Props, State> {
 		}
 
 		return (
-			<SafeAreaView style={styles.appContainer}>
-				<MainGradientBackground noFlex={true}>
-					<ScrollView style={styles.page}>
+			<SafeAreaView>
+				<MainGradientBackground noFlex={false}>
+					<ScrollView
+						style={styles.page}
+						contentContainerStyle={styles.scrollContentContainer}>
 						<View style={styles.TopArea}>
 							<TouchableOpacity onPress={() => {
 								if (this.state.media?.pictures === undefined || this.state.media.pictures.length === 0) {
@@ -196,75 +200,103 @@ export default class Details extends React.Component<Props, State> {
 									}}
 								/>
 							</TouchableOpacity>
-
+								
 							<View style={styles.TitleArea}>
-								<Text style={styles.title}>{this.state.media.title}</Text>
+								<Typography
+									colorVariant="primary"
+									isOnContainer={false}
+									textKind="header"
+									variant="headline4" style={styles.title}>
+									{this.state.media.title}
+								</Typography>
 								{this.state.media.title !=
 									this.state.media.alternativeTitles?.en ? (
-									<Text style={styles.alternateTitle}>
+									<Typography
+										colorVariant="primary"
+										isOnContainer={false}
+										textKind="subText"
+										variant="headline5" style={styles.alternateTitle}>
 										{this.state.media.alternativeTitles?.en}
-									</Text>
+									</Typography>
 								) : undefined}
-								<Text style={styles.alternateTitle}>
+								<Typography
+									colorVariant="primary"
+									isOnContainer={false}
+									textKind="subText"
+									variant="headline5" style={styles.alternateTitle}>
 									{this.state.media.alternativeTitles?.ja}
-								</Text>
+								</Typography>
+
 								<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
 								<View style={styles.TopAreaData}>
 									<View style={styles.TopAreaLabels}>
-										<Text style={styles.TopAreaLabel}>Score:</Text>
-										<Text style={styles.TopAreaLabel}>Rank:</Text>
-										<Text style={styles.TopAreaLabel}>Popularity:</Text>
+										<TopAreaLabel>Score:</TopAreaLabel>
+										<TopAreaLabel>Rank:</TopAreaLabel>
+										<TopAreaLabel>Popularity:</TopAreaLabel>
 									</View>
 									<View style={styles.TopAreaValues}>
-										<Text style={styles.TopAreaValue}>
-											{this.state.media.mean}
-										</Text>
-										<Text style={styles.TopAreaValue}>
-											#{this.state.media.rank}
-										</Text>
-										<Text style={styles.TopAreaValue}>
-											#{this.state.media.popularity}
-										</Text>
+										<TopAreaValue>{this.state.media.mean}</TopAreaValue>
+										<TopAreaValue>#{this.state.media.rank}</TopAreaValue>
+										<TopAreaValue>#{this.state.media.popularity}</TopAreaValue>
 									</View>
 								</View>
 								<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
 								<View style={styles.TopAreaData}>
 									<View style={styles.TopAreaLabels}>
-										<Text style={styles.TopAreaLabel}>Status:</Text>
-										<Text style={styles.TopAreaLabel}>Aired:</Text>
+										<TopAreaLabel>Status:</TopAreaLabel>
+										<TopAreaLabel>Aired:</TopAreaLabel>
 										{this.episodesLabel()}
-										<Text style={styles.TopAreaLabel}>Genres:</Text>
+										<TopAreaLabel>Genres:</TopAreaLabel>
 									</View>
 									<View style={styles.TopAreaValues}>
-										<Text style={styles.TopAreaValue}>
+										<TopAreaValue>
 											{this.niceString(this.state.media.status?.toString())}
-										</Text>
-										<Text style={styles.TopAreaValue}>
+										</TopAreaValue>
+										<TopAreaValue>
 											{niceDateFormat(this.state.media.startDate)}
-										</Text>
+										</TopAreaValue>
 										{this.episodesValue()}
-										<Text style={styles.TopAreaValue}>
+										<TopAreaValue>
 											{this.state.media.genres
 												?.map((x) => x.name)
 												.join(", ")}
-										</Text>
+										</TopAreaValue>
 									</View>
 								</View>
 							</View>
 						</View>
-						<Text style={styles.head2}>Synopsis</Text>
+						<Typography
+							colorVariant="primary"
+							isOnContainer={false}
+							textKind="header"
+							variant="headline4">
+							Synopsis
+						</Typography>
 						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
 						<LargeText text={this.state.media.synopsis} backgroundColorVariant="background" isOnContainer={false} />
 						{this.state.media.background != undefined &&
 							this.state.media.background != "" ? (
-							<View>
-								<Text style={styles.head2}>Background</Text>
+								<View>
+									<Spacer direction="vertical" spacing="large"/>
+									<Typography
+										colorVariant="primary"
+										isOnContainer={false}
+										textKind="header"
+										variant="headline4">
+										Background
+									</Typography>
 								<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
 								<LargeText text={this.state.media.background} backgroundColorVariant="background" isOnContainer={false} />
 							</View>
 						) : undefined}
-						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
-						<Text style={styles.head2}>Your list status</Text>
+						<Spacer direction="vertical" spacing="large" />
+						<Typography
+							colorVariant="primary"
+							isOnContainer={false}
+							textKind="header"
+							variant="headline4">
+							Your list status
+						</Typography>
 						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
 						<ListStatus
 							parentRefresh={() => {
@@ -276,8 +308,15 @@ export default class Details extends React.Component<Props, State> {
 							route={this.props.route}
 							mediaType={this.state.mediaType}
 						/>
-						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
-						<Text style={styles.head2}>Recommendations</Text>
+						<Spacer direction="vertical" spacing="large" />
+
+						<Typography
+							colorVariant="primary"
+							isOnContainer={false}
+							textKind="header"
+							variant="headline4">
+							Recommendations
+						</Typography>
 						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={100} />
 						<FlatList
 							horizontal={true}
@@ -298,9 +337,6 @@ export default class Details extends React.Component<Props, State> {
 							keyExtractor={(_, index) => index.toString()}
 						/>
 						<Divider margin={false} variant="primary" isOnContainer={false} widthPercentage={0} />
-						<View
-							style={styles.extraRoom}
-						/>
 					</ScrollView>
 				</MainGradientBackground>
 			</SafeAreaView>
@@ -308,46 +344,34 @@ export default class Details extends React.Component<Props, State> {
 	}
 }
 
-const fontSize = Dimensions.get("window").width / 36;
-
+type Styles = typeof styles;
 const styles = StyleSheet.create({
-	appContainer: {
-		backgroundColor: Colors.INVISIBLE_BACKGROUND,
-	},
 	loading: {
-		marginTop: Dimensions.get("window").height / 2,
+		marginTop: sizing.vh(50),
 	},
 	image: {
-		width: Dimensions.get("window").width / 2.5,
-		height: (Dimensions.get("window").width / 2.5) * 1.5,
+		width: sizing.vw(40),
+		height: sizing.vw(60),
 	},
 	title: {
-		color: Colors.TEXT,
-		fontSize: fontSize + 4,
-		marginLeft: 5,
+		marginLeft: sizing.spacing("small"),
 	},
 	alternateTitle: {
-		color: Colors.SUBTEXT,
-		marginLeft: 5,
-		fontSize: fontSize + 2,
+		marginLeft: sizing.spacing("small"),
 	},
 	page: {
-		margin: 10,
+		margin: sizing.spacing("medium"),
 	},
 	TopArea: {
 		flexDirection: "row",
 		alignItems: "stretch",
-		width: Dimensions.get("window").width - 20,
-		marginBottom: 10,
+		width: sizing.vw(100, -20),
+		marginBottom: sizing.spacing("medium"),
 	},
 	TitleArea: {
 		flexDirection: "column",
-		marginLeft: 10,
+		marginLeft: sizing.spacing("medium"),
 		flex: 1,
-	},
-	head2: {
-		fontSize: fontSize + 4,
-		color: Colors.TEXT,
 	},
 	TopAreaLabels: {
 		flexDirection: "column",
@@ -360,18 +384,8 @@ const styles = StyleSheet.create({
 	TopAreaData: {
 		flexDirection: "row",
 	},
-	TopAreaLabel: {
-		color: Colors.TEXT,
-		fontWeight: "bold",
-		fontSize: 12,
-	},
-	TopAreaValue: {
-		color: Colors.TEXT,
-		fontSize: 12,
-	},
-	extraRoom: {
-		height: 80,
-		width: 5,
+	scrollContentContainer: {
+		paddingBottom: 80
 	}
 });
 

@@ -76,6 +76,5 @@ const styles = StyleSheet.create({
         textDecorationStyle: "solid",
         textDecorationLine: "underline",
 		textDecorationColor: colors.onColor("background", "link"),
-        marginBottom: sizing.spacing("large"),
     },
 });

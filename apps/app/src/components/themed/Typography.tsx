@@ -90,7 +90,6 @@ export function createTypographyStyles(
 			},
 			...propertyStyles
 		])
-		console.log("ret",ret)
 		return ret
 	}
 
