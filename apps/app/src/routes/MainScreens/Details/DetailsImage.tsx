@@ -63,8 +63,6 @@ export class DetailsImage extends React.Component<Props, State> {
                             }}
                             style={styles.image} />
                     </ReactNativeZoomableView>
-
-
                 </MainGradientBackground>
             </SafeAreaView>
         );
