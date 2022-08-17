@@ -1,6 +1,5 @@
 import { ListDetails } from "#routes/MainScreens/Details/ListDetails";
 import { MangaStatus, AnimeStatus } from "@kurabu/api-sdk";
-import { ItemValue } from "@react-native-picker/picker/typings/Picker";
 
 export class ListDetailsStateManager {
     private get setState() {
@@ -13,7 +12,7 @@ export class ListDetailsStateManager {
 
     constructor(private _listDetails: ListDetails) {}
 
-    changeStatus(itemValue: ItemValue) {
+    changeStatus(itemValue: AnimeStatus | MangaStatus) {
         if (this.state.listStatus == undefined) return;
         
         
@@ -32,13 +31,11 @@ export class ListDetailsStateManager {
         
         if (!allowedStatuses.includes(itemValue.toString())) return;
 
-        console.log("cool")
-
         this.setState((oldState) => ({
             ...oldState,
             listStatus: {
                 ...oldState.listStatus,
-                status: itemValue as MangaStatus | AnimeStatus,
+                status: itemValue,
             },
         }));
     }
@@ -169,7 +166,7 @@ export class ListDetailsStateManager {
         }));
     }
 
-    changeIsRewatching(itemValue: ItemValue) {
+    changeIsRewatching(itemValue: "true"|"false") {
         if (this.state.listStatus == undefined) return;
         this.setState((oldState) => ({
             ...oldState,
@@ -180,7 +177,7 @@ export class ListDetailsStateManager {
         }));
     }
 
-    changeIsRereading(itemValue: ItemValue) {
+	changeIsRereading(itemValue: "true" | "false") {
         if (this.state.listStatus == undefined) return;
         this.setState((oldState) => ({
             ...oldState,
