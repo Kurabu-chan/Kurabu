@@ -1,6 +1,5 @@
 import { AnimeRankingSource } from "#data/anime/AnimeRankingSource";
 import { changeActivePage } from "#helpers/backButton";
-import { Picker } from "@react-native-picker/picker";
 import { ItemValue } from "@react-native-picker/picker/typings/Picker";
 import React from "react";
 import { Dimensions, StyleSheet } from "react-native";
@@ -12,6 +11,11 @@ import { Colors } from "#config/Colors";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RankingStackParamList } from "#routes/MainStacks/RankingStack";
 import { MainGradientBackground } from "#comps/MainGradientBackground";
+import { Picker } from "#comps/themed/Picker";
+import { AppliedStyles, colors, ProvidedTheme, resolve, sizing, ThemedComponent } from "@kurabu/theme";
+import { ThemedStyleSheet } from "#helpers/ThemedStyleSheet";
+import { createTypographyStyles } from "#comps/themed/Typography";
+
 
 type Props = StackScreenProps<RankingStackParamList, "RankingScreen">
 
@@ -29,9 +33,9 @@ type StateType = {
     listenerToUnMount?: () => void;
 };
 
-export default class Ranking extends React.Component<Props, StateType> {
+export default class Ranking extends ThemedComponent<Styles, Props, StateType> {
     constructor(props: Props) {
-        super(props);
+        super(styles, props);
         this.state = {
             ranking: {
                 rankingValue: "all",
@@ -104,37 +108,56 @@ export default class Ranking extends React.Component<Props, StateType> {
         }
     }
 
-    changeRanking(val: ItemValue) {
+    changeRanking(val: string) {
         this.setState(
             (prevState) =>
                 ({
                     ...prevState,
                     ranking: {
                         ...prevState.ranking,
-                        rankingValue: val.toString(),
+                        rankingValue: val,
                     },
                 } as StateType),
             this.DoRanking.bind(this)
         );
     }
 
-    createSearchBar() {
+	createSearchBar(styles: AppliedStyles<Styles>, providedTheme: ProvidedTheme) {
         return (
-            <Picker
-                selectedValue={this.state.ranking.rankingValue}
-                onValueChange={this.changeRanking.bind(this)}
-                style={styles.searchBarPicker}
-            >
-                <Picker.Item label="All" value="all" />
-                <Picker.Item label="Airing" value="airing" />
-                <Picker.Item label="Upcoming" value="upcoming" />
-                <Picker.Item label="Tv" value="tv" />
-                <Picker.Item label="Ova" value="ova" />
-                <Picker.Item label="Movie" value="movie" />
-                <Picker.Item label="Special" value="special" />
-                <Picker.Item label="Popularity" value="bypopularity" />
-                <Picker.Item label="Favorite" value="favorite" />
-            </Picker>
+			// <Picker
+				
+            //     selectedValue={this.state.ranking.rankingValue}
+            //     onValueChange={this.changeRanking.bind(this)}
+            //     style={styles.searchBarPicker}
+            // >
+            //     <Picker.Item label="All" value="all" />
+            //     <Picker.Item label="Airing" value="airing" />
+            //     <Picker.Item label="Upcoming" value="upcoming" />
+            //     <Picker.Item label="Tv" value="tv" />
+            //     <Picker.Item label="Ova" value="ova" />
+            //     <Picker.Item label="Movie" value="movie" />
+            //     <Picker.Item label="Special" value="special" />
+            //     <Picker.Item label="Popularity" value="bypopularity" />
+            //     <Picker.Item label="Favorite" value="favorite" />
+            // </Picker>
+			<Picker
+				value={this.state.ranking.rankingValue}
+				setValue={this.changeRanking.bind(this)}
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				dropDownBackgroundColor={resolve(colors.colorContainer("secondary"), providedTheme)}
+				items={[
+					{ label: "All", value: "all" },
+					{ label: "Airing", value: "airing" },
+					{ label: "Upcoming", value: "upcoming" },
+					{ label: "Tv", value: "tv" },
+					{ label: "Ova", value: "ova" },
+					{ label: "Movie", value: "movie" },
+					{ label: "Special", value: "special" },
+					{ label: "Popularity", value: "bypopularity" },
+					{ label: "Favorite", value: "favorite" },
+				]}
+				style={StyleSheet.flatten(styles.searchBarPicker)}
+				/>
         );
     }
 
@@ -155,13 +178,13 @@ export default class Ranking extends React.Component<Props, StateType> {
         }));
     }
 
-    render() {
+    renderThemed(styles: AppliedStyles<Styles>, providedTheme: ProvidedTheme) {
         return (
             <SafeAreaProvider
                 style={styles.safeAreaProvider}
 			>
 				<MainGradientBackground>
-                    {this.createSearchBar()}
+                    {this.createSearchBar(styles, providedTheme)}
                     {this.state.rankingSource !== undefined ? (
                         <SearchList
                             title={`Top Overall Rankings`}
@@ -176,17 +199,28 @@ export default class Ranking extends React.Component<Props, StateType> {
         );
     }
 }
-const styles = StyleSheet.create({
-    searchBarPicker: {
-        backgroundColor: Colors.KURABUPURPLE,
-        marginTop: 5,
-        marginLeft: 5,
-        marginRight: 5,
-        width: Dimensions.get("window").width - 10,
-        color: Colors.TEXT,
-    },
+
+const valueTextStyle = createTypographyStyles(
+	"body1",
+	"paragraph",
+	false,
+	"secondary");
+
+
+type Styles = typeof styles;
+const styles = ThemedStyleSheet.create({
+	searchBarPicker: {
+		...valueTextStyle[0].text,
+		paddingLeft: sizing.spacing("medium"),
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		borderRadius: sizing.rounding("extraSmall") as number,
+		textAlignVertical: "center",
+		backgroundColor: colors.color("secondary"),
+		borderWidth: 0,
+		margin: sizing.spacing("medium"),
+		width: sizing.vw(100, -20)
+	},
     safeAreaProvider: {
-        backgroundColor: Colors.ALTERNATE_BACKGROUND,
         flex: 1
     }
 });

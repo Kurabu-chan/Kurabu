@@ -6,7 +6,6 @@ import { BackButtonFunctionsType, changeActivePage, changeBackButton, getActiveP
 import { ListDetailsStateManager } from "#helpers/Screens/Main/ListDetails/StateManager";
 import { niceTextFormat } from "#helpers/textFormatting";
 import { RouteProp } from "@react-navigation/native";
-import DropDownPicker from "react-native-dropdown-picker";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import {
@@ -25,12 +24,11 @@ import { AnimeDetailsMediaTypeEnum, AnimeDetailsMyListStatus, AnimeStatus, Manga
 import { DetailsStackParamList } from "#routes/MainStacks/DetailsStack";
 import { UpdateMangaList } from "#actions/manga/UpdateMangaList";
 import { MainGradientBackground } from "#comps/MainGradientBackground";
-import { AppliedStyles, applyUnfrozen, colors, ProvidedTheme, resolve, resolveColor, sizing, ThemedComponent } from "@kurabu/theme";
+import { AppliedStyles, colors, ProvidedTheme, resolve, sizing, ThemedComponent } from "@kurabu/theme";
 import { createTypographyStyles, Typography } from "#comps/themed/Typography";
 import { TopAreaLabel, topAreaLabelStyles, topAreaLabelTypographySettings } from "./components/TopAreaLabel";
 import { TopAreaValue, topAreaValueStyles } from "./components/TopAreaValue";
-import { Icon } from "react-native-elements";
-import { Picker } from "./components/Picker";
+import { Picker } from "#comps/themed/Picker";
 import { Spacer } from "#comps/themed/Spacer";
 
 export type Props = {
