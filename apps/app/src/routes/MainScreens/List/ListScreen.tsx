@@ -127,7 +127,8 @@ export default class List extends React.Component<Props, StateType> {
 
     createSearchBar() {
         return (
-            <FieldSearchBar
+			<FieldSearchBar
+				mediaType="anime"
                 fields={[
                     {
                         name: "status",

@@ -1,8 +1,7 @@
 import { MangaSearchSource } from "#data/manga/MangaSearchSource";
 import { changeActivePage } from "#helpers/backButton";
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
-import { SearchBar } from "react-native-elements";
+import { StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { MediaListSource } from "#data/MediaListSource";
 import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
@@ -11,6 +10,7 @@ import { Colors } from "#config/Colors";
 import { SearchStackParamList } from "#routes/MainStacks/SearchStack";
 import { StackScreenProps } from "@react-navigation/stack";
 import { MainGradientBackground } from "#comps/MainGradientBackground";
+import { ThemedSearchBar } from "#comps/themed/SearchBar";
 
 type Props = StackScreenProps<SearchStackParamList, "SearchScreen">
 
@@ -98,44 +98,14 @@ export default class Search extends React.Component<Props, StateType> {
 
 	createSearchBar() {
 		return (
-			<SearchBar
-				placeholder="Search for a Manga Title.."
-				loadingProps={{}}
-				showLoading={false}
-				lightTheme={false}
-				round={true}
-				autoCompleteType={undefined}
-				onFocus={() => {
-					return;
-				}}
-				onBlur={() => {
-					return;
-				}}
-				style={styles.style}
-				inputStyle={styles.inputStyle}
-				labelStyle={styles.labelStyle}
-				searchIcon={{
-					name: "search",
-					color: Colors.TEXT,
-				}}
-				clearIcon={{
-					name: "close",
-					color: Colors.TEXT
-				}}
-				inputContainerStyle={styles.inputContainerStyle}
-				containerStyle={styles.containerStyle}
-				leftIconContainerStyle={styles.leftIconContainerStyle}
-				onEndEditing={this.DoSearch.bind(this)}
-				platform={"default"}
-				onChangeText={this.updateSearch.bind(this) as never}
-				onClear={() => {
+			<ThemedSearchBar
+				search={this.state.search.searchText}
+				runSearch={this.DoSearch.bind(this)}
+				title="Search for an manga title"
+				changeText={this.updateSearch.bind(this)}
+				clearSearch={() => {
 					this.updateSearch("");
 				}}
-				onCancel={this.DoSearch.bind(this)}
-				value={this.state.search.searchText}
-				cancelButtonTitle={"Cancel"}
-				cancelButtonProps={{}}
-				showCancel={this.state.search.searchText != undefined}
 			/>
 		);
 	}
@@ -180,28 +150,6 @@ export default class Search extends React.Component<Props, StateType> {
 }
 
 const styles = StyleSheet.create({
-	style: {
-		backgroundColor: Colors.KURABUPURPLE,
-		color: Colors.TEXT,
-		width: Dimensions.get("window").width - 10
-	},
-	inputStyle: {
-		color: Colors.TEXT,
-	},
-	labelStyle: {
-		backgroundColor: Colors.KURABUPURPLE,
-	},
-	inputContainerStyle: {
-		backgroundColor: Colors.KURABUPURPLE,
-	},
-	containerStyle: {
-		backgroundColor: Colors.TRANSPARENT,
-		borderTopWidth: 0,
-		borderBottomWidth: 0,
-	},
-	leftIconContainerStyle: {
-		backgroundColor: Colors.KURABUPURPLE,
-	},
 	safeAreaProvider: {
 		backgroundColor: Colors.ALTERNATE_BACKGROUND,
 		flex: 1

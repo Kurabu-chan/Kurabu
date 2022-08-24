@@ -1,9 +1,11 @@
 import { Colors } from "#config/Colors";
-import { createClearIcon, createSearchIcon } from "#helpers/DefaultIcons";
+import { createClearIcon } from "#helpers/DefaultIcons";
+import { ThemedStyleSheet } from "#helpers/ThemedStyleSheet";
 import { AppliedStyles, applyUnfrozen, colors, ProvidedTheme, sizing, ThemedComponent } from "@kurabu/theme";
 import React from "react";
-import { View, Dimensions, ColorValue, StyleSheet, Modal, TouchableOpacity, TouchableHighlight, Alert } from "react-native";
-import { Icon, SearchBar } from "react-native-elements";
+import { View, Dimensions, ColorValue, Modal, TouchableOpacity, TouchableHighlight, Alert } from "react-native";
+import { Icon } from "react-native-elements";
+import { ThemedSearchBar } from "./themed/SearchBar";
 import { createTypographyStyles, Typography } from "./themed/Typography";
 
 export type Field = {
@@ -26,22 +28,20 @@ type Props = {
 	onChange: (field: FieldValue[], text: string, search: boolean) => void,
 	search: string,
 	currentFields: FieldValue[],
-	onSearch: () => void
+	onSearch: () => void,
+	mediaType: "anime"|"manga"
 }
 
 type State = {
 	filtering: boolean,
 	filterIndex: number | false,
-
 }
 
 export class FieldSearchBar extends ThemedComponent<Styles, Props, State> {
-	private typing: boolean;
 	private timeout: NodeJS.Timeout | undefined;
 
 	constructor(props: Props) {
 		super(styles, props);
-		this.typing = false;
 		this.state = {
 			filtering: false,
 			filterIndex: false
@@ -49,11 +49,9 @@ export class FieldSearchBar extends ThemedComponent<Styles, Props, State> {
 	}
 
 	changeText(search: string) {
-		this.typing = true;
 		if (this.timeout) clearTimeout(this.timeout);
 
 		this.timeout = setTimeout(() => {
-			this.typing = false;
 			this.props.onSearch();
 		}, 1000);
 
@@ -215,10 +213,6 @@ export class FieldSearchBar extends ThemedComponent<Styles, Props, State> {
 			}
 		}, providedTheme)
 
-		const appliedTextStyle = inputTextStyle[1]({
-			text: styles.inputText
-		}, providedTheme, {});
-
 		return (
 			<View>
 				<Modal
@@ -240,40 +234,14 @@ export class FieldSearchBar extends ThemedComponent<Styles, Props, State> {
 				</Modal>
 				<View style={styles.searchContainer}>
 					<View style={styles.searchParent}>
-						<SearchBar
-							value={this.props.search}
-							platform={"default"}
-							autoCompleteType={undefined}
-							onBlur={() => { return; }}
-							onChangeText={((text?: string) => {
+						<ThemedSearchBar
+							title={this.props.mediaType == "anime" ? "Search for an anime title": "Search for a manga title"}
+							search={this.props.search}
+							changeText={((text?: string) => {
 								this.changeText(text ?? "");
 							})}
-							onFocus={() => { return; }}
-							clearIcon={{
-								...createClearIcon(undefined, {}, styles.clearIconStyle[1].color),
-								name: "close"
-							}}
-							searchIcon={{
-								...createSearchIcon(undefined, {}, styles.searchIconStyle[1].color),
-								name: "search"
-							}}
-							loadingProps={{}}
-							showLoading={false}
-							onClear={() => { this.props.onChange([], "", false) }}
-							onCancel={() => { console.log("onCancel") }}
-							lightTheme={false}
-							round={true}
-							cancelButtonTitle={""}
-							cancelButtonProps={{}}
-
-							onEndEditing={() => { this.props.onSearch() }}
-							showCancel={true}
-							disabledInputStyle={appliedTextStyle}
-							style={styles.searchBarStyle}
-							inputStyle={appliedTextStyle}
-							inputContainerStyle={styles.inputContainerStyle}
-							containerStyle={styles.containerStyle}
-							leftIconContainerStyle={styles.leftIconContaienrStyle}
+							clearSearch={() => { this.props.onChange([], "", false) }}
+							runSearch={() => { this.props.onSearch() }}
 						/>
 					</View>
 					<View>
@@ -328,7 +296,7 @@ const fontSize = Dimensions.get("window").width / 36;
 const inputTextStyle = createTypographyStyles("headline4", "paragraph", false, "secondary");
 
 type Styles = typeof styles;
-const styles = StyleSheet.create({
+const styles = ThemedStyleSheet.create({
 	modalFilterButtonAddSubtract: {
 		padding: sizing.spacing("halfMedium"),
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
