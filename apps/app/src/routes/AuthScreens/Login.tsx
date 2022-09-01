@@ -7,7 +7,7 @@ import Kurabu from "../../../assets/pinklogin.svg";
 import Auth from "#api/Authenticate";
 import { Colors } from "#config/Colors";
 import { AuthStackParamList } from "../AuthStack";
-import { DoSwitch } from "../RootNavigator";
+import { RootSwitchContext } from "../../contexts/rootSwitch";
 
 type Props = StackScreenProps<AuthStackParamList, "Login">;
 
@@ -18,6 +18,8 @@ type LoginState = {
 };
 
 class Login extends React.Component<Props, LoginState> {
+	static contextType =  RootSwitchContext
+
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -41,11 +43,11 @@ class Login extends React.Component<Props, LoginState> {
         }));
     }
 
-    private async DoLogin() {
+    private async DoLogin(rootSwitch: (a: "Auth"|"Drawer") => void) {
         const auth = await Auth.getInstance()
         const loginRes = await auth.Trylogin(this.state.email, this.state.pass)
         if (loginRes === true) {
-            DoSwitch("Drawer");
+			rootSwitch("Drawer");
         }
     }
 
@@ -53,7 +55,9 @@ class Login extends React.Component<Props, LoginState> {
         this.state.navigator.navigate("Register");
     }
 
-    render() {
+	render() {
+		const rootSwitchContext = this.context as (a: "Auth" | "Drawer") => void;
+
         return (
             <View style={styles.appContainer}>
                 <Kurabu
@@ -86,7 +90,7 @@ class Login extends React.Component<Props, LoginState> {
                         style={styles.LoginButton}
                         activeOpacity={0.6}
                         onPress={() => {
-                            void this.DoLogin();
+							void this.DoLogin(rootSwitchContext);
                         }}
                     >
                         <Text style={styles.LoginButtonText}>Login</Text>

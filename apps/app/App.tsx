@@ -2,45 +2,44 @@ import "react-native-gesture-handler";
 import * as Font from "expo-font";
 import React from "react";
 import * as Linking from "expo-linking";
-import { AppState, AppStateStatus, Dimensions, LogBox, PixelRatio, ScaledSize, NativeEventSubscription } from "react-native";
+import { AppState, AppStateStatus, Dimensions, LogBox, PixelRatio, ScaledSize, NativeEventSubscription, Text } from "react-native";
 import Authentication from "#api/Authenticate";
 import { NavigationContainer } from "@react-navigation/native";
 import Drawer from "#routes/MainDrawer";
 import Auth from "#routes/AuthStack";
-import { DoSwitch, navigationRef, navigationRefReady } from "#routes/RootNavigator";
-import { registerSwitchListener } from "#routes/RootNavigator";
+import { navigationRef, navigationRefReady } from "#routes/RootNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { hideAsync, preventAutoHideAsync } from "expo-splash-screen"
 import { ReactNativeUIScaling, ThemeProvider, addTheme, ThemeSet, Theme } from "@kurabu/theme";
 import { themes } from "./src/themes";
+import { RootSwitchContext } from "./src/contexts/rootSwitch";
 
 LogBox.ignoreLogs([/Require\scycles/]);
 
 void preventAutoHideAsync()
 
 type StateType = {
-    fonts: boolean;
-    appstate: AppStateStatus;
-    RootSwitch: "Auth" | "Drawer";
-    dimensions: {
-        screen: ScaledSize,
-        window: ScaledSize,
-    },
-    themeSet: ThemeSet
+	fonts: boolean;
+	appstate: AppStateStatus;
+	RootSwitch: "Auth" | "Drawer";
+	dimensions: {
+		screen: ScaledSize,
+		window: ScaledSize,
+	},
+	themeSet: ThemeSet
 };
 
 export default class Application extends React.Component<never, StateType> {
-    private _appStateChangeSubscription?: NativeEventSubscription;
+	private _appStateChangeSubscription?: NativeEventSubscription;
 
-    constructor(props: never) {
-        super(props);
-        registerSwitchListener(this.setRootSwitch.bind(this));
+	constructor(props: never) {
+		super(props);
 
-        const _themeSet: ThemeSet = {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            default: {} as unknown as Theme
+		const _themeSet: ThemeSet = {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			default: {} as unknown as Theme
 		};
-		
+
 		const themesEntries = Object.entries(themes);
 
 		for (const theme of themesEntries) {
@@ -49,86 +48,86 @@ export default class Application extends React.Component<never, StateType> {
 
 		const def = themesEntries[0][1];
 
-        const themeSet = {
-            ..._themeSet,
-            default: def,
-        }
+		const themeSet = {
+			..._themeSet,
+			default: def,
+		}
 
-        this.state = {
-            fonts: false,
-            appstate: AppState.currentState,
-            RootSwitch: "Auth",
-            dimensions: {
-                window: Dimensions.get("window"),
-                screen: Dimensions.get("screen"),
-            },
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            themeSet: themeSet,
-        };
-    }
+		this.state = {
+			fonts: false,
+			appstate: AppState.currentState,
+			RootSwitch: "Auth",
+			dimensions: {
+				window: Dimensions.get("window"),
+				screen: Dimensions.get("screen"),
+			},
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			themeSet: themeSet,
+		};
+	}
 
-    async componentDidMount() {
-        await this._checkInitialUrl();
+	async componentDidMount() {
+		await this._checkInitialUrl();
 
-        this._appStateChangeSubscription = AppState.addEventListener("change", this._handleAppStateChange.bind(this));
-        Linking.addEventListener("url", (ss) => {
-            void this._handleUrl(ss.url);
-        });
+		this._appStateChangeSubscription = AppState.addEventListener("change", this._handleAppStateChange.bind(this));
+		Linking.addEventListener("url", (ss) => {
+			void this._handleUrl(ss.url);
+		});
 
 		await this.getFonts();
-    }
+	}
 
-    setRootSwitch(sw: "Auth" | "Drawer") {
-        console.log(sw);
-        this.setState((prevState) => ({
-            ...prevState,
-            RootSwitch: sw,
-        }));
-    }
+	setRootSwitch(sw: "Auth" | "Drawer") {
+		console.log(sw);
+		this.setState((prevState) => ({
+			...prevState,
+			RootSwitch: sw,
+		}));
+	}
 
-    componentWillUnmount() {
-        this._appStateChangeSubscription?.remove();  
-    }
+	componentWillUnmount() {
+		this._appStateChangeSubscription?.remove();
+	}
 
-    private _handleAppStateChange(nextAppState: AppStateStatus) {
-        if (this.state.appstate.match(/inactive|background/) && nextAppState === "active") {
-            void this._checkInitialUrl();
-        }
-        this.setState((prevState) => ({
-            ...prevState,
-            appstate: nextAppState,
-        }));
-    };
-    private _checkInitialUrl = async () => {
-        const url = await Linking.getInitialURL();
-        if (url?.includes("auth")) {
-            await this._handleUrl(url);
-        }
-    };
+	private _handleAppStateChange(nextAppState: AppStateStatus) {
+		if (this.state.appstate.match(/inactive|background/) && nextAppState === "active") {
+			void this._checkInitialUrl();
+		}
+		this.setState((prevState) => ({
+			...prevState,
+			appstate: nextAppState,
+		}));
+	};
+	private _checkInitialUrl = async () => {
+		const url = await Linking.getInitialURL();
+		if (url?.includes("auth")) {
+			await this._handleUrl(url);
+		}
+	};
 
-    private async _handleUrl(url: string | null) {
-        if (url != null) {
-            if (url.includes("auth")) {
-                const token = url.split("auth/")[1];
-                console.log(token);
-                const auth = await Authentication.getInstance()
-                    
-                const currentToken = await auth.GetToken();
+	private async _handleUrl(url: string | null) {
+		if (url != null) {
+			if (url.includes("auth")) {
+				const token = url.split("auth/")[1];
+				console.log(token);
+				const auth = await Authentication.getInstance()
 
-                if (currentToken == undefined || currentToken == "" || currentToken == null) {
-                    throw new Error("No token after redirect to auth");   
-                }
+				const currentToken = await auth.GetToken();
 
-                try {
-                    DoSwitch("Drawer");
-                } catch (e) {
-                    console.log(e);
-                }
-            }
-        }
-    }
+				if (currentToken == undefined || currentToken == "" || currentToken == null) {
+					throw new Error("No token after redirect to auth");
+				}
 
-    private async getFonts() { 
+				try {
+					this.setState({ ...this.state, RootSwitch: "Drawer" });
+				} catch (e) {
+					console.log(e);
+				}
+			}
+		}
+	}
+
+	private async getFonts() {
 		await Font.loadAsync({
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			AGRevueCyr: require("./assets/fonts/AGRevueCyr.ttf"),
@@ -160,41 +159,47 @@ export default class Application extends React.Component<never, StateType> {
 			Roboto_Thin: require("./assets/fonts/Roboto_Thin.ttf"),
 		});
 
-        await hideAsync();
+		await hideAsync();
 
-        this.setState((prevState) => ({
-            ...prevState,
-            fonts: true,
-        }));
-    }
+		this.setState((prevState) => ({
+			...prevState,
+			fonts: true,
+		}));
+	}
 
-    render() {
-        Dimensions.addEventListener(
-            "change",
-            ({ window, screen }) => {
-                this.setState(x => ({...x, dimensions: {window, screen}}));
-            }
-        );
+	render() {
+		Dimensions.addEventListener(
+			"change",
+			({ window, screen }) => {
+				this.setState(x => ({ ...x, dimensions: { window, screen } }));
+			}
+		);
 
-        if (this.state.fonts == true) {
-            return (
-                <SafeAreaProvider>
-                    <ThemeProvider scaling={new ReactNativeUIScaling((num: number) => { 
-                        return PixelRatio.roundToNearestPixel(num);
-                    })} customViewport={{
-                        densityIndependentHeight: this.state.dimensions.window.height,
-                        densityIndependentWidth: this.state.dimensions.window.width,
-                        pixelHeight: this.state.dimensions.screen.height,
-                        pixelWidth: this.state.dimensions.screen.height,
-                        }}
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    themeSet={this.state.themeSet}>
-                        <NavigationContainer ref={navigationRef} onReady={navigationRefReady}>
-                            {this.state.RootSwitch == "Auth" ? <Auth /> : <Drawer />}
-                        </NavigationContainer>
-                    </ThemeProvider>
-                </SafeAreaProvider>
-            );
-        }
-    }
+		if (this.state.fonts == true) {
+			return (
+				<NavigationContainer ref={navigationRef} onReady={navigationRefReady}>
+					<SafeAreaProvider>
+						<ThemeProvider scaling={new ReactNativeUIScaling((num: number) => {
+							return PixelRatio.roundToNearestPixel(num);
+						})} customViewport={{
+							densityIndependentHeight: this.state.dimensions.window.height,
+							densityIndependentWidth: this.state.dimensions.window.width,
+							pixelHeight: this.state.dimensions.screen.height,
+							pixelWidth: this.state.dimensions.screen.height,
+						}}
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							themeSet={this.state.themeSet}>
+							<RootSwitchContext.Provider value={(sw: "Auth" | "Drawer") => {
+								this.setState({ ...this.state, RootSwitch: sw })
+							}}>
+								{this.state.RootSwitch == "Auth" ? <Auth /> : <Drawer />}
+							</RootSwitchContext.Provider>
+						</ThemeProvider>
+					</SafeAreaProvider>
+
+				</NavigationContainer>
+
+			);
+		}
+	}
 }

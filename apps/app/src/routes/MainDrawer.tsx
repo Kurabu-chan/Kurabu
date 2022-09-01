@@ -34,8 +34,9 @@ export default class DrawerComp extends ThemedComponent<{}, Props> {
 
         return (
             <Drawer.Navigator
-                initialRouteName="Main"
-                drawerContent={CustomDrawerContentComponent}
+				initialRouteName="Main"
+				useLegacyImplementation={false}
+				drawerContent={(props) => (<CustomDrawerContentComponent {...props} />)}
                 screenOptions={{
                     drawerActiveBackgroundColor: navStyles.drawer.activeBackgroundColor,
                     drawerInactiveBackgroundColor: navStyles.drawer.inactiveBackgroundColor,

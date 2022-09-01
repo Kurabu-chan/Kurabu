@@ -1,26 +1,27 @@
 {
-	"version": "0.2.0",
-	"configurations": [
-        // This starts the api
-		{
-			"name": "Launch @kurabu/api",
-			"type": "node",
-			"request": "launch",
-			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "npm",
-			"runtimeArgs": [
-				"run-script",
-				"dev",
-				"-w=@kurabu/api"
-			]
-		},
+    "version": "0.2.0",
+    "configurations": [
+        // this starts the app
         {
-            "name": "Debug android Hermes",
-            "cwd": "${workspaceFolder}/apps/app",
-            "type": "reactnativedirect",
+            "name": "Debug @kurabu/app in Exponent",
             "request": "launch",
-            "platform": "android",
-            "preLaunchTask": "Kurabu: eject"
-        }
-	]
+            "type": "reactnative",
+            "cwd": "${workspaceFolder}/apps/app",
+            "platform": "exponent",
+            "expoHostType": "local"
+        },
+        // This starts the api
+        {
+            "name": "Launch @kurabu/api",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "dev",
+                "-w=@kurabu/api"
+            ]
+        },
+    ]
 }
