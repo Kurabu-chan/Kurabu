@@ -16,7 +16,6 @@ export default function PreLogin() {
 	useEffect(() => { 
 		Auth.getInstance().then((auth) => {
 			if (auth.getLoaded()) {
-				console.log("switch")
 				rootSwitchContext("Drawer");
 			} else {
 				RootNavigator.navigate("Login", undefined);
@@ -25,7 +24,6 @@ export default function PreLogin() {
 			throw reason;
 		});
 	})
-	console.log("switch2")
 
 
 	return (
