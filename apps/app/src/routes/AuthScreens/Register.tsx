@@ -4,11 +4,11 @@ import React from "react";
 import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Kurabu from "../../../assets/pinkregister.svg";
 import Auth from "#api/Authenticate";
 import PasswordStrength from "#comps/PasswordStrength";
 import { Colors } from "#config/Colors";
 import { AuthStackParamList } from "../AuthStack";
+import { AuthBackground } from "#comps/AuthBackgrounds";
 
 type RegisterProps = {
     navigation: StackNavigationProp<AuthStackParamList, "Register">;
@@ -72,12 +72,7 @@ class Register extends React.Component<RegisterProps, RegisterState> {
     render() {
         return (
             <View style={styles.appContainer}>
-                <Kurabu
-                    height={Dimensions.get("window").height}
-                    width={Dimensions.get("window").width * 3}
-                    preserveAspectRatio="xMinYMin slice"
-                    style={styles.kurabuImage}
-                />
+				<AuthBackground inverted={true} />
                 <SafeAreaView style={styles.safeContainer} />
                 <View style={styles.content}>
                     <View
@@ -140,9 +135,6 @@ class Register extends React.Component<RegisterProps, RegisterState> {
 const styles = StyleSheet.create({
     havaAnAcountText: {
         color: Colors.TEXT,
-    },
-    kurabuImage: {
-        position: "absolute",
     },
     extraSpacing: {
         width: 10,

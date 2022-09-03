@@ -5,6 +5,7 @@ import Auth from "#api/Authenticate";
 import * as RootNavigator from "../RootNavigator";
 import { Colors } from "#config/Colors";
 import { RootSwitchContext } from "../../contexts/rootSwitch";
+import { AuthBackground } from "#comps/AuthBackgrounds";
 
 //uncomment to reset saved token and go into developer mode for the Auth system
 // Auth.devMode = true;
@@ -30,12 +31,7 @@ export default function PreLogin() {
 		<View
 			style={styles.container}
 		>
-			<Kurabu
-				height={Dimensions.get("window").height * 1.5}
-				width={Dimensions.get("window").width * 3}
-				preserveAspectRatio="xMinYMin slice"
-				style={styles.image}
-			/>
+			<AuthBackground inverted={false} />
 		</View>
 	);
 }
@@ -44,8 +40,5 @@ const styles = StyleSheet.create({
     container: {
         height: Dimensions.get("window").height,
         backgroundColor: Colors.ALTERNATE_BACKGROUND,
-    },
-    image: {
-        position: "absolute",
     }
 });

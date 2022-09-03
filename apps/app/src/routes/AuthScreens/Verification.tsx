@@ -10,6 +10,7 @@ import { Colors } from "#config/Colors";
 import { AuthStackParamList } from "../AuthStack";
 import * as RootNavigator from "../RootNavigator";
 import Kurabu from "../../../assets/pinklogin.svg";
+import { AuthBackground } from "#comps/AuthBackgrounds";
 
 type RegisterProps = {
     navigation: StackNavigationProp<AuthStackParamList, "Verify">;
@@ -96,12 +97,7 @@ export default class Verif extends React.Component<RegisterProps, State> {
 
         return (
             <View>
-                <Kurabu
-                    height={Dimensions.get("window").height * 1.5}
-                    width={Dimensions.get("window").width * 3}
-                    preserveAspectRatio="xMinYMin slice"
-                    style={styles.kurabuImage}
-                />
+				<AuthBackground inverted={false} />
                 <SafeAreaView />
                 <View style={styles.content}>
                     {/* <Text style={styles.head}>Kurabu</Text> */}
@@ -141,9 +137,6 @@ export default class Verif extends React.Component<RegisterProps, State> {
 }
 
 const styles = StyleSheet.create({
-    kurabuImage: {
-        position: "absolute",
-    },
     codeFieldRoot: { marginTop: 20 },
     cell: {
         width: 40,
