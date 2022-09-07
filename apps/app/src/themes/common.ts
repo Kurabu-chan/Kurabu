@@ -19,12 +19,12 @@ export const commonTypography: Typography = {
             letterSpacing: 0.25,
         },
         button: {
-            case: "AllCaps",
+            case: "Sentence",
             fontFamily: "Roboto",
-            fontSize: 14,
+            fontSize: 16,
             fontStyle: "normal",
-            fontWeight: "500",
-            letterSpacing: 1.25,
+            fontWeight: "700",
+            letterSpacing: 1,
         },
         caption: {
             case: "Sentence",

@@ -98,10 +98,10 @@ const kurabuTheme: Theme = {
 				subText: "themed.ref.pal.gray.50",
 			},
 
-			tertiary: "themed.ref.pal.gray.900",
-			tertiaryBorder: "themed.ref.pal.gray.900",
-			tertiaryContainer: "themed.ref.pal.gray.700",
-			tertiaryContainerBorder: "themed.ref.pal.gray.700",
+			tertiary: "themed.ref.pal.blue.400",
+			tertiaryBorder: "themed.ref.pal.gray.400",
+			tertiaryContainer: "themed.ref.pal.gray.500",
+			tertiaryContainerBorder: "themed.ref.pal.gray.500",
 			tertiaryGradient: {
 				second: "themed.ref.pal.gray.900",
 				start: "themed.ref.pal.gray.800"

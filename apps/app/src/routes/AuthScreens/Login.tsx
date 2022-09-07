@@ -1,14 +1,16 @@
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import React from "react";
-import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Kurabu from "../../../assets/pinklogin.svg";
 import Auth from "#api/Authenticate";
 import { Colors } from "#config/Colors";
 import { AuthStackParamList } from "../AuthStack";
 import { RootSwitchContext } from "../../contexts/rootSwitch";
 import { AuthBackground } from "#comps/AuthBackgrounds";
+import { AppliedStyles, ThemedComponent, colors, sizing } from "@kurabu/theme";
+import { AuthInput } from "./components/AuthInput";
+import { Typography } from "#comps/themed/Typography";
 
 type Props = StackScreenProps<AuthStackParamList, "Login">;
 
@@ -18,11 +20,11 @@ type LoginState = {
 	pass: string;
 };
 
-class Login extends React.Component<Props, LoginState> {
+class Login extends ThemedComponent<Styles, Props, LoginState> {
 	static contextType = RootSwitchContext
 
 	constructor(props: Props) {
-		super(props);
+		super(styles, props);
 		this.state = {
 			navigator: props.navigation,
 			email: "",
@@ -56,32 +58,33 @@ class Login extends React.Component<Props, LoginState> {
 		this.state.navigator.navigate("Register");
 	}
 
-	render() {
+	renderThemed(styles: AppliedStyles<Styles>) {
 		const rootSwitchContext = this.context as (a: "Auth" | "Drawer") => void;
 
 		return (
 			<View style={styles.appContainer}>
 				<AuthBackground inverted={false} />
 				<SafeAreaView style={styles.safeContainer} />
-				<View style={styles.content}>
-					<View
-						style={styles.extraSpacing}
-					></View>
-                    <TextInput
-						onChangeText={this.changeEmail.bind(this)}
+				<KeyboardAvoidingView
+					behavior="padding"
+					style={styles.content}>
+					<AuthInput
 						autoComplete="email"
-                        placeholder="Email"
-                        style={styles.Input}
-                        value={this.state.email}
-                    />
-                    <TextInput
-                        onChangeText={this.changePass.bind(this)}
-                        placeholder="Password"
-                        autoComplete="password"
-                        secureTextEntry
-                        style={styles.Input}
-                        value={this.state.pass}
-                    />
+						placeholder="Email"
+						onChangeText={this.changeEmail.bind(this)}
+						value={this.state.email}
+						secureTextEntry={false}
+						containerStyle={styles.InputContainer}
+					/>
+					<AuthInput
+						autoComplete="password"
+						placeholder="Password"
+						onChangeText={this.changePass.bind(this)}
+						value={this.state.pass}
+						secureTextEntry={false}
+						containerStyle={styles.InputContainer}
+					/>
+
 					<TouchableOpacity
 						style={styles.LoginButton}
 						activeOpacity={0.6}
@@ -89,83 +92,68 @@ class Login extends React.Component<Props, LoginState> {
 							void this.DoLogin(rootSwitchContext);
 						}}
 					>
-						<Text style={styles.LoginButtonText}>Login</Text>
+						<Typography variant="button" colorVariant="background" isOnContainer={false} textKind="paragraph">Login</Typography>
 					</TouchableOpacity>
-					<Text
-						style={styles.noAccountText}
-					>
+					<Typography colorVariant="background" isOnContainer={false} textKind="paragraph" variant="body1">
 						No Account?
-					</Text>
+					</Typography>
 					<TouchableOpacity
 						style={styles.SignupButton}
 						activeOpacity={0.6}
 						onPress={this.DoSignup.bind(this)}
 					>
-						<Text style={styles.SignupButtonText}>Sign up</Text>
+						<Typography variant="button" colorVariant="background" isOnContainer={false} textKind="paragraph">Sign up</Typography>
 					</TouchableOpacity>
-				</View>
+				</KeyboardAvoidingView>
 			</View>
 		);
 	}
 }
 
-const fontSize = Dimensions.get("window").width / 36;
-const sizer = Dimensions.get("window").width / 400;
-
+type Styles = typeof styles;
 const styles = StyleSheet.create({
-	extraSpacing: {
-		width: 10,
-		height: `${30 * sizer}%`,
-	},
-	noAccountText: {
-		color: Colors.TEXT,
-	},
 	appContainer: {
 		// backgroundColor: Colors.BLUE
+		height: sizing.vh(100),
+		width: sizing.vw(100),
 	},
 	safeContainer: {
 		// backgroundColor: Colors.BLUE
 	},
 	content: {
-		height: Dimensions.get("window").height,
 		alignItems: "center",
 		justifyContent: "center",
+		// backgroundColor: "red",
+		position: "absolute",
+		width: sizing.vw(100),
+		bottom: "15%",
 	},
-	Input: {
-		opacity: 1,
-		width: sizer * 250,
-		height: sizer * 50,
-		borderBottomColor: "#868686",
-		borderBottomWidth: 1,
-		color: Colors.TEXT,
-		fontSize: fontSize * 2,
+	InputContainer: {
+		width: 300,
+		height: 54,
+		marginTop: sizing.spacing("large"),
 	},
 	LoginButton: {
-		borderRadius: 4,
-		backgroundColor: Colors.CYAN,
-		paddingHorizontal: sizer * 97,
-		paddingVertical: sizer * 10,
-		marginTop: sizer * 90,
-		marginBottom: sizer * 40,
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		borderRadius: sizing.rounding("small") as number,
+		backgroundColor: colors.color("tertiary"),
+		width: 230,
+		height: 44,
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: 90,
+		marginBottom: 40,
 		color: Colors.TEXT,
-	},
-	LoginButtonText: {
-		color: Colors.TEXT,
-		fontSize: fontSize * 1.5,
-		fontWeight: "bold",
 	},
 	SignupButton: {
-		borderRadius: 4,
-		backgroundColor: Colors.CYAN,
-		paddingHorizontal: sizer * 60,
-		paddingVertical: sizer * 6,
-		marginTop: sizer * 5,
-		color: Colors.TEXT,
-	},
-	SignupButtonText: {
-		color: Colors.TEXT,
-		fontSize: fontSize * 1.5,
-		fontWeight: "bold",
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		borderRadius: sizing.rounding("small") as number,
+		backgroundColor: colors.color("tertiary"),
+		width: 200,
+		height: 44,
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: sizing.spacing("small"),
 	},
 });
 

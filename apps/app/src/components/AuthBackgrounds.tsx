@@ -49,7 +49,7 @@ export function AuthBackground({ inverted }: NewProps) {
 		the values were optimized using an algorithm which is now long gone
 	*/
 	function calculateKurabuOffset() {
-		return -(((1) / (((Math.pow(screenRatio, 0.048)) / (665)))) - 658)
+		return -(((1) / (((Math.pow(screenRatio, 0.048)) / (665)))) - 658)-3
 	}
 
 	return (<View style={styles.container}>

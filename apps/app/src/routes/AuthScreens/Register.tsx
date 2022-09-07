@@ -1,7 +1,7 @@
 import { RouteProp } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Auth from "#api/Authenticate";
@@ -9,184 +9,177 @@ import PasswordStrength from "#comps/PasswordStrength";
 import { Colors } from "#config/Colors";
 import { AuthStackParamList } from "../AuthStack";
 import { AuthBackground } from "#comps/AuthBackgrounds";
+import { AppliedStyles, colors, sizing, ThemedComponent } from "@kurabu/theme";
+import { AuthInput } from "./components/AuthInput";
+import { Typography } from "#comps/themed/Typography";
 
 type RegisterProps = {
-    navigation: StackNavigationProp<AuthStackParamList, "Register">;
-    route: RouteProp<AuthStackParamList, "Register">;
+	navigation: StackNavigationProp<AuthStackParamList, "Register">;
+	route: RouteProp<AuthStackParamList, "Register">;
 };
 
 type RegisterState = {
-    email: string;
-    pass: string;
-    retype: string;
+	email: string;
+	pass: string;
+	retype: string;
 };
 
-class Register extends React.Component<RegisterProps, RegisterState> {
-    constructor(props: RegisterProps) {
-        super(props);
-        this.state = {
-            email: "",
-            pass: "",
-            retype: "",
-        };
-    }
+class Register extends ThemedComponent<Styles, RegisterProps, RegisterState> {
+	constructor(props: RegisterProps) {
+		super(styles, props);
+		this.state = {
+			email: "",
+			pass: "",
+			retype: "",
+		};
+	}
 
-    private changeEmail(newstr: string) {
-        this.setState((prevState) => ({
-            ...prevState,
-            email: newstr,
-        }));
-    }
+	private changeEmail(newstr: string) {
+		this.setState((prevState) => ({
+			...prevState,
+			email: newstr,
+		}));
+	}
 
-    private changePass(newstr: string) {
-        this.setState((prevState) => ({
-            ...prevState,
-            pass: newstr,
-        }));
-    }
+	private changePass(newstr: string) {
+		this.setState((prevState) => ({
+			...prevState,
+			pass: newstr,
+		}));
+	}
 
-    private changeRetype(newstr: string) {
-        this.setState((prevState) => ({
-            ...prevState,
-            retype: newstr,
-        }));
-    }
+	private changeRetype(newstr: string) {
+		this.setState((prevState) => ({
+			...prevState,
+			retype: newstr,
+		}));
+	}
 
-    private async DoSignup() {
-        const auth = await Auth.getInstance()
-        const registerRes = await auth.TryRegister(this.state.email, this.state.pass)
-        if (registerRes != "") {
-            //we got the token for the verification
-            auth.setToken(registerRes);
-            
-            this.props.navigation.replace("Verify", {
-                token: registerRes,
-            });
-        }
-    }
+	private async DoSignup() {
+		const auth = await Auth.getInstance()
+		const registerRes = await auth.TryRegister(this.state.email, this.state.pass)
+		if (registerRes != "") {
+			//we got the token for the verification
+			auth.setToken(registerRes);
 
-    private DoSignin() {
-        this.props.navigation.goBack();
-    }
+			this.props.navigation.replace("Verify", {
+				token: registerRes,
+			});
+		}
+	}
 
-    render() {
-        return (
-            <View style={styles.appContainer}>
+	private DoSignin() {
+		this.props.navigation.goBack();
+	}
+
+	renderThemed(styles: AppliedStyles<Styles>) {
+		return (
+			<View style={styles.appContainer}>
 				<AuthBackground inverted={true} />
-                <SafeAreaView style={styles.safeContainer} />
-                <View style={styles.content}>
-                    <View
-                        style={styles.extraSpacing}
-                    ></View>
-                    <TextInput
-                        onChangeText={this.changeEmail.bind(this)}
-                        placeholder="Email"
-                        autoComplete="email"
-                        style={styles.Input}
-                        value={this.state.email}
-                    />
-                    <TextInput
-                        onChangeText={this.changePass.bind(this)}
-                        placeholder="Password"
-                        autoComplete="password"
-                        secureTextEntry
-                        passwordRules="required: lower; required: upper; required digit; required: [~!@#$%^*_-+=`|(){}[:;'<>,.? \]]; minlength: 8;"
-                        spellCheck={false}
-                        style={styles.Input}
-                        value={this.state.pass}
-                    />
-                    <PasswordStrength pass={this.state.pass} />
-                    <TextInput
-                        onChangeText={this.changeRetype.bind(this)}
-                        placeholder="Retype Password"
-                        autoComplete="password"
-                        secureTextEntry
-                        spellCheck={false}
-                        style={styles.Input}
-                        value={this.state.retype}
-                    />
-                    <TouchableOpacity
-                        style={styles.SignupButton}
-                        activeOpacity={0.6}
-                        onPress={() => {
-                            void this.DoSignup();
-                        }}
-                    >
-                        <Text style={styles.SignupButtonText}>Sign up</Text>
-                    </TouchableOpacity>
-                    <Text
-                        style={styles.havaAnAcountText}
-                    >
-                        Have an account?
-                    </Text>
-                    <TouchableOpacity
-                        style={styles.LoginButton}
-                        activeOpacity={0.6}
-                        onPress={this.DoSignin.bind(this)}
-                    >
-                        <Text style={styles.LoginButtonText}>Login</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    }
+				<SafeAreaView style={styles.safeContainer} />
+				<KeyboardAvoidingView
+					behavior="padding"
+					style={styles.content}>
+					<AuthInput
+						autoComplete="email"
+						placeholder="Email"
+						onChangeText={this.changeEmail.bind(this)}
+						value={this.state.email}
+						secureTextEntry={false}
+						containerStyle={styles.InputContainer}
+					/>
+					<AuthInput
+						autoComplete="password"
+						placeholder="Password"
+						onChangeText={this.changePass.bind(this)}
+						value={this.state.pass}
+						secureTextEntry={false}
+						containerStyle={styles.InputContainer}
+					/>
+					<PasswordStrength pass={this.state.pass} />
+					<AuthInput
+						autoComplete="password"
+						placeholder="Retype password"
+						onChangeText={this.changeRetype.bind(this)}
+						value={this.state.retype}
+						secureTextEntry={false}
+						containerStyle={styles.InputContainer}
+					/>
+
+					<TouchableOpacity
+						style={styles.SignupButton}
+						activeOpacity={0.6}
+						onPress={() => {
+							void this.DoSignup();
+						}}
+					>
+						<Typography variant="button" colorVariant="background" isOnContainer={false} textKind="paragraph">Sign up</Typography>
+					</TouchableOpacity>
+					<Typography colorVariant="background" isOnContainer={false} textKind="paragraph" variant="body1">
+						No Account?
+					</Typography>
+					<TouchableOpacity
+						style={styles.LoginButton}
+						activeOpacity={0.6}
+						onPress={() => {
+							void this.DoSignin();
+						}}
+					>
+						<Typography variant="button" colorVariant="background" isOnContainer={false} textKind="paragraph">Login</Typography>
+
+					</TouchableOpacity>
+				</KeyboardAvoidingView>
+			</View>
+		);
+	}
 }
 
+type Styles = typeof styles;
 const styles = StyleSheet.create({
-    havaAnAcountText: {
-        color: Colors.TEXT,
-    },
-    extraSpacing: {
-        width: 10,
-        height: "25%",
-    },
-    appContainer: {
-        backgroundColor: Colors.ALTERNATE_BACKGROUND,
-    },
-    safeContainer: {
-        backgroundColor: Colors.ALTERNATE_BACKGROUND,
-    },
-    content: {
-        height: Dimensions.get("window").height,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    Input: {
-        width: 250,
-        height: 50,
-        borderBottomColor: Colors.INPUT_UNDERLINE,
-        borderBottomWidth: 1,
-        color: Colors.TEXT,
-        fontSize: 20,
-        marginTop: 15,
-    },
-    SignupButton: {
-        borderRadius: 4,
-        backgroundColor: Colors.CYAN,
-        paddingHorizontal: 97,
-        paddingVertical: 10,
-        marginTop: 40,
-        marginBottom: 40,
-        color: Colors.TEXT,
-    },
-    SignupButtonText: {
-        color: Colors.TEXT,
-        fontSize: 18,
-        fontWeight: "bold",
-    },
-    LoginButton: {
-        borderRadius: 4,
-        backgroundColor: Colors.CYAN,
-        paddingHorizontal: 60,
-        paddingVertical: 6,
-        marginTop: 5,
-        color: Colors.TEXT,
-    },
-    LoginButtonText: {
-        color: Colors.TEXT,
-        fontSize: 18,
-        fontWeight: "bold",
-    },
+	appContainer: {
+		// backgroundColor: Colors.BLUE
+		height: sizing.vh(100),
+		width: sizing.vw(100),
+	},
+	safeContainer: {
+		// backgroundColor: Colors.BLUE
+	},
+	content: {
+		alignItems: "center",
+		justifyContent: "center",
+		// backgroundColor: "red",
+		position: "absolute",
+		width: sizing.vw(100),
+		bottom: "15%",
+	},
+	InputContainer: {
+		width: 300,
+		height: 54,
+		marginTop: 16,
+	},
+	SignupButton: {
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		borderRadius: sizing.rounding("small") as number,
+		backgroundColor: colors.color("tertiary"),
+		width: 230,
+		height: 44,
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: 90,
+		marginBottom: 40,
+		color: Colors.TEXT,
+	},
+	LoginButton: {
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		borderRadius: sizing.rounding("small") as number,
+		backgroundColor: colors.color("tertiary"),
+		width: 200,
+		height: 44,
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: 5,
+		color: Colors.TEXT,
+	},
 });
 
 export default Register;
