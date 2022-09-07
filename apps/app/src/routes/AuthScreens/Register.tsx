@@ -1,7 +1,7 @@
 import { RouteProp } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, View, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Auth from "#api/Authenticate";
@@ -56,16 +56,19 @@ class Register extends ThemedComponent<Styles, RegisterProps, RegisterState> {
 	}
 
 	private async DoSignup() {
-		const auth = await Auth.getInstance()
-		const registerRes = await auth.TryRegister(this.state.email, this.state.pass)
-		if (registerRes != "") {
+		const auth = await Auth.getInstance();
+		const registerRes = await auth.TryRegister(this.state.email, this.state.pass);
+		if (registerRes[0] != false) {
 			//we got the token for the verification
-			auth.setToken(registerRes);
+			auth.setToken(registerRes[1]);
 
 			this.props.navigation.replace("Verify", {
-				token: registerRes,
+				token: registerRes[1],
 			});
+			return;
 		}
+
+		Alert.alert("Register Failed", registerRes[1]);
 	}
 
 	private DoSignin() {

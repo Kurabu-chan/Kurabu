@@ -1,6 +1,6 @@
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import React from "react";
-import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, View, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Auth from "#api/Authenticate";
@@ -48,10 +48,14 @@ class Login extends ThemedComponent<Styles, Props, LoginState> {
 
 	private async DoLogin(rootSwitch: (a: "Auth" | "Drawer") => void) {
 		const auth = await Auth.getInstance()
+
 		const loginRes = await auth.Trylogin(this.state.email, this.state.pass)
-		if (loginRes === true) {
+		if (loginRes[0] === true) {
 			rootSwitch("Drawer");
+			return;
 		}
+
+		Alert.alert("Login Failed", loginRes[1]);
 	}
 
 	private DoSignup() {

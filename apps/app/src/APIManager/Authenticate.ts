@@ -95,7 +95,7 @@ class Authentication {
     }
 
     /** make request to MAL, check status and save token */
-    public async Trylogin(email: string, password: string): Promise<boolean> {
+    public async Trylogin(email: string, password: string): Promise<[boolean, string|undefined]> {
         //url to make request to
         const url = `${Authentication.root}/authed/jwt/login`;
         //the body of the request
@@ -113,25 +113,24 @@ class Authentication {
         });
         //is the response an error !?!?!?
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const json: JsonType = await res.json();
+		const json: JsonType = await res.json();
+		console.log(JSON.stringify(json))
         handleError(json);
-        if (json.status == "error") {
-            //oh fuck
-            Alert.alert("Something bad happened", json.message);
-            return false;
+		if (json.status == "error") {
+            return [false, json.message];
         }
 
         //we good
         if (isJWT(json.message)) {
             await this.SetToken(json.message);
-            return true;
+            return [true, undefined];
         }
 
         //oh no we not
-        return false;
+        return [false, "Unknown error"];
     }
 
-    public async TryRegister(email: string, password: string): Promise<string> {
+    public async TryRegister(email: string, password: string): Promise<[boolean, string]> {
         //url to make request to
         const url = `${Authentication.root}/authed/jwt/register`;
         //the body of the request
@@ -152,12 +151,10 @@ class Authentication {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const json: JsonType = await res.json();
         if (json.status == "error") {
-            //oh fuck
-            Alert.alert("Something bad happened", json.message);
-            return "";
+            return [false, json.message];
         }
 
-        return json.message;
+        return [true, json.message];
     }
 
     public async TryCancelRegister(token: string): Promise<boolean> {
