@@ -44,7 +44,9 @@ export class ThemedSearchBar extends ThemedComponent<Styles, Props>{
 				}}
 				loadingProps={{}}
 				showLoading={false}
-				onClear={() => { this.props.clearSearch() }}
+				onClear={() => {
+					this.props.clearSearch()
+				}}
 				onCancel={() => { console.log("onCancel") }}
 				lightTheme={false}
 				round={true}

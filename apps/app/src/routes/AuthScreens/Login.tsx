@@ -11,6 +11,7 @@ import { AuthBackground } from "#comps/AuthBackgrounds";
 import { AppliedStyles, ThemedComponent, colors, sizing } from "@kurabu/theme";
 import { AuthInput } from "./components/AuthInput";
 import { Typography } from "#comps/themed/Typography";
+import { ToolTip } from "#comps/ToolTip";
 
 type Props = StackScreenProps<AuthStackParamList, "Login">;
 
@@ -18,6 +19,7 @@ type LoginState = {
 	navigator: StackNavigationProp<AuthStackParamList, "Login">;
 	email: string;
 	pass: string;
+	helpShown: boolean;
 };
 
 class Login extends ThemedComponent<Styles, Props, LoginState> {
@@ -29,6 +31,7 @@ class Login extends ThemedComponent<Styles, Props, LoginState> {
 			navigator: props.navigation,
 			email: "",
 			pass: "",
+			helpShown: false
 		};
 	}
 
@@ -72,20 +75,42 @@ class Login extends ThemedComponent<Styles, Props, LoginState> {
 				<KeyboardAvoidingView
 					behavior="padding"
 					style={styles.content}>
-					<AuthInput
-						autoComplete="email"
-						placeholder="Email"
-						onChangeText={this.changeEmail.bind(this)}
-						value={this.state.email}
-						secureTextEntry={false}
-						containerStyle={styles.InputContainer}
-					/>
+					<ToolTip
+						text="When logging in don't use your MyAnimeList credentials, use the credentials you used to register on Kurabu."
+						title="Login help"
+						enabled={this.state.helpShown}
+						style={styles.tooltip}
+						tooltipContainerStyle={styles.tooltipContainerStyle}
+						tooltipTitleProps={{
+							colorVariant: "secondary",
+							isOnContainer: false,
+							textKind: "paragraph",
+							variant: "headline4"
+						}}
+						tooltipTextProps={{
+							colorVariant: "secondary",
+							isOnContainer: false,
+							textKind: "paragraph",
+							variant: "body1"
+						}}
+					>
+						<AuthInput
+							autoComplete="email"
+							placeholder="Email"
+							onChangeText={this.changeEmail.bind(this)}
+							value={this.state.email}
+							secureTextEntry={false}
+							containerStyle={styles.InputContainer}
+							onFocus={() => this.setState({ helpShown: true })}
+							onLostFocus={() => this.setState({ helpShown: false })}
+						/>
+					</ToolTip>
 					<AuthInput
 						autoComplete="password"
 						placeholder="Password"
 						onChangeText={this.changePass.bind(this)}
 						value={this.state.pass}
-						secureTextEntry={false}
+						secureTextEntry={true}
 						containerStyle={styles.InputContainer}
 					/>
 
@@ -159,6 +184,18 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		marginTop: sizing.spacing("small"),
 	},
+	tooltip: {
+		
+		// backgroundColor: "red"
+	},
+	tooltipContainerStyle: {
+		width: sizing.vw(70),
+		height: "auto",
+		backgroundColor: colors.color("secondary"),
+		padding: sizing.spacing("medium"),
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		borderRadius: sizing.rounding("small") as number,
+	}
 });
 
 export default Login;

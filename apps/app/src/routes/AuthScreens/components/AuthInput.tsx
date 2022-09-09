@@ -11,6 +11,8 @@ type Props = {
 	autoComplete: typeof TextInput.prototype.props.autoComplete,
 	containerStyle?: StyleProp<ViewStyle>,
 	inputStyle?: StyleProp<TextStyle>,
+	onFocus?: () => void,
+	onLostFocus?: () => void,
 }
 
 export class AuthInput extends ThemedComponent<Styles, Props> {
@@ -47,6 +49,8 @@ export class AuthInput extends ThemedComponent<Styles, Props> {
 					secureTextEntry={this.props.secureTextEntry}
 					style={StyleSheet.flatten(textStyles)}
 					value={this.props.value}
+					onFocus={this.props.onFocus}
+					onBlur={this.props.onLostFocus}
 				/>
 			</View>
 		);
