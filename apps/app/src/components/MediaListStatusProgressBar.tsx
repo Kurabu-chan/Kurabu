@@ -122,8 +122,6 @@ export class Progress extends ThemedComponent<Styles, Props, State>{
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		const textColor: string = resolve(colors.onColor(this.props.color, "paragraph"), providedTheme);
 
-		console.log(color, textColor)
-
         return (
             <LinearGradient
                 colors={[color, Colors.NO_BACKGROUND]}
@@ -142,7 +140,7 @@ export class Progress extends ThemedComponent<Styles, Props, State>{
                     <Icon
                         name="remove"
                         style={StyleSheet.flatten(styles.removeIconStyle)}
-                        color={Colors.TEXT}
+                        color={StyleSheet.flatten(styles.iconColor).color}
                         size={this.props.height}
                         tvParallaxProperties={{}} />
                 </TouchableOpacity>
@@ -153,7 +151,7 @@ export class Progress extends ThemedComponent<Styles, Props, State>{
                     <Icon
                         name="add"
 						style={StyleSheet.flatten(styles.addIconStyle)}
-                        color={Colors.TEXT}
+                        color={StyleSheet.flatten(styles.iconColor).color}
                         size={this.props.height}
                         tvParallaxProperties={{}} />
                 </TouchableOpacity>
@@ -179,7 +177,10 @@ const styles = StyleSheet.create({
     },
     removeIconStyle: {
         margin: -2
-    }
+	},
+	iconColor: {
+		color: colors.onColor("primary", "paragraph")
+	}
 });
 
 // create a function that clamps a value between min and max

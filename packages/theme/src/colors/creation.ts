@@ -30,8 +30,13 @@ export const colors = {
 
 
     // eslint-disable-next-line sort-keys
-    labels() {
-        return new TokenReference("themed.ref.col.labels.on") as unknown as string;
+	labels(seed?: number) {
+		if (seed === undefined) {
+			return new TokenReference("themed.ref.col.labels.any") as unknown as string;
+		} else {
+			return new TokenReference(`themed.ref.col.labels.seed.${seed}`) as unknown as string;
+		}
+
 	},
 	// eslint-disable-next-line sort-keys
 	onLabels(textKind: TypographicColorSetSetting) {

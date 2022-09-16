@@ -1,7 +1,7 @@
 {
     "name": "@kurabu/app",
     "main": "index.js",
-    "version": "1.0.71",
+    "version": "1.0.72",
     "scripts": {
         "eas-build-post-install": "cd ../.. && yarn run build --filter=@kurabu/app^... --filter=!@kurabu/api-sdk",
         "dev": "expo start --android",
@@ -68,7 +68,6 @@
         "@types/react": "~18.0.0",
         "@types/react-native": "~0.69.1",
         "babel-plugin-module-resolver": "4.1.0",
-        "expo-cli": "^6.0.1",
         "npm-force-resolutions": "0.0.10",
         "typescript": "^4.6.3"
     },

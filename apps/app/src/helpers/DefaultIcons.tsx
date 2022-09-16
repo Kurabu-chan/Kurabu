@@ -38,7 +38,7 @@ export function createIconAnime(size?: number, style?: ViewStyle | TextStyle, co
 }
 
 export function createIconManga(size?: number, style?: ViewStyle | TextStyle, color: number | ColorValue = Colors.TEXT) {
-    return (
+	return (
         <Icon
             name="book"
             type="font-awesome-5"

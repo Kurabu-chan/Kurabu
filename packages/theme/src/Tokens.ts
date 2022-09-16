@@ -31,7 +31,8 @@ export type ColorToken =
         | TypographicColorTokenSet<"tertiary">
         , TypographicColorSetSetting>
     | SpecificToken<"col", "status", `${"danger" | "success" | "warning" | "info" | "disabled"}.${ColorTokenColorSet}`>
-	| SpecificToken<"col", "labels", undefined>
+	| SpecificToken<"col", "labels", "any">
+	| SpecificToken<"col", "labels", `seed.${number}`>
 	| SpecificToken<"col", "labels", `onLabels.${ColorTokenTextKind}`>;
 
 /**

@@ -6,6 +6,7 @@ import { BottomTabNavigationConfig } from "@react-navigation/bottom-tabs/lib/typ
 import { DefaultNavigatorOptions, ParamListBase, TabNavigationState, TabRouterOptions, TypedNavigator } from "@react-navigation/core";
 import React from "react";
 import { createTypographyStyles } from "./themed/Typography";
+import { StyleSheet } from "react-native"
 
 type TabType = TypedNavigator<ParamListBase, TabNavigationState<ParamListBase>, BottomTabNavigationOptions, BottomTabNavigationEventMap, ({ initialRouteName, backBehavior, children, screenListeners, screenOptions, sceneContainerStyle, ...restWithDeprecated }: DefaultNavigatorOptions<ParamListBase, TabNavigationState<ParamListBase>, BottomTabNavigationOptions, BottomTabNavigationEventMap> & TabRouterOptions & BottomTabNavigationConfig) => JSX.Element>;
 
@@ -44,7 +45,7 @@ export class AnimeMangaTabNavigator extends ThemedComponent<Styles, Props>{
 					tabBarInactiveBackgroundColor: color.colors.tabBarInactiveBackgroundColor,
 					tabBarLabelStyle: tabBarLabel,
 					tabBarStyle: styles.tabBarStyle,
-					headerShown: false
+					headerShown: false,
 				}}
 			>
 				<this.Tab.Screen
@@ -52,9 +53,7 @@ export class AnimeMangaTabNavigator extends ThemedComponent<Styles, Props>{
 					component={this.props.anime}
 					options={{
 						tabBarIcon: (props: { focused: boolean, color: string, size: number }) => {
-							return createIconAnime(props.size, {
-								color: props.color
-							})
+							return createIconAnime(props.size, {}, StyleSheet.flatten(styles.tabBarIconStyle).color)
 						}
 					}}
 				></this.Tab.Screen>
@@ -63,10 +62,8 @@ export class AnimeMangaTabNavigator extends ThemedComponent<Styles, Props>{
 					component={this.props.manga}
 					options={{
 						tabBarIcon: (props: { focused: boolean, color: string, size: number }) => {
-							return createIconManga(props.size, {
-								color: props.color
-							})
-						}
+							return createIconManga(props.size, {}, StyleSheet.flatten(styles.tabBarIconStyle).color)
+						},
 					}}
 				></this.Tab.Screen>
 			</this.Tab.Navigator>
@@ -85,5 +82,8 @@ const styles = ThemedStyleSheet.create({
 	tabBarStyle: {
 		height: 55,
 		display: "flex"
+	},
+	tabBarIconStyle: {
+		color: colors.onColor("primary", "header")
 	}
 });

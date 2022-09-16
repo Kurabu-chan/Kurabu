@@ -18,7 +18,7 @@ export type FieldValue = {
 	name: string,
 	value: string,
 	negative?: boolean,
-	color: ColorValue
+	color?: ColorValue
 }
 
 type Props = {
@@ -29,7 +29,7 @@ type Props = {
 	search: string,
 	currentFields: FieldValue[],
 	onSearch: () => void,
-	mediaType: "anime"|"manga"
+	mediaType: "anime" | "manga"
 }
 
 type State = {
@@ -153,7 +153,7 @@ export class FieldSearchBar extends ThemedComponent<Styles, Props, State> {
 						negative: true,
 					}, this.props.fields, currentFields)
 
-					
+
 
 					return (
 						<View key={index} style={styles.modalFilterNameButtonContentContainer}>
@@ -235,7 +235,7 @@ export class FieldSearchBar extends ThemedComponent<Styles, Props, State> {
 				<View style={styles.searchContainer}>
 					<View style={styles.searchParent}>
 						<ThemedSearchBar
-							title={this.props.mediaType == "anime" ? "Search for an anime title": "Search for a manga title"}
+							title={this.props.mediaType == "anime" ? "Search for an anime title" : "Search for a manga title"}
 							search={this.props.search}
 							changeText={((text?: string) => {
 								this.changeText(text ?? "");
@@ -266,12 +266,23 @@ export class FieldSearchBar extends ThemedComponent<Styles, Props, State> {
 				<View style={styles.fieldsContainer}>
 					{
 						this.props.currentFields.map((field, index) => {
+
+							let color = field.color
+
+							if (color === undefined) {
+								color = this.props.fields
+									.find((f) => f.name === field.name)
+									?.possibleValues
+									?.find((v) => v.val === field.value)
+									?.color
+							}
+
 							return (
 								<View key={index} style={[
 									...styles.field,
 									{
-										borderColor: field.color,
-										backgroundColor: field.color
+										borderColor: color,
+										backgroundColor: color
 									}
 								]}>
 									<Typography colorVariant="labels" isOnContainer={false} textKind="paragraph" variant="body1">{field.negative ? "-" : "+"}{field.name}: {field.value}</Typography>
@@ -300,7 +311,7 @@ const styles = ThemedStyleSheet.create({
 	modalFilterButtonAddSubtract: {
 		padding: sizing.spacing("halfMedium"),
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-		borderRadius: sizing.rounding("large") as number 
+		borderRadius: sizing.rounding("large") as number
 	},
 	smallSpacing: {
 		width: sizing.spacing("medium")

@@ -30,13 +30,25 @@ export function resolveColor(
 ): any {
 
 	if (typeSet === "labels") {
-		if (setting === undefined) {
+
+
+		if (setting === "any") {
 			const labels = theme.theme.colors.colors.labels;
 
 			const r = Math.round((Math.random() * labels.length - 0.5));
 
 			return new TokenReference(labels[r]).resolve(theme);
 		}
+
+		if (setting?.startsWith("seed")) {
+			const labels = theme.theme.colors.colors.labels;
+
+			const seed = parseInt(setting.split(".")[1], 10) % labels.length;
+
+			return new TokenReference(labels[seed]).resolve(theme);
+		}
+
+		if (setting === undefined) throw new Error();
 
 		const textKind: ColorTokenTextKind = setting.split(".")[1] as ColorTokenTextKind;
 
