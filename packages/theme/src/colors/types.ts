@@ -36,7 +36,8 @@ export type Colors = {
     colors: ColorSubSets<MainColorSets>
     & {
         status: Record<Status, ColorSet>,
-        labels: PaletteToken[]
+		labels: PaletteToken[],
+		onLabels: TypographicColorSet
     },
     palettes: Record<PaletteKeys, Record<PaletteShade, string>>
 }

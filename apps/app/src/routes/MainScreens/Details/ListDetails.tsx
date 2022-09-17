@@ -5,674 +5,750 @@ import { Colors } from "#config/Colors";
 import { BackButtonFunctionsType, changeActivePage, changeBackButton, getActivePage } from "#helpers/backButton";
 import { ListDetailsStateManager } from "#helpers/Screens/Main/ListDetails/StateManager";
 import { niceTextFormat } from "#helpers/textFormatting";
-import { Picker } from "@react-native-picker/picker";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import {
-    Dimensions,
-    SafeAreaView,
-    ScrollView,
-    View,
-    Text,
-    StyleSheet,
-    ActivityIndicator,
-    TouchableOpacity,
+	SafeAreaView,
+	ScrollView,
+	View,
+	Text,
+	StyleSheet,
+	ActivityIndicator,
+	TouchableOpacity,
+	TextStyle,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import TimeAgo from "react-native-timeago";
-import { AnimeDetailsMediaTypeEnum, AnimeDetailsMyListStatus, MangaDetailsMediaTypeEnum, MangaDetailsMyListStatus } from "@kurabu/api-sdk";
+import { AnimeDetailsMediaTypeEnum, AnimeDetailsMyListStatus, AnimeStatus, MangaDetailsMediaTypeEnum, MangaDetailsMyListStatus, MangaStatus } from "@kurabu/api-sdk";
 import { DetailsStackParamList } from "#routes/MainStacks/DetailsStack";
 import { UpdateMangaList } from "#actions/manga/UpdateMangaList";
+import { MainGradientBackground } from "#comps/MainGradientBackground";
+import { AppliedStyles, colors, ProvidedTheme, resolve, sizing, ThemedComponent } from "@kurabu/theme";
+import { createTypographyStyles, Typography } from "#comps/themed/Typography";
+import { TopAreaLabel, topAreaLabelStyles, topAreaLabelTypographySettings } from "./components/TopAreaLabel";
+import { TopAreaValue, topAreaValueStyles } from "./components/TopAreaValue";
+import { Picker } from "#comps/themed/Picker";
+import { Spacer } from "#comps/themed/Spacer";
 
 export type Props = {
-    navigation: StackNavigationProp<DetailsStackParamList, "ListDetailsScreen">;
-    route: RouteProp<DetailsStackParamList, "ListDetailsScreen">;
+	navigation: StackNavigationProp<DetailsStackParamList, "ListDetailsScreen">;
+	route: RouteProp<DetailsStackParamList, "ListDetailsScreen">;
 };
 
 export type State = {
-    mediaId: number;
-    listStatus?: Partial<AnimeDetailsMyListStatus | MangaDetailsMyListStatus>;
-    listenerToUnMount?: () => void;
-    page: keyof BackButtonFunctionsType;
-    mediaType: AnimeDetailsMediaTypeEnum | MangaDetailsMediaTypeEnum;
-    isAnime: boolean;
-    isEditing: boolean;
-    before?: Partial<AnimeDetailsMyListStatus | MangaDetailsMyListStatus>;
+	mediaId: number;
+	listStatus?: Partial<AnimeDetailsMyListStatus | MangaDetailsMyListStatus>;
+	listenerToUnMount?: () => void;
+	page: keyof BackButtonFunctionsType;
+	mediaType: AnimeDetailsMediaTypeEnum | MangaDetailsMediaTypeEnum;
+	isAnime: boolean;
+	isEditing: boolean;
+	before?: Partial<AnimeDetailsMyListStatus | MangaDetailsMyListStatus>;
+	pickers: {
+		status: boolean,
+		rewatchingOrRereading: boolean
+	}
 };
 
-export class ListDetails extends React.PureComponent<Props, State> {
-    private stateManager: ListDetailsStateManager;
-    constructor(props: Props) {
-        super(props);
-        this.stateManager = new ListDetailsStateManager(this);
+export class ListDetails extends ThemedComponent<Styles, Props, State> {
+	private stateManager: ListDetailsStateManager;
+	constructor(props: Props) {
+		super(styles, props);
+		this.stateManager = new ListDetailsStateManager(this);
 
-        let mediaId = props.route.params.id;
-        const mediaType = props.route.params.mediaType;
-        if (mediaId == undefined) {
-            mediaId = 1;
-        }
+		let mediaId = props.route.params.id;
+		const mediaType = props.route.params.mediaType;
+		if (mediaId == undefined) {
+			mediaId = 1;
+		}
 
-        console.log(`${mediaType} ${mediaId}`);
+		console.log(`${mediaType} ${mediaId}`);
 
-        const mangaMediatTypes = [
-            "manga",
-            "light_novel",
-            "manhwa",
-            "one_shot",
-            "manhua",
-            "doujinshi",
-            "novel",
-        ];
-        const isAnime = !mangaMediatTypes.includes(mediaType.toString());
-        this.state = {
-            mediaId: mediaId,
-            listenerToUnMount: undefined,
-            page: getActivePage(),
-            mediaType: mediaType,
-            isAnime: isAnime,
-            isEditing: false,
-        };
+		const mangaMediatTypes = [
+			"manga",
+			"light_novel",
+			"manhwa",
+			"one_shot",
+			"manhua",
+			"doujinshi",
+			"novel",
+		];
+		const isAnime = !mangaMediatTypes.includes(mediaType.toString());
+		this.state = {
+			mediaId: mediaId,
+			listenerToUnMount: undefined,
+			page: getActivePage(),
+			mediaType: mediaType,
+			isAnime: isAnime,
+			isEditing: false,
+			pickers: {
+				rewatchingOrRereading: false,
+				status: false,
+			}
+		};
 
-        void this.refresh();
-    }
+		void this.refresh();
+	}
 
-    async refresh() {
-        const animeFields = "id, title, main_picture, alternative_titles, my_list_status{status, comments, is_rewatching, num_times_rewatched, num_watched_episodes, priority, rewatch_value, score, tags}";
-        const mangaFields = "id, title, main_picture, alternative_titles, my_list_status{status, score, num_volumes_read, num_chapters_read, is_rereading, updated_at, priority, num_times_reread, reread_value, tags, comments}";
+	async refresh() {
+		const animeFields = "id, title, main_picture, alternative_titles, my_list_status{status, comments, is_rewatching, num_times_rewatched, num_watched_episodes, priority, rewatch_value, score, tags}";
+		const mangaFields = "id, title, main_picture, alternative_titles, my_list_status{status, score, num_volumes_read, num_chapters_read, is_rereading, updated_at, priority, num_times_reread, reread_value, tags, comments}";
 
-        let listSource: AnimeDetailsSource | MangaDetailsSource;
+		let listSource: AnimeDetailsSource | MangaDetailsSource;
 
-        if (!this.state.isAnime) {
-            listSource = new MangaDetailsSource(this.state.mediaId, mangaFields);
-        } else {
-            listSource = new AnimeDetailsSource(this.state.mediaId, animeFields);
-        }
+		if (!this.state.isAnime) {
+			listSource = new MangaDetailsSource(this.state.mediaId, mangaFields);
+		} else {
+			listSource = new AnimeDetailsSource(this.state.mediaId, animeFields);
+		}
 
-        const listStatus = await listSource.MakeRequest();
+		const listStatus = await listSource.MakeRequest();
 
-        this.setState({
-            mediaId: this.state.mediaId,
-            listStatus: listStatus.myListStatus,
-            isEditing: false,
-            before: listStatus.myListStatus,
-        });
-    }
+		this.setState({
+			mediaId: this.state.mediaId,
+			listStatus: listStatus.myListStatus,
+			isEditing: false,
+			before: listStatus.myListStatus,
+		});
+	}
 
-    componentDidMount() {
-        changeBackButton(this.state.page, () => {
-            this.props.navigation.popToTop();
-            changeBackButton(this.state.page, undefined);
-        });
+	componentDidMount() {
+		changeBackButton(this.state.page, () => {
+			this.props.navigation.popToTop();
+			changeBackButton(this.state.page, undefined);
+		});
 
-        const unsubscribe = this.props.navigation.addListener("focus", () => {
-            changeActivePage(this.state.page);
-            // The screen is focused
-            // Call any action
-        });
+		const unsubscribe = this.props.navigation.addListener("focus", () => {
+			changeActivePage(this.state.page);
+			// The screen is focused
+			// Call any action
+		});
 
-        this.setState((prevState) => ({
-            ...prevState,
-            listenerToUnMount: unsubscribe,
-        }));
-    }
+		this.setState((prevState) => ({
+			...prevState,
+			listenerToUnMount: unsubscribe,
+		}));
+	}
 
-    componentWillUnmount() {
-        if (this.state.listenerToUnMount) this.state.listenerToUnMount();
-    }
+	componentWillUnmount() {
+		if (this.state.listenerToUnMount) this.state.listenerToUnMount();
+	}
 
-    renderAnime(listStatus: AnimeDetailsMyListStatus) {
-        if (this.state.isEditing) return this.animeEditing(listStatus);
-        else return this.animeDisplay(listStatus);
-    }
+	renderAnime(listStatus: AnimeDetailsMyListStatus, styles: AppliedStyles<Styles>, providedTheme: ProvidedTheme) {
+		if (this.state.isEditing) return this.animeEditing(listStatus, styles, providedTheme);
+		else return this.animeDisplay(listStatus, styles);
+	}
 
-    renderManga(listStatus: MangaDetailsMyListStatus) {
-        if (this.state.isEditing) return this.mangaEditing(listStatus);
-        else return this.mangaDisplay(listStatus);
-    }
+	renderManga(listStatus: MangaDetailsMyListStatus, styles: AppliedStyles<Styles>, providedTheme: ProvidedTheme) {
+		if (this.state.isEditing) return this.mangaEditing(listStatus, styles, providedTheme);
+		else return this.mangaDisplay(listStatus, styles);
+	}
 
-    animeDisplay(listStatus: AnimeDetailsMyListStatus) {
-        return (
-            <View style={styles.Table}>
-                <View style={styles.Labels}>
-                    <Text style={styles.Label}>Status:</Text>
-                    <Text style={styles.Label}>Watched episodes:</Text>
-                    <Text style={styles.Label}>Score:</Text>
-                    <Text style={styles.Label}>Priority:</Text>
+	animeDisplay(listStatus: AnimeDetailsMyListStatus, styles: AppliedStyles<Styles>) {
+		return (
+			<View style={styles.Table}>
+				<View style={styles.Labels}>
+					<TopAreaLabel>Status:</TopAreaLabel>
+					<TopAreaLabel>Watched episodes:</TopAreaLabel>
+					<TopAreaLabel>Score:</TopAreaLabel>
+					<TopAreaLabel>Priority:</TopAreaLabel>
 
-                    <Text style={styles.Label}></Text>
+					<TopAreaLabel></TopAreaLabel>
 
-                    <Text style={styles.Label}>Rewatching:</Text>
-                    <Text style={styles.Label}>Num times rewatched:</Text>
-                    <Text style={styles.Label}>Rewatch value:</Text>
+					<TopAreaLabel>Rewatching:</TopAreaLabel>
+					<TopAreaLabel>Num times rewatched:</TopAreaLabel>
+					<TopAreaLabel>Rewatch value:</TopAreaLabel>
 
-                    <Text style={styles.Label}></Text>
+					<TopAreaLabel></TopAreaLabel>
 
-                    <Text style={styles.Label}>Tags:</Text>
-                    <Text style={styles.Label}>Comments:</Text>
+					<TopAreaLabel>Tags:</TopAreaLabel>
+					<TopAreaLabel>Comments:</TopAreaLabel>
 
-                    <Text style={styles.Label}></Text>
+					<TopAreaLabel></TopAreaLabel>
 
-                    <Text style={styles.Label}>Updated:</Text>
-                </View>
-                <View style={styles.Values}>
-                    <Text style={styles.Value}>{niceTextFormat(listStatus.status?.toString())}</Text>
-                    <Text style={styles.Value}>{listStatus.numEpisodesWatched}</Text>
-                    <Text style={styles.Value}># {listStatus.score}</Text>
-                    <Text style={styles.Value}>{listStatus.priority}</Text>
+					<TopAreaLabel>Updated:</TopAreaLabel>
+				</View>
+				<View style={styles.Values}>
 
-                    <Text style={styles.Value}></Text>
+					<TopAreaValue>{niceTextFormat(listStatus.status?.toString())}</TopAreaValue>
+					<TopAreaValue>{listStatus.numEpisodesWatched}</TopAreaValue>
+					<TopAreaValue># {listStatus.score}</TopAreaValue>
+					<TopAreaValue>{listStatus.priority}</TopAreaValue>
 
-                    <Text style={styles.Value}>
-                        {listStatus.isRewatching == true ? "yes" : "no"}
-                    </Text>
-                    <Text style={styles.Value}>{listStatus.numTimesRewatched}</Text>
-                    <Text style={styles.Value}>{listStatus.rewatchValue}</Text>
+					<TopAreaValue></TopAreaValue>
 
-                    <Text style={styles.Value}></Text>
+					<TopAreaValue>
+						{listStatus.isRewatching == true ? "yes" : "no"}
+					</TopAreaValue>
+					<TopAreaValue>{listStatus.numTimesRewatched}</TopAreaValue>
+					<TopAreaValue>{listStatus.rewatchValue}</TopAreaValue>
 
-                    <Text style={styles.Value}>
-                        {listStatus.tags == undefined || listStatus.tags.length == 0
-                            ? "N/A"
-                            : listStatus.tags.join(", ")}
-                    </Text>
-                    <Text style={styles.Value}>
-                        {(listStatus.comments ?? "") == "" ? "N/A" : listStatus.comments}
-                    </Text>
+					<TopAreaValue></TopAreaValue>
 
-                    <Text style={styles.Value}></Text>
+					<TopAreaValue>
+						{listStatus.tags == undefined || listStatus.tags.length == 0
+							? "N/A"
+							: listStatus.tags.join(", ")}
+					</TopAreaValue>
+					<TopAreaValue>
+						{(listStatus.comments ?? "") == "" ? "N/A" : listStatus.comments}
+					</TopAreaValue>
 
-                    <Text style={styles.Value}>
-                        <TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
-                    </Text>
-                </View>
-            </View>
-        );
-    }
+					<TopAreaValue></TopAreaValue>
 
-    animeEditing(listStatus: AnimeDetailsMyListStatus) {
-        return (
-            <View style={styles.newTable}>
-                <View style={styles.newPair}></View>
-                {/* for some crazy reason 2 empty ones are required for the first 2 to show up */}
-                <View style={styles.newPair}></View>
+					<TopAreaValue>
+						<TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
+					</TopAreaValue>
+				</View>
+			</View>
+		);
+	}
 
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Status:</Text>
-                    <Picker
-                        selectedValue={listStatus.status}
-                        style={styles.newValue}
-                        onValueChange={this.stateManager.changeStatus.bind(this)}
-                    >
-                        <Picker.Item
-                            label={niceTextFormat("watching")}
-                            value="watching" />
-                        <Picker.Item
-                            label={niceTextFormat("completed")}
-                            value="completed" />
-                        <Picker.Item
-                            label={niceTextFormat("on_hold")}
-                            value="on_hold" />
-                        <Picker.Item
-                            label={niceTextFormat("dropped")}
-                            value="dropped" />
-                        <Picker.Item
-                            label={niceTextFormat("plan_to_watch")}
-                            value="plan_to_watch"
-                        />
-                    </Picker>
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Watched episodes:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.numEpisodesWatched?.toString() ?? ""}
-                        onChangeText={this.stateManager.changeEpisodesWatched.bind(this)}
-                        keyboardType={"numeric"}
-                    />
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Score:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.score?.toString() ?? ""}
-                        onChangeText={this.stateManager.changeScore.bind(this)}
-                        keyboardType={"numeric"}
-                    />
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Priority:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.priority?.toString() ?? ""}
-                        onChangeText={this.stateManager.changePriority.bind(this)}
-                        keyboardType={"numeric"}
-                    />
-                </View>
+	animeEditing(listStatus: AnimeDetailsMyListStatus, styles: AppliedStyles<Styles>, providedTheme: ProvidedTheme) {
+		const labelStyle = labelTextStyle[1]({
+			text: styles.newLabel
+		}, providedTheme, {})
+		const valueStyle = valueTextStyle[1]({
+			text: styles.newValue
+		}, providedTheme, {})
 
-                <View style={styles.empty}></View>
+		console.log("value style", valueStyle);
 
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Rewatching:</Text>
-                    <Picker
-                        selectedValue={listStatus.isRewatching == true ? "true" : "false"}
-                        style={styles.newValue}
-                        onValueChange={this.stateManager.changeIsRewatching.bind(this)}
-                    >
-                        <Picker.Item label={niceTextFormat("yes")} value="true" />
-                        <Picker.Item label={niceTextFormat("no")} value="false" />
-                    </Picker>
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Num times rewatched:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.numTimesRewatched?.toString() ?? ""}
-                        onChangeText={this.stateManager.changeNumTimesRewatched.bind(this)}
-                        keyboardType={"numeric"}
-                    />
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Rewatch value:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.rewatchValue?.toString() ?? ""}
-                        onChangeText={this.stateManager.changeRewatchValue.bind(this)}
-                        keyboardType={"numeric"}
-                    />
-                </View>
+		return (
+			<View style={styles.newTable}>
+				<View style={StyleSheet.flatten([...styles.newPair, ...styles.firstPickerPair])}>
 
-                <View style={styles.empty}></View>
+					<Text style={labelStyle}>Status:</Text>
+					<View style={styles.newValueContainer}>
 
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Tags:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.tags?.join(" ") ?? ""}
-                        onChangeText={this.stateManager.changeTags.bind(this)}
-                        keyboardType={"ascii-capable"}
-                    />
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Comments:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.comments ?? ""}
-                        onChangeText={this.stateManager.changeComments.bind(this)}
-                        keyboardType={"ascii-capable"}
-                    />
-                </View>
+						<Picker
+							items={Object.entries(AnimeStatus).map(a => ({ label: niceTextFormat(a[1]), value: a[1] }))}
+							setValue={(val) => {
+								// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+								this.stateManager.changeStatus(val)
+							}}
+							style={valueStyle as TextStyle}
+							value={listStatus.status === undefined ? null : listStatus.status}
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							dropDownBackgroundColor={resolve(colors.colorContainer("secondary"), providedTheme)}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Watched episodes:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.numEpisodesWatched?.toString() ?? ""}
+							onChangeText={this.stateManager.changeEpisodesWatched.bind(this)}
+							keyboardType={"numeric"}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Score:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.score?.toString() ?? ""}
+							onChangeText={this.stateManager.changeScore.bind(this)}
+							keyboardType={"numeric"}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Priority:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.priority?.toString() ?? ""}
+							onChangeText={this.stateManager.changePriority.bind(this)}
+							keyboardType={"numeric"}
+						/>
+					</View>
+				</View>
 
-                <View style={styles.empty}></View>
+				<Spacer direction="vertical" spacing="large" />
+				<Spacer direction="vertical" spacing="large" />
 
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Updated:</Text>
-                    <Text style={styles.newValue}>
-                        <TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
-                    </Text>
-                </View>
-            </View>
-        );
-    }
+				<View style={StyleSheet.flatten([...styles.newPair, ...styles.secondPickerPair])}>
+					<Text style={labelStyle}>Rewatching:</Text>
+					<View style={styles.newValueContainer}>
+						<Picker
+							items={[{ label: "Yes", value: "true" }, { label: "No", value: "false" }]}
+							setValue={(val) => {
+								// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+								this.stateManager.changeIsRewatching(val)
+							}}
+							style={valueStyle as TextStyle}
+							value={listStatus.isRewatching === undefined ? null : String(listStatus.isRewatching) as "true" | "false"}
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							dropDownBackgroundColor={resolve(colors.colorContainer("secondary"), providedTheme)}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Num times rewatched:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.numTimesRewatched?.toString() ?? ""}
+							onChangeText={this.stateManager.changeNumTimesRewatched.bind(this)}
+							keyboardType={"numeric"}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Rewatch value:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.rewatchValue?.toString() ?? ""}
+							onChangeText={this.stateManager.changeRewatchValue.bind(this)}
+							keyboardType={"numeric"}
+						/>
+					</View>
+				</View>
 
-    mangaDisplay(listStatus: MangaDetailsMyListStatus) {
-        return (
-            <View style={styles.Table}>
-                <View style={styles.Labels}>
-                    <Text style={styles.Label}>Status:</Text>
-                    <Text style={styles.Label}>Chapters read:</Text>
-                    <Text style={styles.Label}>Volumes read:</Text>
-                    <Text style={styles.Label}>Score:</Text>
+				<Spacer direction="vertical" spacing="large" />
+				<Spacer direction="vertical" spacing="large" />
 
-                    <Text style={styles.Label}></Text>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Tags:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.tags?.join(" ") ?? ""}
+							onChangeText={this.stateManager.changeTags.bind(this)}
+							keyboardType={"ascii-capable"}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Comments:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.comments ?? ""}
+							onChangeText={this.stateManager.changeComments.bind(this)}
+							keyboardType={"ascii-capable"}
+						/>
+					</View>
+				</View>
 
-                    <Text style={styles.Label}>Rereading:</Text>
-                    <Text style={styles.Label}>Number of times reread:</Text>
-                    <Text style={styles.Label}>Reread value:</Text>
+				<Spacer direction="vertical" spacing="large" />
+				<Spacer direction="vertical" spacing="large" />
 
-                    <Text style={styles.Label}></Text>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Updated:</Text>
+					<View style={styles.newValueContainer}>
+						<Text style={valueStyle}>
+							<TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
+						</Text>
+					</View>
+				</View>
+			</View >
+		);
+	}
 
-                    <Text style={styles.Label}>Tags:</Text>
-                    <Text style={styles.Label}>Comments:</Text>
+	mangaDisplay(listStatus: MangaDetailsMyListStatus, styles: AppliedStyles<Styles>) {
+		return (
+			<View style={styles.Table}>
+				<View style={styles.Labels}>
+					<TopAreaLabel>Status:</TopAreaLabel>
+					<TopAreaLabel>Chapters read:</TopAreaLabel>
+					<TopAreaLabel>Volumes read:</TopAreaLabel>
+					<TopAreaLabel>Score:</TopAreaLabel>
 
-                    <Text style={styles.Label}></Text>
+					<Spacer direction="vertical" spacing="large" />
+					<Spacer direction="vertical" spacing="large" />
 
-                    <Text style={styles.Label}>Updated:</Text>
-                </View>
-                <View style={styles.Values}>
-                    <Text style={styles.Value}>{niceTextFormat(listStatus.status?.toString())}</Text>
-                    <Text style={styles.Value}>{listStatus.numChaptersRead}</Text>
-                    <Text style={styles.Value}>{listStatus.numVolumesRead}</Text>
-                    <Text style={styles.Value}># {listStatus.score}</Text>
+					<TopAreaLabel>Rereading:</TopAreaLabel>
+					<TopAreaLabel>Number of times reread:</TopAreaLabel>
+					<TopAreaLabel>Reread value:</TopAreaLabel>
 
-                    <Text style={styles.Value}></Text>
+					<Spacer direction="vertical" spacing="large" />
+					<Spacer direction="vertical" spacing="large" />
 
-                    <Text style={styles.Value}>
-                        {listStatus.isRereading == true ? "yes" : "no"}
-                    </Text>
-                    <Text style={styles.Value}>{listStatus.numTimesReread}</Text>
-                    <Text style={styles.Value}>{listStatus.rereadValue}</Text>
+					<TopAreaLabel>Tags:</TopAreaLabel>
+					<TopAreaLabel>Comments:</TopAreaLabel>
 
-                    <Text style={styles.Value}></Text>
+					<Spacer direction="vertical" spacing="large" />
+					<Spacer direction="vertical" spacing="large" />
 
-                    <Text style={styles.Value}>
-                        {listStatus.tags == undefined || listStatus.tags.length == 0
-                            ? "N/A"
-                            : listStatus.tags.join(", ")}
-                    </Text>
-                    <Text style={styles.Value}>
-                        {(listStatus.comments ?? "") == "" ? "N/A" : listStatus.comments}
-                    </Text>
+					<TopAreaLabel>Updated:</TopAreaLabel>
+				</View>
+				<View style={styles.Values}>
+					<TopAreaValue>{niceTextFormat(listStatus.status?.toString())}</TopAreaValue>
+					<TopAreaValue>{listStatus.numChaptersRead}</TopAreaValue>
+					<TopAreaValue>{listStatus.numVolumesRead}</TopAreaValue>
+					<TopAreaValue># {listStatus.score}</TopAreaValue>
 
-                    <Text style={styles.Value}></Text>
+					<Spacer direction="vertical" spacing="large" />
+					<Spacer direction="vertical" spacing="large" />
 
-                    <Text style={styles.Value}>
-                        <TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
-                    </Text>
-                </View>
-            </View>
-        );
-    }
-    mangaEditing(listStatus: MangaDetailsMyListStatus) {
-        if (this.state.listStatus == undefined) return;
-        return (
-            <View style={styles.newTable}>
-                <View style={styles.newPair}></View>
-                {/* for some crazy reason 2 empty ones are required for the first 2 to show up */}
-                <View style={styles.newPair}></View>
+					<TopAreaValue>
+						{listStatus.isRereading == true ? "yes" : "no"}
+					</TopAreaValue>
+					<TopAreaValue>{listStatus.numTimesReread}</TopAreaValue>
+					<TopAreaValue>{listStatus.rereadValue}</TopAreaValue>
 
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Status:</Text>
-                    <Picker
-                        selectedValue={listStatus.status}
-                        style={styles.newValue}
-                        onValueChange={this.stateManager.changeStatus.bind(this)}
-                    >
-                        <Picker.Item label={niceTextFormat("reading")} value="reading" />
-                        <Picker.Item label={niceTextFormat("completed")} value="completed" />
-                        <Picker.Item label={niceTextFormat("on_hold")} value="on_hold" />
-                        <Picker.Item label={niceTextFormat("dropped")} value="dropped" />
-                        <Picker.Item label={niceTextFormat("plan_to_read")} value="plan_to_read" />
-                    </Picker>
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Chapters read:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.numChaptersRead?.toString() ?? ""}
-                        onChangeText={this.stateManager.changeChaptersRead.bind(this)}
-                        keyboardType={"numeric"}
-                    />
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Volumes read:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.numVolumesRead?.toString() ?? ""}
-                        onChangeText={this.stateManager.changeVolumesRead.bind(this)}
-                        keyboardType={"numeric"}
-                    />
-                </View>
+					<Spacer direction="vertical" spacing="large" />
+					<Spacer direction="vertical" spacing="large" />
 
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Score:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.score?.toString() ?? ""}
-                        onChangeText={this.stateManager.changeScore.bind(this)}
-                        keyboardType={"numeric"}
-                    />
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Priority:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.priority?.toString() ?? ""}
-                        onChangeText={this.stateManager.changePriority.bind(this)}
-                        keyboardType={"numeric"}
-                    />
-                </View>
+					<TopAreaValue>
+						{listStatus.tags == undefined || listStatus.tags.length == 0
+							? "N/A"
+							: listStatus.tags.join(", ")}
+					</TopAreaValue>
+					<TopAreaValue>
+						{(listStatus.comments ?? "") == "" ? "N/A" : listStatus.comments}
+					</TopAreaValue>
 
-                <View style={styles.empty}></View>
+					<Spacer direction="vertical" spacing="large" />
+					<Spacer direction="vertical" spacing="large" />
 
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Rereading:</Text>
-                    <Picker
-                        selectedValue={listStatus.isRereading == true ? "true" : "false"}
-                        style={styles.newValue}
-                        onValueChange={this.stateManager.changeIsRereading.bind(this)}
-                    >
-                        <Picker.Item label={niceTextFormat("yes")} value="true" />
-                        <Picker.Item label={niceTextFormat("no")} value="false" />
-                    </Picker>
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Num times rewatched:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.numTimesReread?.toString() ?? ""}
-                        onChangeText={this.stateManager.changeNumTimesReread.bind(this)}
-                        keyboardType={"numeric"}
-                    />
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Rewatch value:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.rereadValue?.toString() ?? ""}
-                        onChangeText={this.stateManager.changeRereadValue.bind(this)}
-                        keyboardType={"numeric"}
-                    />
-                </View>
+					<TopAreaValue>
+						<TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
+					</TopAreaValue>
+				</View>
+			</View>
+		);
+	}
+	mangaEditing(listStatus: MangaDetailsMyListStatus, styles: AppliedStyles<Styles>, providedTheme: ProvidedTheme) {
+		const labelStyle = labelTextStyle[1]({
+			text: styles.newLabel
+		}, providedTheme, {})
+		const valueStyle = valueTextStyle[1]({
+			text: styles.newValue
+		}, providedTheme, {})
 
-                <View style={styles.empty}></View>
+		if (this.state.listStatus == undefined) return;
+		return (
+			<View style={styles.newTable}>
+				<View style={StyleSheet.flatten([...styles.newPair, ...styles.firstPickerPair])}>
+					<Text style={labelStyle}>Status:</Text>
+					<View style={styles.newValueContainer}>
+						<Picker
+							items={Object.entries(MangaStatus).map(a => ({ label: niceTextFormat(a[1]), value: a[1] }))}
+							setValue={(val) => {
+								// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+								this.stateManager.changeStatus(val)
+							}}
+							style={valueStyle as TextStyle}
+							value={listStatus.status === undefined ? null : listStatus.status}
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							dropDownBackgroundColor={resolve(colors.colorContainer("secondary"), providedTheme)}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Chapters read:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.numChaptersRead?.toString() ?? ""}
+							onChangeText={this.stateManager.changeChaptersRead.bind(this)}
+							keyboardType={"numeric"}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Volumes read:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.numVolumesRead?.toString() ?? ""}
+							onChangeText={this.stateManager.changeVolumesRead.bind(this)}
+							keyboardType={"numeric"}
+						/>
+					</View>
+				</View>
 
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Tags:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.tags?.join(" ") ?? ""}
-                        onChangeText={this.stateManager.changeTags.bind(this)}
-                        keyboardType={"ascii-capable"}
-                    />
-                </View>
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Comments:</Text>
-                    <TextInput
-                        style={styles.newValue}
-                        value={listStatus.comments ?? ""}
-                        onChangeText={this.stateManager.changeComments.bind(this)}
-                        keyboardType={"ascii-capable"}
-                    />
-                </View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Score:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.score?.toString() ?? ""}
+							onChangeText={this.stateManager.changeScore.bind(this)}
+							keyboardType={"numeric"}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Priority:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.priority?.toString() ?? ""}
+							onChangeText={this.stateManager.changePriority.bind(this)}
+							keyboardType={"numeric"}
+						/>
+					</View>
+				</View>
 
-                <View style={styles.empty}></View>
+				<Spacer direction="vertical" spacing="large" />
+				<Spacer direction="vertical" spacing="large" />
 
-                <View style={styles.newPair}>
-                    <Text style={styles.newLabel}>Updated:</Text>
-                    <Text style={styles.newValue}>
-                        <TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
-                    </Text>
-                </View>
-            </View>
-        );
-    }
+				<View style={StyleSheet.flatten([...styles.newPair, ...styles.secondPickerPair])}>
+					<Text style={labelStyle}>Rereading:</Text>
+					<View style={styles.newValueContainer}>
+						<Picker
+							items={[{ label: "Yes", value: "true" }, { label: "No", value: "false" }]}
+							setValue={(val) => {
+								// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+								this.stateManager.changeIsRereading(val)
+							}}
+							style={valueStyle as TextStyle}
+							value={listStatus.isRereading === undefined ? null : String(listStatus.isRereading) as "true" | "false"}
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							dropDownBackgroundColor={resolve(colors.colorContainer("secondary"), providedTheme)}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Num times rewatched:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.numTimesReread?.toString() ?? ""}
+							onChangeText={this.stateManager.changeNumTimesReread.bind(this)}
+							keyboardType={"numeric"}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Rewatch value:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.rereadValue?.toString() ?? ""}
+							onChangeText={this.stateManager.changeRereadValue.bind(this)}
+							keyboardType={"numeric"}
+						/>
+					</View>
+				</View>
 
-    async saveEdit() {
-        if (this.state.listStatus == undefined) return;
+				<Spacer direction="vertical" spacing="large" />
+				<Spacer direction="vertical" spacing="large" />
 
-        if (this.state.isAnime == true) {
-            const updateRequest = new UpdateAnimeList();
-            await updateRequest.MakeRequest(
-                this.state.mediaId,
-                this.state.before as AnimeDetailsMyListStatus,
-                this.state.listStatus as AnimeDetailsMyListStatus
-            )
-            await this.refresh();
-        } else {
-            const updateRequest = new UpdateMangaList();
-            await updateRequest.MakeRequest(
-                this.state.mediaId,
-                this.state.before as MangaDetailsMyListStatus,
-                this.state.listStatus as MangaDetailsMyListStatus
-            )
-            await this.refresh();
-        }
-    }
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Tags:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.tags?.join(" ") ?? ""}
+							onChangeText={this.stateManager.changeTags.bind(this)}
+							keyboardType={"ascii-capable"}
+						/>
+					</View>
+				</View>
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Comments:</Text>
+					<View style={styles.newValueContainer}>
+						<TextInput
+							style={valueStyle}
+							value={listStatus.comments ?? ""}
+							onChangeText={this.stateManager.changeComments.bind(this)}
+							keyboardType={"ascii-capable"}
+						/>
+					</View>
+				</View>
 
-    render() {
-        return (
-            <SafeAreaView style={styles.appContainer}>
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={[
-                        Colors.KURABUPINK,
-                        Colors.KURABUPURPLE,
-                        Colors.BACKGROUNDGRADIENT_COLOR1,
-                        Colors.BACKGROUNDGRADIENT_COLOR2_DETAILS,
-                    ]}
-                    style={{
-                        width: Dimensions.get("window").width,
-                        height: Dimensions.get("window").height,
-                    }}
-                >
-                    {this.state.listStatus == undefined ? (
-                        <ActivityIndicator
-                            style={styles.loading}
-                            size="large"
-                            color={Colors.BLUE}
-                        />
-                    ) : (
-                        <ScrollView style={styles.page}>
-                            {this.state.isAnime
-                                ? this.renderAnime(
-                                      this.state.listStatus as AnimeDetailsMyListStatus
-                                  )
-                                : this.renderManga(
-                                      this.state.listStatus as MangaDetailsMyListStatus
-                                  )}
-                            {!this.state.isEditing ? (
-                                <TouchableOpacity
-                                    style={styles.listStatusEdit}
-                                    onPress={() => {
-                                        this.setState({
-                                            ...this.state,
-                                            isEditing: true,
-                                        });
-                                    }}
-                                >
-                                    <Text
-                                        style={styles.selfAlignCenter}
-                                    >
-                                        Edit
-                                    </Text>
-                                </TouchableOpacity>
-                            ) : (
-                                <TouchableOpacity
-                                    style={styles.listStatusEdit}
-                                    onPress={() => {
-                                        void this.saveEdit();
-                                    }}
-                                >
-                                    <Text
-                                        style={styles.selfAlignCenter}
-                                    >
-                                        Save
-                                    </Text>
-                                </TouchableOpacity>
-                            )}
-                            {this.state.isEditing == true ? (
-                                <TouchableOpacity
-                                    style={styles.listStatusEdit}
-                                    onPress={() => {
-                                        void this.refresh();
-                                    }}
-                                >
-                                    <Text
-                                        style={styles.selfAlignCenter}
-                                    >
-                                        Cancel
-                                    </Text>
-                                </TouchableOpacity>
-                            ) : undefined}
-                        </ScrollView>
-                    )}
-                </LinearGradient>
-            </SafeAreaView>
-        );
-    }
+				<Spacer direction="vertical" spacing="large" />
+				<Spacer direction="vertical" spacing="large" />
+
+				<View style={styles.newPair}>
+					<Text style={labelStyle}>Updated:</Text>
+					<View style={styles.newValueContainer}>
+						<Text style={valueStyle}>
+							<TimeAgo time={listStatus.updatedAt ?? ""} interval={5000} />
+						</Text>
+					</View>
+				</View>
+			</View>
+		);
+	}
+
+	async saveEdit() {
+		if (this.state.listStatus == undefined) return;
+
+		if (this.state.isAnime == true) {
+			const updateRequest = new UpdateAnimeList();
+			await updateRequest.MakeRequest(
+				this.state.mediaId,
+				this.state.before as AnimeDetailsMyListStatus,
+				this.state.listStatus as AnimeDetailsMyListStatus
+			)
+			await this.refresh();
+		} else {
+			const updateRequest = new UpdateMangaList();
+			await updateRequest.MakeRequest(
+				this.state.mediaId,
+				this.state.before as MangaDetailsMyListStatus,
+				this.state.listStatus as MangaDetailsMyListStatus
+			)
+			await this.refresh();
+		}
+	}
+
+	renderThemed(styles: AppliedStyles<Styles>, providedTheme: ProvidedTheme) {
+		if (this.state.listStatus == undefined)
+			return (<ActivityIndicator
+				style={styles.loading}
+				size="large"
+				color={Colors.BLUE}
+			/>);
+
+		return (
+			<SafeAreaView style={styles.appContainer}>
+				<MainGradientBackground noFlex={true}>
+					<ScrollView
+						style={styles.page}
+						contentContainerStyle={styles.pageContentContainer}>
+						{this.state.isAnime
+							? this.renderAnime(
+								this.state.listStatus as AnimeDetailsMyListStatus,
+								styles,
+								providedTheme
+							)
+							: this.renderManga(
+								this.state.listStatus as MangaDetailsMyListStatus,
+								styles,
+								providedTheme
+							)}
+						{!this.state.isEditing ? (
+							<TouchableOpacity
+								style={styles.listStatusEdit}
+								onPress={() => {
+									this.setState({
+										...this.state,
+										isEditing: true,
+									});
+								}}
+							>
+								<Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="button" style={styles.selfAlignCenter}>Edit</Typography>
+							</TouchableOpacity>
+						) : (
+							<TouchableOpacity
+								style={styles.listStatusEdit}
+								onPress={() => {
+									void this.saveEdit();
+								}}
+							>
+								<Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="button" style={styles.selfAlignCenter}>Save</Typography>
+
+							</TouchableOpacity>
+						)}
+						{this.state.isEditing == true ? (
+							<TouchableOpacity
+								style={styles.listStatusEdit}
+								onPress={() => {
+									void this.refresh();
+								}}
+							>
+								<Typography colorVariant="secondary" isOnContainer={false} textKind="paragraph" variant="button" style={styles.selfAlignCenter}>Cancel</Typography>
+
+							</TouchableOpacity>
+						) : undefined}
+					</ScrollView>
+				</MainGradientBackground>
+			</SafeAreaView >
+		);
+	}
 }
 
-const fontSize = Dimensions.get("window").width / 36;
+const labelTextStyle = createTypographyStyles(
+	topAreaLabelTypographySettings.variant,
+	topAreaLabelTypographySettings.textKind,
+	topAreaLabelTypographySettings.isOnContainer,
+	topAreaLabelTypographySettings.colorVariant);
+
+const valueTextStyle = createTypographyStyles(
+	topAreaLabelTypographySettings.variant,
+	topAreaLabelTypographySettings.textKind,
+	topAreaLabelTypographySettings.isOnContainer,
+	topAreaLabelTypographySettings.colorVariant);
+
+type Styles = typeof styles;
 
 const styles = StyleSheet.create({
-    appContainer: {
-        backgroundColor: Colors.INVISIBLE_BACKGROUND,
-    },
-    loading: {
-        marginTop: Dimensions.get("window").height / 2,
-    },
-    page: {
-        margin: 10,
-    },
-    Labels: {
-        flexDirection: "column",
-        flex: 1,
-        margin: 2,
-    },
-    Values: {
-        flexDirection: "column",
-        flex: 1,
-        margin: 2,
-    },
-    Table: {
-        flexDirection: "row",
-    },
-    Label: {
-        color: Colors.TEXT,
-        fontWeight: "bold",
-        fontSize: fontSize * 1.2,
-    },
-    Value: {
-        color: Colors.TEXT,
-        fontSize: fontSize * 1.2,
-    },
-    listStatusEdit: {
-        width: Dimensions.get("window").width - 20,
-        paddingTop: 10,
-        paddingBottom: 10,
-        backgroundColor: Colors.KURABUPINK,
-        fontSize: fontSize,
-        color: Colors.KURABUPINK,
-        marginTop: 10,
-    },
-    newLabel: {
-        flex: 1,
-        fontWeight: "bold",
-        color: Colors.TEXT,
-        fontSize: fontSize * 1.2,
-        textAlignVertical: "center",
-    },
-    newValue: {
-        flex: 1,
-        color: Colors.TEXT,
-        fontSize: fontSize * 1.2,
-    },
-    newPair: {
-        flexDirection: "row",
-        flex: 1,
-        margin: 2,
-    },
-    empty: {
-        flexDirection: "row",
-        flex: 1,
-        margin: 6,
-    },
-    newTable: {
-        flexDirection: "column",
-    },
-    selfAlignCenter: {
-        alignSelf: "center",
-    }
+	appContainer: {
+		backgroundColor: Colors.INVISIBLE_BACKGROUND,
+	},
+	loading: {
+		marginTop: sizing.vh(50),
+	},
+	page: {
+		margin: sizing.spacing("medium")
+	},
+	pageContentContainer: {
+		paddingBottom: 80
+	},
+	Labels: {
+		flexDirection: "column",
+		flex: 1,
+		margin: sizing.spacing("small"),
+	},
+	Values: {
+		flexDirection: "column",
+		flex: 1,
+		margin: sizing.spacing("small"),
+	},
+	Table: {
+		flexDirection: "row",
+	},
+	listStatusEdit: {
+		width: sizing.vw(100, -20),
+		paddingTop: sizing.spacing("large"),
+		paddingBottom: sizing.spacing("large"),
+		backgroundColor: colors.color("secondary"),
+		marginTop: sizing.spacing("large"),
+	},
+	newLabel: {
+		flex: 1,
+		textAlignVertical: "center",
+		...labelTextStyle[0].text,
+		...topAreaLabelStyles.TopAreaLabel
+	},
+	newValue: {
+		flex: 1,
+		...valueTextStyle[0].text,
+		...topAreaValueStyles.TopAreaValue,
+		paddingLeft: sizing.spacing("medium"),
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		borderRadius: sizing.rounding("extraSmall") as number,
+		textAlignVertical: "center",
+		backgroundColor: colors.color("secondary"),
+		borderWidth: 0
+	},
+	newPair: {
+		height: 50,
+		flexDirection: "row",
+		width: "100%",
+		margin: sizing.spacing("small"),
+	},
+	firstPickerPair: {
+		zIndex: 2000,
+	},
+	secondPickerPair: {
+		zIndex: 1000
+	},
+	empty: {
+		flexDirection: "row",
+		flex: 1,
+		margin: 6,
+	},
+	newTable: {
+		flexDirection: "column"
+	},
+	selfAlignCenter: {
+		alignSelf: "center",
+	},
+	newValueContainer: {
+		flex: 1,
+		marginRight: sizing.spacing("halfMedium")
+	}
 });

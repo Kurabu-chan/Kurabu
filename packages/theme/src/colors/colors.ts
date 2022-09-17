@@ -1,5 +1,5 @@
 import { ProvidedTheme } from "../Theme";
-import { ColorToken, isToken, PaletteToken, SpecificTokenSetting, SpecificTokenTypeSet, TokenReference } from "../Tokens";
+import { ColorToken, ColorTokenTextKind, isToken, PaletteToken, SpecificTokenSetting, SpecificTokenTypeSet, TokenReference } from "../Tokens";
 import { indexWalk } from "../util";
 
 /**
@@ -26,14 +26,33 @@ export function resolveColor(
     typeSet: SpecificTokenTypeSet<ColorToken>,
     setting: SpecificTokenSetting<ColorToken>,
     theme: ProvidedTheme
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): any {
 
-    if (typeSet === "labels") {
-        const labels = theme.theme.colors.colors.labels;
+	if (typeSet === "labels") {
 
-        const r = Math.round((Math.random() * labels.length - 0.5));
 
-        return new TokenReference(labels[r]).resolve(theme);
+		if (setting === "any") {
+			const labels = theme.theme.colors.colors.labels;
+
+			const r = Math.round((Math.random() * labels.length - 0.5));
+
+			return new TokenReference(labels[r]).resolve(theme);
+		}
+
+		if (setting?.startsWith("seed")) {
+			const labels = theme.theme.colors.colors.labels;
+
+			const seed = parseInt(setting.split(".")[1], 10) % labels.length;
+
+			return new TokenReference(labels[seed]).resolve(theme);
+		}
+
+		if (setting === undefined) throw new Error();
+
+		const textKind: ColorTokenTextKind = setting.split(".")[1] as ColorTokenTextKind;
+
+		return new TokenReference(theme.theme.colors.colors.onLabels[textKind]).resolve(theme);
     }
 
 
@@ -62,6 +81,7 @@ export function resolvePalette(
     typeSet: SpecificTokenTypeSet<PaletteToken>,
     setting: SpecificTokenSetting<PaletteToken>,
     theme: ProvidedTheme
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): any {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const walked = indexWalk(theme.theme.colors.palettes[typeSet], setting.split("."));

@@ -1,17 +1,14 @@
 import { changeActivePage } from "#helpers/backButton";
 import { HomeStackParamList } from "#routes/MainStacks/HomeStack";
 import { StackScreenProps } from "@react-navigation/stack";
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Dimensions, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { AnimeSeasonalSource } from "#data/anime/AnimeSeasonalSource";
 import { MediaListSource } from "#data/MediaListSource";
 import MediaList, { mediaListFields } from "#comps/MediaList";
 import { Colors } from "#config/Colors";
-import { getCurrentSeason } from "#helpers/seasonProvider";
-import {  GetSeasonalAnimesSeasonEnum } from "@kurabu/api-sdk";
 import { AnimeRankingSource } from "#data/anime/AnimeRankingSource";
+import { MainGradientBackground } from "#comps/MainGradientBackground";
 
 type Props = StackScreenProps<HomeStackParamList, "HomeScreen">;
 
@@ -58,20 +55,7 @@ export default class Home extends React.Component<Props, StateType> {
             <SafeAreaProvider
                 style={styles.safeAreaProvider}
             >
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={[
-                        Colors.KURABUPINK,
-                        Colors.KURABUPURPLE,
-                        Colors.BACKGROUNDGRADIENT_COLOR1,
-                        Colors.BACKGROUNDGRADIENT_COLOR2,
-                    ]}
-                    style={{
-                        width: Dimensions.get("window").width,
-                        height: Dimensions.get("window").height,
-                        ...styles.gradient
-                    }}
-                >
+				<MainGradientBackground>
                     <View
                         style={styles.mediaListContainer}
                     >
@@ -81,7 +65,7 @@ export default class Home extends React.Component<Props, StateType> {
                             navigator={this.props.navigation}
                         />
                     </View>
-                </LinearGradient>
+                </MainGradientBackground>
             </SafeAreaProvider>
         );
     }
@@ -94,8 +78,5 @@ const styles = StyleSheet.create({
     },
     mediaListContainer: {
         flexDirection: "row",
-    },
-    gradient: {
-        flex: 1,
     }
 });

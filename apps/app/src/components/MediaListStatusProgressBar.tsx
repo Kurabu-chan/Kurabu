@@ -7,10 +7,11 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { UpdateAnimeList } from "#actions/anime/UpdateAnimeList";
 import { AnimeDetailsMyListStatus, MangaDetailsMyListStatus } from "@kurabu/api-sdk";
 import { UpdateMangaList } from "#actions/manga/UpdateMangaList";
+import { AppliedStyles, MainColorSets, ProvidedTheme, resolve, ThemedComponent, colors } from "@kurabu/theme";
 
 type Props = {
     height: number;
-    color: string;
+    color: MainColorSets;
     min: number;
     max: number;
     current: number;
@@ -23,9 +24,9 @@ type State = {
     current: number;
 }
 
-export class Progress extends React.PureComponent<Props, State>{
+export class Progress extends ThemedComponent<Styles, Props, State>{
     constructor(props: Props) {
-        super(props);
+        super(styles, props);
         this.state = {
             current: props.current,
         }
@@ -110,50 +111,56 @@ export class Progress extends React.PureComponent<Props, State>{
         }
     }
 
-    render() {
+	renderThemed(styles: AppliedStyles<Styles>, providedTheme: ProvidedTheme) {
         let location = (this.state.current - this.props.min) / (this.props.max - this.props.min);
 
         if (isNaN(location)) location = 0;
         if (!isFinite(location)) location = 0.5;
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		const color: string = resolve(colors.color(this.props.color), providedTheme);
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		const textColor: string = resolve(colors.onColor(this.props.color, "paragraph"), providedTheme);
+
         return (
             <LinearGradient
-                colors={[this.props.color, Colors.NO_BACKGROUND]}
+                colors={[color, Colors.NO_BACKGROUND]}
                 start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
                 locations={[location, location]}
-                style={{
+                style={[
                     ...styles.progressContainer,
-                    height: this.props.height,
-                    borderColor: this.props.color,
-                }}>
+					{
+						height: this.props.height,
+						borderColor: color
+					}
+                ]}>
                 <TouchableOpacity
                     onPress={this.pushRemove.bind(this)}
                 >
                     <Icon
                         name="remove"
-                        style={styles.removeIconStyle}
-                        color={Colors.TEXT}
+                        style={StyleSheet.flatten(styles.removeIconStyle)}
+                        color={StyleSheet.flatten(styles.iconColor).color}
                         size={this.props.height}
                         tvParallaxProperties={{}} />
                 </TouchableOpacity>
-                <Text style={styles.progressDisplay}>{this.state.current}/{this.props.max === 0 ? "?" : this.props.max}</Text>
+				<Text style={StyleSheet.flatten([...styles.progressDisplay, { color: textColor }])}>{this.state.current}/{this.props.max === 0 ? "?" : this.props.max}</Text>
                 <TouchableOpacity
                     onPress={this.pushAdd.bind(this)}
-                >
+				>
                     <Icon
                         name="add"
-                        style={styles.addIconStyle}
-                        color={Colors.TEXT}
+						style={StyleSheet.flatten(styles.addIconStyle)}
+                        color={StyleSheet.flatten(styles.iconColor).color}
                         size={this.props.height}
                         tvParallaxProperties={{}} />
                 </TouchableOpacity>
             </LinearGradient>
         );
     }
+} 
 
-
-}
-
+type Styles = typeof styles;
 const styles = StyleSheet.create({
     progressContainer: {
         borderWidth: 1,
@@ -162,7 +169,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     progressDisplay: {
-        color: Colors.TEXT,
         marginTop: 1
     },
     addIconStyle: {
@@ -171,7 +177,10 @@ const styles = StyleSheet.create({
     },
     removeIconStyle: {
         margin: -2
-    }
+	},
+	iconColor: {
+		color: colors.onColor("primary", "paragraph")
+	}
 });
 
 // create a function that clamps a value between min and max

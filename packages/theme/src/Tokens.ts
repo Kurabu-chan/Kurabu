@@ -31,13 +31,21 @@ export type ColorToken =
         | TypographicColorTokenSet<"tertiary">
         , TypographicColorSetSetting>
     | SpecificToken<"col", "status", `${"danger" | "success" | "warning" | "info" | "disabled"}.${ColorTokenColorSet}`>
-    | SpecificToken<"col", "labels", undefined>;
+	| SpecificToken<"col", "labels", "any">
+	| SpecificToken<"col", "labels", `seed.${number}`>
+	| SpecificToken<"col", "labels", `onLabels.${ColorTokenTextKind}`>;
+
+/**
+ * All kinds of text tokens
+ */
+export type ColorTokenTextKind = "header" | "paragraph" | "link" | "linkActive" | "subText";
+
 /**
  * All settings on status colors
  *
  * @category Advanced Use
  */
-export type ColorTokenColorSet = "color" | "border" | `text.${"header" | "paragraph" | "link" | "linkHover" | "subText"}`;
+export type ColorTokenColorSet = "color" | "border" | `text.${ColorTokenTextKind}`;
 
 /**
  * All color sets for each color kind
@@ -215,7 +223,7 @@ export class TokenReference<TToken extends Token = AnyToken> {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unused-vars
                 return resolveColor(
                     typeSet as SpecificTokenTypeSet<ColorToken>,
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
                     setting as any,
                     theme);
             case "siz":
@@ -245,6 +253,7 @@ export class TokenReference<TToken extends Token = AnyToken> {
  *
  * @category Advanced Use
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isToken(obj: any): obj is Token {
     if (typeof obj === "string") {
         return obj.startsWith("themed.ref.");
@@ -257,6 +266,7 @@ export function isToken(obj: any): obj is Token {
  *
  * @category General Use
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function resolve(obj: any, theme: ProvidedTheme): any {
     if (typeof obj === "object") {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access

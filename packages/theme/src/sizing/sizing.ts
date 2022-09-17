@@ -32,13 +32,17 @@ export function resolveSizing(
                     .replace("minus.", "-")
                     .replace("plus.", ""), 10);
                 num = parseFloat(vhParts[0] + "." + vhParts[1]);
-
             } else {
                 plus = parseInt((vhParts.slice(1).join("."))
                     .replace("minus.", "-")
                     .replace("plus.", ""), 10);
                 num = parseFloat(vhParts[0]);
-
+            }
+        } else {
+            if (vhParts.length > 1) {
+                num = parseFloat(vhParts[0] + "." + vhParts[1]);
+            } else {
+                num = parseFloat(vhParts[0]);
             }
         }
 
