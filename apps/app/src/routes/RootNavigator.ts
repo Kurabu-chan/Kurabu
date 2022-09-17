@@ -27,14 +27,3 @@ export function navigate(name: keyof AuthStackParamList, params?: AuthStackParam
         navQueue.push({ name, params });
     }
 }
-
-type swListener = (sw: "Auth" | "Drawer") => void;
-const listeners: swListener[] = [];
-
-export function registerSwitchListener(listener: swListener) {
-    listeners.push(listener);
-}
-
-export function DoSwitch(switchTo: "Auth" | "Drawer") {
-    listeners.forEach((x) => x(switchTo));
-}

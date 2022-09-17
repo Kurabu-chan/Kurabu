@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     outer: {
         backgroundColor: Colors.PASSWORD_STRENGTH.BACKGROUND,
         height: 10,
-        width: "60%",
+        width: 300,
         marginTop: 5,
         borderRadius: 5,
     },

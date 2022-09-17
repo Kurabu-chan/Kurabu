@@ -1,10 +1,9 @@
 import { AnimeSeasonalSource } from "#data/anime/AnimeSeasonalSource";
 import { changeActivePage } from "#helpers/backButton";
-import { Picker } from "@react-native-picker/picker";
+import { Picker } from "#comps/themed/Picker";
 import { ItemValue } from "@react-native-picker/picker/typings/Picker";
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { MediaListSource } from "#data/MediaListSource";
 import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
@@ -13,131 +12,143 @@ import { Colors } from "#config/Colors";
 import { GetSeasonalAnimesSeasonEnum } from "@kurabu/api-sdk";
 import { SeasonalStackParamList } from "#routes/MainStacks/SeasonalStack";
 import { StackScreenProps } from "@react-navigation/stack";
+import { MainGradientBackground } from "#comps/MainGradientBackground";
+import { niceTextFormat } from "#helpers/textFormatting";
+import { createTypographyStyles } from "#comps/themed/Typography";
+import { AppliedStyles, colors, ProvidedTheme, resolve, sizing, ThemedComponent } from "@kurabu/theme";
 
 type Props = StackScreenProps<SeasonalStackParamList, "SeasonalScreen">
 
 type StateType = {
-    seasonal: {
-        seasonValue: GetSeasonalAnimesSeasonEnum;
-        yearValue: number;
-        limit?: number;
-        offset?: number;
-        searched: boolean;
-        found: boolean;
-    };
-    rankingSource?: MediaListSource;
-    animeList?: DetailedUpdateList;
-    listenerToUnMount?: () => void;
+	seasonal: {
+		seasonValue: GetSeasonalAnimesSeasonEnum;
+		yearValue: number;
+		limit?: number;
+		offset?: number;
+		searched: boolean;
+		found: boolean;
+	};
+	rankingSource?: MediaListSource;
+	animeList?: DetailedUpdateList;
+	listenerToUnMount?: () => void;
 };
 
 const currYear = new Date().getFullYear();
 const currSeason = getSeason();
 
-export default class Seasonal extends React.Component<Props, StateType> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            seasonal: {
-                seasonValue: currSeason,
-                yearValue: currYear,
-                limit: 10,
-                offset: 0,
-                searched: false,
-                found: false,
-            },
-            listenerToUnMount: undefined,
-        };
-    }
+export default class Seasonal extends ThemedComponent<Styles, Props, StateType> {
+	constructor(props: Props) {
+		super(styles, props);
+		this.state = {
+			seasonal: {
+				seasonValue: currSeason,
+				yearValue: currYear,
+				limit: 10,
+				offset: 0,
+				searched: false,
+				found: false,
+			},
+			listenerToUnMount: undefined,
+		};
+	}
 
-    componentDidMount() {
+	componentDidMount() {
 
-        this.DoSeasonal();
+		this.DoSeasonal();
 
-        const unsubscribe = this.props.navigation.addListener("focus", () => {
-            changeActivePage("Seasonal");
-            // The screen is focused
-            // Call any action
-        });
+		const unsubscribe = this.props.navigation.addListener("focus", () => {
+			changeActivePage("Seasonal");
+			// The screen is focused
+			// Call any action
+		});
 
-        this.setState((prevState) => ({
-            ...prevState,
-            listenerToUnMount: unsubscribe,
-        }));
-    }
+		this.setState((prevState) => ({
+			...prevState,
+			listenerToUnMount: unsubscribe,
+		}));
+	}
 
-    componentWillUnmount() {
-        if (this.state.listenerToUnMount) this.state.listenerToUnMount();
-    }
+	componentWillUnmount() {
+		if (this.state.listenerToUnMount) this.state.listenerToUnMount();
+	}
 
-    DoSeasonal() {
-        const fields = DetailedUpdateItemFields;
+	DoSeasonal() {
+		const fields = DetailedUpdateItemFields;
 
-        const nodeSource = new AnimeSeasonalSource(
-            fields,
-            this.state.seasonal.yearValue,
-            this.state.seasonal.seasonValue,
-        );
-        this.setState((prevState) => ({
-            ...prevState,
-            rankingSource: nodeSource,
-            seasonal: {
-                ...prevState.seasonal,
-                searched: true,
-            },
-        }));
-        if (this.state.animeList) {
-            console.log(this.state.seasonal.seasonValue);
-            this.state.animeList.changeSource(
-                `${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${this.state.seasonal.yearValue
-                }`,
-                nodeSource
-            );
-        }
-    }
+		const nodeSource = new AnimeSeasonalSource(
+			fields,
+			this.state.seasonal.yearValue,
+			this.state.seasonal.seasonValue,
+		);
+		this.setState((prevState) => ({
+			...prevState,
+			rankingSource: nodeSource,
+			seasonal: {
+				...prevState.seasonal,
+				searched: true,
+			},
+		}));
+		if (this.state.animeList) {
+			console.log(this.state.seasonal.seasonValue);
+			this.state.animeList.changeSource(
+				`${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${this.state.seasonal.yearValue
+				}`,
+				nodeSource
+			);
+		}
+	}
 
-    changeSeason(val: ItemValue) {
-        const season = val.toString();
-        if (!["winter", "summer", "spring", "fall"].includes(season)) {
-            return;
-        }
+	changeSeason(val: string) {
+		const season = val.toString();
+		if (!["winter", "summer", "spring", "fall"].includes(season)) {
+			return;
+		}
 
-        this.setState(
-            (prevState) =>
-            ({
-                ...prevState,
-                seasonal: {
-                    ...prevState.seasonal,
-                    seasonValue: season,
-                },
-            } as StateType),
-            this.DoSeasonal.bind(this)
-        );
-    }
+		this.setState(
+			(prevState) =>
+			({
+				...prevState,
+				seasonal: {
+					...prevState.seasonal,
+					seasonValue: season,
+				},
+			} as StateType),
+			this.DoSeasonal.bind(this)
+		);
+	}
 
-    changeYear(val: ItemValue) {
-        const year = parseInt(val.toString());
-        if (year < 1917 || year > currYear + 1) {
-            return;
-        }
+	changeYear(val: string) {
+		const year = parseInt(val.toString());
+		if (year < 1917 || year > currYear + 1) {
+			return;
+		}
 
-        this.setState(
-            (prevState) =>
-            ({
-                ...prevState,
-                seasonal: {
-                    ...prevState.seasonal,
-                    yearValue: year,
-                },
-            } as StateType),
-            this.DoSeasonal.bind(this)
-        );
-    }
+		let seasonValue = getMaxSeasonForYear(year)
 
-    createSearchBar() {
-        const allowedSeasons = getAllowedSeasons(maxSeason(this.state.seasonal.yearValue));
-        return (
-            <View style={styles.searchBarContainer}>
-                <Picker
+		if (seasonToNr(this.state.seasonal.seasonValue) <= seasonToNr(seasonValue)) {
+			seasonValue = this.state.seasonal.seasonValue
+		}
+
+		this.setState(
+			(prevState) =>
+			({
+				...prevState,
+				seasonal: {
+					...prevState.seasonal,
+					yearValue: year,
+					seasonValue: seasonValue
+				},
+			} as StateType),
+			this.DoSeasonal.bind(this)
+		);
+	}
+
+	createSearchBar(styles: AppliedStyles<Styles>, providedTheme: ProvidedTheme) {
+		const allowedSeasons = getAllowedSeasons(getMaxSeasonForYear(this.state.seasonal.yearValue));
+
+		return (
+			<View style={styles.searchBarContainer}>
+				{/* <Picker
                     selectedValue={this.state.seasonal.seasonValue}
                     onValueChange={this.changeSeason.bind(this)}
                     style={styles.searchBarPicker}
@@ -167,176 +178,245 @@ export default class Seasonal extends React.Component<Props, StateType> {
                                 value={x.toString()}
                             />
                         ))}
-                </Picker>
-            </View>
-        );
-    }
+                </Picker> */}
+				<View>
 
-    onSearchListCreate(list: DetailedUpdateList) {
-        this.setState((prevState) => ({
-            ...prevState,
-            animeList: list,
-        }));
-    }
+					<Picker
 
-    onSearchListDataGather() {
-        this.setState((prevState) => ({
-            ...prevState,
-            seasonal: {
-                ...prevState.seasonal,
-                found: true,
-            },
-        }));
-    }
+						value={this.state.seasonal.seasonValue}
+						items={allowedSeasons.map(x => ({ label: niceTextFormat(x), value: x }))}
+						setValue={this.changeSeason.bind(this)}
+						style={StyleSheet.flatten(styles.searchBarPicker)}
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+						dropDownBackgroundColor={resolve(colors.colorContainer("secondary"), providedTheme)}
+					/>
+				</View>
 
-    render() {
-        return (
-            <SafeAreaProvider
-                style={styles.safeAreaProvider}
-            >
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={[
-                        Colors.KURABUPINK,
-                        Colors.KURABUPURPLE,
-                        Colors.BACKGROUNDGRADIENT_COLOR1,
-                        Colors.BACKGROUNDGRADIENT_COLOR2,
-                    ]}
-                    style={{
-                        width: Dimensions.get("window").width,
-                        height: Dimensions.get("window").height,
-                        ...styles.gradient
-                    }}
-                >
-                    {this.createSearchBar()}
-                    {this.state.rankingSource !== undefined ? (
-                        <DetailedUpdateList
-                            title={`${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${this.state.seasonal.yearValue
-                                }`}
-                            mediaNodeSource={this.state.rankingSource}
-                            navigator={this.props.navigation}
-                            onCreate={this.onSearchListCreate.bind(this)}
-                            onDataGather={this.onSearchListDataGather.bind(this)}
-                        />
-                    ) : undefined}
-                </LinearGradient>
-            </SafeAreaProvider>
-        );
-    }
+				<View>
+
+					<Picker
+
+						value={String(this.state.seasonal.yearValue)}
+						items={arrayFromXToY(1917, getMaxYear() + 1)
+							.reverse()
+							.map(x => ({ label: String(x), value: String(x) }))}
+						setValue={this.changeYear.bind(this)}
+						style={StyleSheet.flatten(styles.searchBarPicker)}
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+						dropDownBackgroundColor={resolve(colors.colorContainer("secondary"), providedTheme)}
+					/>
+				</View>
+			</View>
+		);
+	}
+
+	onSearchListCreate(list: DetailedUpdateList) {
+		this.setState((prevState) => ({
+			...prevState,
+			animeList: list,
+		}));
+	}
+
+	onSearchListDataGather() {
+		this.setState((prevState) => ({
+			...prevState,
+			seasonal: {
+				...prevState.seasonal,
+				found: true,
+			},
+		}));
+	}
+
+	renderThemed(styles: AppliedStyles<Styles>, providedTheme: ProvidedTheme) {
+		return (
+			<SafeAreaProvider
+				style={styles.safeAreaProvider}
+			>
+				<MainGradientBackground>
+					{this.createSearchBar(styles, providedTheme)}
+					{this.state.rankingSource !== undefined ? (
+						<DetailedUpdateList
+							title={`${capitalizeFirstLetter(this.state.seasonal.seasonValue)} ${this.state.seasonal.yearValue
+								}`}
+							mediaNodeSource={this.state.rankingSource}
+							navigator={this.props.navigation}
+							onCreate={this.onSearchListCreate.bind(this)}
+							onDataGather={this.onSearchListDataGather.bind(this)}
+						/>
+					) : undefined}
+				</MainGradientBackground>
+			</SafeAreaProvider>
+		);
+	}
 }
 
+const valueTextStyle = createTypographyStyles(
+	"body1",
+	"paragraph",
+	false,
+	"secondary");
+
+type Styles = typeof styles;
 const styles = StyleSheet.create({
-    searchBarContainer: {
-        flexDirection: "row",
-    },
-    searchBarPicker: {
-        backgroundColor: Colors.KURABUPURPLE,
-        marginTop: 5,
-        marginLeft: 5,
-        marginRight: 5,
-        width: (Dimensions.get("window").width - 20) / 2,
-        color: Colors.TEXT,
-    },
-    safeAreaProvider: {
-        backgroundColor: Colors.ALTERNATE_BACKGROUND,
-        flex: 1
-    },
-    gradient: {
-        flex: 1
-    }
+	searchBarContainer: {
+		flexDirection: "row",
+	},
+	searchBarPicker: {
+		...valueTextStyle[0].text,
+		paddingLeft: sizing.spacing("medium"),
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		borderRadius: sizing.rounding("extraSmall") as number,
+		textAlignVertical: "center",
+		backgroundColor: colors.color("secondary"),
+		borderWidth: 0,
+		margin: sizing.spacing("medium"),
+		width: sizing.vw(50, -20)
+	},
+	safeAreaProvider: {
+		backgroundColor: Colors.ALTERNATE_BACKGROUND,
+		flex: 1
+	}
 });
 
 
 function arrayFromXToY(x: number, y: number) {
-    return Array.from(Array(y - x).keys()).map((z) => z + x);
+	return Array.from(Array(y - x).keys()).map((z) => z + x);
 }
 
 function capitalizeFirstLetter(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+	return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 type seasons = "winter" | "summer" | "spring" | "fall";
+function getYear(): number {
+	return new Date().getFullYear();
+}
+
 function getSeason(): GetSeasonalAnimesSeasonEnum {
-    const month = new Date().getMonth();
-    switch (month) {
-        case 12:
-        case 1:
-        case 2:
-            return GetSeasonalAnimesSeasonEnum.Winter;
-        case 3:
-        case 4:
-        case 5:
-            return GetSeasonalAnimesSeasonEnum.Spring;
-        case 6:
-        case 7:
-        case 8:
-            return GetSeasonalAnimesSeasonEnum.Summer;
-        case 9:
-        case 10:
-        case 11:
-            return GetSeasonalAnimesSeasonEnum.Fall;
-        default:
-            return GetSeasonalAnimesSeasonEnum.Fall;
-    }
-}
-
-function maxYear(season: seasons): number {
-    const currSeasonNr = seasonToNr(currSeason);
-    if (currSeasonNr > 1) {
-        //max year in general is next year. This year is definetly possible in all seasons
-        if ((currSeasonNr + 2) % 4 < seasonToNr(season)) return currYear;
-        return currYear + 1;
-    } else {
-        if ((currSeasonNr + 2) % 4 < seasonToNr(season)) return currYear - 1;
-        return currYear;
-    }
-}
-
-function maxSeason(year: number): seasons {
-    const currSeasonNr = seasonToNr(currSeason);
-
-    if (year < currYear) return "fall";
-
-    return NrToSeason(currSeasonNr + 2);
+	const month = new Date().getMonth();
+	switch (month) {
+		case 12:
+		case 1:
+		case 2:
+			return GetSeasonalAnimesSeasonEnum.Winter;
+		case 3:
+		case 4:
+		case 5:
+			return GetSeasonalAnimesSeasonEnum.Spring;
+		case 6:
+		case 7:
+		case 8:
+			return GetSeasonalAnimesSeasonEnum.Summer;
+		case 9:
+		case 10:
+		case 11:
+			return GetSeasonalAnimesSeasonEnum.Fall;
+		default:
+			return GetSeasonalAnimesSeasonEnum.Fall;
+	}
 }
 
 function getAllowedSeasons(maxSeason: seasons): seasons[] {
-    switch (maxSeason) {
-        case "winter":
-            return ["winter"];
-        case "spring":
-            return ["winter", "spring"];
-        case "summer":
-            return ["winter", "spring", "summer"];
-        default:
-            return ["winter", "spring", "summer", "fall"];
-    }
+	console.log(maxSeason)
+	switch (maxSeason) {
+		case "winter":
+			return ["winter"];
+		case "spring":
+			return ["winter", "spring"];
+		case "summer":
+			return ["winter", "spring", "summer"];
+		default:
+			return ["winter", "spring", "summer", "fall"];
+	}
 }
 
 function seasonToNr(season: seasons): number {
-    switch (season) {
-        case "winter":
-            return 0;
-        case "spring":
-            return 1;
-        case "summer":
-            return 2;
-        case "fall":
-            return 3;
-    }
+	switch (season) {
+		case "winter":
+			return 0;
+		case "spring":
+			return 1;
+		case "summer":
+			return 2;
+		case "fall":
+			return 3;
+	}
 }
 
 function NrToSeason(nr: number): seasons {
-    switch (nr % 4) {
-        case 0:
-            return "winter";
-        case 1:
-            return "spring";
-        case 2:
-            return "summer";
-        case 3:
-            return "fall";
-        default:
-            return "winter";
-    }
+	switch (nr % 4) {
+		case 0:
+			return "winter";
+		case 1:
+			return "spring";
+		case 2:
+			return "summer";
+		case 3:
+			return "fall";
+		default:
+			return "winter";
+	}
+}
+
+type MonthYear = {
+	year: number;
+	season: seasons;
+	seasonNr: number;
+}
+
+function getMaxSeasonForYear(year: number) {
+	const maxYear = getMaxYear();
+	
+	if (year == maxYear) {
+		return getMaxSeason();
+	} else {
+		return "fall";
+	}
+}
+
+function getMaxYear() {
+	const season = getSeason();
+	const year = getYear();
+
+	const max = addMonths({
+		season: season,
+		seasonNr: seasonToNr(season),
+		year: year,
+	}, 2);
+
+	return max.year;
+}
+
+function getMaxSeason() {
+	const season = getSeason();
+	const year = getYear();
+
+	const max = addMonths({
+		season: season,
+		seasonNr: seasonToNr(season),
+		year: year,
+	}, 2);
+
+	return max.season;
+}
+
+
+function addMonths(my: MonthYear, months: number) {
+	if (my.seasonNr + months > 3) {
+		const newYear = Math.floor((my.seasonNr + months) / 3) + my.year;
+		const newSeasonNr = (my.seasonNr + months) % 3;
+		const newSeason = NrToSeason(newSeasonNr);
+
+		return {
+			year: newYear,
+			season: newSeason,
+			seasonNr: newSeasonNr,
+		};
+	}
+
+	return {
+		year: my.year,
+		season: NrToSeason(my.seasonNr + months),
+		seasonNr: my.seasonNr + months
+	}
 }

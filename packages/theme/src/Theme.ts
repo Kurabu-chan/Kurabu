@@ -81,8 +81,8 @@ export function useThemeProvider(): ProvidedTheme {
  *
  * @category General Use
  */
-export function useTheme(styles: StyleType)
-    : AppliedStyles<StyleType>{
+export function useTheme<T extends StyleType>(styles: T)
+    : AppliedStyles<T>{
     const context = useContext(themeContext);
     const applied = applyTheme(styles, context);
 
@@ -91,13 +91,21 @@ export function useTheme(styles: StyleType)
 
 /**
  * Type for a theming applied to styles.
- * Each key in the object is a style property and the value is an array of two elements, the second the normal styles, the first with the properties that were themed with applied values.
+ * Each key in the object is a style property and the value is an array of two elements, the first the normal styles, the second with the properties that were themed with applied values.
  *
  * @category General Use
  */
 export type AppliedStyles<TStyle> = {
-    [P in keyof TStyle]: [Partial<TStyle[P]>, TStyle[P]]
+    [P in keyof TStyle]: [TStyle[P], Partial<TStyle[P]>]
 }
+
+/**
+ * Type for a theming applied to a style.
+ * The value is an array of two elements, the first the normal styles, the second with the properties that were themed with applied values.
+ *
+ * @category General Use
+ */
+export type AppliedStyle<TStyle, P extends keyof TStyle> = [TStyle[P], Partial<TStyle[P]>]
 
 /**
  * A type representing a style object. It is this obscure since we need to support both ReactDom and ReactNative
@@ -120,6 +128,43 @@ function applyTheme<TStyle extends StyleType>
     }
 
     return retObj as AppliedStyles<TStyle>;
+}
+
+/**
+ * Merge multiple styles from a stylesheet into one
+ *
+ * @category Advanced Use
+ */
+export function mergeStyles
+    <TStyle extends StyleType>(style: AppliedStyles<TStyle>, keys: (keyof TStyle)[]) {
+    const styles: Partial<TStyle[keyof TStyle]>[] = [];
+
+    for (const key of keys) {
+        styles.push(...style[key]);
+    }
+
+    return styles;
+}
+
+/** * Apply a theme to a style object, which is not frozen.
+ * This allows group resolving of tokens.
+ *
+ * @category General Use
+ */
+export function applyUnfrozen<TStyle extends StyleType>(obj: TStyle, theme: ProvidedTheme)
+    : TStyle {
+    const retObj: Partial<TStyle> = {};
+
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            retObj[key] = {
+                ...obj[key],
+                ...applySubTheme(obj[key], theme)
+            };
+        }
+    }
+
+    return retObj as TStyle;
 }
 
 function applySubTheme<TSubStyle>(obj: TSubStyle, theme: ProvidedTheme): TSubStyle {
