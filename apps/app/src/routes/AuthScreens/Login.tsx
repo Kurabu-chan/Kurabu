@@ -76,7 +76,9 @@ class Login extends ThemedComponent<Styles, Props, LoginState> {
 					behavior="padding"
 					style={styles.content}>
 					<ToolTip
-						text="When logging in don't use your MyAnimeList credentials, use the credentials you used to register on Kurabu."
+						text={`When logging in don't use your MyAnimeList credentials, use the credentials you used to register on Kurabu. 
+						
+A forgot password system is coming soon.`}
 						title="Login help"
 						enabled={this.state.helpShown}
 						style={styles.tooltip}
@@ -101,8 +103,11 @@ class Login extends ThemedComponent<Styles, Props, LoginState> {
 							value={this.state.email}
 							secureTextEntry={false}
 							containerStyle={styles.InputContainer}
-							onFocus={() => this.setState({ helpShown: true })}
-							onLostFocus={() => this.setState({ helpShown: false })}
+							rightIcon={{
+								name: "help",
+								type: "material",
+								onClick: () => this.setState({ helpShown: !this.state.helpShown })
+							}}
 						/>
 					</ToolTip>
 					<AuthInput
