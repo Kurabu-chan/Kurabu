@@ -12,6 +12,7 @@ import { AuthBackground } from "#comps/AuthBackgrounds";
 import { AppliedStyles, colors, sizing, ThemedComponent } from "@kurabu/theme";
 import { AuthInput } from "./components/AuthInput";
 import { Typography } from "#comps/themed/Typography";
+import { ToolTip } from "#comps/ToolTip";
 
 type RegisterProps = {
 	navigation: StackNavigationProp<AuthStackParamList, "Register">;
@@ -22,6 +23,7 @@ type RegisterState = {
 	email: string;
 	pass: string;
 	retype: string;
+	helpShown: false | "password" | "email";
 };
 
 class Register extends ThemedComponent<Styles, RegisterProps, RegisterState> {
@@ -31,6 +33,7 @@ class Register extends ThemedComponent<Styles, RegisterProps, RegisterState> {
 			email: "",
 			pass: "",
 			retype: "",
+			helpShown: false
 		};
 	}
 
@@ -83,22 +86,79 @@ class Register extends ThemedComponent<Styles, RegisterProps, RegisterState> {
 				<KeyboardAvoidingView
 					behavior="padding"
 					style={styles.content}>
-					<AuthInput
-						autoComplete="email"
-						placeholder="Email"
-						onChangeText={this.changeEmail.bind(this)}
-						value={this.state.email}
-						secureTextEntry={false}
-						containerStyle={styles.InputContainer}
-					/>
-					<AuthInput
-						autoComplete="password"
-						placeholder="Password"
-						onChangeText={this.changePass.bind(this)}
-						value={this.state.pass}
-						secureTextEntry={false}
-						containerStyle={styles.InputContainer}
-					/>
+					<ToolTip
+						text={`When registering don't use your MyAnimeList credentials, we will link your account later.`}
+						title="Register help"
+						enabled={this.state.helpShown == "email"}
+						style={styles.tooltip}
+						tooltipContainerStyle={styles.tooltipContainerStyle}
+						tooltipTitleProps={{
+							colorVariant: "secondary",
+							isOnContainer: false,
+							textKind: "paragraph",
+							variant: "headline4"
+						}}
+						tooltipTextProps={{
+							colorVariant: "secondary",
+							isOnContainer: false,
+							textKind: "paragraph",
+							variant: "body1"
+						}}
+					>
+						<AuthInput
+							autoComplete="email"
+							placeholder="Email"
+							onChangeText={this.changeEmail.bind(this)}
+							value={this.state.email}
+							secureTextEntry={false}
+							containerStyle={styles.InputContainer}
+							rightIcon={{
+								name: "help",
+								type: "material",
+								onClick: () => this.setState({ helpShown: this.state.helpShown == "email" ? false : "email" })
+							}}
+						/>
+					</ToolTip>
+					
+					<ToolTip
+						text={`Password requirements:
+- At least 8 characters (12+ recommended)
+- At least 1 uppercase letter
+- At least 1 lowercase letter
+- At least 1 number
+- At least 1 special character`}
+						title="Register help"
+						enabled={this.state.helpShown == "password"}
+						style={styles.tooltip}
+						tooltipContainerStyle={styles.tooltipContainerStyle}
+						tooltipTitleProps={{
+							colorVariant: "secondary",
+							isOnContainer: false,
+							textKind: "paragraph",
+							variant: "headline4"
+						}}
+						tooltipTextProps={{
+							colorVariant: "secondary",
+							isOnContainer: false,
+							textKind: "paragraph",
+							variant: "body1"
+						}}
+					>
+						<AuthInput
+							autoComplete="password"
+							placeholder="Password"
+							onChangeText={this.changePass.bind(this)}
+							value={this.state.pass}
+							secureTextEntry={false}
+							containerStyle={styles.InputContainer}
+							rightIcon={{
+								name: "help",
+								type: "material",
+								onClick: () => this.setState({ helpShown: this.state.helpShown == "password" ? false : "password" })
+							}}
+						/>
+					</ToolTip>
+					
 					<PasswordStrength pass={this.state.pass} />
 					<AuthInput
 						autoComplete="password"
@@ -183,6 +243,18 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 		color: Colors.TEXT,
 	},
+	tooltip: {
+
+		// backgroundColor: "red"
+	},
+	tooltipContainerStyle: {
+		width: sizing.vw(70),
+		height: "auto",
+		backgroundColor: colors.color("secondary"),
+		padding: sizing.spacing("medium"),
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		borderRadius: sizing.rounding("small") as number,
+	}
 });
 
 export default Register;
