@@ -149,7 +149,7 @@ class Register extends ThemedComponent<Styles, RegisterProps, RegisterState> {
 							placeholder="Password"
 							onChangeText={this.changePass.bind(this)}
 							value={this.state.pass}
-							secureTextEntry={false}
+							secureTextEntry={true}
 							containerStyle={styles.InputContainer}
 							rightIcon={{
 								name: "help",
@@ -165,7 +165,7 @@ class Register extends ThemedComponent<Styles, RegisterProps, RegisterState> {
 						placeholder="Retype password"
 						onChangeText={this.changeRetype.bind(this)}
 						value={this.state.retype}
-						secureTextEntry={false}
+						secureTextEntry={true}
 						containerStyle={styles.InputContainer}
 					/>
 
