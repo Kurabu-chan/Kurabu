@@ -23,10 +23,11 @@ export class ReAuthController {
         const ourdomain = `${req.protocol}://${req.hostname}`;
 
         const result = await this._reAuthCommand.handle({
+			isJwt: arg.isJwt,
             ourdomain,
             redirect: arg.redirect,
             user: arg.user,
-            uuid: arg.state,
+			uuid: arg.state,
         });
 
         return {

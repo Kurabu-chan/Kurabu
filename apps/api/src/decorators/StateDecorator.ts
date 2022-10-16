@@ -26,8 +26,9 @@ export default function state() {
                 res,
                 {
                     ...arg,
+					isJwt: userState.isJwt,
                     state: userState.state,
-                    user: userState.user,
+					user: userState.user,
                 },
             ]);
         };

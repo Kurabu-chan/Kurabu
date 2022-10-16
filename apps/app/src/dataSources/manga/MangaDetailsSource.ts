@@ -10,7 +10,7 @@ export class MangaDetailsSource extends MangaBase {
 
     @requestErrorHandler
     async MakeRequest(): Promise<MangaDetails> {
-        const api = await super.getApi();
+        const api = super.getApi();
         const requestParams: GetMangaDetailsRequest = {
             mangaid: this.mangaId,
             fields: fieldsToString(this.fields),

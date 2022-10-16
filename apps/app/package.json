@@ -1,7 +1,7 @@
 {
     "name": "@kurabu/app",
     "main": "index.js",
-    "version": "1.0.74",
+    "version": "1.0.75",
     "scripts": {
         "eas-build-post-install": "cd ../.. && yarn run build --filter=@kurabu/app^... --filter=!@kurabu/api-sdk",
         "dev": "expo start --android",
@@ -59,7 +59,8 @@
         "react-native-timeago": "^0.5.0",
         "react-native-web": "~0.18.7",
         "tslib": "^2.1.0",
-        "url": "^0.11.0"
+        "url": "^0.11.0",
+        "xstate": "^4.33.6"
     },
     "devDependencies": {
         "@babel/core": "^7.18.6",

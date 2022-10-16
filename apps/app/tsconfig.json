@@ -18,7 +18,8 @@
       "#config/*": ["./src/config/*"],
       "#data/*": ["./src/dataSources/*"],
       "#actions/*": ["./src/actions/*"],
-      "#decorators/*": ["./src/decorators/*"]
+      "#decorators/*": ["./src/decorators/*"],
+      "#errors/*": ["./src/errors/*"]
     }
   },
   "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"],

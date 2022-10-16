@@ -9,6 +9,7 @@ import MediaList, { mediaListFields } from "#comps/MediaList";
 import { Colors } from "#config/Colors";
 import { AnimeRankingSource } from "#data/anime/AnimeRankingSource";
 import { MainGradientBackground } from "#comps/MainGradientBackground";
+import { ErrorManager } from "#errors/ErrorManager";
 
 type Props = StackScreenProps<HomeStackParamList, "HomeScreen">;
 
@@ -50,7 +51,8 @@ export default class Home extends React.Component<Props, StateType> {
         if (this.state.listenerToUnMount) this.state.listenerToUnMount();
     }
 
-    render() {
+	render() {
+		ErrorManager.catch(new Error("Some kind of error"));
         return (
             <SafeAreaProvider
                 style={styles.safeAreaProvider}

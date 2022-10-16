@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ViewProps } from "react-native";
+import { StyleSheet, ViewProps } from "react-native";
 import Svg, { Defs, RadialGradient as SVGRadialGradient, Rect, Stop } from "react-native-svg";
 
 export type RadialGradientProps = {

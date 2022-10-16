@@ -29,13 +29,15 @@ export function pendingUserCommand(): void {
             const sut = new PendingUserCommandHandler(
                 undefined as any,
                 dbMockInstance,
-                undefined as any
+                undefined as any,
+				undefined as any
             );
 
             const input = {
                 code: "blabla",
                 ourdomain: "domain",
-                uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+				uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+				isJwt: false
             };
 
             await expectThrowsAsync(() => sut.handle(input), "uuid does not exist yet");
@@ -62,13 +64,15 @@ export function pendingUserCommand(): void {
             const sut = new PendingUserCommandHandler(
                 undefined as any,
                 dbMockInstance,
-                userStatusQueryMockInstance
+				userStatusQueryMockInstance,
+				undefined as any
             );
 
             const input = {
                 code: "blabla",
                 ourdomain: "domain",
-                uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+				uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+				isJwt: false
             };
 
             await expectThrowsAsync(() => sut.handle(input), "uuid is not pending");
@@ -102,13 +106,15 @@ export function pendingUserCommand(): void {
             const sut = new PendingUserCommandHandler(
                 undefined as any,
                 dbMockInstance,
-                userStatusQueryMockInstance
+				userStatusQueryMockInstance,
+				undefined as any
             );
 
             const input = {
                 code: "blabla",
                 ourdomain: "domain",
-                uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+				uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+				isJwt: false
             };
 
             await expectThrowsAsync(() => sut.handle(input), "No tokens for pending user");
@@ -160,23 +166,23 @@ export function pendingUserCommand(): void {
 
             const sut = new PendingUserCommandHandler(
                 getTokensMockInstance,
-                // undefined as any,
                 dbMockInstance,
-                userStatusQueryMockInstance
-                // undefined as any
+                userStatusQueryMockInstance,
+                undefined as any
             );
 
             const input = {
                 code: "blabla",
                 ourdomain: "domain",
-                uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+				uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+				isJwt: false
             };
 
             const result = await sut.handle(input);
 
             const expected = {
                 success: ICommandResultStatus.success,
-                url: `imal://auth/${input.uuid}`,
+                url: `kurabu://auth/${input.uuid}`,
             };
 
             expect(JSON.stringify(result)).to.equal(JSON.stringify(expected));
@@ -232,14 +238,15 @@ export function pendingUserCommand(): void {
                 getTokensMockInstance,
                 // undefined as any,
                 dbMockInstance,
-                userStatusQueryMockInstance
-                // undefined as any
+                userStatusQueryMockInstance,
+                undefined as any
             );
 
             const input = {
                 code: "blabla",
                 ourdomain: "domain",
-                uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+				uuid: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+				isJwt: false
             };
 
             const result = await sut.handle(input);

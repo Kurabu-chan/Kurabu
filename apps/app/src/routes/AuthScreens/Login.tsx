@@ -1,17 +1,22 @@
-import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
-import React from "react";
-import { KeyboardAvoidingView, StyleSheet, View, Alert } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Auth from "#api/Authenticate";
-import { Colors } from "#config/Colors";
-import { AuthStackParamList } from "../AuthStack";
-import { RootSwitchContext } from "../../contexts/rootSwitch";
+import { Authentication } from "#api/Authentication";
 import { AuthBackground } from "#comps/AuthBackgrounds";
-import { AppliedStyles, ThemedComponent, colors, sizing } from "@kurabu/theme";
-import { AuthInput } from "./components/AuthInput";
 import { Typography } from "#comps/themed/Typography";
 import { ToolTip } from "#comps/ToolTip";
+import { Colors } from "#config/Colors";
+import { AppliedStyles, colors, sizing, ThemedComponent } from "@kurabu/theme";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
+import React from "react";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { IncorrectLoginError } from "#errors/auth/IncorrectLoginError";
+import { MissingFormParameterError } from "#errors/MissingFormParameterError";
+import { ErrorBox } from "#errors/ui/ErrorBox";
+import { UnexpectedKurabuError } from "#errors/UnexpectedKurabuError";
+import { AuthStackParamList } from "../AuthStack";
+import { AuthInput } from "./components/AuthInput";
+import { FocusSubscriber } from "#comps/FocusSubscriber";
+import { KurabuError } from "#errors/KurabuError";
 
 type Props = StackScreenProps<AuthStackParamList, "Login">;
 
@@ -23,7 +28,7 @@ type LoginState = {
 };
 
 class Login extends ThemedComponent<Styles, Props, LoginState> {
-	static contextType = RootSwitchContext
+	private errorBox = React.createRef<ErrorBox<KurabuError>>();
 
 	constructor(props: Props) {
 		super(styles, props);
@@ -49,32 +54,47 @@ class Login extends ThemedComponent<Styles, Props, LoginState> {
 		}));
 	}
 
-	private async DoLogin(rootSwitch: (a: "Auth" | "Drawer") => void) {
-		const auth = await Auth.getInstance()
-
-		const loginRes = await auth.Trylogin(this.state.email, this.state.pass)
-		if (loginRes[0] === true) {
-			rootSwitch("Drawer");
-			return;
-		}
-
-		Alert.alert("Login Failed", loginRes[1]);
+	private DoLogin() {
+		const authentication = Authentication.GetInstance()
+		authentication.SubmitLoginForm(this.state.email, this.state.pass);
 	}
 
 	private DoSignup() {
-		this.state.navigator.navigate("Register");
+		const authentication = Authentication.GetInstance()
+		authentication.SignUpButtonPressed();
+	}
+
+	private _handleFocus() {
+		console.log("focus")
+		this.errorBox.current?.clear();
 	}
 
 	renderThemed(styles: AppliedStyles<Styles>) {
-		const rootSwitchContext = this.context as (a: "Auth" | "Drawer") => void;
-
 		return (
 			<View style={styles.appContainer}>
+				<FocusSubscriber
+					onFocus={this._handleFocus.bind(this)}
+				/>
 				<AuthBackground inverted={false} />
 				<SafeAreaView style={styles.safeContainer} />
 				<KeyboardAvoidingView
 					behavior="padding"
 					style={styles.content}>
+					<ErrorBox
+						
+						ref={this.errorBox}
+						errors={[
+							{
+								error: IncorrectLoginError
+							},
+							{
+								error: UnexpectedKurabuError
+							},
+							{
+								error: MissingFormParameterError
+							}
+						]} 
+						/>
 					<ToolTip
 						text={`When logging in don't use your MyAnimeList credentials, use the credentials you used to register on Kurabu. 
 						
@@ -118,12 +138,11 @@ A forgot password system is coming soon.`}
 						secureTextEntry={true}
 						containerStyle={styles.InputContainer}
 					/>
-
 					<TouchableOpacity
 						style={styles.LoginButton}
 						activeOpacity={0.6}
 						onPress={() => {
-							void this.DoLogin(rootSwitchContext);
+							void this.DoLogin();
 						}}
 					>
 						<Typography variant="button" colorVariant="background" isOnContainer={false} textKind="paragraph">Login</Typography>
@@ -190,7 +209,7 @@ const styles = StyleSheet.create({
 		marginTop: sizing.spacing("small"),
 	},
 	tooltip: {
-		
+
 		// backgroundColor: "red"
 	},
 	tooltipContainerStyle: {

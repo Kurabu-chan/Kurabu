@@ -3,11 +3,11 @@ import { Configuration, MangaApi } from "@kurabu/api-sdk";
 import { ApiBase } from "./ApiBase";
 
 export abstract class MangaBase extends ApiBase {
-    protected async getApi() {
+    protected getApi() {
         const appConfig = Config.GetInstance()
 
         const config = new Configuration({
-            accessToken: await super.getAccessToken(),
+            accessToken: super.getAccessToken(),
             basePath: appConfig.GetApiRoot()
         });
         const api = new MangaApi(config);

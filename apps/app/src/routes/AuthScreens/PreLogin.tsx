@@ -1,31 +1,20 @@
-import React, { useContext, useEffect } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
-import Kurabu from "../../../assets/pinklogin.svg";
-import Auth from "#api/Authenticate";
-import * as RootNavigator from "../RootNavigator";
-import { Colors } from "#config/Colors";
-import { RootSwitchContext } from "../../contexts/rootSwitch";
+import { Authentication } from "#api/Authentication";
 import { AuthBackground } from "#comps/AuthBackgrounds";
+import { Colors } from "#config/Colors";
+import { AuthStackParamList } from "#routes/AuthStack";
+import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
+import { Dimensions, StyleSheet, View } from "react-native";
 
 //uncomment to reset saved token and go into developer mode for the Auth system
 // Auth.devMode = true;
 // void Auth.ClearAsync();
 
-export default function PreLogin() { 
-	const rootSwitchContext = useContext(RootSwitchContext);
-
-	useEffect(() => { 
-		Auth.getInstance().then((auth) => {
-			if (auth.getLoaded()) {
-				rootSwitchContext("Drawer");
-			} else {
-				RootNavigator.navigate("Login", undefined);
-			}
-		}).catch((reason: unknown) => {
-			throw reason;
-		});
-	})
-
+export default function PreLogin(props: {
+	navigation: StackNavigationProp<AuthStackParamList, "PreLogin">
+}) {
+	const authentication = Authentication.GetInstance()
+	authentication.CreateMachine(props.navigation);
 
 	return (
 		<View
@@ -37,8 +26,8 @@ export default function PreLogin() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        height: Dimensions.get("window").height,
-        backgroundColor: Colors.ALTERNATE_BACKGROUND,
-    }
+	container: {
+		height: Dimensions.get("window").height,
+		backgroundColor: Colors.ALTERNATE_BACKGROUND,
+	}
 });

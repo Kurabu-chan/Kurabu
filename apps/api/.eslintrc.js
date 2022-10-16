@@ -2,7 +2,7 @@ const base = require("@kurabu/config/eslint-preset");
 
 const parserOptions = {
     parserOptions: {
-        project: ["./tsconfig.json", "./tests/tsconfig.json"],
+        project: ["./tsconfig.json"],
         sourceType: "module",
     },
 }

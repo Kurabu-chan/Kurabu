@@ -6,5 +6,6 @@ export type Params = {
     error?: string;
     user: User;
     state: string;
-    code: string;
+	code: string;
+	isJwt: boolean;
 };

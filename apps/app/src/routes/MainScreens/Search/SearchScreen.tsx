@@ -1,17 +1,16 @@
-import { changeActivePage } from "#helpers/backButton";
-import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
-import { SearchBar } from "react-native-elements";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { AnimeSearchSource } from "#data/anime/AnimeSearchSource";
-import { MediaListSource } from "#data/MediaListSource";
 import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
 import SearchList from "#comps/DetailedUpdateList";
-import { Colors } from "#config/Colors";
-import { StackScreenProps } from "@react-navigation/stack";
-import { SearchStackParamList } from "#routes/MainStacks/SearchStack";
 import { MainGradientBackground } from "#comps/MainGradientBackground";
 import { ThemedSearchBar } from "#comps/themed/SearchBar";
+import { Colors } from "#config/Colors";
+import { AnimeSearchSource } from "#data/anime/AnimeSearchSource";
+import { MediaListSource } from "#data/MediaListSource";
+import { changeActivePage } from "#helpers/backButton";
+import { SearchStackParamList } from "#routes/MainStacks/SearchStack";
+import { StackScreenProps } from "@react-navigation/stack";
+import React from "react";
+import { StyleSheet } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 type Props = StackScreenProps<SearchStackParamList, "SearchScreen">;
 

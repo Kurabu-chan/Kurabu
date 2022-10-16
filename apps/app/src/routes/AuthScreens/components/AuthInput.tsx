@@ -1,8 +1,8 @@
+import { AppliedStyles, applyUnfrozen, colors, ProvidedTheme, sizing, ThemedComponent } from "@kurabu/theme";
 import React from "react";
-import { TextInput, View, StyleSheet, ViewStyle, StyleProp, TextStyle, TouchableOpacity } from "react-native";
-import { AppliedStyles, applyUnfrozen, colors, ProvidedTheme, sizing, ThemedComponent, useTheme } from "@kurabu/theme"
-import { createTypographyStyles } from "../../../components/themed/Typography"
+import { StyleProp, StyleSheet, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Icon } from "react-native-elements";
+import { createTypographyStyles } from "../../../components/themed/Typography";
 
 type Props = {
 	value: string,
@@ -32,9 +32,9 @@ export class AuthInput extends ThemedComponent<Styles, Props> {
 			text: styles.Input
 		}, theme, {})
 
-		styles.InputContainer[1].backgroundColor = styles.InputContainer[1].backgroundColor! + "99";
+		if (styles.InputContainer[1].backgroundColor === null || styles.InputContainer[1].backgroundColor === undefined) throw new Error("Background color is null");
 
-
+		styles.InputContainer[1].backgroundColor = styles.InputContainer[1].backgroundColor + "99";
 
 		const color = applyUnfrozen({
 			colors: {
