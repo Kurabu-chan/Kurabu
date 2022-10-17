@@ -1,9 +1,9 @@
 ARG ARCH=
 
 # Create a base section that later steps will use
-FROM ${ARCH}node:17-alpine AS base
+FROM ${ARCH}node:16.18-alpine AS base
 
-ENV YARN_VERSION 1.22.17
+ENV YARN_VERSION 1.22.19
 RUN yarn policies set-version $YARN_VERSION
 
 RUN apk add git
@@ -14,7 +14,7 @@ WORKDIR /app
 # Create a layer for pruning the monorepo
 FROM base AS pruner
 
-RUN yarn global add turbo
+RUN yarn global add turbo@1.4.4
 # Copy the entire monorepo to the container
 # An alternative would be copying only the desired app, and depended upon packages from the get go and not running turbo prune.
 # This would be faster, but is less modular and requires editing the Dockerfile for each app.
