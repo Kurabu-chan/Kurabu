@@ -1,18 +1,18 @@
-import "react-native-gesture-handler";
-import * as Font from "expo-font";
-import React from "react";
-import * as Linking from "expo-linking";
-import { AppState, AppStateStatus, Dimensions, LogBox, PixelRatio, ScaledSize, NativeEventSubscription, Text } from "react-native";
-import Authentication from "#api/Authenticate";
-import { NavigationContainer } from "@react-navigation/native";
-import Drawer from "#routes/MainDrawer";
+import { Authentication } from "#api/Authentication";
+import { AuthenticationSwitch } from "#comps/AuthenticationSwitch";
 import Auth from "#routes/AuthStack";
+import Drawer from "#routes/MainDrawer";
 import { navigationRef, navigationRefReady } from "#routes/RootNavigator";
+import { addTheme, ReactNativeUIScaling, Theme, ThemeProvider, ThemeSet } from "@kurabu/theme";
+import { NavigationContainer } from "@react-navigation/native";
+import * as Font from "expo-font";
+import * as Linking from "expo-linking";
+import { hideAsync, preventAutoHideAsync } from "expo-splash-screen";
+import React from "react";
+import { AppState, AppStateStatus, Dimensions, LogBox, NativeEventSubscription, PixelRatio, ScaledSize } from "react-native";
+import "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { hideAsync, preventAutoHideAsync } from "expo-splash-screen"
-import { ReactNativeUIScaling, ThemeProvider, addTheme, ThemeSet, Theme } from "@kurabu/theme";
 import { themes } from "./src/themes";
-import { RootSwitchContext } from "./src/contexts/rootSwitch";
 
 LogBox.ignoreLogs([/Require\scycles/]);
 
@@ -21,7 +21,6 @@ void preventAutoHideAsync()
 type StateType = {
 	fonts: boolean;
 	appstate: AppStateStatus;
-	RootSwitch: "Auth" | "Drawer";
 	dimensions: {
 		screen: ScaledSize,
 		window: ScaledSize,
@@ -56,7 +55,6 @@ export default class Application extends React.Component<never, StateType> {
 		this.state = {
 			fonts: false,
 			appstate: AppState.currentState,
-			RootSwitch: "Auth",
 			dimensions: {
 				window: Dimensions.get("window"),
 				screen: Dimensions.get("screen"),
@@ -101,28 +99,20 @@ export default class Application extends React.Component<never, StateType> {
 	private _checkInitialUrl = async () => {
 		const url = await Linking.getInitialURL();
 		if (url?.includes("auth")) {
-			await this._handleUrl(url);
+			this._handleUrl(url);
 		}
 	};
 
-	private async _handleUrl(url: string | null) {
+	private _handleUrl(url: string | null) {
 		if (url != null) {
 			if (url.includes("auth")) {
 				const token = url.split("auth/")[1];
 				console.log(token);
-				const auth = await Authentication.getInstance()
-
-				const currentToken = await auth.GetToken();
-
-				if (currentToken == undefined || currentToken == "" || currentToken == null) {
+				if (token == undefined || token == "" || token == null) {
 					throw new Error("No token after redirect to auth");
 				}
-
-				try {
-					this.setState({ ...this.state, RootSwitch: "Drawer" });
-				} catch (e) {
-					console.log(e);
-				}
+				const auth = Authentication.GetInstance()
+				auth.ReceivedRedirect(token);
 			}
 		}
 	}
@@ -189,16 +179,11 @@ export default class Application extends React.Component<never, StateType> {
 						}}
 							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 							themeSet={this.state.themeSet}>
-							<RootSwitchContext.Provider value={(sw: "Auth" | "Drawer") => {
-								this.setState({ ...this.state, RootSwitch: sw })
-							}}>
-								{this.state.RootSwitch == "Auth" ? <Auth /> : <Drawer />}
-							</RootSwitchContext.Provider>
+							
+							<AuthenticationSwitch authComp={(<Auth />)} loggedinComp={(<Drawer />)} />
 						</ThemeProvider>
 					</SafeAreaProvider>
-
 				</NavigationContainer>
-
 			);
 		}
 	}

@@ -5,5 +5,6 @@ export class ReAuthUserCommand extends ICommand {
     uuid!: string;
     user!: User;
     redirect?: string;
-    ourdomain!: string;
+	ourdomain!: string;
+	isJwt!: boolean;
 }

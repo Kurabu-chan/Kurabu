@@ -29,9 +29,10 @@ export class VerifJwtController {
 
         const result = await this._verifUserCommand.handle({
             code: arg.code,
+			isJwt: true,
             ourdomain,
             redirect: arg.redirect,
-            uuid: arg.uuid,
+			uuid: arg.uuid,
         });
 
         return {

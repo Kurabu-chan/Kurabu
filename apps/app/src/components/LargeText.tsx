@@ -1,6 +1,6 @@
+import { AppliedStyles, colors, MainColorSets, ThemedComponent } from "@kurabu/theme";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { AppliedStyles, colors, MainColorSets, sizing, ThemedComponent } from "@kurabu/theme";
 import { Typography } from "./themed/Typography";
 
 type Props = {

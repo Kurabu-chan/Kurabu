@@ -11,7 +11,7 @@ export class AnimeRankingSource extends AnimeBase implements MediaListSource {
 
     @requestErrorHandler
     async MakeRequest(limit?: number, offset?: number): Promise<AnimeList> {
-        const api = await super.getApi();
+        const api = super.getApi();
         const requestParams: GetAnimeRankingsRequest = {
             fields: fieldsToString(this.fields),
             rankingType: this.rankingType,

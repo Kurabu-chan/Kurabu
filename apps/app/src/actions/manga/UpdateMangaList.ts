@@ -9,7 +9,7 @@ export class UpdateMangaList extends ListBase {
     async MakeRequest(mangaId: number,
         before: MangaDetailsMyListStatus,
         after: MangaDetailsMyListStatus): Promise<void> {
-        const api = await super.getApi();
+        const api = super.getApi();
 
         const changeList = calculateAlteredFields(before, after);
         const changes = pick(after, changeList);

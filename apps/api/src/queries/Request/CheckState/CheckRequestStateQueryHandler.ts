@@ -14,53 +14,97 @@ import { JWT_ENCRYPTION } from "#helpers/GLOBALVARS";
 
 @autoInjectable()
 export class CheckRequestStateQueryHandler
-    implements IQueryHandler<CheckRequestStateQuery, CheckRequestStateQueryResult>
+	implements IQueryHandler<CheckRequestStateQuery, CheckRequestStateQueryResult>
 {
-    constructor(private _checkUserUUIDQuery: CheckUserUUIDQueryHandler) {}
+	constructor(private _checkUserUUIDQuery: CheckUserUUIDQueryHandler) { }
 
-    async handle({ req }: CheckRequestStateQuery): Promise<CheckRequestStateQueryResult> {
-        const authorization = req.headers.authorization;
-        let state = "";
-        if (authorization === undefined || authorization === "") {
-            // state is one of the paramaters
-            const query = req.query.state?.toString();
-            const body = req.body.state?.toString();
+	async handle({ req }: CheckRequestStateQuery): Promise<CheckRequestStateQueryResult> {
+		const authorization = req.headers.authorization;
+		let state = "";
+		let isJwt = false;
 
-            state = query ?? body;
+		if (authorization === undefined || authorization === "") {
+			// state is one of the paramaters
+			const query = req.query.state?.toString();
+			const body = req.body.state?.toString();
 
-            if (!state || state === "") {
-                throw new MissingParameterError("Missing required parameter state");
-            }
-        } else {
-            if (Array.isArray(authorization)) {
-                throw new MalformedParameterError("Misformatted authentication");
-            }
-            if (!authorization.startsWith("Bearer ")) {
-                throw new MalformedParameterError("Misformatted authentication");
-            }
+			state = query ?? body;
 
-            const token = authorization.split(" ")[1];
-            const jwtResult = jwt.verify(token, JWT_ENCRYPTION) as any;
-            if (jwtResult.id === undefined) {
-                throw new MalformedParameterError("Misformatted authentication");
-            }
+			if (!state || state === "") {
+				throw new MissingParameterError("Missing required parameter state");
+			}
+		} else {
+			if (Array.isArray(authorization)) {
+				throw new MalformedParameterError("Misformatted authentication");
+			}
+			if (!authorization.startsWith("Bearer ")) {
+				throw new MalformedParameterError("Misformatted authentication");
+			}
 
-            state = jwtResult.id;
-        }
+			const token = authorization.split(" ")[1];
 
-        // state is valid format
-        if (!isUUID(state)) {
-            throw new MalformedParameterError("Misformatted authentication");
-        }
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const jwtRes = useJWT(token, true);
+			if (jwtRes === undefined) throw Error("not supposed to happen");
+			state = jwtRes.id;
+			isJwt = true;
+		}
 
-        const result = await this._checkUserUUIDQuery.handle({
-            uuid: state,
-        });
+		const jwtResult = useJWT(state, false);
 
-        return {
-            state,
-            success: IQueryResultStatus.success,
-            user: result.user,
-        };
-    }
+		if (jwtResult !== undefined) {
+			state = jwtResult.id;
+			isJwt = true;
+		}
+
+		// state is valid format
+		if (!isUUID(state)) {
+			throw new MalformedParameterError("Misformatted authentication");
+		}
+
+		const result = await this._checkUserUUIDQuery.handle({
+			uuid: state,
+		});
+
+		return {
+			isJwt,
+			state,
+			success: IQueryResultStatus.success,
+			user: result.user,
+		};
+	}
+}
+
+function useJWT(token: string, throwOnError: boolean): undefined | { id: string } {
+
+	try {
+		const jwtResult = jwt.verify(token, JWT_ENCRYPTION) as unknown;
+
+		if (typeof jwtResult !== "object")
+			return throwIfTrue(throwOnError,
+				new MalformedParameterError("Misformatted authentication"));
+		if (jwtResult === null || jwtResult === undefined)
+			return throwIfTrue(throwOnError,
+				new MalformedParameterError("Misformatted authentication"));
+
+		// eslint-disable-next-line @typescript-eslint/ban-types
+		if (!("id" in (jwtResult as {}))) {
+			return throwIfTrue(throwOnError,
+				new MalformedParameterError("Misformatted authentication"));
+		}
+
+		return jwtResult as {
+			id: string;
+		};
+	} catch (err: unknown) {
+		if (err instanceof jwt.JsonWebTokenError) {
+			return throwIfTrue(throwOnError,
+				new MalformedParameterError("Misformatted authentication"));
+		}
+	}
+}
+
+function throwIfTrue(val: boolean, error: Error) {
+	if (val === true) throw error;
+	return undefined;
 }

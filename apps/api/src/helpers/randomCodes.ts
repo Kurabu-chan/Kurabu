@@ -1,5 +1,6 @@
 import { randomBytes } from "crypto";
 import { v4, validate } from "uuid";
+import {  } from "jsonwebtoken";
 
 function base64URLEncode(buff: Buffer) {
     return buff.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");

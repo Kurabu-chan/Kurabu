@@ -15,6 +15,7 @@ module.exports = function(api) {
                         "#data": "./src/dataSources",
                         "#actions": "./src/actions",
                         "#decorators": "./src/decorators",
+                        "#errors": "./src/errors",
                     },
                 },
             ],

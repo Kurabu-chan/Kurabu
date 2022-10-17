@@ -4,5 +4,6 @@ import { IQueryResult } from "#queries/IQuery";
 
 export class CheckRequestStateQueryResult extends IQueryResult {
     state!: string;
-    user!: User;
+	user!: User;
+	isJwt!: boolean;
 }

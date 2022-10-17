@@ -5,5 +5,6 @@ export const controllerName = "reauth";
 export type Params = {
     state: string;
     user: User;
-    redirect?: string;
+	redirect?: string;
+	isJwt: boolean;
 };

@@ -1,9 +1,9 @@
-import Authentication from '#api/Authenticate';
 import { DrawerItem, DrawerItemList, DrawerContentScrollView, DrawerContentComponentProps } from '@react-navigation/drawer';
 import { SafeAreaView, View, Alert, Linking } from 'react-native';
 import * as Updates from "expo-updates";
 import { colors, resolve, sizing, ThemeApplier, useThemeProvider } from '@kurabu/theme';
 import { ThemedStyleSheet } from '#helpers/ThemedStyleSheet';
+import { Authentication } from '#api/Authentication';
 
 export function CustomDrawerContentComponent(props: DrawerContentComponentProps) {
 	const providedTheme = useThemeProvider();
@@ -47,7 +47,8 @@ export function CustomDrawerContentComponent(props: DrawerContentComponentProps)
 										{ text: "Cancel", onPress: () => { return; }, style: "cancel" },
 										{
 											text: "Logout", onPress: () => {
-												void Authentication.ClearAsync();
+												
+												void Authentication.ClearStorage();
 												void Updates.reloadAsync();
 											}
 										}

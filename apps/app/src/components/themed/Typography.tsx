@@ -8,6 +8,7 @@ import {
 	MainColorSets,
 	ProvidedTheme,
 	resolve,
+	Status,
 	ThemedComponent,
 	TypographicColorSetSetting,
 	typography,
@@ -18,7 +19,7 @@ import { TextProps, Text, TextStyle, StyleProp, StyleSheet } from "react-native"
 
 type Props = {
 	variant: TypographyScales,
-	colorVariant: MainColorSets | "labels",
+	colorVariant: MainColorSets | "labels" | `status.${Status}`,
 	isOnContainer: boolean,
 	textKind: TypographicColorSetSetting
 } & TextProps;
@@ -41,12 +42,15 @@ export function createTypographyStyles(
 	variant: TypographyScales,
 	textKind: TypographicColorSetSetting,
 	isOnContainer: boolean,
-	colorVariant: MainColorSets | "labels"): [Styles, (styles: AppliedStyles<Styles>, theme: ProvidedTheme, propertyStyles: StyleProp<TextStyle>) => StyleProp<TextStyle>] {
+	colorVariant: MainColorSets | "labels" | `status.${Status}`): [Styles, (styles: AppliedStyles<Styles>, theme: ProvidedTheme, propertyStyles: StyleProp<TextStyle>) => StyleProp<TextStyle>] {
 	
 	let color: string;	
 	
 	if (colorVariant === "labels") {
 		color = colors.onLabels(textKind)
+	} else if (isStatusColorVariant(colorVariant)) {
+		const status: Status = colorVariant.split(".")[1] as Status;
+		color = colors.status(status, `text.${textKind}`)
 	} else { 
 		color = isOnContainer ? colors.onColor(colorVariant, textKind) : colors.onColorContainer(colorVariant, textKind)
 	}
@@ -110,6 +114,10 @@ export class Typography extends ThemedComponent<Styles, Props> {
 			<Text {...this.props} style={this.applyTextStyle(styles, theme, this.props.style)}>{this.props.children}</Text>
 		);
 	}
+}
+
+function isStatusColorVariant(colorVariant: MainColorSets | "labels" | `status.${Status}`): colorVariant is `status.${Status}` { 
+	return colorVariant.startsWith("status");
 }
 
 type Styles = {

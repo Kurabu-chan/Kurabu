@@ -1,21 +1,20 @@
-import { AnimeSeasonalSource } from "#data/anime/AnimeSeasonalSource";
-import { changeActivePage } from "#helpers/backButton";
+import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
+import DetailedUpdateList from "#comps/DetailedUpdateList";
+import { MainGradientBackground } from "#comps/MainGradientBackground";
 import { Picker } from "#comps/themed/Picker";
-import { ItemValue } from "@react-native-picker/picker/typings/Picker";
+import { createTypographyStyles } from "#comps/themed/Typography";
+import { Colors } from "#config/Colors";
+import { AnimeSeasonalSource } from "#data/anime/AnimeSeasonalSource";
+import { MediaListSource } from "#data/MediaListSource";
+import { changeActivePage } from "#helpers/backButton";
+import { niceTextFormat } from "#helpers/textFormatting";
+import { SeasonalStackParamList } from "#routes/MainStacks/SeasonalStack";
+import { GetSeasonalAnimesSeasonEnum } from "@kurabu/api-sdk";
+import { AppliedStyles, colors, ProvidedTheme, resolve, sizing, ThemedComponent } from "@kurabu/theme";
+import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { MediaListSource } from "#data/MediaListSource";
-import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
-import DetailedUpdateList from "#comps/DetailedUpdateList";
-import { Colors } from "#config/Colors";
-import { GetSeasonalAnimesSeasonEnum } from "@kurabu/api-sdk";
-import { SeasonalStackParamList } from "#routes/MainStacks/SeasonalStack";
-import { StackScreenProps } from "@react-navigation/stack";
-import { MainGradientBackground } from "#comps/MainGradientBackground";
-import { niceTextFormat } from "#helpers/textFormatting";
-import { createTypographyStyles } from "#comps/themed/Typography";
-import { AppliedStyles, colors, ProvidedTheme, resolve, sizing, ThemedComponent } from "@kurabu/theme";
 
 type Props = StackScreenProps<SeasonalStackParamList, "SeasonalScreen">
 

@@ -87,7 +87,7 @@ function extractTextStyles(style: TextStyle): TextStyle {
 	const textStyle: TextStyle = {};
 	for (const textStyleProp of textStyleProps) {
 		if (textStyleProp in style) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
 			textStyle[textStyleProp] = style[textStyleProp] as any;	
 		}
 	}
@@ -99,7 +99,7 @@ function extractContainerStyles(style: TextStyle): TextStyle {
 	const containerStyle: TextStyle = {};
 	for (const styleProp of Object.keys(style) as (keyof TextStyle)[]) {
 		if (!(styleProp in textStyleProps)) { 
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
 			containerStyle[styleProp] = style[styleProp] as any;
 		}
 	}

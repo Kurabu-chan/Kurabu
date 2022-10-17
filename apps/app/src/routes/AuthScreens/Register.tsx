@@ -1,18 +1,23 @@
+import { Authentication } from "#api/Authentication";
+import { AuthBackground } from "#comps/AuthBackgrounds";
+import PasswordStrength from "#comps/PasswordStrength";
+import { Typography } from "#comps/themed/Typography";
+import { ToolTip } from "#comps/ToolTip";
+import { Colors } from "#config/Colors";
+import { IncorrectEmailFormatError } from "#errors/auth/IncorrectEmailFormatError";
+import { MailUsedError } from "#errors/auth/MailUsedError";
+import { PasswordStrengthError } from "#errors/auth/PasswordStrengthError";
+import { MissingFormParameterError } from "#errors/MissingFormParameterError";
+import { ErrorBox } from "#errors/ui/ErrorBox";
+import { AppliedStyles, colors, sizing, ThemedComponent } from "@kurabu/theme";
 import { RouteProp } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { KeyboardAvoidingView, StyleSheet, View, Alert } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Auth from "#api/Authenticate";
-import PasswordStrength from "#comps/PasswordStrength";
-import { Colors } from "#config/Colors";
 import { AuthStackParamList } from "../AuthStack";
-import { AuthBackground } from "#comps/AuthBackgrounds";
-import { AppliedStyles, colors, sizing, ThemedComponent } from "@kurabu/theme";
 import { AuthInput } from "./components/AuthInput";
-import { Typography } from "#comps/themed/Typography";
-import { ToolTip } from "#comps/ToolTip";
 
 type RegisterProps = {
 	navigation: StackNavigationProp<AuthStackParamList, "Register">;
@@ -58,24 +63,14 @@ class Register extends ThemedComponent<Styles, RegisterProps, RegisterState> {
 		}));
 	}
 
-	private async DoSignup() {
-		const auth = await Auth.getInstance();
-		const registerRes = await auth.TryRegister(this.state.email, this.state.pass);
-		if (registerRes[0] != false) {
-			//we got the token for the verification
-			auth.setToken(registerRes[1]);
-
-			this.props.navigation.replace("Verify", {
-				token: registerRes[1],
-			});
-			return;
-		}
-
-		Alert.alert("Register Failed", registerRes[1]);
+	private DoSignup() {
+		const authentication = Authentication.GetInstance();
+		authentication.SubmitRegisterForm(this.state.email, this.state.pass, this.state.retype);
 	}
 
 	private DoSignin() {
-		this.props.navigation.goBack();
+		const authentication = Authentication.GetInstance();
+		authentication.SignInButtonPressed();
 	}
 
 	renderThemed(styles: AppliedStyles<Styles>) {
@@ -86,6 +81,20 @@ class Register extends ThemedComponent<Styles, RegisterProps, RegisterState> {
 				<KeyboardAvoidingView
 					behavior="padding"
 					style={styles.content}>
+					<ErrorBox errors={[
+						{
+							error: IncorrectEmailFormatError
+						},
+						{
+							error: PasswordStrengthError
+						},
+						{
+							error: MailUsedError
+						},
+						{
+							error: MissingFormParameterError
+						}
+					]} />
 					<ToolTip
 						text={`When registering don't use your MyAnimeList credentials, we will link your account later.`}
 						title="Register help"
@@ -119,7 +128,7 @@ class Register extends ThemedComponent<Styles, RegisterProps, RegisterState> {
 							}}
 						/>
 					</ToolTip>
-					
+
 					<ToolTip
 						text={`Password requirements:
 - At least 8 characters (12+ recommended)
@@ -158,7 +167,7 @@ class Register extends ThemedComponent<Styles, RegisterProps, RegisterState> {
 							}}
 						/>
 					</ToolTip>
-					
+
 					<PasswordStrength pass={this.state.pass} />
 					<AuthInput
 						autoComplete="password"

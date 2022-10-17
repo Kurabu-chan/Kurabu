@@ -1,20 +1,18 @@
-import { AnimeRankingSource } from "#data/anime/AnimeRankingSource";
-import { changeActivePage } from "#helpers/backButton";
-import { ItemValue } from "@react-native-picker/picker/typings/Picker";
-import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { MediaListSource } from "#data/MediaListSource";
 import { DetailedUpdateItemFields } from "#comps/DetailedUpdateItem";
 import SearchList from "#comps/DetailedUpdateList";
-import { Colors } from "#config/Colors";
-import { StackScreenProps } from "@react-navigation/stack";
-import { RankingStackParamList } from "#routes/MainStacks/RankingStack";
 import { MainGradientBackground } from "#comps/MainGradientBackground";
 import { Picker } from "#comps/themed/Picker";
-import { AppliedStyles, colors, ProvidedTheme, resolve, sizing, ThemedComponent } from "@kurabu/theme";
-import { ThemedStyleSheet } from "#helpers/ThemedStyleSheet";
 import { createTypographyStyles } from "#comps/themed/Typography";
+import { AnimeRankingSource } from "#data/anime/AnimeRankingSource";
+import { MediaListSource } from "#data/MediaListSource";
+import { changeActivePage } from "#helpers/backButton";
+import { ThemedStyleSheet } from "#helpers/ThemedStyleSheet";
+import { RankingStackParamList } from "#routes/MainStacks/RankingStack";
+import { AppliedStyles, colors, ProvidedTheme, resolve, sizing, ThemedComponent } from "@kurabu/theme";
+import { StackScreenProps } from "@react-navigation/stack";
+import React from "react";
+import { StyleSheet } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 
 type Props = StackScreenProps<RankingStackParamList, "RankingScreen">

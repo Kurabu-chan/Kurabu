@@ -65,8 +65,9 @@ export class AuthedController {
         const ourdomain = `${req.protocol}://${req.hostname}`;
         const result = await this._pendingUserCommand.handle({
             code: arg.code,
+			isJwt: arg.isJwt,
             ourdomain,
-            uuid: arg.state,
+			uuid: arg.state,
         });
 
         res.redirect(result.url);

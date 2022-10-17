@@ -32,7 +32,7 @@ class ListManager extends ListBase {
 
         if (this.loadingPromise !== undefined) return await this.loadingPromise;
         this.loadingPromise = (async () => {
-            const api = await super.getApi();
+            const api = super.getApi();
             const animeList = await getFullAnimeList(api);
             const mangaList = await getFullMangaList(api);
             for (const anime of animeList) {

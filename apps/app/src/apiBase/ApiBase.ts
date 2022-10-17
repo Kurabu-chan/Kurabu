@@ -1,9 +1,9 @@
-import Authentication from "#api/Authenticate";
+import {Authentication} from "#api/Authentication";
 
 export abstract class ApiBase {
-    protected async getAccessToken() {
-        const authentication = await Authentication.getInstance();
-        const accessToken = await authentication.GetToken();
+    protected getAccessToken() {
+        const authentication = Authentication.GetInstance();
+        const accessToken = authentication.token;
         if (!accessToken) {
             throw new Error("No access token found");
         }

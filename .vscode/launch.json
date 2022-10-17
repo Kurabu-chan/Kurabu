@@ -23,5 +23,11 @@
                 "-w=@kurabu/api"
             ]
         },
+    ],
+    "compounds": [
+        {
+            "name": "@kurabu/api & @kurabu/app",
+            "configurations": ["Debug @kurabu/app in Exponent", "Launch @kurabu/api"],
+        }
     ]
 }

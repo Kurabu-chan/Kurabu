@@ -1,15 +1,15 @@
+import { fieldsToString } from "#helpers/fieldsHelper";
+import { niceDateFormat, niceTextFormat } from "#helpers/textFormatting";
+import { ThemedStyleSheet } from "#helpers/ThemedStyleSheet";
+import { AnimeDetails, AnimeListData, MangaDetails, MangaListData, MediaFields } from "@kurabu/api-sdk";
+import { AppliedStyles, colors, mergeStyles, ProvidedTheme, sizing, ThemedComponent } from "@kurabu/theme";
+import { ParamListBase } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { Image, StyleProp, TouchableOpacity, View, ViewStyle } from "react-native";
 import NoImageKurabu from "../../assets/NoImageKurabu.svg";
-import { Divider } from "./themed/Divider";
-import { MediaFields, AnimeDetails, MangaDetails, AnimeListData, MangaListData } from "@kurabu/api-sdk";
-import { fieldsToString } from "#helpers/fieldsHelper";
-import { niceDateFormat, niceTextFormat } from "#helpers/textFormatting";
 import { Progress } from "./MediaListStatusProgressBar";
-import { ParamListBase } from "@react-navigation/native";
-import { AppliedStyles, colors, sizing, ThemedComponent, mergeStyles, resolve, ProvidedTheme } from "@kurabu/theme";
-import { ThemedStyleSheet } from "#helpers/ThemedStyleSheet";
+import { Divider } from "./themed/Divider";
 import { Typography } from "./themed/Typography";
 
 type DetailedUpdateItemProps = {
@@ -95,7 +95,7 @@ export class DetailedUpdateItem extends ThemedComponent<
         return this.props.item.node as AnimeDetails;
     }
 
-    createListStatus(styles: AppliedStyles<Styles>, theme: ProvidedTheme) {
+    createListStatus(styles: AppliedStyles<Styles>) {
         if (this.props.showListStatus !== true) return;
 
         const animeNode = this.getAnimeNode();
@@ -232,11 +232,11 @@ export class DetailedUpdateItem extends ThemedComponent<
         );
     }
 
-    renderThemed(styles: AppliedStyles<Styles>, theme: ProvidedTheme) {
+    renderThemed(styles: AppliedStyles<Styles>) {
         const manga = this.getMangaNode();
         const anime = this.getAnimeNode();
 
-        const listStatusElement = this.createListStatus(styles, theme);
+        const listStatusElement = this.createListStatus(styles);
 
         return (
             <View style={styles.container} >
