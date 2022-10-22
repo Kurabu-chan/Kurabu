@@ -76,7 +76,6 @@ export default class Application extends React.Component<never, StateType> {
 	}
 
 	setRootSwitch(sw: "Auth" | "Drawer") {
-		console.log(sw);
 		this.setState((prevState) => ({
 			...prevState,
 			RootSwitch: sw,
@@ -107,7 +106,6 @@ export default class Application extends React.Component<never, StateType> {
 		if (url != null) {
 			if (url.includes("auth")) {
 				const token = url.split("auth/")[1];
-				console.log(token);
 				if (token == undefined || token == "" || token == null) {
 					throw new Error("No token after redirect to auth");
 				}

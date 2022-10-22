@@ -63,7 +63,6 @@ export class RequestBuilder {
 		const token = Authentication.GetInstance().token;
 
         if (!token) throw new ReferenceError("No token present");
-        console.log(token);
         this.setHeader("Authorization", "Bearer " + token);
 
         return this;

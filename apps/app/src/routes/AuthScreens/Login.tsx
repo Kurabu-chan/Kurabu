@@ -65,7 +65,6 @@ class Login extends ThemedComponent<Styles, Props, LoginState> {
 	}
 
 	private _handleFocus() {
-		console.log("focus")
 		this.errorBox.current?.clear();
 	}
 
