@@ -30,7 +30,12 @@
     },
     "description": "An app for browsing and getting information on animes.",
     "scheme": "kurabu",
-    "sdkVersion": "46.0.0"
+    "sdkVersion": "46.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "8c9852ea-0960-462d-b6ab-6572ddac81e8"
+      }
+    }
   },
   "name": "@kurabu/app"
 }
