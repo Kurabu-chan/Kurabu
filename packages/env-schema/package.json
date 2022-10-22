@@ -1,12 +1,12 @@
 {
     "name": "@kurabu/env-schema",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "main": "./build/index.js",
     "files": [
         "./build/**"
     ],
     "scripts": {
-        "build": "yarn rimraf ./build/ && yarn tsc",
+        "build": "rimraf ./build/ && tsc",
         "check-build-required": "echo \"@kurabu/env-schema\"",
         "lint": "eslint \"src/**/*.ts\"",
         "lint:fix": "eslint \"**/*.ts\" --fix"
@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "@types/valid-url": "^1.0.3",
+        "rimraf": "^3.0.2",
         "valid-url": "^1.0.9"
     }
 }

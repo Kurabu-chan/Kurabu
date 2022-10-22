@@ -24,7 +24,10 @@
             ]
         },
         "lint": {
-            "outputs": []
+            "outputs": [],
+            "dependsOn": [
+                "^build"
+            ]
         },
         "dev": {
             "cache": false
@@ -38,7 +41,11 @@
                 "^check-build-required"
             ]
         },
-        "test": {},
+        "test": {
+            "dependsOn": [
+                "^build"
+            ]
+        },
         "test:unit": {},
         "test:coverage": {},
         "test:coverage-text": {},

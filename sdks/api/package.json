@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/api-sdk",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "main": "./build/index.js",
     "types": "./build/index.d.ts",
     "license": "MIT",
@@ -8,7 +8,6 @@
         "prebuild": "yarn shx rm -rf ./swagger/* && yarn shx rm -rf ./lib/* && yarn shx rm -rf ./build/* && yarn shx mkdir -p swagger && yarn shx cp -r ../../apps/api/swagger/* ./swagger && openapi-generator-cli generate -i swagger/swagger.json -o lib -g typescript-fetch --strict-spec false",
         "build": "tsc -p ./tsconfig.json"
     },
-    "dependencies": {},
     "devDependencies": {
         "@kurabu/tsconfig": "*",
         "@openapitools/openapi-generator-cli": "^2.4.26",

@@ -52,7 +52,6 @@ export default class Home extends React.Component<Props, StateType> {
     }
 
 	render() {
-		ErrorManager.catch(new Error("Some kind of error"));
         return (
             <SafeAreaProvider
                 style={styles.safeAreaProvider}

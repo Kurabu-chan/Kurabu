@@ -3,7 +3,7 @@ ARG ARCH=
 # Create a base section that later steps will use
 FROM ${ARCH}node:16.18-alpine AS base
 
-ENV YARN_VERSION 1.22.19
+ENV YARN_VERSION 3.2.4
 RUN yarn policies set-version $YARN_VERSION
 
 RUN apk add git
@@ -14,13 +14,12 @@ WORKDIR /app
 # Create a layer for pruning the monorepo
 FROM base AS pruner
 
-RUN yarn global add turbo@1.4.4
 # Copy the entire monorepo to the container
 # An alternative would be copying only the desired app, and depended upon packages from the get go and not running turbo prune.
 # This would be faster, but is less modular and requires editing the Dockerfile for each app.
 # Simply personal preference here.
 COPY . .
-RUN turbo prune --scope=@kurabu/api --docker
+RUN yarn dlx turbo@1.5.5 prune --scope=@kurabu/api --docker
 
 # Create a layer for installing modules
 FROM base AS installer
@@ -29,8 +28,7 @@ FROM base AS installer
 COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/yarn.lock ./yarn.lock
 
-# Use pure lockfile for faster install
-RUN yarn install --pure-lockfile
+RUN yarn install 
 
 # Combine the layers into a fucntioning app.
 FROM base AS builder
@@ -43,6 +41,6 @@ COPY --from=pruner /app/out/full/ .
 COPY .gitignore .gitignore
 
 # Build api
-RUN yarn turbo run build --scope=@kurabu/api --include-dependencies --no-deps
+RUN yarn turbo run build --scope=@kurabu/api --include-dependencies --no-deps --no-daemon
 
-ENTRYPOINT [ "yarn", "turbo", "run", "start", "--scope=@kurabu/api" ]
+ENTRYPOINT [ "yarn", "turbo", "run", "start", "--scope=@kurabu/api", "--no-daemon" ]

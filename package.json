@@ -1,12 +1,16 @@
 {
     "name": "turborepo-basic-shared",
     "version": "0.0.0",
-    "packageManager": "yarn@1.22.17",
+    "packageManager": "yarn@3.2.4",
     "workspaces": {
         "packages": [
             "apps/*",
             "packages/*",
             "sdks/*"
+        ],
+        "nohoist": [
+            "**/react-native",
+            "**/react-native/**"
         ]
     },
     "private": true,
@@ -35,10 +39,10 @@
         "prettier": "^2.5.1",
         "rimraf": "^3.0.2",
         "ts-node": "^10.9.1",
-        "turbo": "^1.4.4"
+        "turbo": "1.5.5"
     },
     "engines": {
-        "yarn": ">=1.22.17",
+        "yarn": ">=3.2.4",
         "node": ">=14.0.0"
     },
     "resolutions": {
