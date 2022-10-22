@@ -1,12 +1,12 @@
 {
     "name": "@kurabu/logging",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "main": "./build/index.js",
     "files": [
         "./build/**"
     ],
     "scripts": {
-        "build": "yarn rimraf ./build/ && yarn tsc",
+        "build": "rimraf ./build/ && tsc",
         "check-build-required": "echo \"@kurabu/logging\"",
         "lint": "eslint \"src/**/*.ts\"",
         "lint:fix": "eslint \"**/*.ts\" --fix"
@@ -20,6 +20,7 @@
         "typescript": "^4.7.4"
     },
     "dependencies": {
-        "express": "^4.17.2"
+        "express": "^4.17.2",
+        "rimraf": "^3.0.2"
     }
 }
