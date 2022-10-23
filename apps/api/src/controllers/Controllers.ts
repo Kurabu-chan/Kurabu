@@ -22,6 +22,7 @@ import { LoginJwtController } from "./Authed/jwt/Login/LoginJwtController";
 import { RegisterJwtController } from "./Authed/jwt/Register/RegisterJwtController";
 import { VerifJwtController } from "./Authed/jwt/Verif/VerifJwtController";
 import { CancelRegisterJwtController } from "./Authed/jwt/CancelRegister/CancelRegisterJwtController";
+import { StaticController } from "./Static/StaticController";
 import ContainerManager from "#helpers/ContainerManager";
 
 const container = ContainerManager.getInstance().container;
@@ -56,5 +57,7 @@ export default [
 
     container.resolve(AuthedController),
 
-    container.resolve(DocsController),
+	container.resolve(DocsController),
+
+	container.resolve(StaticController)
 ];
