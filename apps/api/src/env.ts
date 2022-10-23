@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { checkEnv, Variable } from "@kurabu/env-schema";
-import { Logger } from "@overnightjs/logger";
+import { winstonLogger } from "@kurabu/logging";
 
 const variables: Record<string, Variable> = {
     "CLIENT_ID": {
@@ -50,5 +50,5 @@ const variables: Record<string, Variable> = {
 };
 export function check() {
     checkEnv(variables);
-    Logger.Info("Environment variables are valid");
+    winstonLogger.info("Environment variables are valid");
 }

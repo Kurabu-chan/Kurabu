@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Request, Response } from "express";
 
-import { Logger } from "@overnightjs/logger";
+import { winstonLogger } from "@kurabu/logging";
 import { getUUID } from "#helpers/randomCodes";
 
 export default function logArg() {
@@ -18,7 +18,7 @@ export default function logArg() {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { user, ...logArguments } = arg;
 
-            Logger.Info(
+            winstonLogger.info(
                 `${requestCode} ${target.constructor.name as string}: ${JSON.stringify(
                     logArguments,
                     null,

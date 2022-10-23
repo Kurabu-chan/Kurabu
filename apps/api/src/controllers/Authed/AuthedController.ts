@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
 import { Controller, Get } from "@overnightjs/core";
-import { Logger } from "@overnightjs/logger";
+import { winstonLogger } from "@kurabu/logging";
 import * as Options from "./AuthedControllerOptions";
 import { PendingUserCommandHandler } from "#commands/Users/Pending/PendingUserCommandHandler";
 import { param, ParamPos, ParamType } from "#decorators/ParamDecorator";
@@ -56,7 +56,7 @@ export class AuthedController {
     private async get(req: Request, res: Response, arg: Options.Params) {
         const codeRe = /[0-9a-z]{700,1300}/;
         if (!codeRe.exec(arg.code)) {
-            Logger.Warn("Code parameter was of incorrect format in request to /authed");
+            winstonLogger.warn("Code parameter was of incorrect format in request to /authed");
 
             await arg.user.destroy();
             throw new ParameterError("There is a problem with one of your parameters");

@@ -1,9 +1,8 @@
 import * as fs from "fs";
-import { resolve } from "path";
 import { Request, Response } from "express";
 import { Controller, Get } from "@overnightjs/core";
 import { autoInjectable } from "tsyringe";
-import { Logger } from "@overnightjs/logger";
+import { winstonLogger } from "@kurabu/logging";
 
 let loaded: string | undefined;
 
@@ -12,7 +11,7 @@ function loadDocs(): string {
         if (fs.existsSync("src/controllers/views/documentation.html")) {
             loaded = fs.readFileSync("src/controllers/views/documentation.html", "utf-8");
         } else {
-            Logger.Warn("no docs file " + resolve("src/controllers/views/documentation.html"));
+            winstonLogger.warn("no docs file");
             loaded = "no docs";
         }
     }

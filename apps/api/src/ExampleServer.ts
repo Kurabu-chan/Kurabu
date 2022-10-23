@@ -1,8 +1,8 @@
 import { Server as Serve } from "http";
 import { urlencoded as bpUrlencoded, json as bpJson } from "body-parser";
 import { Server } from "@overnightjs/core";
-import { Logger } from "@overnightjs/logger";
 import { Request, Response } from "express";
+import { winstonLogger } from "@kurabu/logging";
 import controllers from "./controllers/Controllers";
 import { apply as swagger } from "./swagger";
 
@@ -26,7 +26,7 @@ class ExampleServer extends Server {
             res.send(this.serverStarted + port.toString());
         });
         return this.app.listen(port, "0.0.0.0", () => {
-            Logger.Imp(this.serverStarted + port.toString());
+			winstonLogger.info(this.serverStarted + port.toString());
         });
     }
 

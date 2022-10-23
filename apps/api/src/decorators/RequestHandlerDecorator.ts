@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Request, Response } from "express";
-import { Logger } from "@overnightjs/logger";
+import { winstonLogger } from "@kurabu/logging";
 import GeneralError from "#errors/GeneralError";
 
 export default function requestHandlerDecorator(log = true) {
@@ -36,7 +36,7 @@ export default function requestHandlerDecorator(log = true) {
                         message: "unknown error",
                         status: "error",
                     });
-                    if (log) Logger.Err(err);
+                    if (log) winstonLogger.error(err);
                 }
             }
         };

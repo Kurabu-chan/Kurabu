@@ -2,7 +2,7 @@ import path = require("path");
 import { readdir } from "fs";
 import { Sequelize, SequelizeOptions } from "sequelize-typescript";
 import { singleton } from "tsyringe";
-import { Logger } from "@overnightjs/logger";
+import { winstonLogger } from "@kurabu/logging";
 import { SequelizeStorage, Umzug } from "umzug";
 import * as DeepDiff from "deep-diff";
 import ModelsArray, { models, ModelsType } from "#models/index";
@@ -44,10 +44,10 @@ export class Database {
         this._sequelize
             .databaseVersion()
             .then((version) => {
-                Logger.Info(`Databases initialized with db version ${version}`);
+                winstonLogger.info(`Databases initialized with db version ${version}`);
             })
             .catch((err) => {
-                Logger.Err(err);
+                winstonLogger.error(err);
             });
 
         void this.migrate();
@@ -73,7 +73,7 @@ export class Database {
                     });
                 } catch (err: unknown) {
                     if (isSequelizeMetaNotExistError(err)) {
-                        Logger.Info("No migrations were present on the database");
+                        winstonLogger.info("No migrations were present on the database");
                     } else {
                         throw err;
                     }
@@ -126,12 +126,12 @@ export class Database {
                 void umzug.up();
             })();
         } catch (err) {
-            Logger.Info(consoleMessages);
-            Logger.Err(err);
+            winstonLogger.info(consoleMessages);
+            winstonLogger.error(err);
             return;
         }
 
-        Logger.Info(consoleMessages);
+        winstonLogger.info(consoleMessages);
     }
 }
 

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { injectable } from "tsyringe";
 
 import { Controller, Post } from "@overnightjs/core";
-import { Logger } from "@overnightjs/logger";
+import { winstonLogger } from "@kurabu/logging";
 
 import * as Options from "./RegisterJwtControllerOptions";
 import { SUCCESS_STATUS } from "#helpers/GLOBALVARS";
@@ -27,7 +27,7 @@ export class RegisterJwtController {
     @param("email", ParamType.string, false)
     @param("pass", ParamType.string, false)
     private async post(req: Request, res: Response, arg: Options.Params) {
-        Logger.Info(`Starting auth for ${req.ip}`);
+        winstonLogger.info(`Starting auth for ${req.ip}`);
 
         const result = await this._startUserRegisterCommand.handle({
             email: arg.email,

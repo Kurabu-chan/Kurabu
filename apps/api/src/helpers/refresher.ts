@@ -1,5 +1,5 @@
 import * as fetch from "node-fetch";
-import { Logger } from "@overnightjs/logger";
+import { winstonLogger } from "@kurabu/logging";
 import { isErrResp } from "./BasicTypes";
 import { UpdateDatabaseUserTokensCommandHandler } from "#commands/Users/UpdateDatabaseTokens/UpdateDatabaseUserTokensCommandHandler";
 import RefreshError from "#errors/Authentication/RefreshError";
@@ -111,7 +111,7 @@ export function addTokenHeader(
         } else {
             if (Array.isArray(init.headers)) {
                 // headers is array so we don't know how to deal with this yet
-                Logger.Info(JSON.stringify(init.headers));
+                winstonLogger.info(JSON.stringify(init.headers));
             } else {
                 // header is something I dont know the name off but know how to deal with
                 init.headers[bearerHeaderName] = "Bearer " + token;

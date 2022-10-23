@@ -1,5 +1,5 @@
 import { autoInjectable } from "tsyringe";
-import { Logger } from "@overnightjs/logger";
+import { winstonLogger } from "@kurabu/logging";
 import { RefreshWebRequest } from "./RefreshWebRequest";
 import { RefreshWebRequestResult } from "./RefreshWebRequestResult";
 import { IWebRequestHandler, IWebRequestResultStatus } from "#webreq/IWebRequest";
@@ -35,7 +35,7 @@ export class RefreshWebRequestHandler
 
             const jsData: JSONType = (await data.json()) as JSONType;
             if ((jsData as ErrorResponse).error) {
-                Logger.Info(jsData);
+                winstonLogger.info(jsData);
                 throw new RefreshError("Refresh token has expired");
             }
             const tres = jsData as tokenResponse;

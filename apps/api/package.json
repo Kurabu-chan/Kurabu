@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/api",
-    "version": "2.1.64",
+    "version": "2.1.65",
     "description": "",
     "main": "build/start.js",
     "scripts": {
@@ -32,8 +32,7 @@
         "@kurabu/common": "*",
         "@kurabu/env-schema": "*",
         "@kurabu/logging": "*",
-        "@overnightjs/core": "^1.7.5",
-        "@overnightjs/logger": "^1.2.0",
+        "@overnightjs/core": "^1.7.6",
         "@sendgrid/mail": "^7.4.2",
         "@types/body-parser": "^1.19.2",
         "@types/deep-diff": "^1.0.1",

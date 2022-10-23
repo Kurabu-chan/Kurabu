@@ -2,6 +2,7 @@ import * as path from "path";
 import { config } from "dotenv";
 import { Sequelize } from "sequelize-typescript";
 import { SequelizeStorage, Umzug } from "umzug";
+import { winstonLogger } from "@kurabu/logging";
 import ModelsArray from "#models/index";
 
 config();
@@ -32,5 +33,5 @@ void (async () => {
     const allMigrations = umzug.migrations(sequelize.getQueryInterface());
     const migrationNames = (await allMigrations).map(x => x.name);
     // eslint-disable-next-line no-console
-    console.log(migrationNames.map((x,i) => `${i+1}: ${x}`).join("\n"));
+	winstonLogger.info(migrationNames.map((x, i) => `${i + 1}: ${x}`).join("\n"));
 })();
