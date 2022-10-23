@@ -21,25 +21,30 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-      - name: Remove yarnrc
-        run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
-
-      - name: Add turbo globally
-        run: yarn global add turbo        
 
       - name: Check if build is required
+        id: check-full-turbo
         env:
           REF: ${{ github.event.before }}
         run: |
+          mkdir ./tmp
+          mv ./.yarnrc.yml ./tmp/.yarnrc.yml
+
+          yarn set version stable
+          yarn plugin import workspace-tools
+          yarn workspaces focus
+
+          mv ./tmp/.yarnrc.yml ./.yarnrc.yml
+          
+          npm install -g turbo@1.5.5    
+
           set -x
           ls -la
-          turbo run check-build-required --filter=@kurabu/api...[$REF] 2>&1 | tee ./check-build-required.txt
+          yarn dlx -q turbo@1.5.5 run check-build-required --filter=@kurabu/api...[$REF] --dry-run=json | tee ./check-build-required-tasks.txt
+          cat ./check-build-required-tasks.txt | jq '.tasks | map(.cacheState | .local or .remote) | all' | tee ./check-build-required.txt
           set +x
 
-      - name: Output whether a build is required or not
-        id: check-full-turbo
-        run: |
-          if grep -E -i -w -q "[1-9][0-9]* successful" ./check-build-required.txt; then
+          if grep -E -i -w -q "false" ./check-build-required.txt; then
             echo "::set-output name=build_required_check::required"
             echo "fullturbo"
           else
@@ -75,16 +80,24 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Remove yarnrc
-        run: rm ./.yarnrc || rm ./.yarnrc.yml || yarn --version
-
-      - name: Globally insall packages
-        run: yarn global add turbo ts-node   
-      - name: Install script dependencies
-        run: cd apps/api/scripts && npm install && cd ../../..
-        
+          
       - name: Build and push docker image
-        run: yarn run build:docker --filter=@kurabu/api
+        run: |
+          mkdir ./tmp
+          mv ./.yarnrc.yml ./tmp/.yarnrc.yml
+
+          yarn set version stable
+          yarn plugin import workspace-tools
+
+          mv ./tmp/.yarnrc.yml ./.yarnrc.yml
+
+          npm install -g turbo@1.5.5 ts-node    
+          cd apps/api/scripts && npm install && cd ../../..
+          
+          yarn workspaces focus
+        
+          cat ./node_modules/.yarn-state.yml
+          yarn run build:docker --filter=@kurabu/api
 
   publish-stage:
     name: Publish to staging
