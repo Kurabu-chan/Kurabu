@@ -65,7 +65,8 @@ spec:
               secretKeyRef:
                 name: {{ .Values.secrets.secretName }}
                 key: {{ .Values.secrets.api.keys.databaseSSL }}
-
+		  - name: NODE_ENV
+		    value: production		
         resources:
           {{- toYaml .Values.resources.api | nindent 10}}
         ports:

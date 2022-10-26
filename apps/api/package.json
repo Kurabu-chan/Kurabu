@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/api",
-    "version": "2.1.66",
+    "version": "2.1.67",
     "description": "",
     "main": "build/start.js",
     "scripts": {

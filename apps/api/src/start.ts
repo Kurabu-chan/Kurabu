@@ -9,7 +9,7 @@ reload();
 import { check } from "./env";
 check();
 
-if (process.env.NODE_ENV === "") {
+if (process.env.NODE_ENV === "production") {
 	winstonLogger.defaultMeta = {
 		service: "@kurabu/api"
 	};
