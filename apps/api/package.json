@@ -1,6 +1,6 @@
 {
     "name": "@kurabu/api",
-    "version": "2.1.66",
+    "version": "2.1.67",
     "description": "",
     "main": "build/start.js",
     "scripts": {
@@ -9,8 +9,10 @@
         "test": "cross-env TS_NODE_PROJECT=./tests/tsconfig.json mocha \"tests/**/*.ts\" --config .mocharc.json --timeout 15000",
         "dev": "nodemon --config \"./util/nodemon.json\"/",
         "build": "rimraf ./build/ && tsc && yarn build-copy",
-		"build-copy": "copyfiles -u 1 src/**/*.html build/",
-		"clean": "rimraf build/",
+        "build-copy": "copyfiles -u 1 src/**/*.html build/",
+        "build:esbuild": "node esbuild.js",
+        "start:esbuild": "node ./dist/outfile.js",
+        "clean": "rimraf build/",
         "start": "cross-env TS_NODE_PROJECT=tsconfig.json node -r tsconfig-paths/register -r ts-node/register build/start.js",
         "db:addmigration": "ts-node -r tsconfig-paths/register ./src/database/createmigration.ts",
         "db:localmigration": "ts-node -r tsconfig-paths/register ./src/database/runMigration.ts",
@@ -82,6 +84,7 @@
         "@typescript-eslint/parser": "5.12.0",
         "chai": "^4.3.0",
         "cross-env": "^7.0.3",
+        "esbuild": "^0.15.12",
         "eslint": "8.9.0",
         "eslint-plugin-import": "^2.23.4",
         "eslint-plugin-jsdoc": "37.9.2",
